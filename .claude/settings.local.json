@@ -22,7 +22,8 @@
       "Bash(docker build:*)",
       "Bash(timeout 10s docker run --rm -p 8080:80 jarvis-chat-test)",
       "Bash(find:*)",
-      "Bash(timeout 8s npm run dev)"
+      "Bash(timeout 8s npm run dev)",
+      "Bash(mv:*)"
     ],
     "deny": []
   }
