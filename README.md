@@ -5,9 +5,9 @@ A modern, responsive AI chat application built with React, TypeScript, and Vite.
 ## 🚀 Quick Start
 
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd jarvis-chat
+# Clone the repository  
+git clone https://github.com/MADPANDA3D/J.A.R.V.I.S-PROJECT.git
+cd J.A.R.V.I.S-PROJECT/jarvis-chat
 
 # Install dependencies
 npm install
@@ -295,12 +295,57 @@ cp .env.template .env.local
 nano .env.local
 ```
 
+**Note:** If `.env.template` doesn't exist, create it manually with the template provided below.
+
 You'll need to fill in:
 
 - **VITE_SUPABASE_URL** - Your Supabase project URL
 - **VITE_SUPABASE_ANON_KEY** - Your Supabase anonymous key
 - **VITE_N8N_WEBHOOK_URL** (optional) - Your n8n webhook URL
 - **VITE_APP_DOMAIN** (optional) - Your domain name
+
+#### Environment Template (if .env.template is missing)
+
+If the `.env.template` file doesn't exist, create it manually:
+
+```bash
+# Create the environment template file
+cat > .env.template << 'EOF'
+# ==========================================
+# JARVIS Chat - Environment Configuration
+# ==========================================
+# Copy this file to .env.local and fill in your actual credentials
+# DO NOT commit .env.local to version control!
+
+# ==========================================
+# REQUIRED - Supabase Configuration
+# ==========================================
+# Get these from your Supabase project dashboard:
+# https://app.supabase.com/project/YOUR_PROJECT/settings/api
+
+# Your Supabase project URL (looks like: https://abcdefghijk.supabase.co)
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
+
+# Your Supabase anon/public key (starts with "eyJ...")
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.your-anon-key-here
+
+# ==========================================
+# OPTIONAL - AI Integration
+# ==========================================
+# If you have an n8n instance for AI responses, add the webhook URL
+# If not set, the app will use fallback AI responses for testing
+# VITE_N8N_WEBHOOK_URL=https://your-n8n-instance.com/webhook/chat/send
+
+# ==========================================
+# OPTIONAL - Domain Configuration
+# ==========================================
+# Your application domain (used for CORS and redirects)
+# VITE_APP_DOMAIN=jarvis.yourdomain.com
+EOF
+
+# Now copy it to create your local environment file
+cp .env.template .env.local
+```
 
 ### 4. Start Development Server
 
@@ -396,8 +441,8 @@ Ready-to-deploy Docker setup with copy-paste commands for easy VPS deployment.
 **Step 1: Download and Setup**
 ```bash
 # Clone the repository
-git clone <your-repository-url> jarvis-chat
-cd jarvis-chat
+git clone https://github.com/MADPANDA3D/J.A.R.V.I.S-PROJECT.git
+cd J.A.R.V.I.S-PROJECT/jarvis-chat
 
 # Copy environment template
 cp .env.template .env.local
@@ -828,6 +873,34 @@ npm run format:check
 - **Build Failures**: Ensure Node.js 20+ is available in the container
 - **Port Conflicts**: Use different ports if 3000 or 80 are occupied
 - **Environment Variables**: Verify all required variables are set
+
+### Deployment Issues
+
+**Missing .env.template File**
+```bash
+# If you get "cannot stat '.env.template': No such file or directory"
+# The file might not be in the repository. Create it manually:
+
+cat > .env.template << 'EOF'
+# JARVIS Chat Environment Configuration
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.your-anon-key-here
+# VITE_N8N_WEBHOOK_URL=https://your-n8n-instance.com/webhook/chat/send
+# VITE_APP_DOMAIN=jarvis.yourdomain.com
+EOF
+
+# Then copy it to create your environment file
+cp .env.template .env.local
+```
+
+**Correct Directory Structure**
+```bash
+# Make sure you're in the right directory:
+git clone https://github.com/MADPANDA3D/J.A.R.V.I.S-PROJECT.git
+cd J.A.R.V.I.S-PROJECT          # Main project directory
+cd jarvis-chat                  # Navigate to the chat application
+ls -la                          # Should see package.json, src/, public/, etc.
+```
 
 ## 📝 Contributing
 
