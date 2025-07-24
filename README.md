@@ -18,7 +18,8 @@ npm run dev
 
 Visit `http://localhost:5173` to see the application.
 
-**Health Check:** `http://localhost:5173/health` - Monitor system status
+**Health Check:** `http://localhost:5173/health` - Monitor system status  
+**API Documentation:** `http://localhost:5173/api-docs.html` - Interactive API documentation with Swagger UI
 
 ## 📋 Prerequisites
 
@@ -216,7 +217,8 @@ BEGIN
 END;
 $$ language 'plpgsql' security definer;
 
--- Trigger to create profile on user signup
+-- Trigger to create profile on user signup (drop if exists, then create)
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
     AFTER INSERT ON auth.users
     FOR EACH ROW
@@ -336,17 +338,26 @@ jarvis-chat/
 │   │   ├── ui/             # shadcn/ui components
 │   │   ├── chat/           # Chat-specific components
 │   │   ├── auth/           # Authentication components
-│   │   └── layout/         # Layout components
+│   │   ├── layout/         # Layout components
+│   │   └── accessibility/  # Accessibility components and controls
 │   ├── hooks/              # Custom React hooks
 │   ├── lib/                # Utility functions
+│   │   ├── accessibility.ts     # Accessibility utilities and managers
+│   │   ├── color-contrast-validator.ts # WCAG color contrast validation
+│   │   └── accessibility-testing.ts    # Automated accessibility testing
 │   ├── pages/              # Page components
 │   ├── types/              # TypeScript type definitions
 │   ├── App.tsx             # Main App component
 │   ├── main.tsx            # Application entry point
 │   └── index.css           # Global styles with custom theme
 ├── public/                 # Static assets
-├── docker/                 # Docker-related files
+│   ├── api-docs.html       # Interactive Swagger UI documentation
+│   └── api/                # API documentation
+│       └── openapi.yaml    # OpenAPI 3.0 specification
 ├── docs/                   # Documentation
+│   ├── api-integration-guide.md # Comprehensive API integration guide
+│   └── stories/            # Development stories and requirements
+├── docker/                 # Docker-related files
 └── package.json           # Project configuration
 ```
 
@@ -641,6 +652,8 @@ Before each commit, the following checks run automatically:
 - **User Authentication** - Secure login/registration with Supabase Auth
 - **Message Persistence** - Chat history stored and synchronized across sessions
 - **Responsive Design** - Mobile-first UI with dark theme and neon accents
+- **API Documentation** - Interactive OpenAPI 3.0 specification with Swagger UI
+- **Accessibility Compliance** - WCAG 2.1 AA compliance with screen reader support
 
 ### 🛡️ Production Ready
 - **Health Monitoring** - Built-in health checks at `/health` endpoint
@@ -648,6 +661,8 @@ Before each commit, the following checks run automatically:
 - **Environment Validation** - Runtime configuration validation with status display
 - **Type Safety** - Full TypeScript implementation with strict typing
 - **Test Coverage** - Automated testing with Vitest and React Testing Library
+- **API Documentation** - Complete OpenAPI 3.0 specification with interactive Swagger UI
+- **Accessibility Testing** - Automated WCAG 2.1 AA compliance validation with axe-core
 
 ### 🔧 Developer Experience
 - **Hot Reload** - Fast development with Vite
@@ -659,15 +674,31 @@ Before each commit, the following checks run automatically:
 ### 🎨 User Interface
 - **Modern Design** - shadcn/ui components with Tailwind CSS
 - **Dark Theme** - Optimized for extended use with crimson red accents
-- **Accessibility** - Screen reader compatible with semantic HTML
+- **Accessibility** - WCAG 2.1 AA compliant with screen reader support and keyboard navigation
 - **Loading States** - Smooth UX with skeleton loaders and progress indicators
 - **Error States** - Clear error messages with retry mechanisms
+- **User Preferences** - Accessibility controls for high contrast, font size, and reduced motion
 
 ### 📊 Monitoring & Analytics
 - **Health Dashboard** - Real-time system status monitoring
 - **Performance Tracking** - Response time and system metrics
 - **Error Analytics** - Detailed error tracking with context and stack traces
 - **Environment Status** - Configuration validation and service connectivity
+
+### 📚 API Documentation & Integration
+- **OpenAPI 3.0 Specification** - Complete API documentation with schemas and examples
+- **Interactive Swagger UI** - Test API endpoints directly in the browser
+- **Authentication Examples** - JWT flow with code samples in multiple languages
+- **Rate Limiting Documentation** - Clear usage guidelines and optimization strategies
+- **Integration Guide** - Comprehensive developer documentation with cURL, JavaScript, Python, and TypeScript examples
+
+### ♿ Accessibility Features
+- **WCAG 2.1 AA Compliance** - Full accessibility standard compliance
+- **Screen Reader Support** - Comprehensive ARIA implementation and testing
+- **Keyboard Navigation** - Complete keyboard-only interface navigation
+- **Color Contrast Validation** - Mathematical compliance checking with user controls
+- **Visual Accessibility Controls** - User preference system for high contrast, font size, and reduced motion
+- **Automated Testing** - Continuous accessibility validation with axe-core integration
 
 ## 🚀 Production Deployment
 
@@ -719,6 +750,9 @@ npm run test:run
 - ✅ Chat functionality (useChat hook)
 - ✅ Error boundary components
 - ✅ Health check system
+- ✅ Accessibility compliance (WCAG 2.1 AA)
+- ✅ API documentation validation
+- ✅ Color contrast validation
 
 ### Code Quality Checks
 
@@ -748,6 +782,8 @@ npm run format:check
 - [ ] Error handling and retry mechanisms
 - [ ] Environment validation in Settings
 - [ ] Health monitoring dashboard (`/health`)
+- [ ] API documentation (`/api-docs.html`)
+- [ ] Accessibility controls and preferences
 - [ ] Dark theme with crimson red accents
 - [ ] Responsive design (mobile/desktop)
 
@@ -755,9 +791,12 @@ npm run format:check
 - [ ] TypeScript compilation passes (`npm run type-check`)
 - [ ] ESLint rules pass (`npm run lint`)
 - [ ] Test suite passes (`npm run test:run`)
+- [ ] Accessibility testing passes (axe-core validation)
 - [ ] Production build succeeds (`npm run build`)
 - [ ] Docker container builds and runs
 - [ ] Health check endpoint responds (`/health`)
+- [ ] API documentation accessible (`/api-docs.html`)
+- [ ] WCAG 2.1 AA compliance validated
 - [ ] Error tracking captures issues
 - [ ] Environment variables validate correctly
 

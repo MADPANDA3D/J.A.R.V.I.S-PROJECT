@@ -23,7 +23,20 @@
       "Bash(timeout 10s docker run --rm -p 8080:80 jarvis-chat-test)",
       "Bash(find:*)",
       "Bash(timeout 8s npm run dev)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(cp:*)",
+      "Bash(node:*)",
+      "Bash(grep:*)",
+      "Bash(./scripts/security-scan.sh:*)",
+      "Bash(./scripts/test-pipeline.sh:*)",
+      "Bash(cat:*)",
+      "Bash(git push:*)",
+      "WebFetch(domain:docs.n8n.io)",
+      "WebFetch(domain:js.langchain.com)",
+      "WebFetch(domain:api.python.langchain.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(git submodule:*)",
+      "Bash(curl:*)"
     ],
     "deny": []
   }
