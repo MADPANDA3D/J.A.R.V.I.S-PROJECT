@@ -34,7 +34,257 @@ Visit `http://localhost:5173` to see the application.
 npm install
 ```
 
-### 2. Environment Variables
+### 2. Database Setup (Supabase)
+
+The application requires a Supabase database with specific tables for both the frontend chat interface and n8n workflow integration.
+
+#### Quick Setup Instructions
+
+1. **Create a new Supabase project**:
+   - Go to [supabase.com](https://supabase.com)
+   - Click "New Project"
+   - Choose your organization and enter project details
+   - Wait for the project to be created
+
+2. **Set up the database**:
+   - Navigate to your project dashboard
+   - Go to **SQL Editor** in the left sidebar
+   - Click **"New query"**
+   - Copy and paste the SQL below into the editor
+   - Click **"Run"** to execute
+
+#### Database Schema (Copy & Paste)
+
+```sql
+-- =====================================================
+-- JARVIS Chat Application Database Setup
+-- =====================================================
+-- This script creates all necessary tables and functions
+-- for both the frontend chat interface and n8n backend
+-- =====================================================
+
+-- 1. Frontend Messages Table (for chat interface)
+-- =====================================================
+CREATE TABLE IF NOT EXISTS public.messages (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    content TEXT NOT NULL,
+    role VARCHAR(20) NOT NULL CHECK (role IN ('user', 'assistant')),
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    conversation_id UUID DEFAULT NULL,
+    status VARCHAR(20) DEFAULT 'sent' CHECK (status IN ('sending', 'sent', 'error')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create indexes for better performance
+CREATE INDEX IF NOT EXISTS idx_messages_user_id ON public.messages(user_id);
+CREATE INDEX IF NOT EXISTS idx_messages_conversation_id ON public.messages(conversation_id);
+CREATE INDEX IF NOT EXISTS idx_messages_created_at ON public.messages(created_at);
+
+-- Enable Row Level Security (RLS)
+ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
+
+-- Create RLS policies for frontend messages
+CREATE POLICY "Users can view their own messages" ON public.messages
+    FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert their own messages" ON public.messages
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update their own messages" ON public.messages
+    FOR UPDATE USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their own messages" ON public.messages
+    FOR DELETE USING (auth.uid() = user_id);
+
+-- 2. n8n Backend Chat Memory Table
+-- =====================================================
+-- This table is used by n8n Postgres Chat Memory nodes
+-- It stores conversation memory for AI agent continuity
+-- =====================================================
+CREATE TABLE IF NOT EXISTS public.chat_memory (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    session_id TEXT NOT NULL,
+    message_type VARCHAR(20) NOT NULL CHECK (message_type IN ('human', 'ai')),
+    content TEXT NOT NULL,
+    additional_data JSONB DEFAULT '{}',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create indexes for n8n chat memory
+CREATE INDEX IF NOT EXISTS idx_chat_memory_session_id ON public.chat_memory(session_id);
+CREATE INDEX IF NOT EXISTS idx_chat_memory_created_at ON public.chat_memory(created_at);
+
+-- Enable RLS for chat memory (allow service role access)
+ALTER TABLE public.chat_memory ENABLE ROW LEVEL SECURITY;
+
+-- Allow service role (n8n) to access chat memory
+CREATE POLICY "Service role can manage chat memory" ON public.chat_memory
+    FOR ALL USING (auth.jwt() ->> 'role' = 'service_role');
+
+-- Allow authenticated users to read their own session memory
+CREATE POLICY "Users can view their session memory" ON public.chat_memory
+    FOR SELECT USING (
+        session_id = 'session_' || auth.uid()::text
+        OR session_id LIKE '%' || auth.uid()::text || '%'
+    );
+
+-- 3. User Profiles Table
+-- =====================================================
+-- Extended user information for the chat application
+-- =====================================================
+CREATE TABLE IF NOT EXISTS public.profiles (
+    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    username TEXT UNIQUE,
+    full_name TEXT,
+    avatar_url TEXT,
+    preferences JSONB DEFAULT '{}',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Enable RLS for profiles
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+
+-- Create policies for profiles
+CREATE POLICY "Users can view their own profile" ON public.profiles
+    FOR SELECT USING (auth.uid() = id);
+
+CREATE POLICY "Users can update their own profile" ON public.profiles
+    FOR UPDATE USING (auth.uid() = id);
+
+CREATE POLICY "Users can insert their own profile" ON public.profiles
+    FOR INSERT WITH CHECK (auth.uid() = id);
+
+-- 4. Conversation Sessions Table
+-- =====================================================
+-- Track conversation sessions for better organization
+-- =====================================================
+CREATE TABLE IF NOT EXISTS public.conversation_sessions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    title TEXT DEFAULT 'New Conversation',
+    session_id TEXT NOT NULL UNIQUE,
+    last_message_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    message_count INTEGER DEFAULT 0,
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create indexes for conversation sessions
+CREATE INDEX IF NOT EXISTS idx_conversation_sessions_user_id ON public.conversation_sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_conversation_sessions_session_id ON public.conversation_sessions(session_id);
+CREATE INDEX IF NOT EXISTS idx_conversation_sessions_last_message ON public.conversation_sessions(last_message_at);
+
+-- Enable RLS for conversation sessions
+ALTER TABLE public.conversation_sessions ENABLE ROW LEVEL SECURITY;
+
+-- Create policies for conversation sessions
+CREATE POLICY "Users can manage their own conversations" ON public.conversation_sessions
+    FOR ALL USING (auth.uid() = user_id);
+
+-- 5. Utility Functions
+-- =====================================================
+
+-- Function to automatically update updated_at timestamp
+CREATE OR REPLACE FUNCTION public.update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+-- Create triggers for updated_at columns
+CREATE TRIGGER update_messages_updated_at
+    BEFORE UPDATE ON public.messages
+    FOR EACH ROW
+    EXECUTE FUNCTION public.update_updated_at_column();
+
+CREATE TRIGGER update_profiles_updated_at
+    BEFORE UPDATE ON public.profiles
+    FOR EACH ROW
+    EXECUTE FUNCTION public.update_updated_at_column();
+
+-- Function to create user profile on signup
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO public.profiles (id, username, full_name)
+    VALUES (
+        NEW.id,
+        NEW.raw_user_meta_data->>'username',
+        NEW.raw_user_meta_data->>'full_name'
+    );
+    RETURN NEW;
+END;
+$$ language 'plpgsql' security definer;
+
+-- Trigger to create profile on user signup
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
+    FOR EACH ROW
+    EXECUTE FUNCTION public.handle_new_user();
+
+-- 6. Grant Permissions
+-- =====================================================
+
+-- Grant permissions to authenticated users
+GRANT ALL ON public.messages TO authenticated;
+GRANT ALL ON public.profiles TO authenticated;
+GRANT ALL ON public.conversation_sessions TO authenticated;
+GRANT ALL ON public.chat_memory TO authenticated;
+
+-- Grant permissions to service role (for n8n)
+GRANT ALL ON public.messages TO service_role;
+GRANT ALL ON public.profiles TO service_role;
+GRANT ALL ON public.conversation_sessions TO service_role;
+GRANT ALL ON public.chat_memory TO service_role;
+
+-- Grant sequence permissions
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO authenticated;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO service_role;
+
+-- =====================================================
+-- Setup Complete!
+-- =====================================================
+-- Your database is now ready for:
+-- ✅ Frontend chat interface
+-- ✅ n8n workflow integration  
+-- ✅ User authentication and profiles
+-- ✅ Conversation session management
+-- ✅ AI memory persistence
+-- =====================================================
+```
+
+3. **Get your database credentials**:
+   - Go to **Settings** > **API** in your Supabase dashboard
+   - Copy the following values:
+     - Project URL
+     - Project API Key (anon public)
+     - Project API Key (service_role) - for n8n integration
+
+#### n8n Integration Setup
+
+If you're using n8n workflows, configure your Postgres connection:
+
+1. **Add Postgres Credential in n8n**:
+   - Go to n8n Credentials
+   - Add new "Postgres" credential
+   - Use your Supabase database credentials:
+     - Host: `db.YOUR_PROJECT_REF.supabase.co`
+     - Database: `postgres`
+     - User: `postgres`
+     - Password: Your database password
+     - Port: `5432`
+     - SSL: `require`
+
+2. **Update Postgres Chat Memory nodes**:
+   - Set table name to: `chat_memory`
+   - Set session ID field to match your session logic
+   - Ensure the workflow uses the correct credentials
+
+### 3. Environment Variables
 
 Copy the template and add your credentials:
 
@@ -53,7 +303,7 @@ You'll need to fill in:
 - **VITE_N8N_WEBHOOK_URL** (optional) - Your n8n webhook URL
 - **VITE_APP_DOMAIN** (optional) - Your domain name
 
-### 3. Start Development Server
+### 4. Start Development Server
 
 ```bash
 npm run dev

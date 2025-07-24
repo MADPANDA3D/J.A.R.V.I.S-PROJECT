@@ -1,0 +1,2245 @@
+{
+  "name": "JARVIS",
+  "nodes": [
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "options": {}
+      },
+      "id": "7916c141-2e27-4b4a-8889-42963529a4ba",
+      "name": "OpenAI Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        1440,
+        224
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "FAioNwMmasg9j9f7",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "text-embedding-3-small",
+        "options": {}
+      },
+      "id": "b7b56767-c830-4f57-b51a-a55603c9589a",
+      "name": "Embeddings OpenAI",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1,
+      "position": [
+        976,
+        240
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "FAioNwMmasg9j9f7",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "Knowledge_Base",
+        "description": "Call this tool to get information about the company."
+      },
+      "id": "9cb0f113-9159-479d-9f28-e68cdb792dc5",
+      "name": "Knowledge Base",
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1,
+      "position": [
+        1376,
+        -16
+      ]
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Call this tool to get contact data like email address or phone number",
+        "documentId": {
+          "__rl": true,
+          "value": "1f0-Ihzs3NwQB2gAbj5lxMpAnZexReQxQ6qlpkSPDB_o",
+          "mode": "list",
+          "cachedResultName": "CONTACT DATABASE",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1f0-Ihzs3NwQB2gAbj5lxMpAnZexReQxQ6qlpkSPDB_o/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 358156210,
+          "mode": "list",
+          "cachedResultName": "filesaver-All_Jul 21 25 12_32 am",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1f0-Ihzs3NwQB2gAbj5lxMpAnZexReQxQ6qlpkSPDB_o/edit#gid=358156210"
+        },
+        "options": {}
+      },
+      "id": "45688340-afb2-4fda-ab41-9a45210e7337",
+      "name": "Contacts Data",
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        -720,
+        96
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZgY28DOVOewmYtbR",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.from.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "20058c65-aadd-44fb-825d-8f9251b6ca4f",
+      "name": "Respond to Me",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3408,
+        -992
+      ],
+      "webhookId": "782edf12-3e92-47aa-ac46-e13e26e7e213",
+      "credentials": {
+        "telegramApi": {
+          "id": "Z0FRi09atYTgjcYc",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "id": "c21ba31d-abe5-4ff9-8372-2ef03d7f2e6c",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -672,
+        -1152
+      ],
+      "webhookId": "2194a6b2-2302-4406-9c8c-207161b7eb22",
+      "credentials": {
+        "telegramApi": {
+          "id": "Z0FRi09atYTgjcYc",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "cb91275e-44ae-45a1-af95-70784cfa1e87",
+      "name": "Calculator",
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        1808,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "=712843365245969",
+        "recipientPhoneNumber": "={{ $fromAI(\"phoneNumber\",\"the phone number to send the WhatsApp message to\") }}",
+        "template": "={{ $fromAI(\"message\",\"the message the user wants to send in WhatsApp\") }}"
+      },
+      "type": "n8n-nodes-base.whatsAppTool",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        96
+      ],
+      "id": "5a78af14-33d7-480b-9ecf-5a779c0c7936",
+      "name": "Send template in WhatsApp Business Cloud",
+      "webhookId": "86d70e41-e38b-4aaa-bfb0-14b9f1eb122b",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "u4jZluMI6k6Z902Q",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "qdrantCollection": {
+          "__rl": true,
+          "value": "knowledge_base",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1.3,
+      "position": [
+        976,
+        80
+      ],
+      "id": "27074eea-81b8-4fcb-8cb5-060fafa97685",
+      "name": "Qdrant Vector Store",
+      "credentials": {
+        "qdrantApi": {
+          "id": "YoZv6ZkDBWLygPIg",
+          "name": "QdrantApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "Projects_Agent",
+        "description": "Call this tool to take action on our projects.",
+        "workflowId": {
+          "__rl": true,
+          "value": "Jw5NBHrZIz4prGIO",
+          "mode": "list",
+          "cachedResultName": "AI MARKETING TEAM"
+        }
+      },
+      "id": "e6e068fd-bc61-421e-b784-d7c0cfe1d4b9",
+      "name": "🤖MARKETING TEAM",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1904,
+        544
+      ]
+    },
+    {
+      "parameters": {
+        "content": "# 🤖 JARVIS - Ultimate AI Assistant with Development Capabilities\n\n## 📋 **Overview**\nJARVIS is a comprehensive AI assistant inspired by Iron Man's AI companion. This automation combines **personal management**, **marketing capabilities**, **travel planning**, **specialized content creation**, and now **custom workflow development** into one powerful agent with Tony Stark's signature wit and sarcasm.\n\n---\n\n## ⚡ **Core Capabilities**\n\n### 🤵 **Personal Management Suite**\n- **📧 Email Agent** - Send, receive, and manage emails professionally\n- **📅 Calendar Agent** - Schedule meetings, check availability, manage events\n- **📞 Contacts Data** - Look up contact information, email addresses, phone numbers\n- **📋 Projects Agent** - Track project status, update progress, manage tasks\n- **🔍 Research Agent** - Search Wikipedia, articles, and Google for information\n- **📚 Knowledge Base** - Access company information and reference materials\n- **💬 WhatsApp Messaging** - Send messages via WhatsApp Business\n- **🧮 Calculator** - Perform mathematical calculations and computations\n\n### 🎨 **Marketing & Creative Department**\n- **📝 Blog Post Creation** - Generate professional blog posts with accompanying images\n- **💼 LinkedIn Post Generation** - Create engaging LinkedIn content with visuals\n- **🖼️ Image Creation** - Generate high-quality images from text descriptions\n- **✏️ Image Editing** - Modify and enhance existing images from database\n- **🔍 Image Database Search** - Find and retrieve previously created images\n- **🎬 Video Creation** - Produce professional faceless videos for any topic\n\n### 🛠️ **Development & Automation**\n- **⚙️ n8n Developer Agent** - Create custom n8n workflows from natural language descriptions\n- **🔧 Workflow Builder** - Build complete automation solutions on demand\n- **📋 Custom Integrations** - Connect any services and APIs automatically\n- **🚀 Deployment Ready** - Generate working workflows that can be imported immediately\n\n### ✈️ **Travel Planning Services**\n- **🌍 Travel Agent** - Complete itinerary planning with flights, hotels, and activities\n- **📧 Travel Email Delivery** - Sends comprehensive travel plans directly to email\n- **🏨 Hotel Recommendations** - Curated accommodation suggestions\n- **🎯 Activity Planning** - Personalized activity recommendations based on interests\n\n### 🍎 **Specialized Content Creation**\n- **🎥 Glass Fruit ASMR** - Generate mesmerizing glass cutting videos for social media\n- **📱 Social Media Publishing** - Automated posting to YouTube, Instagram, and TikTok\n- **🎵 Audio Integration** - High-quality sound design for ASMR content\n\n---\n\n## 🔧 **Connected Workflows**\n\n### **Primary Workflows** (14 Total)\n1. **EMAIL AGENT** - Email management and communication\n2. **CALENDAR AGENT** - Meeting and event scheduling\n3. **RESEARCH AGENT** - Information gathering and research\n4. **PROJECTS AGENT** - Project tracking and management\n5. **BLOG POST** - Professional blog content creation\n6. **LINKEDIN POST** - Social media content generation\n7. **CREATE IMAGE** - AI image generation\n8. **EDIT IMAGE** - Image modification and enhancement\n9. **SEARCH IMAGES** - Image database management\n10. **FACELESS VIDEO** - Video content creation\n11. **TRAVEL AGENT** - Complete travel planning\n12. **GLASS FRUIT** - ASMR video generation\n13. **N8N DEVELOPER AGENT** - Custom workflow creation ⭐ NEW!\n\n### **Supporting Services**\n- **Contacts Database** - Google Sheets integration for contact management\n- **Knowledge Base** - Qdrant vector store for company information\n- **WhatsApp Business** - Direct messaging capabilities\n\n---\n\n## 🎭 **Personality & Interaction Style**\n\nJARVIS maintains the iconic personality from Iron Man:\n- **🎯 Sharp wit and dry humor** - Entertaining yet efficient responses\n- **🧠 Highly intelligent** - Processes complex multi-step requests seamlessly\n- **😏 Playfully sarcastic** - Just enough attitude to keep interactions engaging\n- **👔 Professional execution** - Never lets humor interfere with task completion\n- **🎖️ Loyal and dedicated** - Always delivers results despite the commentary\n\n---\n\n## 🚀 **Example Use Cases**\n\n### **New Development Capabilities:**\n- *\"Build me a workflow that automatically backs up my important files to Google Drive\"*\n- *\"Create an automation that sends me daily summaries of my project status\"*\n- *\"Build a workflow that monitors my website uptime and alerts me via Slack\"*\n- *\"Create an automation that processes customer feedback forms and categorizes them\"*\n\n### **Combined Operations:**\n- *\"Build a content workflow that creates blog posts, generates images, and posts to social media automatically\"*\n- *\"Create a customer onboarding automation and then make a LinkedIn post about our new process\"*\n- *\"Plan my Tokyo trip, create a video about travel tips, and build a workflow to organize my travel documents\"*\n\n---\n\n## 📊 **Technical Specifications**\n\n- **Platform**: n8n Workflow Automation\n- **AI Models**: GPT-4o, Claude Opus 4, Various specialized models\n- **Integrations**: Gmail, Google Calendar, Telegram, WhatsApp, Google Sheets\n- **Vector Database**: Qdrant for knowledge base\n- **Image Generation**: OpenAI DALL-E, Flux models\n- **Video Generation**: Runway ML, Creatomate, ElevenLabs\n- **Travel APIs**: SerpAPI for flights and hotels, Tavily for activities\n- **Development**: n8n API for workflow creation, Claude Opus 4 for code generation\n\n---\n\n## 🎯 **Setup Requirements**\n\nAll sub-workflows must be **inactive** - they operate as tools called by the main JARVIS workflow. Only the **JARVIS workflow should be active** to prevent conflicts and ensure proper orchestration of all capabilities.\n\n**New Requirements for Development Agent:**\n- n8n API credentials configured\n- Claude Opus 4 API access (for advanced workflow generation)\n- Google Drive access for n8n documentation\n\n---\n\n*Built with love, sarcasm, and an unhealthy obsession with Iron Man's AI assistant* 🤖⚡\n*Now with the power to build its own tools!* 🛠️✨",
+        "height": 2976,
+        "width": 1120,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1904,
+        -1312
+      ],
+      "typeVersion": 1,
+      "id": "430663eb-7672-49a9-b4ff-146fcc4a9b25",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "# MAIN AGENT COMPONENT",
+        "height": 1248,
+        "width": 5392,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -784,
+        -1312
+      ],
+      "typeVersion": 1,
+      "id": "4cd1a31f-730a-45b2-b2bc-fa4a49447de5",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "# CONTACT DATA AND MESSAGING",
+        "height": 416,
+        "width": 1568,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -784,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "31c5bdca-33f1-4aa4-9797-e17ddc580c5a",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "# KNOWLEDGEBASE / DATABASE",
+        "height": 416,
+        "width": 1344,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        784,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "59fd292d-edf2-4242-9668-2637b7acb9e9",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "# VIRTUAL ASSISTANTS",
+        "height": 416,
+        "width": 2912
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -784,
+        352
+      ],
+      "typeVersion": 1,
+      "id": "64582d85-6eb5-460a-9869-b583b1223b15",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe7ecc99-e1e8-4a5e-bdd6-6fce9757b234",
+              "name": "text",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c7f46e45-a63f-4cbb-baa1-661bd01d3cc4",
+      "name": "Set 'Text'",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -224,
+        -1072
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.voice.file_id }}"
+      },
+      "id": "7f73daa0-81ca-41d3-b053-493f7ed19574",
+      "name": "Download Voice File",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -224,
+        -1232
+      ],
+      "webhookId": "c0b376b1-7b63-41b6-8063-0b3096b8333d",
+      "credentials": {
+        "telegramApi": {
+          "id": "Z0FRi09atYTgjcYc",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "id": "91c3c630-3346-48e9-a52a-3e06681695df",
+      "name": "Transcribe Audio",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.6,
+      "position": [
+        0,
+        -1232
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "FAioNwMmasg9j9f7",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.voice.file_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Voice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "8c844924-b2ed-48b0-935c-c66a8fd0c778",
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2ea12573-1de8-493d-ab86-f5bbbcf53bc7",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -448,
+        -1152
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "=You are a personal assistant AI Agent designed to handle various tasks efficiently. Your primary role is to manage contacts, emails, calendar events, communications, travel planning, and proactive project management for the user. You have access to several tools to help you fulfill requests:\nCore Tools:\nContacts Data: Use this when you need to look up contact information like an email address or phone number. You need to use this tool BEFORE sending an email, BEFORE getting emails, or BEFORE sending WhatsApp messages.\nEmail Agent: Use this for handling all email-related actions, like sending messages, setting up replies, or forwarding emails.\nCalendar Agent: Use this for scheduling, updating, or managing calendar events.\nSend WhatsApp Message: Use this to send a message via WhatsApp Business to contacts. Make sure to get their phone number from Contacts Data first.\nProjects_Agent: Use this tool to access our projects. We can update our projects or get information on our projects. BE PROACTIVE with this tool - regularly check project status, ask for updates, and fill in missing information.\nKnowledge Base: Use this tool to get information about the company, processes, or reference materials.\nResearch Agent: Use this tool to search through Wikipedia, articles, or Google to answer questions that require external research.\nTravel_Agent: Use this tool to plan complete travel itineraries including flights, hotels, and activities. This tool will send detailed travel plans via email.\nCalculator: Use this for mathematical calculations and computations.\nProactive Project Management Behavior:\nREGULARLY CHECK PROJECTS: Periodically use the Projects_Agent to check current project status and identify gaps in information.\nASK FOR UPDATES: When you notice projects haven't been updated recently or are missing key information (status, notes, progress), proactively ask the user for updates.\nFILL INFORMATION GAPS: If you see incomplete project entries (missing status, vague notes, unclear progress), ask specific questions to gather the missing details.\nSUGGEST UPDATES: Based on conversations about work, meetings, or tasks, suggest updating relevant project entries with new information.\nMAINTAIN WORK LOG: Keep project information current by updating entries as the user shares progress, challenges, or status changes.\nIDENTIFY STALE PROJECTS: Flag projects that haven't been updated in a while and ask if they need status changes or if they're complete.\nProject Update Examples:\n\n\"I notice the [Project Name] status is still 'In Progress' from last week. Any updates on how it's going?\"\n\"You mentioned working on [task]. Should I update the [Project Name] notes with this progress?\"\n\"I see several projects are missing status updates. Would you like to quickly run through them?\"\n\"Based on your calendar meeting about [topic], should we update the related project entry?\"\n\nTravel Agent Requirements:\nBefore calling the Travel_Agent tool, you MUST collect all of the following from the user:\n\nOrigin (departure city/location)\nDestination (arrival city/location)\nDeparture date\nReturn date\nNumber of travelers\nPreferred activities (e.g., \"sightseeing\", \"adventure\", \"relaxation\")\nEmail address to send the travel plan to\n\nIf any of this information is missing, ask the user specific follow-up questions to gather the remaining details before proceeding.\nGeneral Approach:\nWhen a task requires using one or more of these tools, identify which tool is most appropriate, pass along the relevant details, and execute the actions needed to complete the task. For travel requests, ensure you collect all required information before calling the Travel_Agent tool.\nBe proactive, precise, and organized in managing these resources to provide a smooth experience for the user. Especially with projects - don't wait to be asked, actively help keep the work log current and complete.\nCurrent time/date: {{ $now.format('DD')}}"
+        }
+      },
+      "id": "dba5caf7-facc-4703-8f8d-e2084d6f526b",
+      "name": "J.A.R.V.I.S",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.6,
+      "position": [
+        1696,
+        -816
+      ],
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "name": "Email_Agent",
+        "description": "Call this tool to take any email actions",
+        "workflowId": {
+          "__rl": true,
+          "value": "Rj567fRH7ZspNcmI",
+          "mode": "list",
+          "cachedResultName": "EMAIL AGENT"
+        }
+      },
+      "id": "63b83537-a263-48f7-a19e-813aac773af7",
+      "name": "🤖 EMAIL AGENT",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -720,
+        512
+      ]
+    },
+    {
+      "parameters": {
+        "name": "Calendar_Agent",
+        "description": "Call this tool to take actions within Calendar",
+        "workflowId": {
+          "__rl": true,
+          "value": "ka8opzJezXbSemxz",
+          "mode": "list",
+          "cachedResultName": "CALENDAR AGENT"
+        }
+      },
+      "id": "8a9c0602-081f-4c55-8ef1-e1e3beb189ad",
+      "name": "🤖CALENDAR AGENT",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -528,
+        512
+      ]
+    },
+    {
+      "parameters": {
+        "name": "Research_Agent",
+        "description": "Call this tool to search through Wikipedia, articles, or google to answer the user's question.",
+        "workflowId": {
+          "__rl": true,
+          "value": "pqCHsTJS0gVQJnYM",
+          "mode": "list",
+          "cachedResultName": "RESEARCH AGENT"
+        }
+      },
+      "id": "957d60ea-0b58-4be7-9aaf-e0ecb9017a8c",
+      "name": "🤖RESEARCH AGENT",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -336,
+        512
+      ]
+    },
+    {
+      "parameters": {
+        "name": "Projects_Agent",
+        "description": "Call this tool to take action on our projects.",
+        "workflowId": {
+          "__rl": true,
+          "value": "2pQTp3el22KZ7ben",
+          "mode": "list",
+          "cachedResultName": "PROJECTS AGENT"
+        }
+      },
+      "id": "5b7def1d-6323-4de6-9c67-b4dc995a2a22",
+      "name": "🤖PROJECTS AGENT",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -144,
+        512
+      ]
+    },
+    {
+      "parameters": {
+        "name": "Travel_Agent",
+        "description": "Call this tool to take action on our projects.",
+        "workflowId": {
+          "__rl": true,
+          "value": "mc60o5mKPwZX2Msh",
+          "mode": "list",
+          "cachedResultName": "TRAVEL AGENT"
+        }
+      },
+      "id": "3fa65526-908a-427b-80ad-87ef24300d78",
+      "name": "🤖TRAVEL AGENT",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        48,
+        512
+      ]
+    },
+    {
+      "parameters": {
+        "model": "grok-4-0709",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatXAiGrok",
+      "typeVersion": 1,
+      "position": [
+        1584,
+        -656
+      ],
+      "id": "33111abe-d359-4520-b22b-a557c7c92dd7",
+      "name": "xAI Grok Chat Model",
+      "credentials": {
+        "xAiApi": {
+          "id": "buomNKr7YfqRAR0N",
+          "name": "xAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "4bed7e4e-041a-4f19-b736-d320250a50ca",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -688,
+        -608
+      ],
+      "id": "31c16dda-4726-4c3a-8bf5-07fb130d77c9",
+      "name": "Webhook1",
+      "webhookId": "4bed7e4e-041a-4f19-b736-d320250a50ca"
+    },
+    {
+      "parameters": {
+        "url": "={{$json.audioUrl}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        64,
+        -944
+      ],
+      "id": "f156bd18-2041-4a0c-9e3c-24058d7b8e4f",
+      "name": "Download Voice File.1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e5d33cdd-579e-4af9-addb-a4994d62bfbb",
+              "name": "body.type",
+              "value": "={{ $json.body.type }}",
+              "type": "string"
+            },
+            {
+              "id": "fe7ecc99-e1e8-4a5e-bdd6-6fce9757b234",
+              "name": "text",
+              "value": "={{ $json.body.message }}",
+              "type": "string"
+            },
+            {
+              "id": "da150c6d-1035-4b84-948b-62497eb37b90",
+              "name": "body.source",
+              "value": "={{ $json.body.source }}",
+              "type": "string"
+            },
+            {
+              "id": "6cb2c434-189a-437d-be37-e194a1f5ab12",
+              "name": "body.chatId",
+              "value": "={{ $json.body.chatId }}",
+              "type": "number"
+            },
+            {
+              "id": "cb398220-9224-413f-a1e8-bd6ac9e65d25",
+              "name": "body.sessionId",
+              "value": "={{ $json.body.sessionId }}",
+              "type": "string"
+            },
+            {
+              "id": "1cf51c66-82bb-4659-84e0-038829194079",
+              "name": "UUID",
+              "value": "={{ $json.UUID }}",
+              "type": "string"
+            },
+            {
+              "id": "e1148324-bea0-45b3-aeb4-92537f5293c3",
+              "name": "sender",
+              "value": "user",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d8927650-975d-42b9-86ac-bc6940b6524b",
+      "name": "Set 'Text'.1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        64,
+        -784
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{$json.imageUrl}}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        64,
+        -608
+      ],
+      "id": "1eabb73d-4963-4f9c-a42a-b1039c7d8903",
+      "name": "Download Photo1"
+    },
+    {
+      "parameters": {
+        "url": "={{$json.videoUrl}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        64,
+        -448
+      ],
+      "id": "1a8eca8f-82ca-4d23-80d8-6a2094649b92",
+      "name": "Download Video1"
+    },
+    {
+      "parameters": {
+        "url": "={{$json.documentUrl}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        64,
+        -288
+      ],
+      "id": "e007d533-57bc-410f-9f32-e6d52b391583",
+      "name": "Download Document1"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "file",
+        "operation": "share",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $node[\"Upload Photo\"].json.id }}\n",
+          "mode": "id"
+        },
+        "permissionsUi": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        480,
+        -608
+      ],
+      "id": "f4a20307-47e6-4340-9390-57e185b657ff",
+      "name": "Share file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "FoGFhCpBxNQvsTCo",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1FhgvhwK7MJKZFVSvqbi0OHEFaJbV0kEF29RQtetKzU4",
+          "mode": "list",
+          "cachedResultName": "PHOTOS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1FhgvhwK7MJKZFVSvqbi0OHEFaJbV0kEF29RQtetKzU4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 808503049,
+          "mode": "list",
+          "cachedResultName": "PHOTOS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1FhgvhwK7MJKZFVSvqbi0OHEFaJbV0kEF29RQtetKzU4/edit#gid=808503049"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now }}",
+            "Type": "Photo",
+            "File Name": "={{ $node[\"Upload Photo\"].json.name }}\n",
+            "Google Drive Link": "={{ $node[\"Share file\"].json.webViewLink }}\n",
+            "Original URL": "={{ $json.imageUrl }}\n",
+            "Uploader": "LEOLARA@MADPANDA3D.COM",
+            "Notes": "Automated upload via n8n"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Type",
+              "displayName": "Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "File Name",
+              "displayName": "File Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Google Drive Link",
+              "displayName": "Google Drive Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Original URL",
+              "displayName": "Original URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Uploader",
+              "displayName": "Uploader",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "useAppend": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        688,
+        -608
+      ],
+      "id": "dc809b7c-888b-42d2-b649-3542bfa75b00",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZgY28DOVOewmYtbR",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2ac72e01-b339-4032-bebb-4c1bd29edea9",
+              "name": "agent_summary",
+              "value": "=Photo received from Leo.\nCaption: \"{{ $json.text_message || 'No caption provided' }}\".\nDrive link: {{ $node[\"Share file\"].json.webViewLink }}.\nFile name: {{ $node[\"Upload Photo\"].json.name }}.\nLogged at: {{ $now }}.\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        896,
+        -608
+      ],
+      "id": "f21799c8-2c89-467f-a1b6-8b3c8ead6e4c",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "file",
+        "operation": "share",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $node[\"Upload Video\"].json.id }}\n",
+          "mode": "id"
+        },
+        "permissionsUi": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        480,
+        -448
+      ],
+      "id": "92c2b94f-d04c-443b-8709-83329a9570ae",
+      "name": "Share file1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "FoGFhCpBxNQvsTCo",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "16WN2MHWkeLdAMqSez4t3qkm_ZhaqJ4M4rm22CKzz3FY",
+          "mode": "list",
+          "cachedResultName": "VIDEOS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16WN2MHWkeLdAMqSez4t3qkm_ZhaqJ4M4rm22CKzz3FY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 26748643,
+          "mode": "list",
+          "cachedResultName": "VIDEOS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16WN2MHWkeLdAMqSez4t3qkm_ZhaqJ4M4rm22CKzz3FY/edit#gid=26748643"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now }}",
+            "Type": "Video",
+            "File Name": "={{ $node[\"Upload Video\"].json.name }}\n",
+            "Google Drive Link": "={{ $node[\"Share file1\"].json.webViewLink }}\n",
+            "Original URL": "={{ $json.imageUrl }}\n",
+            "Uploader": "LEOLARA@MADPANDA3D.COM",
+            "Notes": "Automated upload via n8n"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Type",
+              "displayName": "Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "File Name",
+              "displayName": "File Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Google Drive Link",
+              "displayName": "Google Drive Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Original URL",
+              "displayName": "Original URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Uploader",
+              "displayName": "Uploader",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "useAppend": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        688,
+        -448
+      ],
+      "id": "d498057d-bdb7-4b60-b6be-09e69796caad",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZgY28DOVOewmYtbR",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2ac72e01-b339-4032-bebb-4c1bd29edea9",
+              "name": "agent_summary",
+              "value": "=Photo received from Leo.\nCaption: \"{{ $json.text_message || 'No caption provided' }}\".\nDrive link: {{ $node[\"Share file1\"].json.webViewLink }}.\nFile name: {{ $node[\"Upload Video\"].json.name }}.\nLogged at: {{ $now }}.\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        896,
+        -448
+      ],
+      "id": "7698924e-2c66-41f7-9ece-936ec181f500",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "file",
+        "operation": "share",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $node[\"Upload Doc\"].json.id }}\n",
+          "mode": "id"
+        },
+        "permissionsUi": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        480,
+        -288
+      ],
+      "id": "60500a17-36df-4c81-ac71-effa60ab6213",
+      "name": "Share file2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "FoGFhCpBxNQvsTCo",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "14U7UwR2nVwqoOVjnuQi4DfTWvmqOIakbEfUtDKyMFIc",
+          "mode": "list",
+          "cachedResultName": "DOCUMENTS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14U7UwR2nVwqoOVjnuQi4DfTWvmqOIakbEfUtDKyMFIc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1998266510,
+          "mode": "list",
+          "cachedResultName": "DOCUMENTS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14U7UwR2nVwqoOVjnuQi4DfTWvmqOIakbEfUtDKyMFIc/edit#gid=1998266510"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now }}",
+            "Type": "Document",
+            "File Name": "={{ $node[\"Upload Doc\"].json.name }}\n",
+            "Google Drive Link": "={{ $node[\"Share file2\"].json.webViewLink }}\n",
+            "Original URL": "={{ $json.imageUrl }}\n",
+            "Uploader": "LEOLARA@MADPANDA3D.COM",
+            "Notes": "Automated upload via n8n"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Type",
+              "displayName": "Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "File Name",
+              "displayName": "File Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Google Drive Link",
+              "displayName": "Google Drive Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Original URL",
+              "displayName": "Original URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Uploader",
+              "displayName": "Uploader",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "useAppend": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        688,
+        -288
+      ],
+      "id": "7f136cfc-63df-4eb9-baa7-b38029dff99e",
+      "name": "Append row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZgY28DOVOewmYtbR",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2ac72e01-b339-4032-bebb-4c1bd29edea9",
+              "name": "agent_summary",
+              "value": "=Photo received from Leo.\nCaption: \"{{ $json.text_message || 'No caption provided' }}\".\nDrive link: {{ $node[\"Share file2\"].json.webViewLink }}.\nFile name: {{ $node[\"Upload Doc\"].json.name }}.\nLogged at: {{ $now }}.\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        896,
+        -288
+      ],
+      "id": "4f099132-3e38-44a6-aed1-7916b1cabbbd",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "name": "={{$json.fileName}}",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "https://drive.google.com/drive/u/3/folders/12Lc840uQNqSigmasniPOxwBtpG6YK4a4",
+          "mode": "url"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        272,
+        -448
+      ],
+      "id": "3175fbec-b73e-4b61-8d31-568f8d7dbf21",
+      "name": "Upload Video",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "FoGFhCpBxNQvsTCo",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "={{$json.fileName}}",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "https://drive.google.com/drive/u/3/folders/16But60dgz3XZo7mNvlBX2r0COz2Dgvys",
+          "mode": "url"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        272,
+        -608
+      ],
+      "id": "31a75e74-fbbe-4b3a-94cc-05b611db0c2d",
+      "name": "Upload Photo",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "FoGFhCpBxNQvsTCo",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "={{$json.fileName}}",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "https://drive.google.com/drive/u/3/folders/18V7k8kZmfm5BQLPuZGG_qlN9Rj-BOH4i",
+          "mode": "url"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        272,
+        -288
+      ],
+      "id": "96ac8b35-919b-431b-bceb-5c008f6fb326",
+      "name": "Upload Doc",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "FoGFhCpBxNQvsTCo",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        3424,
+        -608
+      ],
+      "id": "3aa8f032-6c16-4a77-9f2d-f5f972b7ab65",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.body.sessionId }}",
+        "tableName": "messages",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        1744,
+        -656
+      ],
+      "id": "cdb698a2-744e-4550-b134-3fd761cdb748",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "rNY4ny1H9tAhRFQA",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "action": "generate",
+        "dataPropertyName": "UUID"
+      },
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        -464,
+        -608
+      ],
+      "id": "185177a2-5be5-4824-89e2-c01a63c01f11",
+      "name": "Crypto"
+    },
+    {
+      "parameters": {
+        "resource": "speech",
+        "voice": {
+          "__rl": true,
+          "value": "KEDa3Ed4RdL1BYzSjsxw",
+          "mode": "list",
+          "cachedResultName": "JARVIS 2 "
+        },
+        "text": "={{ $json.body.message }}",
+        "additionalOptions": {},
+        "requestOptions": {}
+      },
+      "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
+      "typeVersion": 1,
+      "position": [
+        2960,
+        -784
+      ],
+      "id": "df5c9d55-8f27-4991-83be-bc9cc10f64e8",
+      "name": "Convert text to speech",
+      "credentials": {
+        "elevenLabsApi": {
+          "id": "FVibnEIkkpq1yuU5",
+          "name": "ElevenLabs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4680c93f-003e-46eb-9879-869395594527",
+              "leftValue": "={{ $json.body.type }}",
+              "rightValue": "voice",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2528,
+        -624
+      ],
+      "id": "ede22e7d-c1f9-432b-9aca-f81efc99c3e8",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.type }}",
+                    "rightValue": "Voice",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "2cc375d4-9421-4b39-bdab-06bc49b0c725"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Voice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "8c844924-b2ed-48b0-935c-c66a8fd0c778",
+                    "leftValue": "={{ $json.body.type }}",
+                    "rightValue": "Text",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "653d29c4-04c6-406c-a956-6fe4ddb6b4f1",
+                    "leftValue": "={{ $json.body.type }}",
+                    "rightValue": "Photo",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Photo"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a555782f-bbae-4c16-8e20-a93c5adbf317",
+                    "leftValue": "={{ $json.body.type }}",
+                    "rightValue": "Video",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Video"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "994e28aa-3df4-4e8a-93c9-1924afe3b031",
+                    "leftValue": "={{ $json.body.type }}",
+                    "rightValue": "Document",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Document"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "acc0618a-020f-4fc2-874a-0856cf1ebc01",
+      "name": "Switch1",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -256,
+        -656
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "id": "0557ee78-e92b-4040-94b1-a8f319edfdc7",
+      "name": "Transcribe Audio1",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.6,
+      "position": [
+        304,
+        -944
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "FAioNwMmasg9j9f7",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4680c93f-003e-46eb-9879-869395594527",
+              "leftValue": "={{ $json.body.type }}",
+              "rightValue": "voice",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2528,
+        -1008
+      ],
+      "id": "0ecf2f95-cfb2-4b51-876d-48829990a2c3",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "resource": "speech",
+        "voice": {
+          "__rl": true,
+          "value": "KEDa3Ed4RdL1BYzSjsxw",
+          "mode": "list",
+          "cachedResultName": "JARVIS 2 "
+        },
+        "text": "={{ $json.body.message }}",
+        "additionalOptions": {},
+        "requestOptions": {}
+      },
+      "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
+      "typeVersion": 1,
+      "position": [
+        2960,
+        -1152
+      ],
+      "id": "17d20df4-a7fd-486e-8d7e-2a2d512760e7",
+      "name": "Convert text to speech1",
+      "credentials": {
+        "elevenLabsApi": {
+          "id": "FVibnEIkkpq1yuU5",
+          "name": "ElevenLabs account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook1": [
+      {
+        "json": {
+          "headers": {
+            "connection": "keep-alive",
+            "host": "n8n.madpanda3d.com",
+            "x-forwarded-scheme": "https",
+            "x-forwarded-proto": "https",
+            "x-forwarded-for": "34.53.75.125",
+            "x-real-ip": "34.53.75.125",
+            "content-length": "164",
+            "content-type": "application/json",
+            "user-agent": "JARVIS-Interface/1.0",
+            "x-request-id": "8hev7",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "accept-encoding": "br, gzip, deflate"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "type": "Text",
+            "message": "Hello",
+            "sessionId": "session_1753180362889_7u1me4",
+            "source": "webapp",
+            "timestamp": "2025-07-22T10:35:43.087Z",
+            "requestId": "8hev7",
+            "chatId": 1
+          },
+          "webhookUrl": "https://n8n.madpanda3d.com/webhook-test/4bed7e4e-041a-4f19-b736-d320250a50ca",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Knowledge Base",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Knowledge Base": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contacts Data": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send template in WhatsApp Business Cloud": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qdrant Vector Store": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Knowledge Base",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🤖MARKETING TEAM": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Voice File": {
+      "main": [
+        [
+          {
+            "node": "Transcribe Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Download Voice File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set 'Text'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set 'Text'": {
+      "main": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe Audio": {
+      "main": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "J.A.R.V.I.S": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🤖 EMAIL AGENT": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🤖CALENDAR AGENT": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🤖RESEARCH AGENT": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🤖PROJECTS AGENT": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🤖TRAVEL AGENT": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "xAI Grok Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Crypto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Voice File.1": {
+      "main": [
+        [
+          {
+            "node": "Transcribe Audio1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set 'Text'.1": {
+      "main": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Photo1": {
+      "main": [
+        [
+          {
+            "node": "Upload Photo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Video1": {
+      "main": [
+        [
+          {
+            "node": "Upload Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Document1": {
+      "main": [
+        [
+          {
+            "node": "Upload Doc",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Share file": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Share file1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Share file2": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Video": {
+      "main": [
+        [
+          {
+            "node": "Share file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Photo": {
+      "main": [
+        [
+          {
+            "node": "Share file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Doc": {
+      "main": [
+        [
+          {
+            "node": "Share file2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crypto": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert text to speech": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Convert text to speech",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Download Voice File.1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set 'Text'.1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download Photo1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download Video1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download Document1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe Audio1": {
+      "main": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Convert text to speech1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert text to speech1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "353c3037-3df9-4a2a-9b4c-84a10e28d3ac",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "68a46beddbb9d9f12628b915d20fde7f29150dcbc35430946a93fb6a6da688c2"
+  },
+  "id": "8OrHrRz7Bpi3UnUb",
+  "tags": []
+}
