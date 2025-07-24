@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Generate PWA Icons</title>
+  </head>
+  <body>
+    <canvas id="canvas" style="border: 1px solid black"></canvas>
+    <div>
+      <button onclick="generateIcon(76)">76x76</button>
+      <button onclick="generateIcon(120)">120x120</button>
+      <button onclick="generateIcon(144)">144x144</button>
+      <button onclick="generateIcon(152)">152x152</button>
+      <button onclick="generateIcon(180)">180x180</button>
+      <button onclick="generateIcon(192)">192x192</button>
+      <button onclick="generateIcon(512)">512x512</button>
+    </div>
+
+    <script>
+      function generateIcon(size) {
+        const canvas = document.getElementById('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+
+        // Background
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, size, size);
+
+        // Outer ring
+        ctx.strokeStyle = '#DC143C';
+        ctx.lineWidth = Math.max(2, size / 64);
+        ctx.beginPath();
+        ctx.arc(size / 2, size / 2, size * 0.39, 0, 2 * Math.PI);
+        ctx.stroke();
+
+        // Inner ring
+        ctx.strokeStyle = '#00FFFF';
+        ctx.lineWidth = Math.max(1, size / 85);
+        ctx.beginPath();
+        ctx.arc(size / 2, size / 2, size * 0.16, 0, 2 * Math.PI);
+        ctx.stroke();
+
+        // Center dot
+        ctx.fillStyle = '#DC143C';
+        ctx.beginPath();
+        ctx.arc(size / 2, size / 2, size * 0.04, 0, 2 * Math.PI);
+        ctx.fill();
+
+        // Corner accents
+        ctx.fillStyle = '#DC143C';
+        const accent = size * 0.1;
+        const thickness = Math.max(2, size / 128);
+
+        // Top-left
+        ctx.fillRect(accent, accent, accent, thickness);
+        ctx.fillRect(accent, accent, thickness, accent);
+
+        // Top-right
+        ctx.fillRect(size - 2 * accent, accent, accent, thickness);
+        ctx.fillRect(size - accent - thickness, accent, thickness, accent);
+
+        // Bottom-left
+        ctx.fillRect(accent, size - accent - thickness, accent, thickness);
+        ctx.fillRect(accent, size - 2 * accent, thickness, accent);
+
+        // Bottom-right
+        ctx.fillRect(
+          size - 2 * accent,
+          size - accent - thickness,
+          accent,
+          thickness
+        );
+        ctx.fillRect(
+          size - accent - thickness,
+          size - 2 * accent,
+          thickness,
+          accent
+        );
+
+        // Download
+        const link = document.createElement('a');
+        link.download = `icon-${size}x${size}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+      }
+    </script>
+  </body>
+</html>

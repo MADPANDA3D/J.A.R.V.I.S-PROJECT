@@ -1,0 +1,66 @@
+{
+  "name": "JARVIS Chat Webhook Template",
+  "description": "Template workflow for JARVIS Chat integration",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "4bed7e4e-041a-4f19-b736-d320250a50ca",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "position": [240, 300],
+      "webhookId": "4bed7e4e-041a-4f19-b736-d320250a50ca"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract the message from the webhook payload\nconst userMessage = $input.item.json.message;\nconst userId = $input.item.json.userId;\nconst conversationId = $input.item.json.conversationId;\nconst requestId = $input.item.json.requestId;\n\n// Log the incoming request\nconsole.log('Received message from JARVIS:', userMessage);\n\n// For now, create a simple response\n// TODO: Replace this with your AI service call (OpenAI, Claude, etc.)\nconst aiResponse = `Hello! I received your message: \"${userMessage}\". This is JARVIS responding through n8n. How can I assist you today?`;\n\nreturn {\n  message: userMessage,\n  userId: userId,\n  conversationId: conversationId,\n  requestId: requestId,\n  aiResponse: aiResponse,\n  processingTime: 100\n};"
+      },
+      "id": "process-message",
+      "name": "Process Message",
+      "type": "n8n-nodes-base.code",
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"response\": \"{{ $json.aiResponse }}\",\n  \"success\": true,\n  \"requestId\": \"{{ $json.requestId }}\",\n  \"processingTime\": {{ $json.processingTime }}\n}",
+        "options": {}
+      },
+      "id": "webhook-response",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "position": [680, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Process Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Message": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

@@ -1,0 +1,1272 @@
+openapi: 3.0.0
+info:
+  title: JARVIS Chat API
+  version: 1.0.0
+  description: |
+    AI-powered chat assistant API with comprehensive monitoring, error tracking, and health management.
+
+    ## Features
+    - Real-time messaging with AI assistant
+    - Webhook integration with n8n workflows
+    - Comprehensive health monitoring
+    - User authentication and session management
+    - Advanced error tracking and analytics
+
+    ## Authentication
+    This API uses JWT-based authentication. Include the access token in the Authorization header:
+    ```
+    Authorization: Bearer <your-jwt-token>
+    ```
+
+    ## Rate Limiting
+    - **Standard endpoints**: 100 requests per minute
+    - **Authentication endpoints**: 10 requests per minute
+    - **Health endpoints**: 1000 requests per minute
+
+    ## Error Handling
+    All errors follow a consistent format with appropriate HTTP status codes and detailed error messages.
+
+  contact:
+    name: JARVIS Chat Support
+    email: support@madpanda3d.com
+    url: https://jarvis.madpanda3d.com/support
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://jarvis.madpanda3d.com/api
+    description: Production server
+  - url: https://staging-jarvis.madpanda3d.com/api
+    description: Staging server
+  - url: http://localhost:5173/api
+    description: Development server
+
+security:
+  - BearerAuth: []
+
+paths:
+  # Authentication Endpoints
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      description: Authenticate user with email and password
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            examples:
+              standard_login:
+                summary: Standard email/password login
+                value:
+                  email: user@example.com
+                  password: securepassword123
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+              examples:
+                successful_login:
+                  summary: Successful login response
+                  value:
+                    success: true
+                    message: Login successful
+                    data:
+                      user:
+                        id: 123e4567-e89b-12d3-a456-426614174000
+                        email: user@example.com
+                        name: John Doe
+                        created_at: '2025-01-15T10:30:00Z'
+                      session:
+                        access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                        refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                        expires_at: '2025-01-15T18:30:00Z'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: User registration
+      description: Register a new user account
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            examples:
+              new_user:
+                summary: New user registration
+                value:
+                  email: newuser@example.com
+                  password: securepassword123
+                  name: Jane Smith
+      responses:
+        '201':
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                user_exists:
+                  summary: User already exists
+                  value:
+                    success: false
+                    error:
+                      code: USER_EXISTS
+                      message: User with this email already exists
+        '429':
+          $ref: '#/components/responses/RateLimited'
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: User logout
+      description: Logout user and invalidate session
+      responses:
+        '200':
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+              examples:
+                logout_success:
+                  summary: Successful logout
+                  value:
+                    success: true
+                    message: Logout successful
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /auth/refresh:
+    post:
+      tags:
+        - Authentication
+      summary: Refresh access token
+      description: Refresh expired access token using refresh token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshRequest'
+      responses:
+        '200':
+          description: Token refreshed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  # Messages Endpoints
+  /messages:
+    get:
+      tags:
+        - Messages
+      summary: Get message history
+      description: Retrieve paginated message history for the authenticated user
+      parameters:
+        - name: limit
+          in: query
+          description: Number of messages to return (max 100)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+          example: 20
+        - name: offset
+          in: query
+          description: Number of messages to skip
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          example: 0
+        - name: before
+          in: query
+          description: Get messages before this timestamp (ISO 8601)
+          required: false
+          schema:
+            type: string
+            format: date-time
+          example: '2025-01-15T12:00:00Z'
+        - name: search
+          in: query
+          description: Search messages by content
+          required: false
+          schema:
+            type: string
+          example: 'deployment status'
+      responses:
+        '200':
+          description: Messages retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessagesResponse'
+              examples:
+                message_history:
+                  summary: Sample message history
+                  value:
+                    success: true
+                    data:
+                      messages:
+                        - id: 123e4567-e89b-12d3-a456-426614174001
+                          content: 'How can I deploy my application?'
+                          role: user
+                          created_at: '2025-01-15T10:30:00Z'
+                          metadata:
+                            source: web
+                        - id: 123e4567-e89b-12d3-a456-426614174002
+                          content: 'I can help you deploy your application. What platform are you targeting?'
+                          role: assistant
+                          created_at: '2025-01-15T10:30:15Z'
+                          metadata:
+                            model: gpt-4
+                            tokens_used: 45
+                      pagination:
+                        total: 156
+                        limit: 20
+                        offset: 0
+                        has_more: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags:
+        - Messages
+      summary: Send message
+      description: Send a new message to the AI assistant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendMessageRequest'
+            examples:
+              user_question:
+                summary: User asking a question
+                value:
+                  content: "What's the best way to implement error handling in React?"
+                  metadata:
+                    source: web
+                    context: development
+      responses:
+        '201':
+          description: Message sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              examples:
+                assistant_response:
+                  summary: Assistant response
+                  value:
+                    success: true
+                    data:
+                      user_message:
+                        id: 123e4567-e89b-12d3-a456-426614174003
+                        content: "What's the best way to implement error handling in React?"
+                        role: user
+                        created_at: '2025-01-15T10:35:00Z'
+                      assistant_message:
+                        id: 123e4567-e89b-12d3-a456-426614174004
+                        content: 'For React error handling, I recommend using Error Boundaries...'
+                        role: assistant
+                        created_at: '2025-01-15T10:35:02Z'
+                        metadata:
+                          model: gpt-4
+                          tokens_used: 234
+                          processing_time_ms: 1850
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+
+  /messages/{messageId}:
+    get:
+      tags:
+        - Messages
+      summary: Get specific message
+      description: Retrieve a specific message by ID
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          description: The unique identifier of the message
+          schema:
+            type: string
+            format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174001
+      responses:
+        '200':
+          description: Message retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleMessageResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    delete:
+      tags:
+        - Messages
+      summary: Delete message
+      description: Delete a specific message (user messages only)
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          description: The unique identifier of the message
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Message deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '403':
+          description: Cannot delete assistant messages
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  # User Profile Endpoints
+  /users/profile:
+    get:
+      tags:
+        - Users
+      summary: Get user profile
+      description: Retrieve the authenticated user's profile information
+      responses:
+        '200':
+          description: Profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResponse'
+              examples:
+                user_profile:
+                  summary: User profile data
+                  value:
+                    success: true
+                    data:
+                      user:
+                        id: 123e4567-e89b-12d3-a456-426614174000
+                        email: user@example.com
+                        name: John Doe
+                        created_at: '2025-01-10T08:00:00Z'
+                        last_login: '2025-01-15T10:30:00Z'
+                        preferences:
+                          theme: dark
+                          language: en
+                          notifications: true
+                        statistics:
+                          total_messages: 1456
+                          total_sessions: 89
+                          average_session_duration: 1800
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    put:
+      tags:
+        - Users
+      summary: Update user profile
+      description: Update the authenticated user's profile information
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileRequest'
+            examples:
+              profile_update:
+                summary: Update user profile
+                value:
+                  name: John Smith
+                  preferences:
+                    theme: light
+                    language: en
+                    notifications: false
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  # Health and Monitoring Endpoints
+  /health:
+    get:
+      tags:
+        - Health
+      summary: System health check
+      description: Get comprehensive system health status
+      security: []
+      responses:
+        '200':
+          description: System is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              examples:
+                healthy_system:
+                  summary: Healthy system status
+                  value:
+                    status: healthy
+                    timestamp: '2025-01-15T10:30:00Z'
+                    version: '1.0.0'
+                    environment: production
+                    checks:
+                      database:
+                        status: up
+                        response_time_ms: 25
+                      monitoring:
+                        status: up
+                        active_sessions: 45
+                      webhook:
+                        status: up
+                        success_rate: 99.2
+                    uptime_seconds: 2592000
+        '503':
+          description: System is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              examples:
+                unhealthy_system:
+                  summary: Unhealthy system status
+                  value:
+                    status: unhealthy
+                    timestamp: '2025-01-15T10:30:00Z'
+                    checks:
+                      database:
+                        status: down
+                        error: Connection timeout
+
+  /health/detailed:
+    get:
+      tags:
+        - Health
+      summary: Detailed health information
+      description: Get detailed system health and performance metrics (requires authentication)
+      responses:
+        '200':
+          description: Detailed health information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailedHealthResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /metrics:
+    get:
+      tags:
+        - Metrics
+      summary: System metrics
+      description: Get system performance and business metrics
+      parameters:
+        - name: timeRange
+          in: query
+          description: Time range for metrics (in minutes)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10080
+            default: 60
+          example: 60
+        - name: category
+          in: query
+          description: Filter metrics by category
+          required: false
+          schema:
+            type: string
+            enum: [performance, business, user, technical]
+          example: performance
+      responses:
+        '200':
+          description: Metrics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /incidents:
+    get:
+      tags:
+        - Incidents
+      summary: Get incidents
+      description: Retrieve system incidents and their status
+      parameters:
+        - name: status
+          in: query
+          description: Filter by incident status
+          required: false
+          schema:
+            type: string
+            enum:
+              [
+                detected,
+                investigating,
+                identified,
+                monitoring,
+                resolved,
+                closed,
+              ]
+        - name: severity
+          in: query
+          description: Filter by incident severity
+          required: false
+          schema:
+            type: string
+            enum: [low, medium, high, critical]
+      responses:
+        '200':
+          description: Incidents retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncidentsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags:
+        - Incidents
+      summary: Create manual incident
+      description: Create a new incident manually
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateIncidentRequest'
+      responses:
+        '201':
+          description: Incident created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncidentResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT access token obtained from the authentication endpoints
+
+  schemas:
+    # Authentication Schemas
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: user@example.com
+        password:
+          type: string
+          format: password
+          minLength: 8
+          description: User's password (minimum 8 characters)
+          example: securepassword123
+
+    RegisterRequest:
+      type: object
+      required:
+        - email
+        - password
+        - name
+      properties:
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: newuser@example.com
+        password:
+          type: string
+          format: password
+          minLength: 8
+          description: User's password (minimum 8 characters)
+          example: securepassword123
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: User's full name
+          example: Jane Smith
+
+    RefreshRequest:
+      type: object
+      required:
+        - refresh_token
+      properties:
+        refresh_token:
+          type: string
+          description: Valid refresh token
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+    # Message Schemas
+    SendMessageRequest:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+          minLength: 1
+          maxLength: 4000
+          description: The message content
+          example: 'How do I implement error handling in React?'
+        metadata:
+          type: object
+          description: Additional metadata for the message
+          properties:
+            source:
+              type: string
+              enum: [web, mobile, api]
+              default: web
+            context:
+              type: string
+              description: Context or category for the message
+            priority:
+              type: string
+              enum: [low, normal, high]
+              default: normal
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique message identifier
+          example: 123e4567-e89b-12d3-a456-426614174001
+        content:
+          type: string
+          description: The message content
+          example: 'How can I deploy my application?'
+        role:
+          type: string
+          enum: [user, assistant]
+          description: The role of the message sender
+          example: user
+        created_at:
+          type: string
+          format: date-time
+          description: When the message was created
+          example: '2025-01-15T10:30:00Z'
+        metadata:
+          type: object
+          description: Additional message metadata
+          properties:
+            source:
+              type: string
+              example: web
+            model:
+              type: string
+              example: gpt-4
+            tokens_used:
+              type: integer
+              example: 45
+            processing_time_ms:
+              type: integer
+              example: 1850
+
+    # User Schemas
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique user identifier
+          example: 123e4567-e89b-12d3-a456-426614174000
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: user@example.com
+        name:
+          type: string
+          description: User's full name
+          example: John Doe
+        created_at:
+          type: string
+          format: date-time
+          description: When the user account was created
+          example: '2025-01-10T08:00:00Z'
+        last_login:
+          type: string
+          format: date-time
+          description: Last login timestamp
+          example: '2025-01-15T10:30:00Z'
+        preferences:
+          type: object
+          properties:
+            theme:
+              type: string
+              enum: [light, dark, auto]
+              default: auto
+            language:
+              type: string
+              pattern: '^[a-z]{2}$'
+              default: en
+            notifications:
+              type: boolean
+              default: true
+
+    UpdateProfileRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: User's full name
+        preferences:
+          type: object
+          properties:
+            theme:
+              type: string
+              enum: [light, dark, auto]
+            language:
+              type: string
+              pattern: '^[a-z]{2}$'
+            notifications:
+              type: boolean
+
+    # Health and Monitoring Schemas
+    HealthCheck:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [up, down, degraded]
+          description: Service status
+        response_time_ms:
+          type: integer
+          description: Response time in milliseconds
+          example: 25
+        error:
+          type: string
+          description: Error message if status is down
+        metadata:
+          type: object
+          description: Additional health check metadata
+
+    # Incident Schemas
+    CreateIncidentRequest:
+      type: object
+      required:
+        - title
+        - description
+        - severity
+        - affected_systems
+      properties:
+        title:
+          type: string
+          minLength: 5
+          maxLength: 200
+          description: Incident title
+          example: 'Database connection timeout'
+        description:
+          type: string
+          minLength: 10
+          maxLength: 2000
+          description: Detailed incident description
+          example: 'Users experiencing timeouts when accessing chat history'
+        severity:
+          type: string
+          enum: [low, medium, high, critical]
+          description: Incident severity level
+          example: high
+        affected_systems:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          description: List of affected systems
+          example: ['database', 'chat_service']
+
+    # Response Schemas
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          description: Success message
+          example: Operation completed successfully
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Error code for programmatic handling
+              example: VALIDATION_FAILED
+            message:
+              type: string
+              description: Human-readable error message
+              example: The provided data failed validation
+            details:
+              type: object
+              description: Additional error details
+            trace_id:
+              type: string
+              description: Request trace ID for debugging
+              example: 123e4567-e89b-12d3-a456-426614174000
+
+    AuthResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                user:
+                  $ref: '#/components/schemas/User'
+                session:
+                  type: object
+                  properties:
+                    access_token:
+                      type: string
+                      description: JWT access token
+                    refresh_token:
+                      type: string
+                      description: JWT refresh token
+                    expires_at:
+                      type: string
+                      format: date-time
+                      description: Token expiration time
+
+    TokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                access_token:
+                  type: string
+                  description: New JWT access token
+                expires_at:
+                  type: string
+                  format: date-time
+                  description: Token expiration time
+
+    MessagesResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                messages:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Message'
+                pagination:
+                  type: object
+                  properties:
+                    total:
+                      type: integer
+                      description: Total number of messages
+                    limit:
+                      type: integer
+                      description: Number of messages per page
+                    offset:
+                      type: integer
+                      description: Number of messages skipped
+                    has_more:
+                      type: boolean
+                      description: Whether there are more messages available
+
+    MessageResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                user_message:
+                  $ref: '#/components/schemas/Message'
+                assistant_message:
+                  $ref: '#/components/schemas/Message'
+
+    SingleMessageResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                message:
+                  $ref: '#/components/schemas/Message'
+
+    UserProfileResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                user:
+                  allOf:
+                    - $ref: '#/components/schemas/User'
+                    - type: object
+                      properties:
+                        statistics:
+                          type: object
+                          properties:
+                            total_messages:
+                              type: integer
+                              description: Total messages sent by user
+                            total_sessions:
+                              type: integer
+                              description: Total chat sessions
+                            average_session_duration:
+                              type: integer
+                              description: Average session duration in seconds
+
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+          description: Overall system health status
+        timestamp:
+          type: string
+          format: date-time
+          description: Health check timestamp
+        version:
+          type: string
+          description: Application version
+          example: '1.0.0'
+        environment:
+          type: string
+          enum: [development, staging, production]
+          description: Deployment environment
+        checks:
+          type: object
+          properties:
+            database:
+              $ref: '#/components/schemas/HealthCheck'
+            monitoring:
+              $ref: '#/components/schemas/HealthCheck'
+            webhook:
+              $ref: '#/components/schemas/HealthCheck'
+        uptime_seconds:
+          type: integer
+          description: System uptime in seconds
+
+    DetailedHealthResponse:
+      allOf:
+        - $ref: '#/components/schemas/HealthResponse'
+        - type: object
+          properties:
+            performance:
+              type: object
+              properties:
+                response_time_p95:
+                  type: number
+                  description: 95th percentile response time
+                error_rate:
+                  type: number
+                  description: Current error rate percentage
+                active_connections:
+                  type: integer
+                  description: Number of active connections
+            resources:
+              type: object
+              properties:
+                memory_usage_percent:
+                  type: number
+                  description: Memory usage percentage
+                cpu_usage_percent:
+                  type: number
+                  description: CPU usage percentage
+
+    MetricsResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                timeRange:
+                  type: integer
+                  description: Time range in minutes
+                metrics:
+                  type: object
+                  properties:
+                    performance:
+                      type: object
+                      properties:
+                        average_response_time:
+                          type: number
+                        error_rate:
+                          type: number
+                        throughput:
+                          type: number
+                    business:
+                      type: object
+                      properties:
+                        active_users:
+                          type: integer
+                        messages_sent:
+                          type: integer
+                        session_duration:
+                          type: number
+
+    IncidentsResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                incidents:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      title:
+                        type: string
+                      severity:
+                        type: string
+                        enum: [low, medium, high, critical]
+                      status:
+                        type: string
+                        enum:
+                          [
+                            detected,
+                            investigating,
+                            identified,
+                            monitoring,
+                            resolved,
+                            closed,
+                          ]
+                      created_at:
+                        type: string
+                        format: date-time
+                      affected_systems:
+                        type: array
+                        items:
+                          type: string
+
+    IncidentResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                incident:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                    title:
+                      type: string
+                    description:
+                      type: string
+                    severity:
+                      type: string
+                      enum: [low, medium, high, critical]
+                    status:
+                      type: string
+                      enum:
+                        [
+                          detected,
+                          investigating,
+                          identified,
+                          monitoring,
+                          resolved,
+                          closed,
+                        ]
+                    created_at:
+                      type: string
+                      format: date-time
+                    affected_systems:
+                      type: array
+                      items:
+                        type: string
+
+  responses:
+    BadRequest:
+      description: Bad request - Invalid input parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            validation_error:
+              summary: Validation error
+              value:
+                success: false
+                error:
+                  code: VALIDATION_FAILED
+                  message: Invalid input parameters
+                  details:
+                    email: Email format is invalid
+                    password: Password must be at least 8 characters
+
+    Unauthorized:
+      description: Unauthorized - Invalid or missing authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            missing_token:
+              summary: Missing authentication token
+              value:
+                success: false
+                error:
+                  code: UNAUTHORIZED
+                  message: Authentication token is required
+            invalid_token:
+              summary: Invalid authentication token
+              value:
+                success: false
+                error:
+                  code: INVALID_TOKEN
+                  message: The provided authentication token is invalid or expired
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            resource_not_found:
+              summary: Resource not found
+              value:
+                success: false
+                error:
+                  code: NOT_FOUND
+                  message: The requested resource was not found
+
+    RateLimited:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            rate_limit_exceeded:
+              summary: Rate limit exceeded
+              value:
+                success: false
+                error:
+                  code: RATE_LIMIT_EXCEEDED
+                  message: Too many requests. Please try again later.
+                  details:
+                    retry_after_seconds: 60
+                    limit: 100
+                    window: 60
+
+tags:
+  - name: Authentication
+    description: User authentication and session management
+  - name: Messages
+    description: Chat message operations and history
+  - name: Users
+    description: User profile and settings management
+  - name: Health
+    description: System health monitoring and status
+  - name: Metrics
+    description: Performance and business metrics
+  - name: Incidents
+    description: Incident management and response

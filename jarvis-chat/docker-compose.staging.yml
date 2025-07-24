@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  jarvis-chat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    image: ghcr.io/madpanda3d/jarvis-chat:develop
+    container_name: jarvis-chat-staging
+    restart: unless-stopped
+    ports:
+      - '8080:80'
+    environment:
+      # Application Configuration
+      - NODE_ENV=staging
+      - VITE_APP_ENV=staging
+      - VITE_APP_VERSION=${VITE_APP_VERSION:-staging}
+      - VITE_APP_DOMAIN=staging-jarvis.madpanda3d.com
+      - VITE_CDN_URL=${VITE_CDN_URL}
+
+      # Database & Authentication
+      - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+      - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+
+      # External Integrations
+      - VITE_N8N_WEBHOOK_URL=${VITE_N8N_WEBHOOK_URL}
+      - N8N_WEBHOOK_SECRET=${N8N_WEBHOOK_SECRET}
+      - N8N_API_KEY=${N8N_API_KEY}
+
+      # Monitoring & Logging
+      - VITE_SENTRY_DSN=${VITE_SENTRY_DSN}
+      - DATADOG_API_KEY=${DATADOG_API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - ENABLE_ANALYTICS=${ENABLE_ANALYTICS:-true}
+
+      # Performance & Security
+      - ENABLE_CACHING=${ENABLE_CACHING:-true}
+      - CACHE_TTL=${CACHE_TTL:-1800}
+      - COMPRESSION_ENABLED=${COMPRESSION_ENABLED:-true}
+      - RATE_LIMIT_WINDOW=${RATE_LIMIT_WINDOW:-600}
+      - RATE_LIMIT_MAX_REQUESTS=${RATE_LIMIT_MAX_REQUESTS:-500}
+      - CSP_ENABLED=${CSP_ENABLED:-true}
+
+      # Feature Flags (Staging)
+      - ENABLE_DEBUG_TOOLS=${ENABLE_DEBUG_TOOLS:-false}
+      - ENABLE_EXPERIMENTAL_FEATURES=${ENABLE_EXPERIMENTAL_FEATURES:-true}
+      - MOCK_N8N_RESPONSES=${MOCK_N8N_RESPONSES:-false}
+
+      # Security Secrets (server-side only)
+      - JWT_SECRET=${JWT_SECRET}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+
+      # Webhook Configuration
+      - WEBHOOK_TIMEOUT=${WEBHOOK_TIMEOUT:-20000}
+      - WEBHOOK_RETRY_ATTEMPTS=${WEBHOOK_RETRY_ATTEMPTS:-2}
+      - WEBHOOK_CIRCUIT_BREAKER_THRESHOLD=${WEBHOOK_CIRCUIT_BREAKER_THRESHOLD:-3}
+      - WEBHOOK_MONITORING_ENABLED=${WEBHOOK_MONITORING_ENABLED:-true}
+    env_file:
+      - .env.staging
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - jarvis-staging-network
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    labels:
+      - 'com.docker.compose.service=jarvis-chat-staging'
+      - 'com.docker.compose.version=${COMPOSE_VERSION:-latest}'
+
+networks:
+  jarvis-staging-network:
+    driver: bridge
