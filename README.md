@@ -876,10 +876,22 @@ npm run format:check
 
 ### Deployment Issues
 
-**Missing .env.template File**
+**Empty jarvis-chat Folder After Clone (FIXED)**
 ```bash
-# If you get "cannot stat '.env.template': No such file or directory"
-# The file might not be in the repository. Create it manually:
+# ISSUE: jarvis-chat folder appears empty after git clone
+# CAUSE: jarvis-chat was a separate git repository (submodule)
+# FIX: Merged jarvis-chat into main repository structure
+
+# If you cloned before this fix, you'll need to pull the latest:
+git pull origin main
+
+# The jarvis-chat folder should now contain all files
+```
+
+**Missing .env.template File (FIXED)**
+```bash
+# This issue has been resolved - .env.template is now included in the repository
+# If you still don't see it, create it manually:
 
 cat > .env.template << 'EOF'
 # JARVIS Chat Environment Configuration

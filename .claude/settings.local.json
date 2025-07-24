@@ -36,7 +36,8 @@
       "WebFetch(domain:api.python.langchain.com)",
       "WebFetch(domain:github.com)",
       "Bash(git submodule:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(git rm:*)"
     ],
     "deny": []
   }
