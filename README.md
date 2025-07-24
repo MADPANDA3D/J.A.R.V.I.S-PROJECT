@@ -4,6 +4,8 @@ A modern, responsive AI chat application built with React, TypeScript, and Vite.
 
 ## 🚀 Quick Start
 
+**Important: All commands must be run from the `jarvis-chat` directory**
+
 ```bash
 # Clone the repository  
 git clone https://github.com/MADPANDA3D/J.A.R.V.I.S-PROJECT.git
@@ -285,9 +287,14 @@ If you're using n8n workflows, configure your Postgres connection:
 
 ### 3. Environment Variables
 
+**Important: Environment files must be created in the `jarvis-chat` directory**
+
 Copy the template and add your credentials:
 
 ```bash
+# Make sure you're in the jarvis-chat directory
+cd jarvis-chat
+
 # Copy the template file
 cp .env.template .env.local
 
@@ -297,18 +304,36 @@ nano .env.local
 
 **Note:** If `.env.template` doesn't exist, create it manually with the template provided below.
 
-You'll need to fill in:
+### Required Environment Variables:
 
 - **VITE_SUPABASE_URL** - Your Supabase project URL
 - **VITE_SUPABASE_ANON_KEY** - Your Supabase anonymous key
-- **VITE_N8N_WEBHOOK_URL** (optional) - Your n8n webhook URL
-- **VITE_APP_DOMAIN** (optional) - Your domain name
+
+### Optional Environment Variables:
+
+**Basic Optional:**
+- **VITE_N8N_WEBHOOK_URL** - Your n8n webhook URL for AI responses
+- **VITE_APP_DOMAIN** - Your custom domain name
+
+**Advanced Optional (prevents Docker warnings):**
+- **VITE_APP_VERSION** - Application version for display
+- **VITE_CDN_URL** - CDN URL for static assets
+- **SUPABASE_SERVICE_ROLE_KEY** - Supabase admin operations key
+- **N8N_WEBHOOK_SECRET** - Security secret for n8n webhooks
+- **N8N_API_KEY** - n8n API authentication key
+- **JWT_SECRET** - Custom JWT signing secret
+- **ENCRYPTION_KEY** - Data encryption key
+- **VITE_SENTRY_DSN** - Sentry error tracking DSN
+- **DATADOG_API_KEY** - DataDog monitoring API key
 
 #### Environment Template (if .env.template is missing)
 
-If the `.env.template` file doesn't exist, create it manually:
+If the `.env.template` file doesn't exist, create it manually in the `jarvis-chat` directory:
 
 ```bash
+# Make sure you're in the jarvis-chat directory
+cd jarvis-chat
+
 # Create the environment template file
 cat > .env.template << 'EOF'
 # ==========================================
@@ -330,30 +355,151 @@ VITE_SUPABASE_URL=https://your-project-id.supabase.co
 VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.your-anon-key-here
 
 # ==========================================
-# OPTIONAL - AI Integration
+# OPTIONAL - Basic Features
 # ==========================================
 # If you have an n8n instance for AI responses, add the webhook URL
 # If not set, the app will use fallback AI responses for testing
 # VITE_N8N_WEBHOOK_URL=https://your-n8n-instance.com/webhook/chat/send
 
-# ==========================================
-# OPTIONAL - Domain Configuration
-# ==========================================
 # Your application domain (used for CORS and redirects)
 # VITE_APP_DOMAIN=jarvis.yourdomain.com
+
+# ==========================================
+# OPTIONAL - Advanced Configuration
+# ==========================================
+# These prevent Docker warnings but are not required for basic functionality
+
+# Application version for display in UI
+# VITE_APP_VERSION=1.0.0
+
+# CDN URL for serving static assets (optional)
+# VITE_CDN_URL=https://cdn.yourdomain.com
+
+# Supabase service role key for admin operations (KEEP SECURE!)
+# Get from: https://app.supabase.com/project/YOUR_PROJECT/settings/api
+# SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.your-service-role-key
+
+# n8n webhook security (recommended if using n8n)
+# N8N_WEBHOOK_SECRET=your-random-secret-string-here
+# N8N_API_KEY=your-n8n-api-key
+
+# Custom security keys (generate random strings)
+# JWT_SECRET=your-jwt-secret-minimum-32-characters-long
+# ENCRYPTION_KEY=your-encryption-key-32-characters-long
+
+# Error tracking with Sentry (optional)
+# Get from: https://sentry.io/settings/projects/
+# VITE_SENTRY_DSN=https://your-sentry-dsn@sentry.io/project-id
+
+# Monitoring with DataDog (optional)  
+# Get from: https://app.datadoghq.com/organization-settings/api-keys
+# DATADOG_API_KEY=your-datadog-api-key
 EOF
 
 # Now copy it to create your local environment file
 cp .env.template .env.local
 ```
 
+### 📍 Where to Find Each Credential
+
+#### **Required Credentials**
+
+**Supabase Configuration:**
+1. Go to [supabase.com](https://supabase.com) and sign in
+2. Navigate to your project dashboard
+3. Go to **Settings** → **API** in the left sidebar
+4. Copy the following:
+   - **Project URL** → `VITE_SUPABASE_URL`
+   - **anon public** key → `VITE_SUPABASE_ANON_KEY`
+   - **service_role** key → `SUPABASE_SERVICE_ROLE_KEY` (optional, keep secure!)
+
+#### **Optional Credentials**
+
+**n8n Integration:**
+1. **Webhook URL** (`VITE_N8N_WEBHOOK_URL`):
+   - From your n8n instance workflow
+   - Usually looks like: `https://your-n8n.com/webhook/xxxxx`
+2. **API Key** (`N8N_API_KEY`):
+   - n8n Settings → Personal Access Tokens
+3. **Webhook Secret** (`N8N_WEBHOOK_SECRET`):
+   - Generate a random string (min 16 characters)
+   - Example: `openssl rand -base64 32`
+
+**Security Keys (Generate Random Strings):**
+```bash
+# Generate JWT_SECRET (32+ characters)
+openssl rand -base64 32
+
+# Generate ENCRYPTION_KEY (32+ characters)  
+openssl rand -base64 32
+
+# Generate N8N_WEBHOOK_SECRET
+openssl rand -base64 32
+```
+
+**Error Tracking (Sentry):**
+1. Create account at [sentry.io](https://sentry.io)
+2. Create new project
+3. Go to **Settings** → **Projects** → **Your Project** → **Client Keys (DSN)**
+4. Copy the DSN → `VITE_SENTRY_DSN`
+
+**Monitoring (DataDog):**
+1. Create account at [datadoghq.com](https://datadoghq.com)
+2. Go to **Organization Settings** → **API Keys**
+3. Create new API key → `DATADOG_API_KEY`
+
+**Application Configuration:**
+- **Version** (`VITE_APP_VERSION`): Your app version (e.g., "1.0.0")
+- **Domain** (`VITE_APP_DOMAIN`): Your custom domain (e.g., "jarvis.yourdomain.com")
+- **CDN URL** (`VITE_CDN_URL`): Your CDN provider URL (CloudFlare, AWS CloudFront, etc.)
+
+#### **Quick Start - Minimal Configuration**
+
+For basic functionality, you only need:
+```env
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.your-anon-key-here
+```
+
+To eliminate all Docker warnings, add these with any values:
+```env
+VITE_APP_VERSION=1.0.0
+VITE_CDN_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+N8N_WEBHOOK_SECRET=
+N8N_API_KEY=
+JWT_SECRET=minimum-32-character-random-string-here
+ENCRYPTION_KEY=another-32-character-random-string-here
+VITE_SENTRY_DSN=
+DATADOG_API_KEY=
+```
+
 ### 4. Start Development Server
 
 ```bash
+# Make sure you're in the jarvis-chat directory
 npm run dev
 ```
 
 The application will be available at `http://localhost:5173` with hot reload enabled.
+
+### 5. Quick Deployment Test
+
+To test the full Docker deployment locally:
+```bash
+# Still in jarvis-chat directory
+cp .env.local .env          # Docker Compose needs .env file  
+docker-compose up -d --build
+
+# Test the application
+curl http://localhost:3000/health
+
+# Check logs if needed
+docker-compose logs jarvis-chat
+
+# Stop when done testing
+docker-compose down
+```
 
 ## 🔧 Available Scripts
 
@@ -436,6 +582,8 @@ The application uses a dark theme with:
 
 Ready-to-deploy Docker setup with copy-paste commands for easy VPS deployment.
 
+**Important: All Docker commands must be run from the `jarvis-chat` directory**
+
 ### 🚀 Quick Start (Copy & Paste)
 
 **Step 1: Download and Setup**
@@ -465,19 +613,27 @@ VITE_N8N_WEBHOOK_URL=https://your-n8n-instance.com/webhook/chat
 VITE_APP_DOMAIN=jarvis.yourdomain.com
 ```
 
+**Important:** Docker Compose requires both `.env.local` and `.env` files:
+```bash
+# Copy .env.local to .env for Docker Compose
+cp .env.local .env
+```
+
 **Step 3: Deploy with Docker Compose**
 ```bash
-# Build and start the application
-docker-compose up -d
+# Build and start the application (from jarvis-chat directory)
+docker-compose up -d --build
 
 # Check deployment status
 docker-compose ps
 docker-compose logs jarvis-chat
 ```
 
+**Note:** Always use `--build` flag on first deployment to ensure fresh build.
+
 ### 📋 Ready-to-Use docker-compose.yml
 
-Create this file in your project root, or use the existing one:
+Create this file in the `jarvis-chat` directory:
 
 ```yaml
 version: '3.8'
@@ -534,19 +690,19 @@ networks:
 
 **Option 1: Simple Deployment (App Only)**
 ```bash
-# Just run the application
+# Just run the application (from jarvis-chat directory)
 docker-compose up -d jarvis-chat
 ```
 
 **Option 2: With nginx Reverse Proxy**
 ```bash
-# Run with built-in nginx (requires nginx.conf setup)
+# Run with built-in nginx (requires nginx.conf setup in jarvis-chat directory)
 docker-compose --profile nginx up -d
 ```
 
 **Option 3: Production Build Only**
 ```bash
-# Build the Docker image
+# Build the Docker image (from jarvis-chat directory)
 docker build -t jarvis-chat:latest .
 
 # Run with custom settings
@@ -560,22 +716,28 @@ docker run -d \
 
 ### 🔧 Deployment Commands Reference
 
+**Important: Run all Docker commands from the `jarvis-chat` directory**
+
 **Start Services**
 ```bash
+# From jarvis-chat directory
 docker-compose up -d
 ```
 
 **Stop Services**
 ```bash
+# From jarvis-chat directory
 docker-compose down
 ```
 
 **Update Application**
 ```bash
-# Pull latest changes
+# Pull latest changes from main project directory
+cd J.A.R.V.I.S-PROJECT
 git pull origin main
 
-# Rebuild and restart
+# Navigate to jarvis-chat and rebuild
+cd jarvis-chat
 docker-compose down
 docker-compose build --no-cache
 docker-compose up -d
@@ -873,6 +1035,38 @@ npm run format:check
 - **Build Failures**: Ensure Node.js 20+ is available in the container
 - **Port Conflicts**: Use different ports if 3000 or 80 are occupied
 - **Environment Variables**: Verify all required variables are set
+
+**Environment Variable Warnings (NORMAL)**
+```bash
+WARNING: The VITE_APP_VERSION variable is not set. Defaulting to a blank string.
+WARNING: The VITE_CDN_URL variable is not set. Defaulting to a blank string.
+```
+These warnings are normal for optional variables. Only fix if you need these features.
+
+**Required Environment Variables Fix**
+If you see warnings for required variables, ensure you have both files:
+```bash
+# Make sure both files exist in jarvis-chat directory
+cp .env.local .env  # Docker Compose needs .env file
+ls -la .env*        # Should show both .env and .env.local
+```
+
+**Package Lock File Issues**
+If you see npm lockfile warnings during build:
+```bash
+# Delete and regenerate package-lock.json
+rm package-lock.json
+npm install
+docker-compose down
+docker-compose up -d --build
+```
+
+**Docker BuildX Errors**
+If you see "buildx" format errors, use legacy builder:
+```bash
+export DOCKER_BUILDKIT=0
+docker-compose up -d --build
+```
 
 ### Deployment Issues
 
