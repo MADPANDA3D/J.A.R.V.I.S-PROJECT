@@ -63,9 +63,9 @@ The application requires a Supabase database with specific tables for both the f
 -- for both the frontend chat interface and n8n backend
 -- =====================================================
 
--- 1. Frontend Messages Table (for chat interface)
+-- 1. Frontend Chat Messages Table (for chat interface)
 -- =====================================================
-CREATE TABLE IF NOT EXISTS public.messages (
+CREATE TABLE IF NOT EXISTS public.chat_messages (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     content TEXT NOT NULL,
     role VARCHAR(20) NOT NULL CHECK (role IN ('user', 'assistant')),
@@ -77,53 +77,49 @@ CREATE TABLE IF NOT EXISTS public.messages (
 );
 
 -- Create indexes for better performance
-CREATE INDEX IF NOT EXISTS idx_messages_user_id ON public.messages(user_id);
-CREATE INDEX IF NOT EXISTS idx_messages_conversation_id ON public.messages(conversation_id);
-CREATE INDEX IF NOT EXISTS idx_messages_created_at ON public.messages(created_at);
+CREATE INDEX IF NOT EXISTS idx_chat_messages_user_id ON public.chat_messages(user_id);
+CREATE INDEX IF NOT EXISTS idx_chat_messages_conversation_id ON public.chat_messages(conversation_id);
+CREATE INDEX IF NOT EXISTS idx_chat_messages_created_at ON public.chat_messages(created_at);
 
 -- Enable Row Level Security (RLS)
-ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.chat_messages ENABLE ROW LEVEL SECURITY;
 
 -- Create RLS policies for frontend messages
-CREATE POLICY "Users can view their own messages" ON public.messages
+CREATE POLICY "Users can view their own chat messages" ON public.chat_messages
     FOR SELECT USING (auth.uid() = user_id);
 
-CREATE POLICY "Users can insert their own messages" ON public.messages
+CREATE POLICY "Users can insert their own chat messages" ON public.chat_messages
     FOR INSERT WITH CHECK (auth.uid() = user_id);
 
-CREATE POLICY "Users can update their own messages" ON public.messages
+CREATE POLICY "Users can update their own chat messages" ON public.chat_messages
     FOR UPDATE USING (auth.uid() = user_id);
 
-CREATE POLICY "Users can delete their own messages" ON public.messages
+CREATE POLICY "Users can delete their own chat messages" ON public.chat_messages
     FOR DELETE USING (auth.uid() = user_id);
 
--- 2. n8n Backend Chat Memory Table
+-- 2. n8n LangChain Postgres Chat Memory Table
 -- =====================================================
--- This table is used by n8n Postgres Chat Memory nodes
--- It stores conversation memory for AI agent continuity
+-- This table is REQUIRED by n8n LangChain Postgres Chat Memory nodes
+-- The schema must match exactly what LangChain expects
 -- =====================================================
-CREATE TABLE IF NOT EXISTS public.chat_memory (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    session_id TEXT NOT NULL,
-    message_type VARCHAR(20) NOT NULL CHECK (message_type IN ('human', 'ai')),
-    content TEXT NOT NULL,
-    additional_data JSONB DEFAULT '{}',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+CREATE TABLE IF NOT EXISTS public.messages (
+    id SERIAL PRIMARY KEY,
+    session_id VARCHAR(255) NOT NULL,
+    message JSONB NOT NULL
 );
 
--- Create indexes for n8n chat memory
-CREATE INDEX IF NOT EXISTS idx_chat_memory_session_id ON public.chat_memory(session_id);
-CREATE INDEX IF NOT EXISTS idx_chat_memory_created_at ON public.chat_memory(created_at);
+-- Create indexes for n8n LangChain chat memory
+CREATE INDEX IF NOT EXISTS idx_messages_session_id ON public.messages(session_id);
 
--- Enable RLS for chat memory (allow service role access)
-ALTER TABLE public.chat_memory ENABLE ROW LEVEL SECURITY;
+-- Enable RLS for LangChain messages (allow service role access)
+ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
 
--- Allow service role (n8n) to access chat memory
-CREATE POLICY "Service role can manage chat memory" ON public.chat_memory
+-- Allow service role (n8n) to access LangChain messages
+CREATE POLICY "Service role can manage langchain messages" ON public.messages
     FOR ALL USING (auth.jwt() ->> 'role' = 'service_role');
 
 -- Allow authenticated users to read their own session memory
-CREATE POLICY "Users can view their session memory" ON public.chat_memory
+CREATE POLICY "Users can view their langchain session memory" ON public.messages
     FOR SELECT USING (
         session_id = 'session_' || auth.uid()::text
         OR session_id LIKE '%' || auth.uid()::text || '%'
@@ -196,8 +192,8 @@ END;
 $$ language 'plpgsql';
 
 -- Create triggers for updated_at columns
-CREATE TRIGGER update_messages_updated_at
-    BEFORE UPDATE ON public.messages
+CREATE TRIGGER update_chat_messages_updated_at
+    BEFORE UPDATE ON public.chat_messages
     FOR EACH ROW
     EXECUTE FUNCTION public.update_updated_at_column();
 
@@ -230,16 +226,16 @@ CREATE TRIGGER on_auth_user_created
 -- =====================================================
 
 -- Grant permissions to authenticated users
+GRANT ALL ON public.chat_messages TO authenticated;
 GRANT ALL ON public.messages TO authenticated;
 GRANT ALL ON public.profiles TO authenticated;
 GRANT ALL ON public.conversation_sessions TO authenticated;
-GRANT ALL ON public.chat_memory TO authenticated;
 
 -- Grant permissions to service role (for n8n)
+GRANT ALL ON public.chat_messages TO service_role;
 GRANT ALL ON public.messages TO service_role;
 GRANT ALL ON public.profiles TO service_role;
 GRANT ALL ON public.conversation_sessions TO service_role;
-GRANT ALL ON public.chat_memory TO service_role;
 
 -- Grant sequence permissions
 GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO authenticated;
@@ -249,8 +245,8 @@ GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO service_role;
 -- Setup Complete!
 -- =====================================================
 -- Your database is now ready for:
--- ✅ Frontend chat interface
--- ✅ n8n workflow integration  
+-- ✅ Frontend chat interface (chat_messages table)
+-- ✅ n8n LangChain integration (messages table with SERIAL id, session_id, message JSONB)
 -- ✅ User authentication and profiles
 -- ✅ Conversation session management
 -- ✅ AI memory persistence
@@ -280,9 +276,10 @@ If you're using n8n workflows, configure your Postgres connection:
      - SSL: `require`
 
 2. **Update Postgres Chat Memory nodes**:
-   - Set table name to: `chat_memory`
+   - Set table name to: `messages`
    - Set session ID field to match your session logic
    - Ensure the workflow uses the correct credentials
+   - This table uses the LangChain schema (id SERIAL, session_id VARCHAR, message JSONB)
 
 ### 3. Environment Variables
 
