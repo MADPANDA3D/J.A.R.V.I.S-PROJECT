@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(md-tree:*)",
+      "Bash(npm:*)",
+      "Bash(sudo npm install -g @kayvan/markdown-tree-parser)",
+      "Bash(mkdir:*)",
+      "Bash(yarn create:*)",
+      "Bash(ls:*)",
+      "Bash(npx eslint:*)",
+      "Bash(rm:*)",
+      "Bash(npx husky:*)",
+      "Bash(git init:*)",
+      "Bash(chmod:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git config:*)",
+      "Bash(timeout 10s npm run dev)",
+      "Bash(true)",
+      "Bash(npx:*)",
+      "Bash(timeout 5s npm run dev)",
+      "Bash(docker build:*)",
+      "Bash(timeout 10s docker run --rm -p 8080:80 jarvis-chat-test)",
+      "Bash(find:*)",
+      "Bash(timeout 8s npm run dev)"
+    ],
+    "deny": []
+  }
+}
