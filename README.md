@@ -4,17 +4,25 @@ A modern, responsive AI chat application built with React, TypeScript, and Vite.
 
 ## 🚀 Quick Start
 
-**Important: All commands must be run from the `jarvis-chat` directory**
+**Important: Follow these steps in exact order**
 
 ```bash
-# Clone the repository  
+# 1. Clone the repository  
 git clone https://github.com/MADPANDA3D/J.A.R.V.I.S-PROJECT.git
 cd J.A.R.V.I.S-PROJECT/jarvis-chat
 
-# Install dependencies
+# 2. Check Node.js version (CRITICAL STEP)
+node --version  # Must show v20.19.0 or higher
+
+# 3. If Node.js is v18.x or lower, upgrade it first:
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+node --version  # Should now show v20.x.x
+
+# 4. Install dependencies (this may take a few minutes)
 npm install
 
-# Start development server
+# 5. Start development server
 npm run dev
 ```
 
@@ -25,19 +33,98 @@ Visit `http://localhost:5173` to see the application.
 
 ## 📋 Prerequisites
 
-- Node.js 20 or higher
-- npm or yarn
-- Docker (optional, for containerized deployment)
+- **Node.js 20.19.0 or higher** (NOT Node.js 18!)
+- **npm 10 or higher** 
+- **Docker** (for containerized deployment)
+
+### ⚠️ Important Version Requirements
+
+**Node.js Version Check:**
+```bash
+node --version  # Must be 20.19.0 or higher
+npm --version   # Should be 9.2.0 or higher
+```
+
+**If you have the wrong Node.js version:**
+
+**⚠️ CRITICAL: You MUST upgrade Node.js first! The app will NOT work with Node.js 18.x**
+
+```bash
+# Method 1: Using NodeSource repository (Recommended for Ubuntu/Debian)
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# Method 2: Using snap (Alternative)
+sudo snap install node --classic
+
+# Method 3: Manual download (if above methods fail)
+cd /tmp
+wget https://nodejs.org/dist/v20.19.0/node-v20.19.0-linux-x64.tar.xz
+tar -xf node-v20.19.0-linux-x64.tar.xz
+sudo mv node-v20.19.0-linux-x64 /opt/nodejs
+sudo ln -sf /opt/nodejs/bin/node /usr/bin/node
+sudo ln -sf /opt/nodejs/bin/npm /usr/bin/npm
+sudo ln -sf /opt/nodejs/bin/npx /usr/bin/npx
+
+# Verify installation (MUST show v20.x.x or higher)
+node --version  # Should show v20.19.0 or higher
+npm --version   # Should show 10.x.x or higher
+
+# After upgrading Node.js, clean install dependencies
+cd jarvis-chat
+rm -rf node_modules package-lock.json
+npm install
+npm run dev
+```
 
 ## 🛠️ Development Setup
 
-### 1. Install Dependencies
+### 1. Prerequisites Check & Installation
+
+**CRITICAL: Check Node.js version FIRST**
 
 ```bash
-npm install
+# Check your Node.js version
+node --version
+npm --version
 ```
 
-### 2. Database Setup (Supabase)
+**If Node.js is v18.x or lower, upgrade it:**
+```bash
+# Upgrade Node.js to version 20+ (Ubuntu/Debian)
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# Verify upgrade worked
+node --version  # Should show v20.19.0 or higher
+npm --version   # Should show 10.x.x or higher
+```
+
+### 2. Install Dependencies
+
+**IMPORTANT: You must install dependencies locally, not globally!**
+
+```bash
+# Make sure you're in the jarvis-chat directory
+cd jarvis-chat
+
+# Clean any previous installations (if you had issues)
+rm -rf node_modules package-lock.json
+
+# Install all project dependencies (this may take a few minutes)
+npm install
+
+# Verify vite is installed locally
+npx vite --version  # Should show vite/7.0.6 with your Node.js version
+```
+
+**⚠️ Common Issues:**
+- **DO NOT** install vite globally (`npm install -g vite`)
+- **DO NOT** skip `npm install` - it installs 400+ dependencies including vite
+- **DO NOT** proceed if Node.js is v18.x - upgrade first!
+- If you get "vite: not found" error, you skipped `npm install` or have wrong Node.js version
+
+### 3. Database Setup (Supabase)
 
 The application requires a Supabase database with specific tables for both the frontend chat interface and n8n workflow integration.
 
@@ -285,7 +372,7 @@ If you're using n8n workflows, configure your Postgres connection:
    - Ensure the workflow uses the correct credentials
    - This table uses the LangChain schema (id SERIAL, session_id VARCHAR, message JSONB)
 
-### 3. Environment Variables
+### 4. Environment Variables
 
 **Important: Environment files must be created in the `jarvis-chat` directory**
 
@@ -474,18 +561,84 @@ VITE_SENTRY_DSN=
 DATADOG_API_KEY=
 ```
 
-### 4. Start Development Server
+### 5. Start Development Server
 
 ```bash
 # Make sure you're in the jarvis-chat directory
+cd jarvis-chat
+
+# Start the development server
 npm run dev
+```
+
+**✅ Success! You should see:**
+```
+  VITE v7.0.6  ready in 247 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
 ```
 
 The application will be available at `http://localhost:5173` with hot reload enabled.
 
-### 5. Quick Deployment Test
+### 🖥️ Running on VPS/Server (Background Service)
 
-To test the full Docker deployment locally:
+**For Development (with hot reload):**
+```bash
+# Start a new tmux session
+tmux new-session -s jarvis-dev
+
+# Run your development server inside tmux
+npm run dev
+
+# Detach from tmux (keeps server running when you close SSH)
+# Press: Ctrl + B, then D
+
+# Later, reattach to the session
+tmux attach-session -t jarvis-dev
+
+# List all tmux sessions
+tmux list-sessions
+
+# Kill the session when done
+tmux kill-session -t jarvis-dev
+```
+
+**For Production (recommended):**
+```bash
+# Use Docker instead for production deployment
+cp .env.local .env
+docker-compose up -d --build
+
+# Check status
+docker-compose ps
+docker-compose logs jarvis-chat
+
+# Application runs on port 3000 in production mode
+curl http://localhost:3000/health
+```
+
+**⚠️ If you get "vite: not found" error:**
+```bash
+# You skipped step 2! Install dependencies first:
+cd jarvis-chat
+npm install
+npm run dev
+```
+
+**⚠️ If you get "Unsupported engine" warnings:**
+```bash
+# You skipped step 1! Upgrade Node.js first:
+node --version  # If this shows v18.x, you need to upgrade
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+node --version  # Should now show v20.x.x
+```
+
+### 6. Production Deployment
+
+**For VPS/Server Production Deployment:**
 ```bash
 # Still in jarvis-chat directory
 cp .env.local .env          # Docker Compose needs .env file  
@@ -497,8 +650,75 @@ curl http://localhost:3000/health
 # Check logs if needed
 docker-compose logs jarvis-chat
 
-# Stop when done testing
-docker-compose down
+# Application is now running in background
+# Available at: http://your-server-ip:3000
+```
+
+**Port Configuration:**
+- **Development mode**: `http://localhost:5173` (npm run dev)
+- **Production mode**: `http://localhost:3000` (Docker)
+- **For external access**: Update your firewall to allow port 3000
+
+### 📡 VPS/Server Background Services
+
+**Option 1: tmux (Development with hot reload)**
+```bash
+# Install tmux if not installed
+sudo apt-get install tmux
+
+# Start new session and run development server
+tmux new-session -s jarvis-dev
+cd jarvis-chat
+npm run dev
+
+# Detach from session (Ctrl + B, then D)
+# Server keeps running even when you close SSH
+
+# Later, reattach to see logs or make changes
+tmux attach-session -t jarvis-dev
+
+# List all sessions
+tmux list-sessions
+
+# Kill session when done
+tmux kill-session -t jarvis-dev
+```
+
+**Option 2: Docker (Production, recommended)**
+```bash
+# Run in background automatically
+cd jarvis-chat
+cp .env.local .env
+docker-compose up -d --build
+
+# Service runs automatically, survives reboots
+# No need for tmux or screen
+```
+
+**Option 3: systemd Service (Advanced)**
+```bash
+# Create service file for development mode
+sudo tee /etc/systemd/system/jarvis-chat.service > /dev/null <<EOF
+[Unit]
+Description=JARVIS Chat Development Server
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/J.A.R.V.I.S/J.A.R.V.I.S-PROJECT/jarvis-chat
+ExecStart=/usr/bin/npm run dev
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable and start service
+sudo systemctl enable jarvis-chat
+sudo systemctl start jarvis-chat
+sudo systemctl status jarvis-chat
 ```
 
 ## 🔧 Available Scripts
@@ -1025,6 +1245,52 @@ npm run format:check
 4. **Build Errors**: Clear `node_modules` and reinstall dependencies
 
 ### Development Issues
+
+**Node.js Version Issues:**
+```bash
+# Error: "Unsupported engine" or "vite: not found"
+node --version  # If this shows v18.x.x, you need to upgrade
+
+# Fix: Install Node.js 20+
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+node --version  # Should now show v20.x.x
+```
+
+**Vite Not Found Error:**
+```bash
+# Error: "sh: 1: vite: not found"
+# This means you didn't run npm install properly
+
+# Fix: Install dependencies locally (NOT globally)
+cd jarvis-chat
+rm -rf node_modules package-lock.json  # Clean install
+npm install                            # This installs vite locally
+npx vite --version                     # Should work now
+npm run dev                            # Should work now
+```
+
+**Missing Dependencies:**
+```bash
+# Error: "Cannot find package 'vite'"
+# This means node_modules is corrupted or missing
+
+# Fix: Clean install
+cd jarvis-chat
+rm -rf node_modules package-lock.json
+npm install
+npm run dev
+```
+
+**Permission Issues (if running as root):**
+```bash
+# If you get permission warnings, create a non-root user
+adduser developer
+su - developer
+cd /path/to/jarvis-chat
+npm install
+npm run dev
+```
 
 - **Hot Reload Not Working**: Restart the development server
 - **Import Path Issues**: Check that path aliases are correctly configured

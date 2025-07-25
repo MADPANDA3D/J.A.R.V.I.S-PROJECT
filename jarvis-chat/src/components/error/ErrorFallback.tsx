@@ -71,26 +71,6 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
               </Button>
               <Button
                 variant="outline"
-                onClick={handleReload}
-                className="flex items-center gap-2"
-              >
-                Reload Page
-              </Button>
-            </div>
-
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleReportError}
-                className="flex items-center gap-2"
-              >
-                <Bug className="w-4 h-4" />
-                Report Issue
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
                 asChild
                 className="flex items-center gap-2"
               >
@@ -100,6 +80,16 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
                 </Link>
               </Button>
             </div>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleReportError}
+              className="flex items-center gap-2 w-full"
+            >
+              <Bug className="w-4 h-4" />
+              Report Issue
+            </Button>
           </div>
 
           {/* Help text */}

@@ -149,7 +149,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Navigation */}
         <nav
-          className="p-4 space-y-2"
+          className="p-4 space-y-2 overflow-y-auto overscroll-contain"
+          style={{ maxHeight: 'calc(100vh - 120px)' }}
+          onWheel={(e) => e.stopPropagation()}
           aria-label="Main navigation"
           role="navigation"
         >
@@ -218,20 +220,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         </nav>
 
-        {/* Bottom section for future features */}
-        <div
-          className="absolute bottom-4 left-4 right-4"
-          role="contentinfo"
-          aria-label="Application information"
-        >
-          <div className="p-3 bg-secondary/50 rounded-lg">
-            <p className="text-xs text-muted-foreground">
-              <span className="font-medium">JARVIS v1.0</span>
-              <br />
-              AI Assistant Interface
-            </p>
-          </div>
-        </div>
       </aside>
     </>
   );

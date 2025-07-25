@@ -1,0 +1,22 @@
+{
+  "name": "jarvis-webhook-dependencies",
+  "description": "Additional dependencies needed for VPS webhook server",
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.14.2"
+  },
+  "scripts": {
+    "install-webhook-deps": "npm install express ws",
+    "start-webhook": "node scripts/vps-webhook-server.js",
+    "webhook-status": "systemctl status jarvis-webhook",
+    "webhook-logs": "journalctl -u jarvis-webhook -f"
+  },
+  "installation_instructions": [
+    "1. Run: npm install express ws",
+    "2. Copy jarvis-webhook.service to /etc/systemd/system/",
+    "3. Run: sudo systemctl daemon-reload",
+    "4. Run: sudo systemctl enable jarvis-webhook",
+    "5. Run: sudo systemctl start jarvis-webhook",
+    "6. Verify: sudo systemctl status jarvis-webhook"
+  ]
+}

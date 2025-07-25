@@ -17,9 +17,6 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { getEnvironmentInfo } from '@/lib/env-validation';
-import { VisualAccessibilityControls } from '@/components/accessibility/VisualAccessibilityControls';
-import { AccessibilityTestPanel } from '@/components/accessibility/AccessibilityTestPanel';
-import { screenReader } from '@/lib/accessibility';
 
 export const SettingsPage: React.FC = () => {
   const { user, signOut } = useAuth();
@@ -27,13 +24,9 @@ export const SettingsPage: React.FC = () => {
   const [showApiKey, setShowApiKey] = useState(false);
   const envInfo = getEnvironmentInfo();
 
-  // Announce page load to screen readers
+  // Page loaded successfully
   useEffect(() => {
-    screenReader.announce({
-      message:
-        'Settings page loaded. Configure your JARVIS assistant preferences and account settings.',
-      priority: 'polite',
-    });
+    console.log('Settings page mounted successfully');
   }, []);
 
   // Form states
@@ -331,7 +324,10 @@ export const SettingsPage: React.FC = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <VisualAccessibilityControls />
+              <div className="p-4 text-center text-muted-foreground">
+                <Accessibility className="w-8 h-8 mx-auto mb-2" />
+                <p>Accessibility controls will be available in a future update.</p>
+              </div>
             </CardContent>
           </Card>
 
@@ -344,7 +340,10 @@ export const SettingsPage: React.FC = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <AccessibilityTestPanel />
+              <div className="p-4 text-center text-muted-foreground">
+                <Eye className="w-8 h-8 mx-auto mb-2" />
+                <p>Accessibility testing tools will be available in a future update.</p>
+              </div>
             </CardContent>
           </Card>
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
+import { Footer } from './Footer';
 import { focusManager, screenReader, keyboardNav } from '@/lib/accessibility';
 
 interface AppLayoutProps {
@@ -106,8 +107,11 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         aria-label="Main application content"
         tabIndex={-1}
       >
-        <div className="min-h-[calc(100vh-64px)]">{children}</div>
+        <div className="min-h-[calc(100vh-128px)]">{children}</div>
       </main>
+
+      {/* Footer */}
+      <Footer className="lg:pl-64" />
 
       {/* Live region for announcements */}
       <div

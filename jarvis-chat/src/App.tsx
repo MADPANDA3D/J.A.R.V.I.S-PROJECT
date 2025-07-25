@@ -11,6 +11,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { ErrorBoundary } from '@/components/error/ErrorBoundary';
 import { InstallPrompt } from '@/components/pwa/InstallPrompt';
+import { UpdateNotification } from '@/components/UpdateNotification';
 import { initializeAccessibility } from '@/lib/accessibility';
 import { accessibilityTester } from '@/lib/accessibility-testing';
 
@@ -108,6 +109,9 @@ function App() {
 
         {/* PWA Install Prompt - shows globally when installable */}
         <InstallPrompt />
+        
+        {/* Auto-Deployment Notifications - shows globally for real-time updates */}
+        <UpdateNotification websocketUrl={import.meta.env.VITE_WEBHOOK_WEBSOCKET_URL} />
       </div>
     </ErrorBoundary>
   );

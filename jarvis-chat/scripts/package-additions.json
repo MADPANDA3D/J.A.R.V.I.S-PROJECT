@@ -1,0 +1,18 @@
+{
+  "additional_dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.14.2",
+    "@octokit/rest": "^20.0.2"
+  },
+  "additional_scripts": {
+    "webhook:install": "npm install express ws @octokit/rest",
+    "webhook:start": "node scripts/vps-webhook-server.js",
+    "webhook:logs": "node scripts/log-return-service.js",
+    "webhook:status": "systemctl status jarvis-webhook jarvis-logs",
+    "webhook:restart": "systemctl restart jarvis-webhook jarvis-logs"
+  },
+  "installation_notes": [
+    "Run 'npm install express ws @octokit/rest' to install webhook dependencies",
+    "These dependencies are only needed on the VPS server, not in the main application"
+  ]
+}

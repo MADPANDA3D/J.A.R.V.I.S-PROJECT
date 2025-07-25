@@ -125,7 +125,9 @@ export function ToolsSelector({
       <DropdownMenuContent
         className="w-80 max-h-96 overflow-y-auto"
         align="end"
-        side="top"
+        side="bottom"
+        sideOffset={8}
+        avoidCollisions={true}
       >
         <DropdownMenuLabel className="flex items-center justify-between">
           <span>Available Tools</span>
