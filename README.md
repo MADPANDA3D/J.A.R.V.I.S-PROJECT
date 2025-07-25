@@ -2,14 +2,32 @@
 
 A modern, responsive AI chat application built with React, TypeScript, and Vite. Features dark theme with crimson red and neon accent colors, real-time chat functionality, and seamless integration with n8n backend services.
 
+---
+
+## 📋 Table of Contents
+
+1. [Quick Start](#quick-start)
+2. [Prerequisites](#prerequisites)
+3. [Development Setup](#development-setup)
+4. [Production Deployment](#production-deployment)
+5. [Docker Deployment](#docker-deployment)
+6. [Available Scripts](#available-scripts)
+7. [Project Structure](#project-structure)
+8. [Features](#features)
+9. [Testing](#testing)
+10. [Troubleshooting](#troubleshooting)
+11. [Contributing](#contributing)
+
+---
+
 ## 🚀 Quick Start
 
-**Important: Follow these steps in exact order**
+**Follow these steps in exact order:**
 
 ```bash
 # 1. Clone the repository  
 git clone https://github.com/MADPANDA3D/J.A.R.V.I.S-PROJECT.git
-cd J.A.R.V.I.S-PROJECT/jarvis-chat
+cd J.A.R.V.I.S-PROJECT
 
 # 2. Check Node.js version (CRITICAL STEP)
 node --version  # Must show v20.19.0 or higher
@@ -22,32 +40,37 @@ node --version  # Should now show v20.x.x
 # 4. Install dependencies (this may take a few minutes)
 npm install
 
-# 5. Start development server
+# 5. Configure environment
+cp .env.template .env.local
+nano .env.local  # Add your Supabase credentials
+
+# 6. Start development server
 npm run dev
 ```
 
-Visit `http://localhost:5173` to see the application.
+**✅ Application will be available at:** `http://localhost:5173`
 
-**Health Check:** `http://localhost:5173/health` - Monitor system status  
-**API Documentation:** `http://localhost:5173/api-docs.html` - Interactive API documentation with Swagger UI
+**📊 Health Check:** `http://localhost:5173/health`  
+**📚 API Documentation:** `http://localhost:5173/api-docs.html`
+
+---
 
 ## 📋 Prerequisites
 
+### Required Software
 - **Node.js 20.19.0 or higher** (NOT Node.js 18!)
 - **npm 10 or higher** 
 - **Docker** (for containerized deployment)
 
-### ⚠️ Important Version Requirements
-
-**Node.js Version Check:**
+### Version Check
 ```bash
 node --version  # Must be 20.19.0 or higher
 npm --version   # Should be 9.2.0 or higher
 ```
 
-**If you have the wrong Node.js version:**
+### ⚠️ Node.js Upgrade (If Needed)
 
-**⚠️ CRITICAL: You MUST upgrade Node.js first! The app will NOT work with Node.js 18.x**
+**If you have Node.js 18.x or lower, you MUST upgrade:**
 
 ```bash
 # Method 1: Using NodeSource repository (Recommended for Ubuntu/Debian)
@@ -57,56 +80,30 @@ sudo apt-get install -y nodejs
 # Method 2: Using snap (Alternative)
 sudo snap install node --classic
 
-# Method 3: Manual download (if above methods fail)
-cd /tmp
-wget https://nodejs.org/dist/v20.19.0/node-v20.19.0-linux-x64.tar.xz
-tar -xf node-v20.19.0-linux-x64.tar.xz
-sudo mv node-v20.19.0-linux-x64 /opt/nodejs
-sudo ln -sf /opt/nodejs/bin/node /usr/bin/node
-sudo ln -sf /opt/nodejs/bin/npm /usr/bin/npm
-sudo ln -sf /opt/nodejs/bin/npx /usr/bin/npx
-
-# Verify installation (MUST show v20.x.x or higher)
+# Verify installation
 node --version  # Should show v20.19.0 or higher
 npm --version   # Should show 10.x.x or higher
-
-# After upgrading Node.js, clean install dependencies
-cd jarvis-chat
-rm -rf node_modules package-lock.json
-npm install
-npm run dev
 ```
+
+---
 
 ## 🛠️ Development Setup
 
-### 1. Prerequisites Check & Installation
-
-**CRITICAL: Check Node.js version FIRST**
+### Step 1: Prerequisites Check & Installation
 
 ```bash
-# Check your Node.js version
+# Check your Node.js version FIRST
 node --version
 npm --version
+
+# If Node.js is v18.x or lower, upgrade it (see Prerequisites section)
 ```
 
-**If Node.js is v18.x or lower, upgrade it:**
-```bash
-# Upgrade Node.js to version 20+ (Ubuntu/Debian)
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-# Verify upgrade worked
-node --version  # Should show v20.19.0 or higher
-npm --version   # Should show 10.x.x or higher
-```
-
-### 2. Install Dependencies
-
-**IMPORTANT: You must install dependencies locally, not globally!**
+### Step 2: Install Dependencies
 
 ```bash
-# Make sure you're in the jarvis-chat directory
-cd jarvis-chat
+# Make sure you're in the project directory
+cd J.A.R.V.I.S-PROJECT
 
 # Clean any previous installations (if you had issues)
 rm -rf node_modules package-lock.json
@@ -114,19 +111,11 @@ rm -rf node_modules package-lock.json
 # Install all project dependencies (this may take a few minutes)
 npm install
 
-# Verify vite is installed locally
+# Verify installation
 npx vite --version  # Should show vite/7.0.6 with your Node.js version
 ```
 
-**⚠️ Common Issues:**
-- **DO NOT** install vite globally (`npm install -g vite`)
-- **DO NOT** skip `npm install` - it installs 400+ dependencies including vite
-- **DO NOT** proceed if Node.js is v18.x - upgrade first!
-- If you get "vite: not found" error, you skipped `npm install` or have wrong Node.js version
-
-### 3. Database Setup (Supabase)
-
-The application requires a Supabase database with specific tables for both the frontend chat interface and n8n workflow integration.
+### Step 3: Database Setup (Supabase)
 
 #### Quick Setup Instructions
 
@@ -140,10 +129,12 @@ The application requires a Supabase database with specific tables for both the f
    - Navigate to your project dashboard
    - Go to **SQL Editor** in the left sidebar
    - Click **"New query"**
-   - Copy and paste the SQL below into the editor
+   - Copy and paste the SQL schema below
    - Click **"Run"** to execute
 
-#### Database Schema (Copy & Paste)
+#### Database Schema
+<details>
+<summary>Click to expand database schema</summary>
 
 ```sql
 -- =====================================================
@@ -343,6 +334,7 @@ GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO service_role;
 -- ✅ AI memory persistence
 -- =====================================================
 ```
+</details>
 
 3. **Get your database credentials**:
    - Go to **Settings** > **API** in your Supabase dashboard
@@ -351,37 +343,13 @@ GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO service_role;
      - Project API Key (anon public)
      - Project API Key (service_role) - for n8n integration
 
-#### n8n Integration Setup
+### Step 4: Environment Variables
 
-If you're using n8n workflows, configure your Postgres connection:
-
-1. **Add Postgres Credential in n8n**:
-   - Go to n8n Credentials
-   - Add new "Postgres" credential
-   - Use your Supabase database credentials:
-     - Host: `db.YOUR_PROJECT_REF.supabase.co`
-     - Database: `postgres`
-     - User: `postgres`
-     - Password: Your database password
-     - Port: `5432`
-     - SSL: `require`
-
-2. **Update Postgres Chat Memory nodes**:
-   - Set table name to: `messages`
-   - Set session ID field to match your session logic
-   - Ensure the workflow uses the correct credentials
-   - This table uses the LangChain schema (id SERIAL, session_id VARCHAR, message JSONB)
-
-### 4. Environment Variables
-
-**Important: Environment files must be created in the `jarvis-chat` directory**
+#### Required Environment Variables
 
 Copy the template and add your credentials:
 
 ```bash
-# Make sure you're in the jarvis-chat directory
-cd jarvis-chat
-
 # Copy the template file
 cp .env.template .env.local
 
@@ -389,40 +357,21 @@ cp .env.template .env.local
 nano .env.local
 ```
 
-**Note:** If `.env.template` doesn't exist, create it manually with the template provided below.
+**Minimum Required Configuration:**
+```env
+# Required - Supabase Configuration
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.your-anon-key-here
 
-### Required Environment Variables:
+# Optional - Auto-Deployment Notifications
+VITE_WEBHOOK_WEBSOCKET_URL=ws://localhost:9001
+```
 
-- **VITE_SUPABASE_URL** - Your Supabase project URL
-- **VITE_SUPABASE_ANON_KEY** - Your Supabase anonymous key
+#### Environment Template
+<details>
+<summary>Click to expand full environment template</summary>
 
-### Optional Environment Variables:
-
-**Basic Optional:**
-- **VITE_N8N_WEBHOOK_URL** - Your n8n webhook URL for AI responses
-- **VITE_APP_DOMAIN** - Your custom domain name
-
-**Advanced Optional (prevents Docker warnings):**
-- **VITE_APP_VERSION** - Application version for display
-- **VITE_CDN_URL** - CDN URL for static assets
-- **SUPABASE_SERVICE_ROLE_KEY** - Supabase admin operations key
-- **N8N_WEBHOOK_SECRET** - Security secret for n8n webhooks
-- **N8N_API_KEY** - n8n API authentication key
-- **JWT_SECRET** - Custom JWT signing secret
-- **ENCRYPTION_KEY** - Data encryption key
-- **VITE_SENTRY_DSN** - Sentry error tracking DSN
-- **DATADOG_API_KEY** - DataDog monitoring API key
-
-#### Environment Template (if .env.template is missing)
-
-If the `.env.template` file doesn't exist, create it manually in the `jarvis-chat` directory:
-
-```bash
-# Make sure you're in the jarvis-chat directory
-cd jarvis-chat
-
-# Create the environment template file
-cat > .env.template << 'EOF'
+```env
 # ==========================================
 # JARVIS Chat - Environment Configuration
 # ==========================================
@@ -440,6 +389,14 @@ VITE_SUPABASE_URL=https://your-project-id.supabase.co
 
 # Your Supabase anon/public key (starts with "eyJ...")
 VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.your-anon-key-here
+
+# ==========================================
+# OPTIONAL - Auto-Deployment Notifications
+# ==========================================
+# WebSocket URL for real-time deployment notifications
+# Development: ws://localhost:9001
+# Production: ws://69.62.71.229:9001
+VITE_WEBHOOK_WEBSOCKET_URL=ws://localhost:9001
 
 # ==========================================
 # OPTIONAL - Basic Features
@@ -481,92 +438,12 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.your-anon-key-here
 # Monitoring with DataDog (optional)  
 # Get from: https://app.datadoghq.com/organization-settings/api-keys
 # DATADOG_API_KEY=your-datadog-api-key
-EOF
-
-# Now copy it to create your local environment file
-cp .env.template .env.local
 ```
+</details>
 
-### 📍 Where to Find Each Credential
-
-#### **Required Credentials**
-
-**Supabase Configuration:**
-1. Go to [supabase.com](https://supabase.com) and sign in
-2. Navigate to your project dashboard
-3. Go to **Settings** → **API** in the left sidebar
-4. Copy the following:
-   - **Project URL** → `VITE_SUPABASE_URL`
-   - **anon public** key → `VITE_SUPABASE_ANON_KEY`
-   - **service_role** key → `SUPABASE_SERVICE_ROLE_KEY` (optional, keep secure!)
-
-#### **Optional Credentials**
-
-**n8n Integration:**
-1. **Webhook URL** (`VITE_N8N_WEBHOOK_URL`):
-   - From your n8n instance workflow
-   - Usually looks like: `https://your-n8n.com/webhook/xxxxx`
-2. **API Key** (`N8N_API_KEY`):
-   - n8n Settings → Personal Access Tokens
-3. **Webhook Secret** (`N8N_WEBHOOK_SECRET`):
-   - Generate a random string (min 16 characters)
-   - Example: `openssl rand -base64 32`
-
-**Security Keys (Generate Random Strings):**
-```bash
-# Generate JWT_SECRET (32+ characters)
-openssl rand -base64 32
-
-# Generate ENCRYPTION_KEY (32+ characters)  
-openssl rand -base64 32
-
-# Generate N8N_WEBHOOK_SECRET
-openssl rand -base64 32
-```
-
-**Error Tracking (Sentry):**
-1. Create account at [sentry.io](https://sentry.io)
-2. Create new project
-3. Go to **Settings** → **Projects** → **Your Project** → **Client Keys (DSN)**
-4. Copy the DSN → `VITE_SENTRY_DSN`
-
-**Monitoring (DataDog):**
-1. Create account at [datadoghq.com](https://datadoghq.com)
-2. Go to **Organization Settings** → **API Keys**
-3. Create new API key → `DATADOG_API_KEY`
-
-**Application Configuration:**
-- **Version** (`VITE_APP_VERSION`): Your app version (e.g., "1.0.0")
-- **Domain** (`VITE_APP_DOMAIN`): Your custom domain (e.g., "jarvis.yourdomain.com")
-- **CDN URL** (`VITE_CDN_URL`): Your CDN provider URL (CloudFlare, AWS CloudFront, etc.)
-
-#### **Quick Start - Minimal Configuration**
-
-For basic functionality, you only need:
-```env
-VITE_SUPABASE_URL=https://your-project-id.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.your-anon-key-here
-```
-
-To eliminate all Docker warnings, add these with any values:
-```env
-VITE_APP_VERSION=1.0.0
-VITE_CDN_URL=
-SUPABASE_SERVICE_ROLE_KEY=
-N8N_WEBHOOK_SECRET=
-N8N_API_KEY=
-JWT_SECRET=minimum-32-character-random-string-here
-ENCRYPTION_KEY=another-32-character-random-string-here
-VITE_SENTRY_DSN=
-DATADOG_API_KEY=
-```
-
-### 5. Start Development Server
+### Step 5: Start Development Server
 
 ```bash
-# Make sure you're in the jarvis-chat directory
-cd jarvis-chat
-
 # Start the development server
 npm run dev
 ```
@@ -580,237 +457,17 @@ npm run dev
   ➜  press h + enter to show help
 ```
 
-The application will be available at `http://localhost:5173` with hot reload enabled.
-
-### 🖥️ Running on VPS/Server (Background Service)
-
-**For Development (with hot reload):**
-```bash
-# Start a new tmux session
-tmux new-session -s jarvis-dev
-
-# Run your development server inside tmux
-npm run dev
-
-# Detach from tmux (keeps server running when you close SSH)
-# Press: Ctrl + B, then D
-
-# Later, reattach to the session
-tmux attach-session -t jarvis-dev
-
-# List all tmux sessions
-tmux list-sessions
-
-# Kill the session when done
-tmux kill-session -t jarvis-dev
-```
-
-**For Production (recommended):**
-```bash
-# Use Docker instead for production deployment
-cp .env.local .env
-docker-compose up -d --build
-
-# Check status
-docker-compose ps
-docker-compose logs jarvis-chat
-
-# Application runs on port 3000 in production mode
-curl http://localhost:3000/health
-```
-
-**⚠️ If you get "vite: not found" error:**
-```bash
-# You skipped step 2! Install dependencies first:
-cd jarvis-chat
-npm install
-npm run dev
-```
-
-**⚠️ If you get "Unsupported engine" warnings:**
-```bash
-# You skipped step 1! Upgrade Node.js first:
-node --version  # If this shows v18.x, you need to upgrade
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt-get install -y nodejs
-node --version  # Should now show v20.x.x
-```
-
-### 6. Production Deployment
-
-**For VPS/Server Production Deployment:**
-```bash
-# Still in jarvis-chat directory
-cp .env.local .env          # Docker Compose needs .env file  
-docker-compose up -d --build
-
-# Test the application
-curl http://localhost:3000/health
-
-# Check logs if needed
-docker-compose logs jarvis-chat
-
-# Application is now running in background
-# Available at: http://your-server-ip:3000
-```
-
-**Port Configuration:**
-- **Development mode**: `http://localhost:5173` (npm run dev)
-- **Production mode**: `http://localhost:3000` (Docker)
-- **For external access**: Update your firewall to allow port 3000
-
-### 📡 VPS/Server Background Services
-
-**Option 1: tmux (Development with hot reload)**
-```bash
-# Install tmux if not installed
-sudo apt-get install tmux
-
-# Start new session and run development server
-tmux new-session -s jarvis-dev
-cd jarvis-chat
-npm run dev
-
-# Detach from session (Ctrl + B, then D)
-# Server keeps running even when you close SSH
-
-# Later, reattach to see logs or make changes
-tmux attach-session -t jarvis-dev
-
-# List all sessions
-tmux list-sessions
-
-# Kill session when done
-tmux kill-session -t jarvis-dev
-```
-
-**Option 2: Docker (Production, recommended)**
-```bash
-# Run in background automatically
-cd jarvis-chat
-cp .env.local .env
-docker-compose up -d --build
-
-# Service runs automatically, survives reboots
-# No need for tmux or screen
-```
-
-**Option 3: systemd Service (Advanced)**
-```bash
-# Create service file for development mode
-sudo tee /etc/systemd/system/jarvis-chat.service > /dev/null <<EOF
-[Unit]
-Description=JARVIS Chat Development Server
-After=network.target
-
-[Service]
-Type=simple
-User=root
-WorkingDirectory=/root/J.A.R.V.I.S/J.A.R.V.I.S-PROJECT/jarvis-chat
-ExecStart=/usr/bin/npm run dev
-Restart=always
-RestartSec=3
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-# Enable and start service
-sudo systemctl enable jarvis-chat
-sudo systemctl start jarvis-chat
-sudo systemctl status jarvis-chat
-```
-
-## 🔧 Available Scripts
-
-**Development**
-- `npm run dev` - Start development server with hot reload
-- `npm run preview` - Preview production build locally
-
-**Testing & Quality**
-- `npm run test` - Run test suite in watch mode
-- `npm run test:run` - Run tests once (CI mode)
-- `npm run test:ui` - Run tests with UI interface
-- `npm run type-check` - Run TypeScript type checking
-- `npm run lint` - Run ESLint code analysis
-- `npm run lint:fix` - Fix ESLint issues automatically
-- `npm run format` - Format code with Prettier
-- `npm run format:check` - Check code formatting
-
-**Production**
-- `npm run build` - Build optimized production bundle
-
-## 🏗️ Project Structure
-
-```
-jarvis-chat/
-├── src/
-│   ├── components/          # React components
-│   │   ├── ui/             # shadcn/ui components
-│   │   ├── chat/           # Chat-specific components
-│   │   ├── auth/           # Authentication components
-│   │   ├── layout/         # Layout components
-│   │   └── accessibility/  # Accessibility components and controls
-│   ├── hooks/              # Custom React hooks
-│   ├── lib/                # Utility functions
-│   │   ├── accessibility.ts     # Accessibility utilities and managers
-│   │   ├── color-contrast-validator.ts # WCAG color contrast validation
-│   │   └── accessibility-testing.ts    # Automated accessibility testing
-│   ├── pages/              # Page components
-│   ├── types/              # TypeScript type definitions
-│   ├── App.tsx             # Main App component
-│   ├── main.tsx            # Application entry point
-│   └── index.css           # Global styles with custom theme
-├── public/                 # Static assets
-│   ├── api-docs.html       # Interactive Swagger UI documentation
-│   └── api/                # API documentation
-│       └── openapi.yaml    # OpenAPI 3.0 specification
-├── docs/                   # Documentation
-│   ├── api-integration-guide.md # Comprehensive API integration guide
-│   └── stories/            # Development stories and requirements
-├── docker/                 # Docker-related files
-└── package.json           # Project configuration
-```
-
-## 🎨 Theme & Styling
-
-The application uses a dark theme with:
-
-- **Primary Colors**: Pure Black (#000000), Pure White (#FFFFFF), Crimson Red (#DC143C)
-- **Accent Colors**: Neon Cyan, Green, Purple, Yellow
-- **UI Library**: shadcn/ui components with Tailwind CSS
-- **Typography**: System fonts with optimized rendering
-
-### Custom CSS Classes
-
-```css
-.neon-cyan {
-  color: #00ffff;
-}
-.neon-green {
-  color: #00ff00;
-}
-.neon-purple {
-  color: #ff00ff;
-}
-.neon-yellow {
-  color: #ffff00;
-}
-```
+---
 
 ## 🐳 Docker Deployment
 
-Ready-to-deploy Docker setup with copy-paste commands for easy VPS deployment.
-
-**Important: All Docker commands must be run from the `jarvis-chat` directory**
-
-### 🚀 Quick Start (Copy & Paste)
+### Quick Start (Copy & Paste)
 
 **Step 1: Download and Setup**
 ```bash
 # Clone the repository
 git clone https://github.com/MADPANDA3D/J.A.R.V.I.S-PROJECT.git
-cd J.A.R.V.I.S-PROJECT/jarvis-chat
+cd J.A.R.V.I.S-PROJECT
 
 # Copy environment template
 cp .env.template .env.local
@@ -833,15 +490,12 @@ VITE_N8N_WEBHOOK_URL=https://your-n8n-instance.com/webhook/chat
 VITE_APP_DOMAIN=jarvis.yourdomain.com
 ```
 
-**Important:** Docker Compose requires both `.env.local` and `.env` files:
+**Step 3: Deploy with Docker Compose**
 ```bash
 # Copy .env.local to .env for Docker Compose
 cp .env.local .env
-```
 
-**Step 3: Deploy with Docker Compose**
-```bash
-# Build and start the application (from jarvis-chat directory)
+# Build and start the application
 docker-compose up -d --build
 
 # Check deployment status
@@ -849,115 +503,21 @@ docker-compose ps
 docker-compose logs jarvis-chat
 ```
 
-**Note:** Always use `--build` flag on first deployment to ensure fresh build.
-
-### 📋 Ready-to-Use docker-compose.yml
-
-Create this file in the `jarvis-chat` directory:
-
-```yaml
-version: '3.8'
-
-services:
-  jarvis-chat:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: jarvis-chat
-    restart: unless-stopped
-    ports:
-      - "3000:80"
-    environment:
-      - NODE_ENV=production
-    env_file:
-      - .env.local
-    volumes:
-      # Optional: Mount logs directory
-      - ./logs:/app/logs
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    networks:
-      - jarvis-network
-
-  # Optional: nginx reverse proxy (if not using external nginx)
-  nginx:
-    image: nginx:alpine
-    container_name: jarvis-nginx
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./ssl:/etc/nginx/ssl:ro  # Mount your SSL certificates
-    depends_on:
-      - jarvis-chat
-    networks:
-      - jarvis-network
-    profiles:
-      - nginx  # Optional service, enable with --profile nginx
-
-networks:
-  jarvis-network:
-    driver: bridge
-```
-
-### 🛠️ Advanced Deployment Options
-
-**Option 1: Simple Deployment (App Only)**
-```bash
-# Just run the application (from jarvis-chat directory)
-docker-compose up -d jarvis-chat
-```
-
-**Option 2: With nginx Reverse Proxy**
-```bash
-# Run with built-in nginx (requires nginx.conf setup in jarvis-chat directory)
-docker-compose --profile nginx up -d
-```
-
-**Option 3: Production Build Only**
-```bash
-# Build the Docker image (from jarvis-chat directory)
-docker build -t jarvis-chat:latest .
-
-# Run with custom settings
-docker run -d \
-  --name jarvis-chat \
-  --restart unless-stopped \
-  -p 3000:80 \
-  --env-file .env.local \
-  jarvis-chat:latest
-```
-
-### 🔧 Deployment Commands Reference
-
-**Important: Run all Docker commands from the `jarvis-chat` directory**
+### Production Docker Commands
 
 **Start Services**
 ```bash
-# From jarvis-chat directory
 docker-compose up -d
 ```
 
 **Stop Services**
 ```bash
-# From jarvis-chat directory
 docker-compose down
 ```
 
 **Update Application**
 ```bash
-# Pull latest changes from main project directory
-cd J.A.R.V.I.S-PROJECT
 git pull origin main
-
-# Navigate to jarvis-chat and rebuild
-cd jarvis-chat
 docker-compose down
 docker-compose build --no-cache
 docker-compose up -d
@@ -981,95 +541,104 @@ curl http://localhost:3000/health
 docker-compose ps
 ```
 
-### 🔒 Production Security
+---
 
-**Environment Variables**
-- Never commit `.env.local` to version control
-- Use strong, unique credentials
-- Regularly rotate API keys
+## 🚀 Production Deployment
 
-**Container Security**
+### VPS Webhook Server Setup
+
+For auto-deployment notifications, you need to set up the webhook server on your VPS:
+
 ```bash
-# Run with non-root user (already configured in Dockerfile)
-# Limit container resources
-docker-compose up -d --memory="512m" --cpus="1"
+# On your VPS (69.62.71.229)
+git clone https://github.com/MADPANDA3D/J.A.R.V.I.S-PROJECT.git
+cd J.A.R.V.I.S-PROJECT
+
+# Install webhook dependencies
+npm install express ws
+
+# Setup systemd service
+sudo cp scripts/jarvis-webhook.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable jarvis-webhook
+sudo systemctl start jarvis-webhook
+
+# Build and deploy app
+npm run build
+docker-compose -f docker-compose.prod.yml up -d
 ```
 
-**SSL/TLS Setup**
-```bash
-# If using built-in nginx, mount SSL certificates:
-# - Place certificates in ./ssl/ directory
-# - Update nginx.conf with SSL configuration
-# - Restart with: docker-compose --profile nginx up -d
+### GitHub Repository Secrets
+
+Add these secrets to your GitHub repository settings:
+
+```
+VPS_WEBHOOK_SECRET=your-secure-random-secret-here
+VPS_WEBHOOK_URL=http://69.62.71.229:9000
+GITHUB_TOKEN=your-github-personal-access-token
 ```
 
-### 📊 Monitoring & Maintenance
+### Environment Variables for Production
 
-**Health Monitoring**
-```bash
-# Built-in health check endpoint
-curl http://localhost:3000/health
+```env
+# Production WebSocket URL
+VITE_WEBHOOK_WEBSOCKET_URL=ws://69.62.71.229:9001
 
-# Docker health status
-docker ps --format "table {{.Names}}\t{{.Status}}"
+# Development WebSocket URL (for testing)
+VITE_WEBHOOK_WEBSOCKET_URL=ws://localhost:9001
 ```
 
-**Log Management**
-```bash
-# Rotate logs (add to crontab)
-docker-compose logs --tail=1000 jarvis-chat > /var/log/jarvis-chat.log
+---
 
-# Clear old logs
-docker system prune -f
+## 🔧 Available Scripts
+
+### Development
+- `npm run dev` - Start development server with hot reload
+- `npm run preview` - Preview production build locally
+
+### Testing & Quality
+- `npm run test` - Run test suite in watch mode
+- `npm run test:run` - Run tests once (CI mode)
+- `npm run test:ui` - Run tests with UI interface
+- `npm run type-check` - Run TypeScript type checking
+- `npm run lint` - Run ESLint code analysis
+- `npm run lint:fix` - Fix ESLint issues automatically
+- `npm run format` - Format code with Prettier
+- `npm run format:check` - Check code formatting
+
+### Production
+- `npm run build` - Build optimized production bundle
+
+---
+
+## 🏗️ Project Structure
+
+```
+J.A.R.V.I.S-PROJECT/
+├── src/
+│   ├── components/          # React components
+│   │   ├── ui/             # shadcn/ui components
+│   │   ├── chat/           # Chat-specific components
+│   │   ├── auth/           # Authentication components
+│   │   ├── layout/         # Layout components
+│   │   └── accessibility/  # Accessibility components and controls
+│   ├── hooks/              # Custom React hooks
+│   ├── lib/                # Utility functions
+│   ├── pages/              # Page components
+│   ├── types/              # TypeScript type definitions
+│   ├── App.tsx             # Main App component
+│   ├── main.tsx            # Application entry point
+│   └── index.css           # Global styles with custom theme
+├── public/                 # Static assets
+│   ├── api-docs.html       # Interactive Swagger UI documentation
+│   └── api/                # API documentation
+├── docs/                   # Documentation
+├── scripts/                # Deployment & utility scripts
+├── docker/                 # Docker-related files
+└── package.json           # Project configuration
 ```
 
-**Backup Commands**
-```bash
-# Backup environment configuration
-cp .env.local .env.backup
-
-# Export container (if needed)
-docker save jarvis-chat:latest > jarvis-chat-backup.tar
-```
-
-## 🔍 Code Quality
-
-The project enforces code quality through:
-
-- **ESLint**: Linting for JavaScript/TypeScript
-- **Prettier**: Code formatting
-- **TypeScript**: Type checking
-- **Husky**: Pre-commit hooks
-- **Pre-commit hooks**: Runs type checking and format validation
-
-### Pre-commit Hooks
-
-Before each commit, the following checks run automatically:
-
-- TypeScript type checking (`npm run type-check`)
-- Code formatting validation (`npm run format:check`)
-
-## 🏛️ Architecture
-
-### Frontend Stack
-
-- **React 18+** with TypeScript for type safety
-- **Vite** for fast development and optimized builds
-- **shadcn/ui** components with Tailwind CSS
-- **React Query** for state management and caching
-- **React Router** for client-side routing
-
-### Backend Integration
-
-- **Supabase** for authentication, database, and real-time features
-- **n8n** webhook integration for AI agent functionality
-- **RESTful API** communication with error handling and retries
-
-### Deployment
-
-- **Docker** containerization with nginx for production
-- **Multi-stage builds** for optimized image size
-- **Environment-based configuration**
+---
 
 ## ✨ Features
 
@@ -1079,8 +648,7 @@ Before each commit, the following checks run automatically:
 - **User Authentication** - Secure login/registration with Supabase Auth
 - **Message Persistence** - Chat history stored and synchronized across sessions
 - **Responsive Design** - Mobile-first UI with dark theme and neon accents
-- **API Documentation** - Interactive OpenAPI 3.0 specification with Swagger UI
-- **Accessibility Compliance** - WCAG 2.1 AA compliance with screen reader support
+- **Auto-Deployment Notifications** - Real-time deployment status updates
 
 ### 🛡️ Production Ready
 - **Health Monitoring** - Built-in health checks at `/health` endpoint
@@ -1091,69 +659,14 @@ Before each commit, the following checks run automatically:
 - **API Documentation** - Complete OpenAPI 3.0 specification with interactive Swagger UI
 - **Accessibility Testing** - Automated WCAG 2.1 AA compliance validation with axe-core
 
-### 🔧 Developer Experience
-- **Hot Reload** - Fast development with Vite
-- **Code Quality** - ESLint, Prettier, and pre-commit hooks
-- **Docker Support** - One-command deployment with docker-compose
-- **Environment Management** - Template-based configuration with validation
-- **Error Boundaries** - Graceful error handling with recovery options
-
-### 🎨 User Interface
-- **Modern Design** - shadcn/ui components with Tailwind CSS
-- **Dark Theme** - Optimized for extended use with crimson red accents
-- **Accessibility** - WCAG 2.1 AA compliant with screen reader support and keyboard navigation
-- **Loading States** - Smooth UX with skeleton loaders and progress indicators
-- **Error States** - Clear error messages with retry mechanisms
-- **User Preferences** - Accessibility controls for high contrast, font size, and reduced motion
-
-### 📊 Monitoring & Analytics
-- **Health Dashboard** - Real-time system status monitoring
-- **Performance Tracking** - Response time and system metrics
-- **Error Analytics** - Detailed error tracking with context and stack traces
-- **Environment Status** - Configuration validation and service connectivity
-
-### 📚 API Documentation & Integration
-- **OpenAPI 3.0 Specification** - Complete API documentation with schemas and examples
-- **Interactive Swagger UI** - Test API endpoints directly in the browser
-- **Authentication Examples** - JWT flow with code samples in multiple languages
-- **Rate Limiting Documentation** - Clear usage guidelines and optimization strategies
-- **Integration Guide** - Comprehensive developer documentation with cURL, JavaScript, Python, and TypeScript examples
-
 ### ♿ Accessibility Features
 - **WCAG 2.1 AA Compliance** - Full accessibility standard compliance
 - **Screen Reader Support** - Comprehensive ARIA implementation and testing
 - **Keyboard Navigation** - Complete keyboard-only interface navigation
 - **Color Contrast Validation** - Mathematical compliance checking with user controls
 - **Visual Accessibility Controls** - User preference system for high contrast, font size, and reduced motion
-- **Automated Testing** - Continuous accessibility validation with axe-core integration
 
-## 🚀 Production Deployment
-
-### Building for Production
-
-```bash
-npm run build
-```
-
-The built files will be in the `dist` directory, ready for deployment.
-
-### Environment Variables for Production
-
-Ensure these environment variables are set in your production environment:
-
-- `VITE_SUPABASE_URL` - Your Supabase project URL
-- `VITE_SUPABASE_ANON_KEY` - Your Supabase anonymous key
-- `VITE_N8N_WEBHOOK_URL` - Your n8n webhook endpoint
-- `VITE_APP_DOMAIN` - Your application domain
-
-### Docker Production Deployment
-
-The production Docker image uses nginx to serve the built static files:
-
-```bash
-docker build -t jarvis-chat .
-docker run -d -p 80:80 --name jarvis-chat-prod jarvis-chat
-```
+---
 
 ## 🧪 Testing
 
@@ -1170,16 +683,6 @@ npm run test:ui
 # Run tests once (CI mode)
 npm run test:run
 ```
-
-**Test Coverage**
-- ✅ Environment validation logic
-- ✅ Authentication flow (ProtectedRoute)
-- ✅ Chat functionality (useChat hook)
-- ✅ Error boundary components
-- ✅ Health check system
-- ✅ Accessibility compliance (WCAG 2.1 AA)
-- ✅ API documentation validation
-- ✅ Color contrast validation
 
 ### Code Quality Checks
 
@@ -1200,53 +703,13 @@ npm run format
 npm run format:check
 ```
 
-### Production Testing Checklist
-
-**Application Features**
-- [ ] Authentication (login/logout/registration)
-- [ ] Chat interface with real-time updates
-- [ ] Message persistence and history loading
-- [ ] Error handling and retry mechanisms
-- [ ] Environment validation in Settings
-- [ ] Health monitoring dashboard (`/health`)
-- [ ] API documentation (`/api-docs.html`)
-- [ ] Accessibility controls and preferences
-- [ ] Dark theme with crimson red accents
-- [ ] Responsive design (mobile/desktop)
-
-**Technical Validation**
-- [ ] TypeScript compilation passes (`npm run type-check`)
-- [ ] ESLint rules pass (`npm run lint`)
-- [ ] Test suite passes (`npm run test:run`)
-- [ ] Accessibility testing passes (axe-core validation)
-- [ ] Production build succeeds (`npm run build`)
-- [ ] Docker container builds and runs
-- [ ] Health check endpoint responds (`/health`)
-- [ ] API documentation accessible (`/api-docs.html`)
-- [ ] WCAG 2.1 AA compliance validated
-- [ ] Error tracking captures issues
-- [ ] Environment variables validate correctly
-
-**Deployment Verification**
-- [ ] Docker containers start successfully
-- [ ] Application accessible on configured port
-- [ ] Database connectivity confirmed
-- [ ] SSL/TLS certificates work (if configured)
-- [ ] nginx reverse proxy functional
-- [ ] Health monitoring shows "healthy" status
+---
 
 ## 🔧 Troubleshooting
 
 ### Common Issues
 
-1. **Node.js Version**: Ensure you're using Node.js 20 or higher
-2. **Dependencies**: Run `npm install` if you encounter missing module errors
-3. **Type Errors**: Run `npm run type-check` to identify TypeScript issues
-4. **Build Errors**: Clear `node_modules` and reinstall dependencies
-
-### Development Issues
-
-**Node.js Version Issues:**
+#### Node.js Version Issues
 ```bash
 # Error: "Unsupported engine" or "vite: not found"
 node --version  # If this shows v18.x.x, you need to upgrade
@@ -1257,122 +720,46 @@ sudo apt-get install -y nodejs
 node --version  # Should now show v20.x.x
 ```
 
-**Vite Not Found Error:**
+#### Vite Not Found Error
 ```bash
 # Error: "sh: 1: vite: not found"
 # This means you didn't run npm install properly
 
 # Fix: Install dependencies locally (NOT globally)
-cd jarvis-chat
 rm -rf node_modules package-lock.json  # Clean install
 npm install                            # This installs vite locally
 npx vite --version                     # Should work now
 npm run dev                            # Should work now
 ```
 
-**Missing Dependencies:**
+#### Missing Dependencies
 ```bash
 # Error: "Cannot find package 'vite'"
 # This means node_modules is corrupted or missing
 
 # Fix: Clean install
-cd jarvis-chat
 rm -rf node_modules package-lock.json
 npm install
 npm run dev
 ```
 
-**Permission Issues (if running as root):**
-```bash
-# If you get permission warnings, create a non-root user
-adduser developer
-su - developer
-cd /path/to/jarvis-chat
-npm install
-npm run dev
-```
-
-- **Hot Reload Not Working**: Restart the development server
-- **Import Path Issues**: Check that path aliases are correctly configured
-- **Theme Not Applied**: Ensure Tailwind CSS is properly imported in `index.css`
-
 ### Docker Issues
 
-- **Build Failures**: Ensure Node.js 20+ is available in the container
-- **Port Conflicts**: Use different ports if 3000 or 80 are occupied
-- **Environment Variables**: Verify all required variables are set
-
-**Environment Variable Warnings (NORMAL)**
+#### Environment Variable Warnings (NORMAL)
 ```bash
 WARNING: The VITE_APP_VERSION variable is not set. Defaulting to a blank string.
 WARNING: The VITE_CDN_URL variable is not set. Defaulting to a blank string.
 ```
 These warnings are normal for optional variables. Only fix if you need these features.
 
-**Required Environment Variables Fix**
-If you see warnings for required variables, ensure you have both files:
+#### Required Environment Variables Fix
 ```bash
-# Make sure both files exist in jarvis-chat directory
+# Make sure both files exist
 cp .env.local .env  # Docker Compose needs .env file
 ls -la .env*        # Should show both .env and .env.local
 ```
 
-**Package Lock File Issues**
-If you see npm lockfile warnings during build:
-```bash
-# Delete and regenerate package-lock.json
-rm package-lock.json
-npm install
-docker-compose down
-docker-compose up -d --build
-```
-
-**Docker BuildX Errors**
-If you see "buildx" format errors, use legacy builder:
-```bash
-export DOCKER_BUILDKIT=0
-docker-compose up -d --build
-```
-
-### Deployment Issues
-
-**Empty jarvis-chat Folder After Clone (FIXED)**
-```bash
-# ISSUE: jarvis-chat folder appears empty after git clone
-# CAUSE: jarvis-chat was a separate git repository (submodule)
-# FIX: Merged jarvis-chat into main repository structure
-
-# If you cloned before this fix, you'll need to pull the latest:
-git pull origin main
-
-# The jarvis-chat folder should now contain all files
-```
-
-**Missing .env.template File (FIXED)**
-```bash
-# This issue has been resolved - .env.template is now included in the repository
-# If you still don't see it, create it manually:
-
-cat > .env.template << 'EOF'
-# JARVIS Chat Environment Configuration
-VITE_SUPABASE_URL=https://your-project-id.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.your-anon-key-here
-# VITE_N8N_WEBHOOK_URL=https://your-n8n-instance.com/webhook/chat/send
-# VITE_APP_DOMAIN=jarvis.yourdomain.com
-EOF
-
-# Then copy it to create your environment file
-cp .env.template .env.local
-```
-
-**Correct Directory Structure**
-```bash
-# Make sure you're in the right directory:
-git clone https://github.com/MADPANDA3D/J.A.R.V.I.S-PROJECT.git
-cd J.A.R.V.I.S-PROJECT          # Main project directory
-cd jarvis-chat                  # Navigate to the chat application
-ls -la                          # Should see package.json, src/, public/, etc.
-```
+---
 
 ## 📝 Contributing
 
@@ -1392,9 +779,13 @@ ls -la                          # Should see package.json, src/, public/, etc.
 - Use semantic commit messages
 - Ensure all tests pass before submitting
 
+---
+
 ## 📄 License
 
 This project is licensed under the MIT License.
+
+---
 
 ## 🤝 Support
 

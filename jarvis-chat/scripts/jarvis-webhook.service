@@ -1,13 +1,13 @@
 [Unit]
 Description=JARVIS Chat Webhook Server
-Documentation=https://github.com/madpanda3d/jarvis-chat
+Documentation=https://github.com/MADPANDA3D/J.A.R.V.I.S-PROJECT
 After=network.target docker.service
 Requires=network.target docker.service
 
 [Service]
 Type=simple
 User=root
-WorkingDirectory=/home/user/J.A.R.V.I.S/J.A.R.V.I.S-PROJECT/jarvis-chat
+WorkingDirectory=/root/J.A.R.V.I.S/J.A.R.V.I.S-PROJECT
 ExecStart=/usr/bin/node scripts/vps-webhook-server.js
 Restart=always
 RestartSec=10
@@ -19,14 +19,14 @@ SyslogIdentifier=jarvis-webhook
 Environment=NODE_ENV=production
 Environment=WEBHOOK_PORT=9000
 Environment=WEBHOOK_SECRET=your-webhook-secret-here
-Environment=PROJECT_ROOT=/home/user/J.A.R.V.I.S/J.A.R.V.I.S-PROJECT
+Environment=PROJECT_ROOT=/root/J.A.R.V.I.S/J.A.R.V.I.S-PROJECT
 
 # Security settings
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
-ReadWritePaths=/home/user/J.A.R.V.I.S/J.A.R.V.I.S-PROJECT
+ReadWritePaths=/root/J.A.R.V.I.S/J.A.R.V.I.S-PROJECT
 
 [Install]
 WantedBy=multi-user.target

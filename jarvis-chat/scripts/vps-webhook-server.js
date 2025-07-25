@@ -22,7 +22,7 @@ const WebSocket = require('ws');
 const app = express();
 const PORT = process.env.WEBHOOK_PORT || 9000;
 const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || 'your-webhook-secret-here';
-const PROJECT_ROOT = process.env.PROJECT_ROOT || '/home/user/J.A.R.V.I.S/J.A.R.V.I.S-PROJECT';
+const PROJECT_ROOT = process.env.PROJECT_ROOT || '/root/J.A.R.V.I.S/J.A.R.V.I.S-PROJECT';
 const LOGS_DIR = path.join(PROJECT_ROOT, 'logs');
 
 // Middleware
