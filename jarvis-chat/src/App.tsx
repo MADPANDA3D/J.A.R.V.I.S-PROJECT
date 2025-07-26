@@ -1,12 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { LoginPage } from '@/pages/auth/LoginPage';
-import { Dashboard } from '@/pages/Dashboard';
-import { ChatPage } from '@/pages/ChatPage';
-import { TasksPage } from '@/pages/TasksPage';
-import { SettingsPage } from '@/pages/SettingsPage';
-import { HealthPage } from '@/pages/HealthPage';
-import { NotFound } from '@/pages/NotFound';
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+
+// Lazy load pages for code splitting
+const LoginPage = lazy(() => import('@/pages/auth/LoginPage').then(m => ({ default: m.LoginPage })));
+const Dashboard = lazy(() => import('@/pages/Dashboard').then(m => ({ default: m.Dashboard })));
+const ChatPage = lazy(() => import('@/pages/ChatPage').then(m => ({ default: m.ChatPage })));
+const TasksPage = lazy(() => import('@/pages/TasksPage').then(m => ({ default: m.TasksPage })));
+const SettingsPage = lazy(() => import('@/pages/SettingsPage').then(m => ({ default: m.SettingsPage })));
+const HealthPage = lazy(() => import('@/pages/HealthPage').then(m => ({ default: m.HealthPage })));
+const NotFound = lazy(() => import('@/pages/NotFound').then(m => ({ default: m.NotFound })));
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { ErrorBoundary } from '@/components/error/ErrorBoundary';
@@ -44,7 +47,8 @@ function App() {
   return (
     <ErrorBoundary>
       <div id="main-content">
-        <Routes>
+        <Suspense fallback={<LoadingSpinner />}>
+          <Routes>
           {/* Public routes */}
           <Route path="/login" element={<LoginPage />} />
 
@@ -105,7 +109,8 @@ function App() {
 
           {/* 404 page */}
           <Route path="*" element={<NotFound />} />
-        </Routes>
+          </Routes>
+        </Suspense>
 
         {/* PWA Install Prompt - shows globally when installable */}
         <InstallPrompt />

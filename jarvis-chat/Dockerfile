@@ -14,13 +14,26 @@ RUN npm ci --omit=dev
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
+
+# Build arguments for optimization
+ARG NODE_ENV=production
+ARG BUILD_MODE=optimized
+
+# Set environment variables
+ENV NODE_ENV=$NODE_ENV
+ENV BUILD_MODE=$BUILD_MODE
+
 COPY package.json package-lock.json* ./
 # Skip prepare script (husky) in Docker build
 RUN npm pkg delete scripts.prepare
 RUN npm ci
 
 COPY . .
-RUN npm run build
+
+# Run optimized build (this automatically uses the Vite config optimizations)
+RUN echo "🔨 Building with optimizations enabled..." && \
+    npm run build && \
+    echo "✅ Build completed with code splitting and optimizations"
 
 # Production image, copy all the files and run the app
 FROM nginx:alpine AS runner

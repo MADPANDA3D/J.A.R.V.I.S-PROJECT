@@ -7,7 +7,7 @@
   },
   "scripts": {
     "install-webhook-deps": "npm install express ws",
-    "start-webhook": "node scripts/vps-webhook-server.js",
+    "start-webhook": "node scripts/vps-webhook-server.cjs",
     "webhook-status": "systemctl status jarvis-webhook",
     "webhook-logs": "journalctl -u jarvis-webhook -f"
   },

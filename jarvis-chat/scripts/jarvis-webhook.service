@@ -8,7 +8,7 @@ Requires=network.target docker.service
 Type=simple
 User=root
 WorkingDirectory=/root/J.A.R.V.I.S/J.A.R.V.I.S-PROJECT
-ExecStart=/usr/bin/node scripts/vps-webhook-server.js
+ExecStart=/usr/bin/node /root/J.A.R.V.I.S/J.A.R.V.I.S-PROJECT/scripts/vps-webhook-server.cjs
 Restart=always
 RestartSec=10
 StandardOutput=journal
@@ -18,14 +18,14 @@ SyslogIdentifier=jarvis-webhook
 # Environment variables
 Environment=NODE_ENV=production
 Environment=WEBHOOK_PORT=9000
-Environment=WEBHOOK_SECRET=your-webhook-secret-here
+Environment=WEBHOOK_SECRET=rO5d0/KFj9kHpd29icCmyg4gDIi/dAvxMvZr6gLBWCQ=
 Environment=PROJECT_ROOT=/root/J.A.R.V.I.S/J.A.R.V.I.S-PROJECT
 
 # Security settings
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
-ProtectHome=true
+ProtectHome=false
 ReadWritePaths=/root/J.A.R.V.I.S/J.A.R.V.I.S-PROJECT
 
 [Install]

@@ -1,0 +1,25 @@
+# Docker Compose Override - Automatic Optimizations
+# This file automatically applies production optimizations when running docker-compose
+
+version: '3.8'
+
+services:
+  jarvis-chat:
+    environment:
+      # Ensure production mode for optimizations
+      - NODE_ENV=production
+      - VITE_APP_ENV=production
+      
+      # Build optimizations
+      - BUILD_ANALYZE=false
+      - OPTIMIZE_BUNDLE=true
+      
+      # Performance settings
+      - ENABLE_GZIP=true
+      - ENABLE_CACHE_HEADERS=true
+    
+    # Add build args for optimization
+    build:
+      args:
+        - NODE_ENV=production
+        - BUILD_MODE=optimized

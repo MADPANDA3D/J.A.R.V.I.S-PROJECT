@@ -313,6 +313,116 @@ app.get('/logs', async (req, res) => {
     }
 });
 
+// Team dashboard for live log viewing
+app.get('/dashboard', async (req, res) => {
+    try {
+        const logFile = path.join(LOGS_DIR, 'webhook.log');
+        let logs = 'No logs available yet';
+        
+        try {
+            const logContent = await fs.readFile(logFile, 'utf8');
+            logs = logContent.split('\n').slice(-100).join('\n');
+        } catch (logError) {
+            logs = 'Log file not found - webhook server may be starting up';
+        }
+        
+        res.send(`
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🚀 JARVIS Deployment Dashboard</title>
+    <meta http-equiv="refresh" content="30">
+    <style>
+        body { 
+            font-family: 'Courier New', monospace; 
+            background: #0a0a0a; 
+            color: #00ff41; 
+            margin: 0; 
+            padding: 20px; 
+            line-height: 1.4;
+        }
+        .header { 
+            background: #1a1a1a; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
+        .status { 
+            display: flex; 
+            gap: 30px; 
+            margin: 15px 0;
+        }
+        .stat { 
+            background: #2a2a2a; 
+            padding: 10px 15px; 
+            border-radius: 5px; 
+            border: 1px solid #444;
+        }
+        .logs { 
+            background: #111; 
+            padding: 20px; 
+            border-radius: 8px; 
+            border: 1px solid #333;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        .logs pre { 
+            margin: 0; 
+            white-space: pre-wrap; 
+            word-wrap: break-word;
+            font-size: 12px;
+        }
+        .success { color: #00ff00; }
+        .error { color: #ff4444; }
+        .warning { color: #ffaa00; }
+        .info { color: #44aaff; }
+        h1 { color: #00ff41; text-shadow: 0 0 10px #00ff41; }
+        .refresh-note { color: #888; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 JARVIS Deployment Dashboard</h1>
+        <div class="status">
+            <div class="stat">
+                <strong>Last Updated:</strong> ${new Date().toLocaleString()}
+            </div>
+            <div class="stat">
+                <strong>Connected Clients:</strong> ${connectedClients.size}
+            </div>
+            <div class="stat">
+                <strong>Server Status:</strong> <span class="success">ONLINE</span>
+            </div>
+        </div>
+        <div class="refresh-note">⚡ Auto-refreshes every 30 seconds</div>
+    </div>
+    
+    <div class="logs">
+        <h2>📋 Recent Deployment Logs (Last 100 entries):</h2>
+        <pre>${logs.replace(/ERROR/g, '<span class="error">ERROR</span>')
+                    .replace(/SUCCESS/g, '<span class="success">SUCCESS</span>')
+                    .replace(/WARNING/g, '<span class="warning">WARNING</span>')
+                    .replace(/INFO/g, '<span class="info">INFO</span>')}</pre>
+    </div>
+    
+    <script>
+        // Optional: Add WebSocket connection for real-time updates
+        console.log('JARVIS Dashboard loaded - monitoring deployments...');
+    </script>
+</body>
+</html>
+        `);
+        
+    } catch (error) {
+        res.status(500).send(`
+            <h1>Dashboard Error</h1>
+            <p>Error loading dashboard: ${error.message}</p>
+            <p><a href="/health">Check server health</a></p>
+        `);
+    }
+});
+
 // Error handling
 app.use((error, req, res, next) => {
     console.error('💥 Unhandled error:', error);
