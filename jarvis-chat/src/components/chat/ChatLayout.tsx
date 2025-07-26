@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageInput } from './MessageInput';
 import { MessageList } from './MessageList';
-import { MessageSearch, SearchFilters, SearchResult } from './MessageSearch';
+import { MessageSearch, SearchResult } from './MessageSearch';
+import { SearchFilters } from '@/hooks/useSearchState';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { screenReader } from '@/lib/accessibility';
 import { chatService } from '@/lib/chatService';

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { Search, X, Filter, Calendar, MessageSquare } from 'lucide-react';
+import { Search, X, Filter, Calendar, MessageSquare, History, Trash2 } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -15,14 +15,7 @@ import {
   DropdownMenuItem,
 } from '../ui/dropdown-menu';
 import { chatService, ConversationSession } from '@/lib/chatService';
-
-export interface SearchFilters {
-  query: string;
-  dateRange?: DateRange;
-  messageTypes: ('user' | 'assistant')[];
-  sessionId?: string;
-  hasErrors?: boolean;
-}
+import { useSearchState, SearchFilters } from '@/hooks/useSearchState';
 
 export interface SearchResult {
   messageId: string;
@@ -56,7 +49,19 @@ export function MessageSearch({
   className = '',
   placeholder = 'Search messages...',
 }: MessageSearchProps) {
-  const [query, setQuery] = useState('');
+  const {
+    filters,
+    currentQuery,
+    searchHistory,
+    updateFilters,
+    setCurrentQuery,
+    addToHistory,
+    applyFromHistory,
+    clearSearch: clearSearchState,
+    clearHistory,
+    removeFromHistory,
+  } = useSearchState(userId);
+
   const [isSearching, setIsSearching] = useState(false);
   const [results, setResults] = useState<SearchResult[]>([]);
   const [showResults, setShowResults] = useState(false);
@@ -65,10 +70,6 @@ export function MessageSearch({
   const [searchTotal, setSearchTotal] = useState(0);
   const [hasMoreResults, setHasMoreResults] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [filters, setFilters] = useState<SearchFilters>({
-    query: '',
-    messageTypes: ['user', 'assistant'],
-  });
 
   const activeFiltersCount = useMemo(() => {
     let count = 0;
@@ -116,6 +117,11 @@ export function MessageSearch({
         setSearchTotal(searchResponse.total);
         setHasMoreResults(searchResponse.hasMore);
         setShowResults(true);
+
+        // Add to search history if this is a new search
+        if (!isLoadingMoreResults && searchResponse.results.length > 0) {
+          addToHistory(searchQuery, searchResponse.total);
+        }
       } catch (error) {
         console.error('Search failed:', error);
         if (!isLoadingMoreResults) {
@@ -131,12 +137,12 @@ export function MessageSearch({
         }
       }
     },
-    [filters, onSearch, onClearSearch, results.length]
+    [filters, onSearch, onClearSearch, results.length, addToHistory]
   );
 
   const handleQueryChange = useCallback((value: string) => {
-    setQuery(value);
-  }, []);
+    setCurrentQuery(value);
+  }, [setCurrentQuery]);
 
   // Load conversation sessions
   useEffect(() => {
@@ -160,26 +166,28 @@ export function MessageSearch({
   // Debounced search effect
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (query) {
-        handleSearch(query);
+      if (currentQuery) {
+        handleSearch(currentQuery);
       } else {
         setResults([]);
         setShowResults(false);
+        setSearchTotal(0);
+        setHasMoreResults(false);
         onClearSearch();
       }
     }, 300);
 
     return () => clearTimeout(timeoutId);
-  }, [query, handleSearch, onClearSearch]);
+  }, [currentQuery, handleSearch, onClearSearch]);
 
   const handleLoadMore = useCallback(() => {
-    if (query && hasMoreResults && !isLoadingMore) {
-      handleSearch(query, true);
+    if (currentQuery && hasMoreResults && !isLoadingMore) {
+      handleSearch(currentQuery, true);
     }
-  }, [query, hasMoreResults, isLoadingMore, handleSearch]);
+  }, [currentQuery, hasMoreResults, isLoadingMore, handleSearch]);
 
   const handleClearSearch = () => {
-    setQuery('');
+    clearSearchState();
     setResults([]);
     setShowResults(false);
     setSearchTotal(0);
@@ -200,12 +208,11 @@ export function MessageSearch({
   };
 
   const toggleMessageType = (type: 'user' | 'assistant') => {
-    setFilters(prev => ({
-      ...prev,
-      messageTypes: prev.messageTypes.includes(type)
-        ? prev.messageTypes.filter(t => t !== type)
-        : [...prev.messageTypes, type],
-    }));
+    const newMessageTypes = filters.messageTypes.includes(type)
+      ? filters.messageTypes.filter(t => t !== type)
+      : [...filters.messageTypes, type];
+    
+    updateFilters({ messageTypes: newMessageTypes });
   };
 
   const handleResultClick = (result: SearchResult) => {
@@ -229,7 +236,7 @@ export function MessageSearch({
         <div className="relative flex-1 min-w-0">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            value={query}
+            value={currentQuery}
             onChange={e => handleQueryChange(e.target.value)}
             placeholder={placeholder}
             className="pl-10 pr-10"
@@ -239,7 +246,7 @@ export function MessageSearch({
             aria-expanded={showResults}
             aria-haspopup="listbox"
           />
-          {query && (
+          {currentQuery && (
             <Button
               variant="ghost"
               size="sm"
@@ -257,9 +264,7 @@ export function MessageSearch({
           {/* Date Range Picker */}
           <DateRangePicker
             dateRange={filters.dateRange}
-            onDateRangeChange={(range) => 
-              setFilters(prev => ({ ...prev, dateRange: range }))
-            }
+            onDateRangeChange={(range) => updateFilters({ dateRange: range })}
             placeholder="Select dates"
             disabled={isSearching}
             className="w-full sm:w-auto"
@@ -288,7 +293,7 @@ export function MessageSearch({
             <DropdownMenuSeparator />
             
             <DropdownMenuItem
-              onClick={() => setFilters(prev => ({ ...prev, sessionId: undefined }))}
+              onClick={() => updateFilters({ sessionId: undefined })}
               className={!filters.sessionId ? 'bg-muted/50' : ''}
             >
               <MessageSquare className="h-4 w-4 mr-2" />
@@ -303,7 +308,7 @@ export function MessageSearch({
               conversationSessions.map(session => (
                 <DropdownMenuItem
                   key={session.id}
-                  onClick={() => setFilters(prev => ({ ...prev, sessionId: session.id }))}
+                  onClick={() => updateFilters({ sessionId: session.id })}
                   className={filters.sessionId === session.id ? 'bg-muted/50' : ''}
                 >
                   <div className="flex flex-col items-start flex-1 min-w-0">
@@ -373,12 +378,71 @@ export function MessageSearch({
 
             <DropdownMenuCheckboxItem
               checked={filters.hasErrors || false}
-              onCheckedChange={checked =>
-                setFilters(prev => ({ ...prev, hasErrors: checked }))
-              }
+              onCheckedChange={checked => updateFilters({ hasErrors: checked })}
             >
               Failed Messages Only
             </DropdownMenuCheckboxItem>
+
+            {/* Search History Section */}
+            {searchHistory.length > 0 && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <History className="h-4 w-4 mr-2" />
+                    Recent Searches
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      clearHistory();
+                    }}
+                    className="h-6 w-6 p-0"
+                    title="Clear search history"
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </Button>
+                </DropdownMenuLabel>
+                {searchHistory.slice(0, 5).map(historyItem => (
+                  <DropdownMenuItem
+                    key={historyItem.id}
+                    onClick={() => applyFromHistory(historyItem)}
+                    className="flex flex-col items-start"
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <span className="text-sm font-medium truncate flex-1">
+                        {historyItem.query}
+                      </span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          removeFromHistory(historyItem.id);
+                        }}
+                        className="h-5 w-5 p-0 ml-2 opacity-50 hover:opacity-100"
+                        title="Remove from history"
+                      >
+                        <X className="h-3 w-3" />
+                      </Button>
+                    </div>
+                    <span className="text-xs text-muted-foreground">
+                      {historyItem.resultCount} result{historyItem.resultCount !== 1 ? 's' : ''} • {' '}
+                      {new Intl.DateTimeFormat('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      }).format(historyItem.timestamp)}
+                    </span>
+                  </DropdownMenuItem>
+                ))}
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
         
