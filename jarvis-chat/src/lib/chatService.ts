@@ -45,6 +45,25 @@ export interface ConversationSession {
   status: 'active' | 'archived' | 'deleted';
 }
 
+export interface ConversationSessionGroup {
+  session: ConversationSession;
+  messages: SearchResult[];
+  messageCount: number;
+  hasMoreMessages: boolean;
+}
+
+export interface SessionSearchFilters extends SearchFilters {
+  groupBySession?: boolean;
+  sessionOrder?: 'chronological' | 'relevance' | 'updated';
+}
+
+export interface GroupedSearchResponse {
+  sessionGroups: ConversationSessionGroup[];
+  totalSessions: number;
+  totalMessages: number;
+  hasMoreSessions: boolean;
+}
+
 class ChatService {
   private n8nWebhookUrl: string;
 
@@ -494,6 +513,174 @@ class ChatService {
         metrics: webhookService.getMetrics(),
         isConfigured: !!this.n8nWebhookUrl,
       };
+    }
+  }
+
+  /**
+   * Search messages grouped by conversation sessions
+   */
+  async searchMessagesGroupedBySession(
+    userId: string,
+    filters: SessionSearchFilters,
+    options?: {
+      sessionLimit?: number;
+      sessionOffset?: number;
+      messagesPerSession?: number;
+    }
+  ): Promise<GroupedSearchResponse> {
+    try {
+      const { sessionLimit = 10, sessionOffset = 0, messagesPerSession = 5 } = options || {};
+      
+      // First, get conversation sessions for the user
+      const sessionsQuery = supabase
+        .from('conversation_sessions')
+        .select('*')
+        .eq('user_id', userId)
+        .eq('status', 'active');
+
+      // Apply session ordering
+      switch (filters.sessionOrder) {
+        case 'chronological':
+          sessionsQuery.order('created_at', { ascending: false });
+          break;
+        case 'updated':
+          sessionsQuery.order('updated_at', { ascending: false });
+          break;
+        default:
+          sessionsQuery.order('updated_at', { ascending: false });
+      }
+
+      // Apply pagination
+      sessionsQuery.range(sessionOffset, sessionOffset + sessionLimit - 1);
+
+      const { data: sessions, error: sessionsError } = await sessionsQuery;
+      
+      if (sessionsError) {
+        throw sessionsError;
+      }
+
+      const sessionGroups: ConversationSessionGroup[] = [];
+      let totalMessages = 0;
+
+      // For each session, get the matching messages
+      for (const sessionData of sessions || []) {
+        const session: ConversationSession = {
+          id: sessionData.id,
+          title: sessionData.title,
+          user_id: sessionData.user_id,
+          created_at: new Date(sessionData.created_at),
+          updated_at: new Date(sessionData.updated_at),
+          message_count: sessionData.message_count,
+          status: sessionData.status,
+        };
+
+        // Search messages within this session
+        const sessionFilters: SearchFilters = {
+          ...filters,
+          sessionId: session.id,
+        };
+
+        const sessionSearchResult = await this.searchMessages(
+          userId,
+          sessionFilters,
+          { limit: messagesPerSession, offset: 0 }
+        );
+
+        if (sessionSearchResult.results.length > 0) {
+          sessionGroups.push({
+            session,
+            messages: sessionSearchResult.results,
+            messageCount: sessionSearchResult.total,
+            hasMoreMessages: sessionSearchResult.hasMore,
+          });
+          
+          totalMessages += sessionSearchResult.total;
+        }
+      }
+
+      // Check if there are more sessions available
+      const { count: totalSessionsCount } = await supabase
+        .from('conversation_sessions')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', userId)
+        .eq('status', 'active');
+
+      const hasMoreSessions = sessionOffset + sessionLimit < (totalSessionsCount || 0);
+
+      return {
+        sessionGroups,
+        totalSessions: totalSessionsCount || 0,
+        totalMessages,
+        hasMoreSessions,
+      };
+    } catch (error) {
+      console.error('Error searching messages grouped by session:', error);
+      throw new Error('Failed to search messages by session');
+    }
+  }
+
+  /**
+   * Get session metadata with message preview
+   */
+  async getSessionWithPreview(
+    sessionId: string,
+    userId: string,
+    previewCount: number = 3
+  ): Promise<ConversationSessionGroup | null> {
+    try {
+      // Get session data
+      const { data: sessionData, error: sessionError } = await supabase
+        .from('conversation_sessions')
+        .select('*')
+        .eq('id', sessionId)
+        .eq('user_id', userId)
+        .single();
+
+      if (sessionError || !sessionData) {
+        return null;
+      }
+
+      const session: ConversationSession = {
+        id: sessionData.id,
+        title: sessionData.title,
+        user_id: sessionData.user_id,
+        created_at: new Date(sessionData.created_at),
+        updated_at: new Date(sessionData.updated_at),
+        message_count: sessionData.message_count,
+        status: sessionData.status,
+      };
+
+      // Get recent messages from the session
+      const { data: messages, error: messagesError } = await supabase
+        .from('chat_messages')
+        .select('id, content, role, created_at')
+        .eq('user_id', userId)
+        .eq('conversation_id', sessionId)
+        .order('created_at', { ascending: false })
+        .limit(previewCount);
+
+      if (messagesError) {
+        throw messagesError;
+      }
+
+      const searchResults: SearchResult[] = (messages || []).map(msg => ({
+        messageId: msg.id,
+        content: msg.content,
+        role: msg.role,
+        timestamp: new Date(msg.created_at),
+        highlightedContent: msg.content,
+        matchScore: 1.0,
+      }));
+
+      return {
+        session,
+        messages: searchResults,
+        messageCount: session.message_count,
+        hasMoreMessages: session.message_count > previewCount,
+      };
+    } catch (error) {
+      console.error('Error getting session with preview:', error);
+      throw new Error('Failed to get session preview');
     }
   }
 
