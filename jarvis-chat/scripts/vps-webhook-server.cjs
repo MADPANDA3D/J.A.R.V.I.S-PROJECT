@@ -25,6 +25,22 @@ const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || 'your-webhook-secret-here';
 const PROJECT_ROOT = process.env.PROJECT_ROOT || '/root/J.A.R.V.I.S/J.A.R.V.I.S-PROJECT';
 const LOGS_DIR = path.join(PROJECT_ROOT, 'logs');
 
+// Supported GitHub webhook event types
+const SUPPORTED_EVENTS = {
+    PING: 'ping',
+    WORKFLOW_RUN: 'workflow_run',
+    PUSH: 'push',
+    PULL_REQUEST: 'pull_request'
+};
+
+// Event handler response types
+const RESPONSE_TYPES = {
+    SUCCESS: 'success',
+    ERROR: 'error',
+    INFO: 'info',
+    WARNING: 'warning'
+};
+
 // Middleware
 app.use(express.json());
 app.use(express.raw({ type: 'application/json' }));
@@ -44,6 +60,40 @@ wss.on('connection', (ws) => {
 });
 
 // Utility Functions
+
+// Event validation and classification
+const isValidEventType = (eventType) => {
+    return Object.values(SUPPORTED_EVENTS).includes(eventType?.toLowerCase());
+};
+
+const classifyEvent = (eventType) => {
+    const normalizedType = eventType?.toLowerCase();
+    
+    switch (normalizedType) {
+        case SUPPORTED_EVENTS.PING:
+            return { type: SUPPORTED_EVENTS.PING, category: 'test' };
+        case SUPPORTED_EVENTS.WORKFLOW_RUN:
+            return { type: SUPPORTED_EVENTS.WORKFLOW_RUN, category: 'deployment' };
+        case SUPPORTED_EVENTS.PUSH:
+            return { type: SUPPORTED_EVENTS.PUSH, category: 'repository' };
+        case SUPPORTED_EVENTS.PULL_REQUEST:
+            return { type: SUPPORTED_EVENTS.PULL_REQUEST, category: 'repository' };
+        default:
+            return { type: normalizedType || 'unknown', category: 'unsupported' };
+    }
+};
+
+// Create standardized webhook response
+const createWebhookResponse = (type, message, data = {}) => {
+    return {
+        message,
+        status: type === RESPONSE_TYPES.ERROR ? 'error' : 'healthy',
+        type,
+        timestamp: new Date().toISOString(),
+        ...data
+    };
+};
+
 const verifyGitHubSignature = (payload, signature) => {
     const expectedSignature = 'sha256=' + crypto
         .createHmac('sha256', WEBHOOK_SECRET)
@@ -87,6 +137,90 @@ const sendLogToGitHub = async (action, details) => {
     
     // TODO: Implement GitHub API push for logs
     console.log('📤 Log prepared for GitHub:', logData);
+};
+
+// Event handlers
+const handlePingEvent = async (data, req) => {
+    await logAction('WEBHOOK_PING', {
+        zen: data.zen,
+        hook_id: data.hook_id,
+        repository: data.repository?.name,
+        hook_url: data.hook?.url,
+        user_agent: req.headers['user-agent']
+    });
+
+    return createWebhookResponse(
+        RESPONSE_TYPES.SUCCESS,
+        'Webhook ping received successfully',
+        {
+            zen: data.zen,
+            hook_id: data.hook_id,
+            repository: data.repository?.name
+        }
+    );
+};
+
+const handleWorkflowRunEvent = async (data, req) => {
+    const { action, workflow_run } = data;
+    
+    await logAction('WEBHOOK_WORKFLOW_RUN', {
+        action,
+        conclusion: workflow_run?.conclusion,
+        status: workflow_run?.status,
+        workflow_name: workflow_run?.name,
+        head_sha: workflow_run?.head_sha,
+        repository: data.repository?.name
+    });
+
+    if (action === 'completed' && workflow_run.conclusion === 'success') {
+        const version = workflow_run.head_sha.substring(0, 7);
+        
+        console.log('🚀 Deployment webhook received for version:', version);
+        
+        // Start deployment in background
+        deployApplication(version).catch(error => {
+            console.error('💥 Deployment failed:', error);
+        });
+        
+        return createWebhookResponse(
+            RESPONSE_TYPES.SUCCESS,
+            'Deployment initiated',
+            {
+                version,
+                workflow_name: workflow_run.name,
+                conclusion: workflow_run.conclusion
+            }
+        );
+    } else {
+        return createWebhookResponse(
+            RESPONSE_TYPES.INFO,
+            'Workflow run event processed',
+            {
+                action,
+                status: workflow_run?.status,
+                conclusion: workflow_run?.conclusion,
+                workflow_name: workflow_run?.name
+            }
+        );
+    }
+};
+
+const handleUnsupportedEvent = async (eventType, data, req) => {
+    await logAction('WEBHOOK_UNSUPPORTED_EVENT', {
+        event_type: eventType,
+        repository: data.repository?.name,
+        user_agent: req.headers['user-agent'],
+        payload_keys: Object.keys(data)
+    });
+
+    return createWebhookResponse(
+        RESPONSE_TYPES.WARNING,
+        `Webhook event '${eventType}' received but not processed`,
+        {
+            event_type: eventType,
+            supported_events: Object.values(SUPPORTED_EVENTS)
+        }
+    );
 };
 
 const notifyUsers = (message, type = 'info') => {
@@ -226,66 +360,86 @@ app.post('/webhook/deploy', async (req, res) => {
         if (!verifyGitHubSignature(payload, signature)) {
             await logAction('WEBHOOK_AUTH_FAILED', { 
                 headers: req.headers,
-                ip: req.ip 
+                ip: req.ip,
+                event: req.headers['x-github-event']
             });
-            return res.status(401).json({ error: 'Invalid signature' });
+            return res.status(401).json(createWebhookResponse(
+                RESPONSE_TYPES.ERROR,
+                'Invalid signature'
+            ));
         }
         
         const event = req.headers['x-github-event'];
         const data = req.body;
         
+        // Validate payload structure
+        if (!data || typeof data !== 'object') {
+            await logAction('WEBHOOK_MALFORMED_PAYLOAD', { 
+                event,
+                content_type: req.headers['content-type'],
+                body_type: typeof req.body
+            });
+            return res.status(400).json(createWebhookResponse(
+                RESPONSE_TYPES.ERROR,
+                'Malformed payload - expected JSON object'
+            ));
+        }
+        
+        // Classify event type
+        const eventClassification = classifyEvent(event);
+        
         await logAction('WEBHOOK_RECEIVED', { 
-            event, 
+            event,
+            category: eventClassification.category,
             ref: data.ref,
             repository: data.repository?.name,
-            pusher: data.pusher?.name
+            pusher: data.pusher?.name,
+            user_agent: req.headers['user-agent']
         });
         
-        // Handle ping events from GitHub webhook testing
-        if (event === 'ping') {
-            await logAction('WEBHOOK_PING', {
-                zen: data.zen,
-                hook_id: data.hook_id,
-                repository: data.repository?.name
-            });
-
-            res.json({
-                message: 'Webhook ping received successfully',
-                status: 'healthy',
-                timestamp: new Date().toISOString()
-            });
-            return;
+        let response;
+        
+        // Route to appropriate event handler
+        switch (eventClassification.type) {
+            case SUPPORTED_EVENTS.PING:
+                response = await handlePingEvent(data, req);
+                break;
+                
+            case SUPPORTED_EVENTS.WORKFLOW_RUN:
+                response = await handleWorkflowRunEvent(data, req);
+                break;
+                
+            default:
+                if (eventClassification.category === 'unsupported') {
+                    response = await handleUnsupportedEvent(event, data, req);
+                } else {
+                    // Supported event type but no specific handler yet
+                    await logAction('WEBHOOK_NOT_IMPLEMENTED', {
+                        event_type: event,
+                        category: eventClassification.category
+                    });
+                    response = createWebhookResponse(
+                        RESPONSE_TYPES.INFO,
+                        `Webhook event '${event}' received but handler not implemented`,
+                        { event_type: event }
+                    );
+                }
         }
         
-        // Handle workflow_run completion (from GitHub Actions)
-        if (event === 'workflow_run' && data.action === 'completed' && data.workflow_run.conclusion === 'success') {
-            const version = data.workflow_run.head_sha.substring(0, 7);
-            
-            console.log('🚀 Deployment webhook received for version:', version);
-            
-            // Start deployment in background
-            deployApplication(version).catch(error => {
-                console.error('💥 Deployment failed:', error);
-            });
-            
-            res.json({ 
-                message: 'Deployment initiated',
-                version,
-                timestamp: new Date().toISOString()
-            });
-            
-        } else {
-            res.json({ 
-                message: 'Webhook received but no action taken',
-                event,
-                action: data.action
-            });
-        }
+        res.json(response);
         
     } catch (error) {
         console.error('❌ Webhook error:', error);
-        await logAction('WEBHOOK_ERROR', { error: error.message });
-        res.status(500).json({ error: 'Internal server error' });
+        await logAction('WEBHOOK_ERROR', { 
+            error: error.message,
+            stack: error.stack,
+            event: req.headers['x-github-event']
+        });
+        res.status(500).json(createWebhookResponse(
+            RESPONSE_TYPES.ERROR,
+            'Internal server error',
+            { error: error.message }
+        ));
     }
 });
 
