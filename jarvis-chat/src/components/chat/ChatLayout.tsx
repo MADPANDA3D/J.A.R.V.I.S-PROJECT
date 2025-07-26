@@ -111,6 +111,7 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
             onSearch={handleSearch}
             onClearSearch={handleClearSearch}
             onResultClick={handleSearchResultClick}
+            userId={userId}
             placeholder="Search your conversation history..."
           />
         </div>

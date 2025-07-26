@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { Search, X, Filter, Calendar } from 'lucide-react';
+import { Search, X, Filter, Calendar, MessageSquare } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -12,12 +12,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuItem,
 } from '../ui/dropdown-menu';
+import { chatService, ConversationSession } from '@/lib/chatService';
 
 export interface SearchFilters {
   query: string;
   dateRange?: DateRange;
   messageTypes: ('user' | 'assistant')[];
+  sessionId?: string;
   hasErrors?: boolean;
 }
 
@@ -34,6 +37,7 @@ interface MessageSearchProps {
   onSearch: (filters: SearchFilters) => Promise<SearchResult[]>;
   onClearSearch: () => void;
   onResultClick: (messageId: string) => void;
+  userId: string;
   className?: string;
   placeholder?: string;
 }
@@ -42,6 +46,7 @@ export function MessageSearch({
   onSearch,
   onClearSearch,
   onResultClick,
+  userId,
   className = '',
   placeholder = 'Search messages...',
 }: MessageSearchProps) {
@@ -49,6 +54,8 @@ export function MessageSearch({
   const [isSearching, setIsSearching] = useState(false);
   const [results, setResults] = useState<SearchResult[]>([]);
   const [showResults, setShowResults] = useState(false);
+  const [conversationSessions, setConversationSessions] = useState<ConversationSession[]>([]);
+  const [loadingSessions, setLoadingSessions] = useState(false);
   const [filters, setFilters] = useState<SearchFilters>({
     query: '',
     messageTypes: ['user', 'assistant'],
@@ -58,6 +65,7 @@ export function MessageSearch({
     let count = 0;
     if (filters.dateRange && (filters.dateRange.from || filters.dateRange.to)) count++;
     if (filters.messageTypes.length < 2) count++;
+    if (filters.sessionId) count++;
     if (filters.hasErrors) count++;
     return count;
   }, [filters]);
@@ -94,6 +102,25 @@ export function MessageSearch({
   const handleQueryChange = useCallback((value: string) => {
     setQuery(value);
   }, []);
+
+  // Load conversation sessions
+  useEffect(() => {
+    if (!userId) return;
+
+    const loadSessions = async () => {
+      setLoadingSessions(true);
+      try {
+        const sessions = await chatService.getConversationSessions(userId);
+        setConversationSessions(sessions);
+      } catch (error) {
+        console.error('Failed to load conversation sessions:', error);
+      } finally {
+        setLoadingSessions(false);
+      }
+    };
+
+    loadSessions();
+  }, [userId]);
 
   // Debounced search effect
   useEffect(() => {
@@ -174,6 +201,63 @@ export function MessageSearch({
           placeholder="Select dates"
           disabled={isSearching}
         />
+
+        {/* Conversation Session Selector */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm" disabled={isSearching || loadingSessions}>
+              <MessageSquare className="h-4 w-4 mr-2" />
+              {filters.sessionId 
+                ? conversationSessions.find(s => s.id === filters.sessionId)?.title?.slice(0, 20) + '...'
+                : 'All Conversations'
+              }
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-64" align="start">
+            <DropdownMenuLabel>Conversation Sessions</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            
+            <DropdownMenuItem
+              onClick={() => setFilters(prev => ({ ...prev, sessionId: undefined }))}
+              className={!filters.sessionId ? 'bg-muted/50' : ''}
+            >
+              <MessageSquare className="h-4 w-4 mr-2" />
+              All Conversations
+            </DropdownMenuItem>
+            
+            {loadingSessions ? (
+              <DropdownMenuItem disabled>
+                Loading sessions...
+              </DropdownMenuItem>
+            ) : conversationSessions.length > 0 ? (
+              conversationSessions.map(session => (
+                <DropdownMenuItem
+                  key={session.id}
+                  onClick={() => setFilters(prev => ({ ...prev, sessionId: session.id }))}
+                  className={filters.sessionId === session.id ? 'bg-muted/50' : ''}
+                >
+                  <div className="flex flex-col items-start flex-1 min-w-0">
+                    <span className="text-sm font-medium truncate w-full">
+                      {session.title}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {session.message_count} messages • {new Intl.DateTimeFormat('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      }).format(session.updated_at)}
+                    </span>
+                  </div>
+                </DropdownMenuItem>
+              ))
+            ) : (
+              <DropdownMenuItem disabled>
+                No conversations found
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         {/* Filters Dropdown */}
         <DropdownMenu>

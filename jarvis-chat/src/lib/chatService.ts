@@ -22,6 +22,7 @@ export interface SearchFilters {
   query: string;
   dateRange?: DateRange;
   messageTypes: ('user' | 'assistant')[];
+  sessionId?: string;
   hasErrors?: boolean;
 }
 
@@ -32,6 +33,16 @@ export interface SearchResult {
   timestamp: Date;
   highlightedContent: string;
   matchScore: number;
+}
+
+export interface ConversationSession {
+  id: string;
+  title: string;
+  user_id: string;
+  created_at: Date;
+  updated_at: Date;
+  message_count: number;
+  status: 'active' | 'archived' | 'deleted';
 }
 
 class ChatService {
@@ -289,6 +300,11 @@ class ChatService {
         query = query.lte('created_at', endDate.toISOString());
       }
 
+      // Apply session filter
+      if (filters.sessionId) {
+        query = query.eq('conversation_id', filters.sessionId);
+      }
+
       // Apply error filter
       if (filters.hasErrors) {
         query = query.eq('status', 'error');
@@ -353,6 +369,75 @@ class ChatService {
     const matchedWords = words.filter(word => lowerContent.includes(word));
     
     return matchedWords.length / words.length;
+  }
+
+  /**
+   * Get conversation sessions for a user
+   */
+  async getConversationSessions(userId: string): Promise<ConversationSession[]> {
+    try {
+      const { data, error } = await supabase
+        .from('conversation_sessions')
+        .select('*')
+        .eq('user_id', userId)
+        .eq('status', 'active')
+        .order('updated_at', { ascending: false });
+
+      if (error) {
+        throw error;
+      }
+
+      return data.map(session => ({
+        id: session.id,
+        title: session.title,
+        user_id: session.user_id,
+        created_at: new Date(session.created_at),
+        updated_at: new Date(session.updated_at),
+        message_count: session.message_count,
+        status: session.status,
+      }));
+    } catch (error) {
+      console.error('Error loading conversation sessions:', error);
+      throw new Error('Failed to load conversation sessions');
+    }
+  }
+
+  /**
+   * Create a new conversation session
+   */
+  async createConversationSession(
+    userId: string,
+    title: string = 'New Conversation'
+  ): Promise<ConversationSession> {
+    try {
+      const { data, error } = await supabase
+        .from('conversation_sessions')
+        .insert([
+          {
+            title,
+            user_id: userId,
+          },
+        ])
+        .select()
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      return {
+        id: data.id,
+        title: data.title,
+        user_id: data.user_id,
+        created_at: new Date(data.created_at),
+        updated_at: new Date(data.updated_at),
+        message_count: data.message_count,
+        status: data.status,
+      };
+    } catch (error) {
+      console.error('Error creating conversation session:', error);
+      throw new Error('Failed to create conversation session');
+    }
   }
 
   /**
