@@ -241,6 +241,22 @@ app.post('/webhook/deploy', async (req, res) => {
             pusher: data.pusher?.name
         });
         
+        // Handle ping events from GitHub webhook testing
+        if (event === 'ping') {
+            await logAction('WEBHOOK_PING', {
+                zen: data.zen,
+                hook_id: data.hook_id,
+                repository: data.repository?.name
+            });
+
+            res.json({
+                message: 'Webhook ping received successfully',
+                status: 'healthy',
+                timestamp: new Date().toISOString()
+            });
+            return;
+        }
+        
         // Handle workflow_run completion (from GitHub Actions)
         if (event === 'workflow_run' && data.action === 'completed' && data.workflow_run.conclusion === 'success') {
             const version = data.workflow_run.head_sha.substring(0, 7);

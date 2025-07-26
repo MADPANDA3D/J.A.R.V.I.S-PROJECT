@@ -18,7 +18,7 @@ SyslogIdentifier=jarvis-webhook
 # Environment variables
 Environment=NODE_ENV=production
 Environment=WEBHOOK_PORT=9000
-Environment=WEBHOOK_SECRET=rO5d0/KFj9kHpd29icCmyg4gDIi/dAvxMvZr6gLBWCQ=
+Environment=WEBHOOK_SECRET=bxWGYH5dx8/IS8AJOKokMWaXmdAWsQ87IfZSt38zNo0yX0g1BiHTezqxR6rstM4h
 Environment=PROJECT_ROOT=/root/J.A.R.V.I.S/J.A.R.V.I.S-PROJECT
 
 # Security settings
