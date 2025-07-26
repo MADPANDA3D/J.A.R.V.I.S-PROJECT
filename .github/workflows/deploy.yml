@@ -1,0 +1,236 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      force_deploy:
+        description: 'Force deployment even if tests fail'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    env:
+      NODE_VERSION: '20'
+      WORKING_DIRECTORY: 'jarvis-chat'
+    
+    steps:
+      - name: 🛎️ Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🏗️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: '${{ env.WORKING_DIRECTORY }}/package-lock.json'
+
+      - name: 📋 Display build environment
+        run: |
+          echo "🔍 Build Environment Information:"
+          echo "Node.js version: $(node --version)"
+          echo "NPM version: $(npm --version)"
+          echo "Working directory: ${{ env.WORKING_DIRECTORY }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Commit SHA: ${{ github.sha }}"
+          echo "Repository: ${{ github.repository }}"
+          echo "Workflow: ${{ github.workflow }}"
+          echo "Run ID: ${{ github.run_id }}"
+
+      - name: 📦 Install dependencies
+        run: |
+          cd ${{ env.WORKING_DIRECTORY }}
+          echo "📦 Installing dependencies with npm ci..."
+          npm ci --production=false
+          echo "✅ Dependencies installed successfully"
+        
+      - name: 🔍 Validate environment
+        run: |
+          cd ${{ env.WORKING_DIRECTORY }}
+          echo "🔍 Validating project configuration..."
+          
+          # Check package.json exists and has required scripts
+          if [ ! -f "package.json" ]; then
+            echo "❌ package.json not found"
+            exit 1
+          fi
+          
+          # Verify required scripts exist
+          if ! npm run --silent 2>/dev/null | grep -q "test\|build\|lint"; then
+            echo "⚠️ Some required scripts may be missing"
+          fi
+          
+          # Check critical files exist
+          if [ ! -f "vite.config.ts" ]; then
+            echo "⚠️ vite.config.ts not found - build may fail"
+          fi
+          
+          if [ ! -f "tsconfig.json" ]; then
+            echo "⚠️ tsconfig.json not found - TypeScript compilation may fail"
+          fi
+          
+          echo "✅ Environment validation completed"
+
+      - name: 🧪 Run tests
+        run: |
+          cd ${{ env.WORKING_DIRECTORY }}
+          echo "🧪 Running test suite..."
+          
+          # Run tests with proper error handling
+          if npm run test:run; then
+            echo "✅ All tests passed successfully"
+          else
+            echo "❌ Tests failed"
+            
+            # Check if force deploy is enabled
+            if [ "${{ github.event.inputs.force_deploy }}" = "true" ]; then
+              echo "⚠️ Force deploy enabled - continuing despite test failures"
+            else
+              echo "🛑 Deployment cancelled due to test failures"
+              exit 1
+            fi
+          fi
+
+      - name: 🔧 Run linting
+        run: |
+          cd ${{ env.WORKING_DIRECTORY }}
+          echo "🔧 Running code linting..."
+          
+          if npm run lint; then
+            echo "✅ Linting passed successfully"
+          else
+            echo "⚠️ Linting issues found - continuing with deployment"
+            echo "Note: Fix linting issues in future commits"
+          fi
+
+      - name: 📊 Type checking
+        run: |
+          cd ${{ env.WORKING_DIRECTORY }}
+          echo "📊 Running TypeScript type checking..."
+          
+          if npm run type-check; then
+            echo "✅ Type checking passed successfully"
+          else
+            echo "❌ Type checking failed"
+            
+            # Check if force deploy is enabled
+            if [ "${{ github.event.inputs.force_deploy }}" = "true" ]; then
+              echo "⚠️ Force deploy enabled - continuing despite type errors"
+            else
+              echo "🛑 Deployment cancelled due to type errors"
+              exit 1
+            fi
+          fi
+
+      - name: 🏗️ Build application
+        run: |
+          cd ${{ env.WORKING_DIRECTORY }}
+          echo "🏗️ Building application for production..."
+          
+          # Set build environment
+          export NODE_ENV=production
+          
+          if npm run build; then
+            echo "✅ Build completed successfully"
+            
+            # Display build info
+            if [ -d "dist" ]; then
+              echo "📊 Build artifacts:"
+              ls -la dist/
+              du -sh dist/
+            fi
+          else
+            echo "❌ Build failed"
+            exit 1
+          fi
+
+      - name: 🔍 Validate build artifacts
+        run: |
+          cd ${{ env.WORKING_DIRECTORY }}
+          echo "🔍 Validating build artifacts..."
+          
+          if [ ! -d "dist" ]; then
+            echo "❌ Build directory 'dist' not found"
+            exit 1
+          fi
+          
+          if [ ! -f "dist/index.html" ]; then
+            echo "❌ Main index.html not found in build"
+            exit 1
+          fi
+          
+          # Check for critical assets
+          if ls dist/assets/*.js 1> /dev/null 2>&1; then
+            echo "✅ JavaScript assets found"
+          else
+            echo "⚠️ No JavaScript assets found"
+          fi
+          
+          if ls dist/assets/*.css 1> /dev/null 2>&1; then
+            echo "✅ CSS assets found"
+          else
+            echo "⚠️ No CSS assets found"
+          fi
+          
+          echo "✅ Build artifacts validation completed"
+
+      - name: 📤 Prepare deployment metadata
+        run: |
+          echo "📤 Preparing deployment metadata..."
+          
+          # Create deployment metadata
+          cat > deployment-metadata.json << EOF
+          {
+            "repository": "${{ github.repository }}",
+            "branch": "${{ github.ref_name }}",
+            "commit_sha": "${{ github.sha }}",
+            "commit_message": "${{ github.event.head_commit.message }}",
+            "author": "${{ github.event.head_commit.author.name }}",
+            "workflow_run_id": "${{ github.run_id }}",
+            "workflow_run_number": "${{ github.run_number }}",
+            "build_timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "node_version": "${{ env.NODE_VERSION }}",
+            "environment": "production"
+          }
+          EOF
+          
+          echo "✅ Deployment metadata prepared:"
+          cat deployment-metadata.json
+
+      - name: 🚀 Deployment successful
+        run: |
+          echo "🎉 Build completed successfully!"
+          echo ""
+          echo "📋 Deployment Summary:"
+          echo "  • Repository: ${{ github.repository }}"
+          echo "  • Branch: ${{ github.ref_name }}"
+          echo "  • Commit: ${{ github.sha }}"
+          echo "  • Build ID: ${{ github.run_id }}"
+          echo "  • Node.js: ${{ env.NODE_VERSION }}"
+          echo "  • Status: ✅ READY FOR DEPLOYMENT"
+          echo ""
+          echo "🔗 Webhook will trigger VPS deployment automatically"
+          echo "🎯 VPS webhook server will process this workflow_run event"
+          echo "📡 Check VPS logs at: http://69.62.71.229:9000/dashboard"
+
+      - name: 📊 Workflow completion notification
+        if: always()
+        run: |
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "✅ WORKFLOW COMPLETED SUCCESSFULLY"
+            echo "🚀 VPS deployment will be triggered automatically via webhook"
+          else
+            echo "❌ WORKFLOW FAILED"
+            echo "🛑 No deployment will be triggered"
+          fi
+          
+          echo ""
+          echo "📋 Final Status: ${{ job.status }}"
+          echo "🕐 Completed at: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
