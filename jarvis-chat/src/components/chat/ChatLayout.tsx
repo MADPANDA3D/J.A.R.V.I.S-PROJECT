@@ -126,13 +126,14 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
     >
       {/* Search Section */}
       <div className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="p-4">
+        <div className="p-3 sm:p-4">
           <MessageSearch
             onSearch={handleSearch}
             onClearSearch={handleClearSearch}
             onResultClick={handleSearchResultClick}
             userId={userId}
             placeholder="Search your conversation history..."
+            className="max-w-none"
           />
         </div>
       </div>

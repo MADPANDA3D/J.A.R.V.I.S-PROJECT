@@ -142,6 +142,18 @@ export function MessageSearch({
     setResults([]);
     setShowResults(false);
     onClearSearch();
+    
+    // Announce to screen readers
+    setTimeout(() => {
+      const message = 'Search cleared';
+      const announcement = document.createElement('div');
+      announcement.setAttribute('aria-live', 'polite');
+      announcement.setAttribute('aria-atomic', 'true');
+      announcement.className = 'sr-only';
+      announcement.textContent = message;
+      document.body.appendChild(announcement);
+      setTimeout(() => document.body.removeChild(announcement), 1000);
+    }, 100);
   };
 
   const toggleMessageType = (type: 'user' | 'assistant') => {
@@ -169,9 +181,9 @@ export function MessageSearch({
 
   return (
     <div className={`relative ${className}`}>
-      <div className="flex gap-2 items-center">
+      <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
         {/* Search Input */}
-        <div className="relative flex-1">
+        <div className="relative flex-1 min-w-0">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             value={query}
@@ -179,6 +191,10 @@ export function MessageSearch({
             placeholder={placeholder}
             className="pl-10 pr-10"
             disabled={isSearching}
+            aria-label="Search messages"
+            role="searchbox"
+            aria-expanded={showResults}
+            aria-haspopup="listbox"
           />
           {query && (
             <Button
@@ -192,25 +208,36 @@ export function MessageSearch({
           )}
         </div>
 
-        {/* Date Range Picker */}
-        <DateRangePicker
-          dateRange={filters.dateRange}
-          onDateRangeChange={(range) => 
-            setFilters(prev => ({ ...prev, dateRange: range }))
-          }
-          placeholder="Select dates"
-          disabled={isSearching}
-        />
+        {/* Filter Controls */}
+        <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
+          
+          {/* Date Range Picker */}
+          <DateRangePicker
+            dateRange={filters.dateRange}
+            onDateRangeChange={(range) => 
+              setFilters(prev => ({ ...prev, dateRange: range }))
+            }
+            placeholder="Select dates"
+            disabled={isSearching}
+            className="w-full sm:w-auto"
+          />
 
-        {/* Conversation Session Selector */}
-        <DropdownMenu>
+          {/* Conversation Session Selector */}
+          <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" disabled={isSearching || loadingSessions}>
-              <MessageSquare className="h-4 w-4 mr-2" />
-              {filters.sessionId 
-                ? conversationSessions.find(s => s.id === filters.sessionId)?.title?.slice(0, 20) + '...'
-                : 'All Conversations'
-              }
+            <Button 
+              variant="outline" 
+              size="sm" 
+              disabled={isSearching || loadingSessions}
+              className="w-full sm:w-auto justify-start"
+            >
+              <MessageSquare className="h-4 w-4 mr-2 flex-shrink-0" />
+              <span className="truncate">
+                {filters.sessionId 
+                  ? conversationSessions.find(s => s.id === filters.sessionId)?.title?.slice(0, 20) + '...'
+                  : 'All Conversations'
+                }
+              </span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-64" align="start">
@@ -259,12 +286,16 @@ export function MessageSearch({
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* Filters Dropdown */}
-        <DropdownMenu>
+          {/* Additional Filters Dropdown */}
+          <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="relative">
-              <Filter className="h-4 w-4 mr-2" />
-              Filters
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="relative w-full sm:w-auto justify-start"
+            >
+              <Filter className="h-4 w-4 mr-2 flex-shrink-0" />
+              <span className="sm:inline">Filters</span>
               {activeFiltersCount > 0 && (
                 <Badge
                   variant="secondary"
@@ -307,11 +338,17 @@ export function MessageSearch({
             </DropdownMenuCheckboxItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        
+        </div>
       </div>
 
       {/* Search Results */}
       {showResults && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-background border rounded-md shadow-lg max-h-96 overflow-y-auto z-50">
+        <div 
+          className="absolute top-full left-0 right-0 mt-2 bg-background border rounded-md shadow-lg max-h-80 md:max-h-96 overflow-y-auto z-50"
+          role="listbox"
+          aria-label="Search results"
+        >
           {isSearching ? (
             <div className="p-4 text-center text-muted-foreground">
               <Search className="h-4 w-4 animate-spin mx-auto mb-2" />
@@ -329,16 +366,18 @@ export function MessageSearch({
                   <button
                     key={result.messageId}
                     onClick={() => handleResultClick(result)}
-                    className="w-full p-3 text-left hover:bg-muted/50 border-b last:border-b-0 focus:bg-muted/50 focus:outline-none"
+                    className="w-full p-3 text-left hover:bg-muted/50 border-b last:border-b-0 focus:bg-muted/50 focus:outline-none transition-colors"
+                    role="option"
+                    aria-label={`Go to ${result.role === 'user' ? 'your' : 'AI'} message: ${result.content.slice(0, 50)}...`}
                   >
-                    <div className="flex items-start justify-between gap-2">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1">
                           <Badge
                             variant={
                               result.role === 'user' ? 'default' : 'secondary'
                             }
-                            className="text-xs"
+                            className="text-xs w-fit"
                           >
                             {result.role === 'user' ? 'You' : 'AI'}
                           </Badge>
@@ -347,7 +386,7 @@ export function MessageSearch({
                           </span>
                         </div>
                         <div
-                          className="text-sm line-clamp-2"
+                          className="text-sm line-clamp-3 sm:line-clamp-2"
                           dangerouslySetInnerHTML={{
                             __html: result.highlightedContent,
                           }}
