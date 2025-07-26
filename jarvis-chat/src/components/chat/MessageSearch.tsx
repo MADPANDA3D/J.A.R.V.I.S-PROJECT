@@ -136,6 +136,7 @@ export function MessageSearch({
   const handleRegularSearch = useCallback(
     async (searchQuery: string, loadMore = false) => {
       const isLoadingMoreResults = loadMore && results.length > 0;
+      const searchStartTime = performance.now();
       
       if (isLoadingMoreResults) {
         setIsLoadingMore(true);
@@ -162,9 +163,10 @@ export function MessageSearch({
         setHasMoreResults(searchResponse.hasMore);
         setShowResults(true);
 
-        // Add to search history if this is a new search
+        // Add to search history with execution time if this is a new search
         if (!isLoadingMoreResults && searchResponse.results.length > 0) {
-          addToHistory(searchQuery, searchResponse.total);
+          const executionTime = performance.now() - searchStartTime;
+          addToHistory(searchQuery, searchResponse.total, executionTime, 'regular');
         }
       } catch (error) {
         console.error('Search failed:', error);
@@ -189,6 +191,7 @@ export function MessageSearch({
       if (!onSessionGroupedSearch) return;
 
       const isLoadingMoreSessions = loadMore && sessionGroups.length > 0;
+      const searchStartTime = performance.now();
       
       if (isLoadingMoreSessions) {
         setIsLoadingMoreSessions(true);
@@ -222,9 +225,10 @@ export function MessageSearch({
         setHasMoreSessions(sessionResponse.hasMoreSessions);
         setShowResults(true);
 
-        // Add to search history if this is a new search
+        // Add to search history with execution time if this is a new search
         if (!isLoadingMoreSessions && sessionResponse.sessionGroups.length > 0) {
-          addToHistory(searchQuery, sessionResponse.totalMessages);
+          const executionTime = performance.now() - searchStartTime;
+          addToHistory(searchQuery, sessionResponse.totalMessages, executionTime, 'session-grouped');
         }
       } catch (error) {
         console.error('Session grouped search failed:', error);

@@ -1,5 +1,7 @@
 import { supabase } from './supabase';
 import { webhookService, WebhookPayload } from './webhookService';
+import { searchOptimizer, SearchQueryOptimizer } from './searchOptimization';
+import { createSearchAnalytics } from './searchAnalytics';
 import type { DateRange } from 'react-day-picker';
 
 export interface ChatMessage {
@@ -66,13 +68,24 @@ export interface GroupedSearchResponse {
 
 class ChatService {
   private n8nWebhookUrl: string;
+  private searchOptimizer: SearchQueryOptimizer;
+  private analyticsCollectors: Map<string, ReturnType<typeof createSearchAnalytics>> = new Map();
 
   constructor() {
     this.n8nWebhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || '';
+    this.searchOptimizer = searchOptimizer;
 
     if (!this.n8nWebhookUrl) {
       console.warn('N8N webhook URL not configured. Using fallback responses.');
     }
+  }
+
+  // Get or create analytics collector for user
+  private getAnalyticsCollector(userId: string) {
+    if (!this.analyticsCollectors.has(userId)) {
+      this.analyticsCollectors.set(userId, createSearchAnalytics(userId));
+    }
+    return this.analyticsCollectors.get(userId)!;
   }
 
   /**
@@ -285,7 +298,7 @@ class ChatService {
   }
 
   /**
-   * Search messages with advanced filtering and pagination
+   * Search messages with advanced filtering, pagination, caching, and analytics
    */
   async searchMessages(
     userId: string,
@@ -295,26 +308,67 @@ class ChatService {
       offset?: number;
     }
   ): Promise<{ results: SearchResult[]; total: number; hasMore: boolean }> {
+    const startTime = performance.now();
+    const analytics = this.getAnalyticsCollector(userId);
+    
     try {
+      analytics.recordEvent({
+        eventType: 'search_started',
+        query: filters.query,
+        filters,
+      });
+
       const { limit = 25, offset = 0 } = options || {};
-      
-      // First, get a count query for pagination
+
+      // Generate optimized query and check cache
+      const optimizedQuery = this.searchOptimizer.buildOptimizedQuery(filters, {
+        limit,
+        offset,
+        includeHighlights: true,
+      });
+
+      // Check cache first for performance
+      const cachedResult = this.searchOptimizer.getCachedResult<{
+        results: SearchResult[];
+        total: number;
+        hasMore: boolean;
+      }>(optimizedQuery.cacheKey);
+
+      if (cachedResult) {
+        const executionTime = performance.now() - startTime;
+        analytics.recordPerformanceMetrics(filters.query, filters, {
+          executionTime,
+          rowsScanned: cachedResult.results.length,
+          rowsReturned: cachedResult.results.length,
+          indexesUsed: ['cache'],
+          cacheHit: true,
+          optimizationApplied: ['cache_hit'],
+        });
+
+        return cachedResult;
+      }
+
+      // Build optimized database queries
       let countQuery = supabase
         .from('chat_messages')
         .select('*', { count: 'exact', head: true })
         .eq('user_id', userId);
       
-      // Build the main query with pagination
       let query = supabase
         .from('chat_messages')
         .select('id, content, role, created_at, conversation_id, status')
         .eq('user_id', userId)
         .order('created_at', { ascending: false });
 
-      // Apply filters to both queries
+      // Apply optimized filters
       const applyFilters = (q: ReturnType<typeof supabase.from>) => {
         if (filters.query.trim()) {
-          q = q.ilike('content', `%${filters.query.trim()}%`);
+          // Use more efficient full-text search if available
+          const searchTerm = filters.query.trim();
+          q = q.textSearch('content', searchTerm, {
+            type: 'websearch',
+            config: 'english'
+          });
         }
 
         if (filters.messageTypes.length > 0 && filters.messageTypes.length < 2) {
@@ -341,42 +395,76 @@ class ChatService {
         return q;
       };
 
-      // Apply filters
-      countQuery = applyFilters(countQuery);
-      query = applyFilters(query);
+      // Apply filters with error handling
+      try {
+        countQuery = applyFilters(countQuery);
+        query = applyFilters(query);
+      } catch {
+        // Fallback to basic ILIKE search if full-text search fails
+        if (filters.query.trim()) {
+          countQuery = countQuery.ilike('content', `%${filters.query.trim()}%`);
+          query = query.ilike('content', `%${filters.query.trim()}%`);
+        }
+      }
 
       // Add pagination
       query = query.range(offset, offset + limit - 1);
 
-      // Execute both queries
+      // Execute queries with performance monitoring
       const [{ count, error: countError }, { data, error }] = await Promise.all([
         countQuery,
         query
       ]);
 
       if (error || countError) {
+        const errorMsg = error?.message || countError?.message || 'Unknown database error';
+        analytics.recordSearchFailure(filters.query, filters, errorMsg);
         throw error || countError;
       }
 
       const total = count || 0;
       const hasMore = offset + limit < total;
       
+      // Process results with highlighting and scoring
       const results = (data || []).map(msg => ({
         messageId: msg.id,
         content: msg.content,
-        role: msg.role,
+        role: msg.role as 'user' | 'assistant',
         timestamp: new Date(msg.created_at),
         highlightedContent: this.highlightSearchTerms(msg.content, filters.query),
         matchScore: this.calculateMatchScore(msg.content, filters.query),
       }));
 
-      return {
+      const finalResult = {
         results,
         total,
         hasMore,
       };
+
+      // Cache the result for future use
+      this.searchOptimizer.setCachedResult(optimizedQuery.cacheKey, finalResult);
+
+      // Record performance metrics
+      const totalExecutionTime = performance.now() - startTime;
+      analytics.recordPerformanceMetrics(filters.query, filters, {
+        executionTime: totalExecutionTime,
+        rowsScanned: total,
+        rowsReturned: results.length,
+        indexesUsed: filters.query.trim() ? ['content_fts_idx', 'created_at_idx'] : ['created_at_idx'],
+        cacheHit: false,
+        optimizationApplied: ['query_optimization', 'result_caching'],
+      });
+
+      return finalResult;
     } catch (error) {
       console.error('Error searching messages:', error);
+      
+      analytics.recordSearchFailure(
+        filters.query,
+        filters,
+        error instanceof Error ? error.message : 'Unknown error'
+      );
+
       throw new Error('Failed to search messages');
     }
   }
@@ -615,8 +703,93 @@ class ChatService {
       };
     } catch (error) {
       console.error('Error searching messages grouped by session:', error);
+      const analytics = this.getAnalyticsCollector(userId);
+      analytics.recordSearchFailure(
+        filters.query,
+        filters,
+        error instanceof Error ? error.message : 'Unknown error'
+      );
       throw new Error('Failed to search messages by session');
     }
+  }
+
+  /**
+   * Record user interaction with search results for analytics
+   */
+  recordSearchResultClick(userId: string, query: string, resultIndex: number, messageId: string): void {
+    const analytics = this.getAnalyticsCollector(userId);
+    analytics.recordResultClick(query, resultIndex, messageId);
+  }
+
+  /**
+   * Record filter application for analytics
+   */
+  recordFilterApplied(userId: string, filterType: string, filterValue: unknown): void {
+    const analytics = this.getAnalyticsCollector(userId);
+    analytics.recordFilterApplied(filterType, filterValue);
+  }
+
+  /**
+   * Record suggestion selection for analytics
+   */
+  recordSuggestionSelected(userId: string, originalQuery: string, selectedSuggestion: string): void {
+    const analytics = this.getAnalyticsCollector(userId);
+    analytics.recordSuggestionSelected(originalQuery, selectedSuggestion);
+  }
+
+  /**
+   * Get search performance report for a user
+   */
+  getSearchPerformanceReport(userId: string, startDate: Date, endDate: Date) {
+    const analytics = this.getAnalyticsCollector(userId);
+    return analytics.generatePerformanceReport(startDate, endDate);
+  }
+
+  /**
+   * Get search quality metrics for a user
+   */
+  getSearchQualityMetrics(userId: string) {
+    const analytics = this.getAnalyticsCollector(userId);
+    return analytics.generateQualityMetrics();
+  }
+
+  /**
+   * Get real-time search metrics for a user
+   */
+  getRealTimeSearchMetrics(userId: string) {
+    const analytics = this.getAnalyticsCollector(userId);
+    return analytics.getRealTimeMetrics();
+  }
+
+  /**
+   * Get search cache statistics
+   */
+  getSearchCacheStats() {
+    return this.searchOptimizer.getCacheStats();
+  }
+
+  /**
+   * Clear search cache for performance testing
+   */
+  clearSearchCache(): void {
+    this.searchOptimizer.clearCache();
+  }
+
+  /**
+   * Export search analytics data for external analysis
+   */
+  exportSearchAnalytics(userId: string, startDate?: Date, endDate?: Date) {
+    const analytics = this.getAnalyticsCollector(userId);
+    return analytics.exportAnalyticsData(startDate, endDate);
+  }
+
+  /**
+   * Clear search analytics data for privacy compliance
+   */
+  clearSearchAnalytics(userId: string): void {
+    const analytics = this.getAnalyticsCollector(userId);
+    analytics.clearAnalyticsData();
+    this.analyticsCollectors.delete(userId);
   }
 
   /**
