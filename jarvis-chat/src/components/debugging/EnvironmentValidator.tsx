@@ -3,7 +3,7 @@ import { AlertCircle, CheckCircle, AlertTriangle, RefreshCw, Eye, EyeOff, Copy, 
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { validateEnvironment, getEnvironmentInfo, getHealthCheckStatus, type ValidationResult } from '@/lib/env-validation';
+import { validateEnvironment, getHealthCheckStatus, type ValidationResult } from '@/lib/env-validation';
 
 interface EnvironmentValidatorProps {
   showSensitiveData?: boolean;
@@ -92,7 +92,7 @@ export function EnvironmentValidator({
   const getConfigurationStatus = () => {
     if (!validationResult) return null;
 
-    const envInfo = getEnvironmentInfo();
+    // const envInfo = getEnvironmentInfo(); // Used in future implementation
     const healthStatus = getHealthCheckStatus();
 
     return {

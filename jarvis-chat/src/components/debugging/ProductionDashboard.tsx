@@ -36,8 +36,8 @@ export function ProductionDashboard({
   enableSensitiveData = false 
 }: ProductionDashboardProps) {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [systemHealth, setSystemHealth] = useState<any>(null);
-  const [envInfo, setEnvInfo] = useState<any>(null);
+  const [systemHealth, setSystemHealth] = useState<Record<string, unknown> | null>(null);
+  const [envInfo, setEnvInfo] = useState<Record<string, unknown> | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
   const [showSensitive, setShowSensitive] = useState(false);
   const [lastRefresh, setLastRefresh] = useState(new Date());
@@ -404,7 +404,7 @@ export function ProductionDashboard({
               </CardHeader>
               <CardContent>
                 <div className="space-y-2 text-sm">
-                  {envInfo.errors?.slice(0, 3).map((error: any, index: number) => (
+                  {envInfo.errors?.slice(0, 3).map((error: Record<string, unknown>, index: number) => (
                     <div key={index} className="flex items-start gap-2 p-2 bg-white/50 rounded border border-red-200">
                       <AlertCircle className="h-3 w-3 text-red-500 mt-0.5 flex-shrink-0" />
                       <div>

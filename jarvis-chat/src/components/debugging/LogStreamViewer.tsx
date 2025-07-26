@@ -89,7 +89,7 @@ export function LogStreamViewer({
             }
             return newLogs;
           });
-        } catch (error) {
+        } catch {
           // If JSON parsing fails, treat as plain text log
           const logEntry: LogEntry = {
             id: crypto.randomUUID(),

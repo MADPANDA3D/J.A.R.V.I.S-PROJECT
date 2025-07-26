@@ -44,7 +44,7 @@ interface SupabaseConnectionTest {
 export function AuthenticationDebugger({ className = '' }: AuthenticationDebuggerProps) {
   const [authTests, setAuthTests] = useState<AuthTest[]>([]);
   const [isRunning, setIsRunning] = useState(false);
-  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [currentUser, setCurrentUser] = useState<Record<string, unknown> | null>(null);
   const [connectionTest, setConnectionTest] = useState<SupabaseConnectionTest | null>(null);
   const [testCredentials, setTestCredentials] = useState({
     email: 'test@example.com',
@@ -129,7 +129,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
 
       // Test connection
       try {
-        const { data, error } = await supabase.from('chat_messages').select('count', { count: 'exact', head: true });
+        const { error } = await supabase.from('chat_messages').select('count', { count: 'exact', head: true });
         config.connection = !error;
         config.auth = !error;
         

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { 
   AlertTriangle, 
   Bug, 
-  RefreshCw, 
   Trash2, 
   Download, 
   Filter, 
@@ -10,7 +9,6 @@ import {
   EyeOff,
   Clock,
   Code,
-  FileX,
   ChevronDown,
   ChevronRight
 } from 'lucide-react';
@@ -26,7 +24,7 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { monitoringService } from '@/lib/monitoring';
-import { captureError } from '@/lib/errorTracking';
+// import { captureError } from '@/lib/errorTracking'; // Used in future implementation
 
 interface RuntimeError {
   id: string;
@@ -68,11 +66,11 @@ export function RuntimeErrorMonitor({
   const [showDetails, setShowDetails] = useState(false);
 
   // Error categorization
-  const categorizeError = (error: ErrorEvent | Error, type: string): Omit<RuntimeError, 'id' | 'count' | 'lastOccurrence'> => {
+  const categorizeError = (error: ErrorEvent | Error): Omit<RuntimeError, 'id' | 'count' | 'lastOccurrence'> => {
     let severity: RuntimeError['severity'] = 'medium';
     let errorType: RuntimeError['type'] = 'javascript';
     let source = '';
-    let metadata: Record<string, unknown> = {};
+    const metadata: Record<string, unknown> = {};
 
     // Determine error type and severity
     if (error.message) {
@@ -180,7 +178,7 @@ export function RuntimeErrorMonitor({
 
     // JavaScript errors
     const handleError = (event: ErrorEvent) => {
-      const errorData = categorizeError(event, 'javascript');
+      const errorData = categorizeError(event);
       addError(errorData);
       
       // Also send to monitoring service
@@ -195,7 +193,7 @@ export function RuntimeErrorMonitor({
     // Unhandled promise rejections
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
       const error = new Error(`Unhandled Promise Rejection: ${event.reason}`);
-      const errorData = categorizeError(error, 'promise');
+      const errorData = categorizeError(error);
       errorData.type = 'promise';
       addError(errorData);
 
@@ -222,14 +220,14 @@ export function RuntimeErrorMonitor({
       originalConsoleError.apply(console, args);
     };
 
-    // Component error boundary integration
-    const handleReactError = (error: Error, errorInfo: { componentStack?: string }) => {
-      const errorData = categorizeError(error, 'react');
-      errorData.type = 'component';
-      errorData.componentStack = errorInfo.componentStack;
-      errorData.severity = 'high';
-      addError(errorData);
-    };
+    // Component error boundary integration (for future use)
+    // const handleReactError = (error: Error, errorInfo: { componentStack?: string }) => {
+    //   const errorData = categorizeError(error);
+    //   errorData.type = 'component';
+    //   errorData.componentStack = errorInfo.componentStack;
+    //   errorData.severity = 'high';
+    //   addError(errorData);
+    // };
 
     // Add event listeners
     window.addEventListener('error', handleError);
@@ -375,8 +373,8 @@ export function RuntimeErrorMonitor({
   const triggerTestError = () => {
     try {
       // This will cause an undefined access error
-      (window as any).nonExistentFunction.call();
-    } catch (error) {
+      (window as Record<string, unknown>).nonExistentFunction.call();
+    } catch {
       // This error will be caught by our monitoring
     }
   };

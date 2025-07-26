@@ -1,12 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
-  Activity, 
   AlertCircle, 
   CheckCircle, 
-  Globe, 
-  Server, 
-  Wifi, 
-  WifiOff, 
   RefreshCw, 
   Clock,
   TrendingUp,
@@ -16,8 +11,8 @@ import {
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { getHealthCheckStatus } from '@/lib/env-validation';
-import { monitoringService } from '@/lib/monitoring';
+// import { getHealthCheckStatus } from '@/lib/env-validation';
+// import { monitoringService } from '@/lib/monitoring';
 
 interface SystemHealthMonitorProps {
   className?: string;
@@ -52,7 +47,7 @@ export function SystemHealthMonitor({
   const [trends, setTrends] = useState<Record<string, 'up' | 'down' | 'stable'>>({});
 
   // VPS and service endpoints to monitor
-  const monitoredServices = [
+  const monitoredServices = useMemo(() => [
     {
       name: 'VPS Server',
       url: 'http://69.62.71.229:9000/health',
@@ -83,7 +78,7 @@ export function SystemHealthMonitor({
       type: 'github',
       timeout: 5000,
     },
-  ];
+  ], []);
 
   // Perform health check for a single service
   const checkServiceHealth = useCallback(async (service: typeof monitoredServices[0]): Promise<HealthCheckResult> => {
@@ -262,7 +257,7 @@ export function SystemHealthMonitor({
     } finally {
       setIsLoading(false);
     }
-  }, [healthChecks, checkServiceHealth]);
+  }, [healthChecks, checkServiceHealth, monitoredServices]);
 
   // Auto-refresh health checks
   useEffect(() => {
@@ -405,7 +400,7 @@ export function SystemHealthMonitor({
             </div>
           ) : (
             <div className="space-y-3">
-              {healthChecks.map((check, index) => (
+              {healthChecks.map((check) => (
                 <div
                   key={check.service}
                   className="flex items-center justify-between p-4 border border-border/50 rounded hover:bg-muted/30 transition-colors"
