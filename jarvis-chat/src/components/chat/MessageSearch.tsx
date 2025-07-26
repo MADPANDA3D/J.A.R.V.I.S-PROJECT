@@ -33,8 +33,14 @@ export interface SearchResult {
   matchScore: number;
 }
 
+interface SearchResponse {
+  results: SearchResult[];
+  total: number;
+  hasMore: boolean;
+}
+
 interface MessageSearchProps {
-  onSearch: (filters: SearchFilters) => Promise<SearchResult[]>;
+  onSearch: (filters: SearchFilters, options?: { limit?: number; offset?: number }) => Promise<SearchResponse>;
   onClearSearch: () => void;
   onResultClick: (messageId: string) => void;
   userId: string;
@@ -56,6 +62,9 @@ export function MessageSearch({
   const [showResults, setShowResults] = useState(false);
   const [conversationSessions, setConversationSessions] = useState<ConversationSession[]>([]);
   const [loadingSessions, setLoadingSessions] = useState(false);
+  const [searchTotal, setSearchTotal] = useState(0);
+  const [hasMoreResults, setHasMoreResults] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [filters, setFilters] = useState<SearchFilters>({
     query: '',
     messageTypes: ['user', 'assistant'],
@@ -71,32 +80,58 @@ export function MessageSearch({
   }, [filters]);
 
   const handleSearch = useCallback(
-    async (searchQuery: string) => {
+    async (searchQuery: string, loadMore = false) => {
       if (!searchQuery.trim()) {
         setResults([]);
         setShowResults(false);
+        setSearchTotal(0);
+        setHasMoreResults(false);
         onClearSearch();
         return;
       }
 
-      setIsSearching(true);
+      const isLoadingMoreResults = loadMore && results.length > 0;
+      
+      if (isLoadingMoreResults) {
+        setIsLoadingMore(true);
+      } else {
+        setIsSearching(true);
+      }
+
       try {
         const searchFilters: SearchFilters = {
           ...filters,
           query: searchQuery.trim(),
         };
 
-        const searchResults = await onSearch(searchFilters);
-        setResults(searchResults);
+        const offset = isLoadingMoreResults ? results.length : 0;
+        const searchResponse = await onSearch(searchFilters, { limit: 25, offset });
+        
+        if (isLoadingMoreResults) {
+          setResults(prev => [...prev, ...searchResponse.results]);
+        } else {
+          setResults(searchResponse.results);
+        }
+        
+        setSearchTotal(searchResponse.total);
+        setHasMoreResults(searchResponse.hasMore);
         setShowResults(true);
       } catch (error) {
         console.error('Search failed:', error);
-        setResults([]);
+        if (!isLoadingMoreResults) {
+          setResults([]);
+          setSearchTotal(0);
+          setHasMoreResults(false);
+        }
       } finally {
-        setIsSearching(false);
+        if (isLoadingMoreResults) {
+          setIsLoadingMore(false);
+        } else {
+          setIsSearching(false);
+        }
       }
     },
-    [filters, onSearch, onClearSearch]
+    [filters, onSearch, onClearSearch, results.length]
   );
 
   const handleQueryChange = useCallback((value: string) => {
@@ -137,10 +172,18 @@ export function MessageSearch({
     return () => clearTimeout(timeoutId);
   }, [query, handleSearch, onClearSearch]);
 
+  const handleLoadMore = useCallback(() => {
+    if (query && hasMoreResults && !isLoadingMore) {
+      handleSearch(query, true);
+    }
+  }, [query, hasMoreResults, isLoadingMore, handleSearch]);
+
   const handleClearSearch = () => {
     setQuery('');
     setResults([]);
     setShowResults(false);
+    setSearchTotal(0);
+    setHasMoreResults(false);
     onClearSearch();
     
     // Announce to screen readers
@@ -357,9 +400,16 @@ export function MessageSearch({
           ) : results.length > 0 ? (
             <>
               <div className="p-2 border-b bg-muted/50">
-                <span className="text-sm text-muted-foreground">
-                  {results.length} result{results.length !== 1 ? 's' : ''} found
-                </span>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">
+                    {results.length} of {searchTotal} result{searchTotal !== 1 ? 's' : ''}
+                  </span>
+                  {hasMoreResults && (
+                    <span className="text-xs text-muted-foreground">
+                      {searchTotal - results.length} more available
+                    </span>
+                  )}
+                </div>
               </div>
               <div className="max-h-80 overflow-y-auto">
                 {results.map(result => (
@@ -395,6 +445,28 @@ export function MessageSearch({
                     </div>
                   </button>
                 ))}
+                
+                {/* Load More Button */}
+                {hasMoreResults && (
+                  <div className="p-3 border-t">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleLoadMore}
+                      disabled={isLoadingMore}
+                      className="w-full"
+                    >
+                      {isLoadingMore ? (
+                        <>
+                          <Search className="h-4 w-4 animate-spin mr-2" />
+                          Loading more...
+                        </>
+                      ) : (
+                        `Load ${Math.min(25, searchTotal - results.length)} more results`
+                      )}
+                    </Button>
+                  </div>
+                )}
               </div>
             </>
           ) : (

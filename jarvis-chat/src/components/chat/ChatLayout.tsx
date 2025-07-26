@@ -78,7 +78,10 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
     }
   };
 
-  const handleSearch = async (filters: SearchFilters): Promise<SearchResult[]> => {
+  const handleSearch = async (
+    filters: SearchFilters, 
+    options?: { limit?: number; offset?: number }
+  ): Promise<{ results: SearchResult[]; total: number; hasMore: boolean }> => {
     try {
       // Update current search terms for highlighting
       if (filters.query.trim()) {
@@ -87,14 +90,14 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
         setCurrentSearchTerms([]);
       }
       
-      return await chatService.searchMessages(userId, filters);
+      return await chatService.searchMessages(userId, filters, options);
     } catch (error) {
       console.error('Search failed:', error);
       screenReader.announce({
         message: 'Search failed. Please try again.',
         priority: 'assertive',
       });
-      return [];
+      return { results: [], total: 0, hasMore: false };
     }
   };
 

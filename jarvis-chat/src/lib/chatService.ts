@@ -266,57 +266,83 @@ class ChatService {
   }
 
   /**
-   * Search messages with advanced filtering
+   * Search messages with advanced filtering and pagination
    */
   async searchMessages(
     userId: string,
-    filters: SearchFilters
-  ): Promise<SearchResult[]> {
+    filters: SearchFilters,
+    options?: {
+      limit?: number;
+      offset?: number;
+    }
+  ): Promise<{ results: SearchResult[]; total: number; hasMore: boolean }> {
     try {
+      const { limit = 25, offset = 0 } = options || {};
+      
+      // First, get a count query for pagination
+      let countQuery = supabase
+        .from('chat_messages')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', userId);
+      
+      // Build the main query with pagination
       let query = supabase
         .from('chat_messages')
-        .select('*')
+        .select('id, content, role, created_at, conversation_id, status')
         .eq('user_id', userId)
         .order('created_at', { ascending: false });
 
-      // Apply text search filter
-      if (filters.query.trim()) {
-        query = query.ilike('content', `%${filters.query.trim()}%`);
+      // Apply filters to both queries
+      const applyFilters = (q: any) => {
+        if (filters.query.trim()) {
+          q = q.ilike('content', `%${filters.query.trim()}%`);
+        }
+
+        if (filters.messageTypes.length > 0 && filters.messageTypes.length < 2) {
+          q = q.in('role', filters.messageTypes);
+        }
+
+        if (filters.dateRange?.from) {
+          q = q.gte('created_at', filters.dateRange.from.toISOString());
+        }
+        if (filters.dateRange?.to) {
+          const endDate = new Date(filters.dateRange.to);
+          endDate.setHours(23, 59, 59, 999);
+          q = q.lte('created_at', endDate.toISOString());
+        }
+
+        if (filters.sessionId) {
+          q = q.eq('conversation_id', filters.sessionId);
+        }
+
+        if (filters.hasErrors) {
+          q = q.eq('status', 'error');
+        }
+
+        return q;
+      };
+
+      // Apply filters
+      countQuery = applyFilters(countQuery);
+      query = applyFilters(query);
+
+      // Add pagination
+      query = query.range(offset, offset + limit - 1);
+
+      // Execute both queries
+      const [{ count, error: countError }, { data, error }] = await Promise.all([
+        countQuery,
+        query
+      ]);
+
+      if (error || countError) {
+        throw error || countError;
       }
 
-      // Apply message type filter
-      if (filters.messageTypes.length > 0 && filters.messageTypes.length < 2) {
-        query = query.in('role', filters.messageTypes);
-      }
-
-      // Apply date range filter
-      if (filters.dateRange?.from) {
-        query = query.gte('created_at', filters.dateRange.from.toISOString());
-      }
-      if (filters.dateRange?.to) {
-        // Include the entire end date by setting time to end of day
-        const endDate = new Date(filters.dateRange.to);
-        endDate.setHours(23, 59, 59, 999);
-        query = query.lte('created_at', endDate.toISOString());
-      }
-
-      // Apply session filter
-      if (filters.sessionId) {
-        query = query.eq('conversation_id', filters.sessionId);
-      }
-
-      // Apply error filter
-      if (filters.hasErrors) {
-        query = query.eq('status', 'error');
-      }
-
-      const { data, error } = await query.limit(100);
-
-      if (error) {
-        throw error;
-      }
-
-      return data.map(msg => ({
+      const total = count || 0;
+      const hasMore = offset + limit < total;
+      
+      const results = (data || []).map(msg => ({
         messageId: msg.id,
         content: msg.content,
         role: msg.role,
@@ -324,6 +350,12 @@ class ChatService {
         highlightedContent: this.highlightSearchTerms(msg.content, filters.query),
         matchScore: this.calculateMatchScore(msg.content, filters.query),
       }));
+
+      return {
+        results,
+        total,
+        hasMore,
+      };
     } catch (error) {
       console.error('Error searching messages:', error);
       throw new Error('Failed to search messages');
