@@ -1,10 +1,45 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import {
   MessageSearch,
   type SearchResult,
 } from '../MessageSearch';
+
+// Create mock functions that will be shared across hook calls
+const mockUpdateFilters = vi.fn();
+const mockSetCurrentQuery = vi.fn();
+const mockAddToHistory = vi.fn();
+const mockApplyFromHistory = vi.fn();
+const mockClearSearch = vi.fn();
+const mockClearHistory = vi.fn();
+const mockRemoveFromHistory = vi.fn();
+
+// Mock the useSearchState hook
+vi.mock('@/hooks/useSearchState', () => ({
+  useSearchState: () => ({
+    filters: {
+      query: '',
+      messageTypes: ['user', 'assistant'],
+    },
+    currentQuery: '',
+    searchHistory: [],
+    updateFilters: mockUpdateFilters,
+    setCurrentQuery: mockSetCurrentQuery,
+    addToHistory: mockAddToHistory,
+    applyFromHistory: mockApplyFromHistory,
+    clearSearch: mockClearSearch,
+    clearHistory: mockClearHistory,
+    removeFromHistory: mockRemoveFromHistory,
+  }),
+}));
+
+// Mock the chatService
+vi.mock('@/lib/chatService', () => ({
+  chatService: {
+    getConversationSessions: vi.fn().mockResolvedValue([]),
+  },
+}));
 
 describe('MessageSearch', () => {
   const mockOnSearch = vi.fn();
@@ -32,20 +67,38 @@ describe('MessageSearch', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockOnSearch.mockResolvedValue(mockSearchResults);
+    mockOnSearch.mockResolvedValue({
+      results: mockSearchResults,
+      total: mockSearchResults.length,
+      hasMore: false,
+    });
+    
+    // Reset hook mocks
+    mockUpdateFilters.mockClear();
+    mockSetCurrentQuery.mockClear();
+    mockAddToHistory.mockClear();
+    mockApplyFromHistory.mockClear();
+    mockClearSearch.mockClear();
+    mockClearHistory.mockClear();
+    mockRemoveFromHistory.mockClear();
   });
 
   const renderComponent = (
     props: Partial<React.ComponentProps<typeof MessageSearch>> = {}
   ) => {
-    return render(
-      <MessageSearch
-        onSearch={mockOnSearch}
-        onClearSearch={mockOnClearSearch}
-        onResultClick={mockOnResultClick}
-        {...props}
-      />
-    );
+    let result: ReturnType<typeof render>;
+    act(() => {
+      result = render(
+        <MessageSearch
+          onSearch={mockOnSearch}
+          onClearSearch={mockOnClearSearch}
+          onResultClick={mockOnResultClick}
+          userId="test-user-id"
+          {...props}
+        />
+      );
+    });
+    return result!;
   };
 
   describe('basic rendering', () => {
@@ -77,7 +130,10 @@ describe('MessageSearch', () => {
       renderComponent();
 
       const input = screen.getByPlaceholderText('Search messages...');
-      fireEvent.change(input, { target: { value: 'hello' } });
+      
+      await act(async () => {
+        fireEvent.change(input, { target: { value: 'hello' } });
+      });
 
       // Should not call immediately
       expect(mockOnSearch).not.toHaveBeenCalled();
@@ -85,10 +141,13 @@ describe('MessageSearch', () => {
       // Should call after debounce delay
       await waitFor(
         () => {
-          expect(mockOnSearch).toHaveBeenCalledWith({
-            query: 'hello',
-            messageTypes: ['user', 'assistant'],
-          });
+          expect(mockOnSearch).toHaveBeenCalledWith(
+            {
+              query: 'hello',
+              messageTypes: ['user', 'assistant'],
+            },
+            { limit: 25, offset: 0 }
+          );
         },
         { timeout: 500 }
       );
@@ -98,10 +157,13 @@ describe('MessageSearch', () => {
       renderComponent();
 
       const input = screen.getByPlaceholderText('Search messages...');
-      fireEvent.change(input, { target: { value: 'hello' } });
+      
+      await act(async () => {
+        fireEvent.change(input, { target: { value: 'hello' } });
+      });
 
       await waitFor(() => {
-        expect(screen.getByText('2 results found')).toBeInTheDocument();
+        expect(screen.getByText('2 of 2 results')).toBeInTheDocument();
       });
 
       expect(screen.getByText('Hello world')).toBeInTheDocument();
@@ -114,11 +176,15 @@ describe('MessageSearch', () => {
       const input = screen.getByPlaceholderText('Search messages...');
 
       // Type something first
-      fireEvent.change(input, { target: { value: 'hello' } });
+      await act(async () => {
+        fireEvent.change(input, { target: { value: 'hello' } });
+      });
       await waitFor(() => expect(mockOnSearch).toHaveBeenCalled());
 
       // Clear the input
-      fireEvent.change(input, { target: { value: '' } });
+      await act(async () => {
+        fireEvent.change(input, { target: { value: '' } });
+      });
 
       await waitFor(() => {
         expect(mockOnClearSearch).toHaveBeenCalled();
@@ -130,7 +196,10 @@ describe('MessageSearch', () => {
       renderComponent();
 
       const input = screen.getByPlaceholderText('Search messages...');
-      fireEvent.change(input, { target: { value: 'hello' } });
+      
+      await act(async () => {
+        fireEvent.change(input, { target: { value: 'hello' } });
+      });
 
       await waitFor(() => {
         expect(screen.getByText('No messages found')).toBeInTheDocument();
@@ -143,11 +212,17 @@ describe('MessageSearch', () => {
       renderComponent();
 
       const filtersButton = screen.getByText('Filters');
-      fireEvent.click(filtersButton);
+      
+      await act(async () => {
+        fireEvent.click(filtersButton);
+      });
 
       // Toggle off user messages
       const userMessagesCheckbox = screen.getByText('My Messages');
-      fireEvent.click(userMessagesCheckbox);
+      
+      await act(async () => {
+        fireEvent.click(userMessagesCheckbox);
+      });
 
       // Should show filter count
       await waitFor(() => {
@@ -160,21 +235,33 @@ describe('MessageSearch', () => {
 
       // Open filters
       const filtersButton = screen.getByText('Filters');
-      fireEvent.click(filtersButton);
+      
+      await act(async () => {
+        fireEvent.click(filtersButton);
+      });
 
       // Disable user messages
       const userMessagesCheckbox = screen.getByText('My Messages');
-      fireEvent.click(userMessagesCheckbox);
+      
+      await act(async () => {
+        fireEvent.click(userMessagesCheckbox);
+      });
 
       // Search
       const input = screen.getByPlaceholderText('Search messages...');
-      fireEvent.change(input, { target: { value: 'hello' } });
+      
+      await act(async () => {
+        fireEvent.change(input, { target: { value: 'hello' } });
+      });
 
       await waitFor(() => {
-        expect(mockOnSearch).toHaveBeenCalledWith({
-          query: 'hello',
-          messageTypes: ['assistant'], // Only assistant messages
-        });
+        expect(mockOnSearch).toHaveBeenCalledWith(
+          {
+            query: 'hello',
+            messageTypes: ['assistant'], // Only assistant messages
+          },
+          { limit: 25, offset: 0 }
+        );
       });
     });
 
@@ -183,22 +270,34 @@ describe('MessageSearch', () => {
 
       // Open filters
       const filtersButton = screen.getByText('Filters');
-      fireEvent.click(filtersButton);
+      
+      await act(async () => {
+        fireEvent.click(filtersButton);
+      });
 
       // Enable failed messages filter
       const failedMessagesCheckbox = screen.getByText('Failed Messages Only');
-      fireEvent.click(failedMessagesCheckbox);
+      
+      await act(async () => {
+        fireEvent.click(failedMessagesCheckbox);
+      });
 
       // Search
       const input = screen.getByPlaceholderText('Search messages...');
-      fireEvent.change(input, { target: { value: 'hello' } });
+      
+      await act(async () => {
+        fireEvent.change(input, { target: { value: 'hello' } });
+      });
 
       await waitFor(() => {
-        expect(mockOnSearch).toHaveBeenCalledWith({
-          query: 'hello',
-          messageTypes: ['user', 'assistant'],
-          hasErrors: true,
-        });
+        expect(mockOnSearch).toHaveBeenCalledWith(
+          {
+            query: 'hello',
+            messageTypes: ['user', 'assistant'],
+            hasErrors: true,
+          },
+          { limit: 25, offset: 0 }
+        );
       });
     });
   });
@@ -208,7 +307,10 @@ describe('MessageSearch', () => {
       renderComponent();
 
       const input = screen.getByPlaceholderText('Search messages...');
-      fireEvent.change(input, { target: { value: 'hello' } });
+      
+      await act(async () => {
+        fireEvent.change(input, { target: { value: 'hello' } });
+      });
 
       await waitFor(() => {
         expect(screen.getByText('Hello world')).toBeInTheDocument();
@@ -217,7 +319,10 @@ describe('MessageSearch', () => {
       const firstResult = screen.getByText('Hello world').closest('button');
       expect(firstResult).toBeInTheDocument();
 
-      fireEvent.click(firstResult!);
+      await act(async () => {
+        fireEvent.click(firstResult!);
+      });
+      
       expect(mockOnResultClick).toHaveBeenCalledWith('1');
     });
 
@@ -225,14 +330,20 @@ describe('MessageSearch', () => {
       renderComponent();
 
       const input = screen.getByPlaceholderText('Search messages...');
-      fireEvent.change(input, { target: { value: 'hello' } });
+      
+      await act(async () => {
+        fireEvent.change(input, { target: { value: 'hello' } });
+      });
 
       await waitFor(() => {
         expect(screen.getByText('Hello world')).toBeInTheDocument();
       });
 
       const firstResult = screen.getByText('Hello world').closest('button');
-      fireEvent.click(firstResult!);
+      
+      await act(async () => {
+        fireEvent.click(firstResult!);
+      });
 
       await waitFor(() => {
         expect(screen.queryByText('Hello world')).not.toBeInTheDocument();
@@ -241,27 +352,36 @@ describe('MessageSearch', () => {
   });
 
   describe('clear functionality', () => {
-    it('should show clear button when text is entered', () => {
+    it('should show clear button when text is entered', async () => {
       renderComponent();
 
       const input = screen.getByPlaceholderText('Search messages...');
-      fireEvent.change(input, { target: { value: 'hello' } });
+      
+      await act(async () => {
+        fireEvent.change(input, { target: { value: 'hello' } });
+      });
 
       expect(
         screen.getByRole('button', { name: /clear/i })
       ).toBeInTheDocument();
     });
 
-    it('should clear search when clear button is clicked', () => {
+    it('should clear search when clear button is clicked', async () => {
       renderComponent();
 
       const input = screen.getByPlaceholderText(
         'Search messages...'
       ) as HTMLInputElement;
-      fireEvent.change(input, { target: { value: 'hello' } });
+      
+      await act(async () => {
+        fireEvent.change(input, { target: { value: 'hello' } });
+      });
 
       const clearButton = screen.getByRole('button', { name: /clear/i });
-      fireEvent.click(clearButton);
+      
+      await act(async () => {
+        fireEvent.click(clearButton);
+      });
 
       expect(input.value).toBe('');
       expect(mockOnClearSearch).toHaveBeenCalled();
@@ -271,8 +391,8 @@ describe('MessageSearch', () => {
   describe('loading states', () => {
     it('should show loading state during search', async () => {
       // Make search take time
-      let resolveSearch: (value: SearchResult[]) => void;
-      const searchPromise = new Promise<SearchResult[]>(resolve => {
+      let resolveSearch: (value: { results: SearchResult[]; total: number; hasMore: boolean }) => void;
+      const searchPromise = new Promise<{ results: SearchResult[]; total: number; hasMore: boolean }>(resolve => {
         resolveSearch = resolve;
       });
       mockOnSearch.mockReturnValue(searchPromise);
@@ -280,14 +400,23 @@ describe('MessageSearch', () => {
       renderComponent();
 
       const input = screen.getByPlaceholderText('Search messages...');
-      fireEvent.change(input, { target: { value: 'hello' } });
+      
+      await act(async () => {
+        fireEvent.change(input, { target: { value: 'hello' } });
+      });
 
       await waitFor(() => {
         expect(screen.getByText('Searching...')).toBeInTheDocument();
       });
 
       // Resolve the search
-      resolveSearch!(mockSearchResults);
+      await act(async () => {
+        resolveSearch!({
+          results: mockSearchResults,
+          total: mockSearchResults.length,
+          hasMore: false,
+        });
+      });
 
       await waitFor(() => {
         expect(screen.queryByText('Searching...')).not.toBeInTheDocument();
@@ -295,8 +424,8 @@ describe('MessageSearch', () => {
     });
 
     it('should disable input during search', async () => {
-      let resolveSearch: (value: SearchResult[]) => void;
-      const searchPromise = new Promise<SearchResult[]>(resolve => {
+      let resolveSearch: (value: { results: SearchResult[]; total: number; hasMore: boolean }) => void;
+      const searchPromise = new Promise<{ results: SearchResult[]; total: number; hasMore: boolean }>(resolve => {
         resolveSearch = resolve;
       });
       mockOnSearch.mockReturnValue(searchPromise);
@@ -304,13 +433,22 @@ describe('MessageSearch', () => {
       renderComponent();
 
       const input = screen.getByPlaceholderText('Search messages...');
-      fireEvent.change(input, { target: { value: 'hello' } });
+      
+      await act(async () => {
+        fireEvent.change(input, { target: { value: 'hello' } });
+      });
 
       await waitFor(() => {
         expect(input).toBeDisabled();
       });
 
-      resolveSearch!(mockSearchResults);
+      await act(async () => {
+        resolveSearch!({
+          results: mockSearchResults,
+          total: mockSearchResults.length,
+          hasMore: false,
+        });
+      });
 
       await waitFor(() => {
         expect(input).not.toBeDisabled();
@@ -333,7 +471,10 @@ describe('MessageSearch', () => {
       renderComponent();
 
       const input = screen.getByPlaceholderText('Search messages...');
-      fireEvent.change(input, { target: { value: 'hello' } });
+      
+      await act(async () => {
+        fireEvent.change(input, { target: { value: 'hello' } });
+      });
 
       await waitFor(() => {
         expect(screen.getByText('Hello world')).toBeInTheDocument();
@@ -341,6 +482,59 @@ describe('MessageSearch', () => {
 
       const firstResult = screen.getByText('Hello world').closest('button');
       expect(firstResult).toHaveAttribute('tabindex', '0');
+    });
+  });
+
+  describe('pagination', () => {
+    it('should show pagination info and load more button when hasMore is true', async () => {
+      mockOnSearch.mockResolvedValue({
+        results: mockSearchResults,
+        total: 50,
+        hasMore: true,
+      });
+
+      renderComponent();
+
+      const input = screen.getByPlaceholderText('Search messages...');
+      
+      await act(async () => {
+        fireEvent.change(input, { target: { value: 'hello' } });
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('2 of 50 results')).toBeInTheDocument();
+        expect(screen.getByText('48 more available')).toBeInTheDocument();
+        expect(screen.getByText(/Load \d+ more results/)).toBeInTheDocument();
+      });
+    });
+
+    it('should hide load more button when hasMore is false', async () => {
+      renderComponent();
+
+      const input = screen.getByPlaceholderText('Search messages...');
+      
+      await act(async () => {
+        fireEvent.change(input, { target: { value: 'hello' } });
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('2 of 2 results')).toBeInTheDocument();
+        expect(screen.queryByText(/Load \d+ more results/)).not.toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('date range filtering', () => {
+    it('should render date range picker', () => {
+      renderComponent();
+      expect(screen.getByText('Select dates')).toBeInTheDocument();
+    });
+  });
+
+  describe('session filtering', () => {
+    it('should render conversation session selector', () => {
+      renderComponent();
+      expect(screen.getByText('All Conversations')).toBeInTheDocument();
     });
   });
 });
