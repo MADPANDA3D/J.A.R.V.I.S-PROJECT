@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import { ChatLayout } from '@/components/chat/ChatLayout';
 import { useChat } from '@/hooks/useChat';
+import { useAuth } from '@/contexts/AuthContext';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { screenReader } from '@/lib/accessibility';
 
 export const ChatPage: React.FC = () => {
+  const { user } = useAuth();
   const {
     messages,
     isLoading,
@@ -77,6 +79,7 @@ export const ChatPage: React.FC = () => {
         messages={messages}
         onSendMessage={sendMessage}
         onRetry={retryMessage}
+        userId={user?.id || ''}
         isLoading={isLoading}
         className="h-full"
       />
