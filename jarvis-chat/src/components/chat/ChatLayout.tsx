@@ -5,7 +5,11 @@ import { MessageSearch, SearchResult } from './MessageSearch';
 import { SearchFilters } from '@/hooks/useSearchState';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { screenReader } from '@/lib/accessibility';
-import { chatService } from '@/lib/chatService';
+import { 
+  chatService, 
+  SessionSearchFilters, 
+  GroupedSearchResponse 
+} from '@/lib/chatService';
 
 export interface Message {
   id: string;
@@ -23,6 +27,7 @@ interface ChatLayoutProps {
   userId: string;
   isLoading?: boolean;
   className?: string;
+  enableSessionGrouping?: boolean;
 }
 
 export const ChatLayout: React.FC<ChatLayoutProps> = ({
@@ -33,6 +38,7 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
   userId,
   isLoading = false,
   className = '',
+  enableSessionGrouping = false,
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [isSending, setIsSending] = useState(false);
@@ -102,6 +108,40 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
     }
   };
 
+  const handleSessionGroupedSearch = async (
+    filters: SessionSearchFilters,
+    options?: { sessionLimit?: number; sessionOffset?: number; messagesPerSession?: number }
+  ): Promise<GroupedSearchResponse> => {
+    try {
+      // Update current search terms for highlighting
+      if (filters.query.trim()) {
+        setCurrentSearchTerms(filters.query.trim().split(/\s+/));
+      } else {
+        setCurrentSearchTerms([]);
+      }
+      
+      return await chatService.searchMessagesGroupedBySession(userId, filters, options);
+    } catch (error) {
+      console.error('Session grouped search failed:', error);
+      screenReader.announce({
+        message: 'Session grouped search failed. Please try again.',
+        priority: 'assertive',
+      });
+      return { sessionGroups: [], totalSessions: 0, totalMessages: 0, hasMoreSessions: false };
+    }
+  };
+
+  const handleSessionSelect = (sessionId: string) => {
+    // Handle session selection logic here
+    console.log('Session selected:', sessionId);
+    
+    // Announce to screen readers
+    screenReader.announce({
+      message: `Switched to conversation session`,
+      priority: 'polite',
+    });
+  };
+
   const handleClearSearch = () => {
     setShowSearch(false);
     setCurrentSearchTerms([]);
@@ -138,6 +178,9 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
             userId={userId}
             placeholder="Search your conversation history..."
             className="max-w-none"
+            enableSessionGrouping={enableSessionGrouping}
+            onSessionGroupedSearch={enableSessionGrouping ? handleSessionGroupedSearch : undefined}
+            onSessionSelect={enableSessionGrouping ? handleSessionSelect : undefined}
           />
         </div>
       </div>
