@@ -36,6 +36,8 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
   const [inputValue, setInputValue] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [currentSearchTerms, setCurrentSearchTerms] = useState<string[]>([]);
+  const [highlightedMessageId, setHighlightedMessageId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom when new messages arrive
@@ -78,6 +80,13 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
 
   const handleSearch = async (filters: SearchFilters): Promise<SearchResult[]> => {
     try {
+      // Update current search terms for highlighting
+      if (filters.query.trim()) {
+        setCurrentSearchTerms(filters.query.trim().split(/\s+/));
+      } else {
+        setCurrentSearchTerms([]);
+      }
+      
       return await chatService.searchMessages(userId, filters);
     } catch (error) {
       console.error('Search failed:', error);
@@ -91,11 +100,22 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
 
   const handleClearSearch = () => {
     setShowSearch(false);
+    setCurrentSearchTerms([]);
+    setHighlightedMessageId(null);
   };
 
   const handleSearchResultClick = (messageId: string) => {
     onMessageClick?.(messageId);
+    setHighlightedMessageId(messageId);
     setShowSearch(false);
+    
+    // Scroll to the message if possible
+    setTimeout(() => {
+      const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+      if (messageElement) {
+        messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
   };
 
   return (
@@ -129,6 +149,8 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
           messages={messages}
           isLoading={isLoading}
           onRetry={onRetry}
+          searchTerms={currentSearchTerms}
+          highlightedMessageId={highlightedMessageId}
           className="h-full"
         />
         <div ref={messagesEndRef} aria-hidden="true" />

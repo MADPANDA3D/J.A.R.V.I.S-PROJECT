@@ -7,6 +7,8 @@ interface MessageListProps {
   messages: Message[];
   isLoading?: boolean;
   onRetry?: (messageId: string) => void;
+  searchTerms?: string[];
+  highlightedMessageId?: string | null;
   className?: string;
 }
 
@@ -14,6 +16,8 @@ export const MessageList: React.FC<MessageListProps> = ({
   messages,
   isLoading = false,
   onRetry,
+  searchTerms,
+  highlightedMessageId,
   className = '',
 }) => {
   return (
@@ -60,8 +64,13 @@ export const MessageList: React.FC<MessageListProps> = ({
         <>
           <ul role="list" className="space-y-4">
             {messages.map(message => (
-              <li key={message.id} role="listitem">
-                <MessageBubble message={message} onRetry={onRetry} />
+              <li key={message.id} role="listitem" data-message-id={message.id}>
+                <MessageBubble 
+                  message={message} 
+                  onRetry={onRetry}
+                  searchTerms={searchTerms}
+                  className={highlightedMessageId === message.id ? 'ring-2 ring-yellow-400 ring-opacity-50 rounded-lg' : ''}
+                />
               </li>
             ))}
           </ul>

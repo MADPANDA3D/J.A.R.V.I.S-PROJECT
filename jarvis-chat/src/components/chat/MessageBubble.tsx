@@ -15,15 +15,50 @@ import type { Message } from './ChatLayout';
 interface MessageBubbleProps {
   message: Message;
   onRetry?: (messageId: string) => void;
+  highlightedContent?: string;
+  searchTerms?: string[];
   className?: string;
 }
 
 export const MessageBubble: React.FC<MessageBubbleProps> = ({
   message,
   onRetry,
+  highlightedContent,
+  searchTerms,
   className = '',
 }) => {
   const isUser = message.role === 'user';
+
+  const highlightSearchTerms = (content: string, terms: string[]): string => {
+    if (!terms || terms.length === 0) return content;
+
+    let highlightedContent = content;
+    terms.forEach(term => {
+      if (term.trim()) {
+        const regex = new RegExp(`(${term.trim()})`, 'gi');
+        highlightedContent = highlightedContent.replace(
+          regex,
+          '<mark class="bg-yellow-200 dark:bg-yellow-800 px-1 rounded" aria-label="Search match: $1">$1</mark>'
+        );
+      }
+    });
+
+    return highlightedContent;
+  };
+
+  const getDisplayContent = () => {
+    if (highlightedContent) {
+      return highlightedContent;
+    }
+    
+    if (searchTerms && searchTerms.length > 0) {
+      return highlightSearchTerms(message.content, searchTerms);
+    }
+    
+    return message.content;
+  };
+
+  const hasHighlights = highlightedContent || (searchTerms && searchTerms.length > 0);
 
   const formatTime = (date: Date) => {
     return new Intl.DateTimeFormat('en-US', {
@@ -116,9 +151,17 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
           role="region"
           aria-label={`Message from ${isUser ? 'you' : 'JARVIS'}`}
         >
-          <p className="whitespace-pre-wrap" aria-label={message.content}>
-            {message.content}
-          </p>
+          {hasHighlights ? (
+            <div
+              className="whitespace-pre-wrap"
+              dangerouslySetInnerHTML={{ __html: getDisplayContent() }}
+              aria-label={`${message.content}${searchTerms ? ' - Contains search matches' : ''}`}
+            />
+          ) : (
+            <p className="whitespace-pre-wrap" aria-label={message.content}>
+              {message.content}
+            </p>
+          )}
         </div>
 
         {/* Timestamp and Status */}
