@@ -66,7 +66,7 @@ export function useSearchState(userId: string) {
       }
 
       if (savedHistory) {
-        const parsedHistory = JSON.parse(savedHistory).map((item: any) => ({
+        const parsedHistory = JSON.parse(savedHistory).map((item: Record<string, unknown>) => ({
           ...item,
           timestamp: new Date(item.timestamp),
           filters: {

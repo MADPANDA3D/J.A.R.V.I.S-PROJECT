@@ -8,7 +8,6 @@ import {
   DropdownMenuTrigger,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuCheckboxItem,
   DropdownMenuItem,
 } from '../ui/dropdown-menu';
 import { ConversationSession } from '@/lib/chatService';

@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { Search, X, Filter, Calendar, MessageSquare, History, Trash2 } from 'lucide-react';
-import type { DateRange } from 'react-day-picker';
+import { Search, X, Filter, MessageSquare, History, Trash2 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Badge } from '../ui/badge';
@@ -131,7 +130,7 @@ export function MessageSearch({
         await handleRegularSearch(searchQuery, loadMore);
       }
     },
-    [enableSessionGrouping, onSessionGroupedSearch, filters, onSearch, onClearSearch, results.length, sessionGroups.length, addToHistory]
+    [enableSessionGrouping, onSessionGroupedSearch, handleRegularSearch, handleSessionGroupedSearch, onClearSearch]
   );
 
   const handleRegularSearch = useCallback(

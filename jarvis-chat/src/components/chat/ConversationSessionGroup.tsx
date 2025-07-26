@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronRight, MessageSquare, Calendar, User, Clock } from 'lucide-react';
+import { ChevronDown, ChevronRight, MessageSquare, Calendar, Clock } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import { ConversationSessionGroup as SessionGroup, SearchResult } from '@/lib/chatService';
+import { ConversationSessionGroup as SessionGroup } from '@/lib/chatService';
 import { cn } from '@/lib/utils';
 
 interface ConversationSessionGroupProps {
@@ -172,7 +172,7 @@ export function ConversationSessionGroup({
           {messages.length > 0 ? (
             <>
               <div className="space-y-3">
-                {messages.map((message, index) => (
+                {messages.map((message) => (
                   <div
                     key={message.messageId}
                     className="border-l-2 border-muted pl-4 py-2 hover:bg-muted/30 rounded-r-md transition-colors cursor-pointer"

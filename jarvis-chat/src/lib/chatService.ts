@@ -312,7 +312,7 @@ class ChatService {
         .order('created_at', { ascending: false });
 
       // Apply filters to both queries
-      const applyFilters = (q: any) => {
+      const applyFilters = (q: ReturnType<typeof supabase.from>) => {
         if (filters.query.trim()) {
           q = q.ilike('content', `%${filters.query.trim()}%`);
         }
