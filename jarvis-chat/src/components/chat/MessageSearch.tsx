@@ -14,8 +14,16 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem,
 } from '../ui/dropdown-menu';
-import { chatService, ConversationSession } from '@/lib/chatService';
+import { 
+  chatService, 
+  ConversationSession, 
+  ConversationSessionGroup, 
+  SessionSearchFilters, 
+  GroupedSearchResponse 
+} from '@/lib/chatService';
 import { useSearchState, SearchFilters } from '@/hooks/useSearchState';
+import { ConversationSessionGroup as SessionGroupComponent } from './ConversationSessionGroup';
+import { SessionNavigation } from './SessionNavigation';
 
 export interface SearchResult {
   messageId: string;
@@ -39,6 +47,14 @@ interface MessageSearchProps {
   userId: string;
   className?: string;
   placeholder?: string;
+  // Session grouping support
+  enableSessionGrouping?: boolean;
+  onSessionGroupedSearch?: (filters: SessionSearchFilters, options?: { 
+    sessionLimit?: number; 
+    sessionOffset?: number; 
+    messagesPerSession?: number; 
+  }) => Promise<GroupedSearchResponse>;
+  onSessionSelect?: (sessionId: string) => void;
 }
 
 export function MessageSearch({
@@ -48,6 +64,9 @@ export function MessageSearch({
   userId,
   className = '',
   placeholder = 'Search messages...',
+  enableSessionGrouping = false,
+  onSessionGroupedSearch,
+  onSessionSelect,
 }: MessageSearchProps) {
   const {
     filters,
@@ -71,6 +90,15 @@ export function MessageSearch({
   const [hasMoreResults, setHasMoreResults] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
+  // Session grouping state
+  const [sessionGroups, setSessionGroups] = useState<ConversationSessionGroup[]>([]);
+  const [expandedSessions, setExpandedSessions] = useState<Set<string>>(new Set());
+  const [activeSessionId, setActiveSessionId] = useState<string | undefined>();
+  const [sessionOrder, setSessionOrder] = useState<'chronological' | 'relevance' | 'updated'>('updated');
+  const [totalSessions, setTotalSessions] = useState(0);
+  const [hasMoreSessions, setHasMoreSessions] = useState(false);
+  const [isLoadingMoreSessions, setIsLoadingMoreSessions] = useState(false);
+
   const activeFiltersCount = useMemo(() => {
     let count = 0;
     if (filters.dateRange && (filters.dateRange.from || filters.dateRange.to)) count++;
@@ -84,13 +112,30 @@ export function MessageSearch({
     async (searchQuery: string, loadMore = false) => {
       if (!searchQuery.trim()) {
         setResults([]);
+        setSessionGroups([]);
         setShowResults(false);
         setSearchTotal(0);
         setHasMoreResults(false);
+        setTotalSessions(0);
+        setHasMoreSessions(false);
         onClearSearch();
         return;
       }
 
+      // Determine if we're doing session-grouped search
+      const useSessionGrouping = enableSessionGrouping && onSessionGroupedSearch;
+      
+      if (useSessionGrouping) {
+        await handleSessionGroupedSearch(searchQuery, loadMore);
+      } else {
+        await handleRegularSearch(searchQuery, loadMore);
+      }
+    },
+    [enableSessionGrouping, onSessionGroupedSearch, filters, onSearch, onClearSearch, results.length, sessionGroups.length, addToHistory]
+  );
+
+  const handleRegularSearch = useCallback(
+    async (searchQuery: string, loadMore = false) => {
       const isLoadingMoreResults = loadMore && results.length > 0;
       
       if (isLoadingMoreResults) {
@@ -137,7 +182,68 @@ export function MessageSearch({
         }
       }
     },
-    [filters, onSearch, onClearSearch, results.length, addToHistory]
+    [filters, onSearch, results.length, addToHistory]
+  );
+
+  const handleSessionGroupedSearch = useCallback(
+    async (searchQuery: string, loadMore = false) => {
+      if (!onSessionGroupedSearch) return;
+
+      const isLoadingMoreSessions = loadMore && sessionGroups.length > 0;
+      
+      if (isLoadingMoreSessions) {
+        setIsLoadingMoreSessions(true);
+      } else {
+        setIsSearching(true);
+      }
+
+      try {
+        const sessionFilters: SessionSearchFilters = {
+          ...filters,
+          query: searchQuery.trim(),
+          groupBySession: true,
+          sessionOrder,
+        };
+
+        const sessionOffset = isLoadingMoreSessions ? sessionGroups.length : 0;
+        const sessionResponse = await onSessionGroupedSearch(sessionFilters, {
+          sessionLimit: 10,
+          sessionOffset,
+          messagesPerSession: 5,
+        });
+        
+        if (isLoadingMoreSessions) {
+          setSessionGroups(prev => [...prev, ...sessionResponse.sessionGroups]);
+        } else {
+          setSessionGroups(sessionResponse.sessionGroups);
+        }
+        
+        setTotalSessions(sessionResponse.totalSessions);
+        setSearchTotal(sessionResponse.totalMessages);
+        setHasMoreSessions(sessionResponse.hasMoreSessions);
+        setShowResults(true);
+
+        // Add to search history if this is a new search
+        if (!isLoadingMoreSessions && sessionResponse.sessionGroups.length > 0) {
+          addToHistory(searchQuery, sessionResponse.totalMessages);
+        }
+      } catch (error) {
+        console.error('Session grouped search failed:', error);
+        if (!isLoadingMoreSessions) {
+          setSessionGroups([]);
+          setTotalSessions(0);
+          setSearchTotal(0);
+          setHasMoreSessions(false);
+        }
+      } finally {
+        if (isLoadingMoreSessions) {
+          setIsLoadingMoreSessions(false);
+        } else {
+          setIsSearching(false);
+        }
+      }
+    },
+    [filters, onSessionGroupedSearch, sessionGroups.length, sessionOrder, addToHistory]
   );
 
   const handleQueryChange = useCallback((value: string) => {
@@ -186,12 +292,63 @@ export function MessageSearch({
     }
   }, [currentQuery, hasMoreResults, isLoadingMore, handleSearch]);
 
+  // Session-specific handlers
+  const handleToggleSessionExpanded = useCallback((sessionId: string) => {
+    setExpandedSessions(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(sessionId)) {
+        newSet.delete(sessionId);
+      } else {
+        newSet.add(sessionId);
+      }
+      return newSet;
+    });
+  }, []);
+
+  const handleSessionSelect = useCallback((sessionId: string) => {
+    setActiveSessionId(sessionId);
+    onSessionSelect?.(sessionId);
+  }, [onSessionSelect]);
+
+  const handleSessionOrderChange = useCallback((order: 'chronological' | 'relevance' | 'updated') => {
+    setSessionOrder(order);
+    // Re-trigger search with new order
+    if (currentQuery.trim()) {
+      handleSearch(currentQuery, false);
+    }
+  }, [currentQuery, handleSearch]);
+
+  const handleLoadMoreSessions = useCallback(() => {
+    if (currentQuery.trim() && hasMoreSessions && !isLoadingMoreSessions) {
+      handleSearch(currentQuery, true);
+    }
+  }, [currentQuery, hasMoreSessions, isLoadingMoreSessions, handleSearch]);
+
+  const handleExpandAllSessions = useCallback(() => {
+    setExpandedSessions(new Set(sessionGroups.map(sg => sg.session.id)));
+  }, [sessionGroups]);
+
+  const handleCollapseAllSessions = useCallback(() => {
+    setExpandedSessions(new Set());
+  }, []);
+
+  const handleLoadMoreInSession = useCallback(async (sessionId: string) => {
+    // This would require additional API support to load more messages within a specific session
+    console.log('Load more messages in session:', sessionId);
+    // Implementation would depend on additional backend support
+  }, []);
+
   const handleClearSearch = () => {
     clearSearchState();
     setResults([]);
+    setSessionGroups([]);
     setShowResults(false);
     setSearchTotal(0);
     setHasMoreResults(false);
+    setTotalSessions(0);
+    setHasMoreSessions(false);
+    setExpandedSessions(new Set());
+    setActiveSessionId(undefined);
     onClearSearch();
     
     // Announce to screen readers
@@ -449,8 +606,61 @@ export function MessageSearch({
         </div>
       </div>
 
-      {/* Search Results */}
-      {showResults && (
+      {/* Search Results - Session Grouped View */}
+      {showResults && enableSessionGrouping && (
+        <div className="absolute top-full left-0 right-0 mt-2 bg-background border rounded-md shadow-lg max-h-96 overflow-y-auto z-50">
+          {/* Session Navigation */}
+          <SessionNavigation
+            sessions={sessionGroups.map(sg => sg.session)}
+            activeSessionId={activeSessionId}
+            sessionOrder={sessionOrder}
+            totalSessions={totalSessions}
+            totalMessages={searchTotal}
+            hasMoreSessions={hasMoreSessions}
+            isLoading={isSearching || isLoadingMoreSessions}
+            onSessionSelect={handleSessionSelect}
+            onOrderChange={handleSessionOrderChange}
+            onLoadMoreSessions={handleLoadMoreSessions}
+            onExpandAll={handleExpandAllSessions}
+            onCollapseAll={handleCollapseAllSessions}
+          />
+
+          {/* Session Groups */}
+          {isSearching ? (
+            <div className="p-4 text-center text-muted-foreground">
+              <Search className="h-4 w-4 animate-spin mx-auto mb-2" />
+              Searching conversations...
+            </div>
+          ) : sessionGroups.length > 0 ? (
+            <div className="p-4 space-y-4 max-h-80 overflow-y-auto">
+              {sessionGroups.map(sessionGroup => (
+                <SessionGroupComponent
+                  key={sessionGroup.session.id}
+                  sessionGroup={sessionGroup}
+                  isExpanded={expandedSessions.has(sessionGroup.session.id)}
+                  onToggleExpanded={handleToggleSessionExpanded}
+                  onSessionSelect={handleSessionSelect}
+                  onMessageClick={onResultClick}
+                  onLoadMore={handleLoadMoreInSession}
+                  isActive={activeSessionId === sessionGroup.session.id}
+                  searchTerms={currentQuery.trim().split(/\s+/).filter(Boolean)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="p-4 text-center text-muted-foreground">
+              <Search className="h-8 w-8 mx-auto mb-2 opacity-50" />
+              <p>No conversations found</p>
+              <p className="text-xs mt-1">
+                Try different keywords or adjust filters
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Search Results - Regular View */}
+      {showResults && !enableSessionGrouping && (
         <div 
           className="absolute top-full left-0 right-0 mt-2 bg-background border rounded-md shadow-lg max-h-80 md:max-h-96 overflow-y-auto z-50"
           role="listbox"
