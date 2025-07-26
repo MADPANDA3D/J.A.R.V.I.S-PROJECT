@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Search, X, Filter, Calendar, MessageSquare, History, Trash2 } from 'lucide-react';
-import { DateRange } from 'react-day-picker';
+import type { DateRange } from 'react-day-picker';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Badge } from '../ui/badge';

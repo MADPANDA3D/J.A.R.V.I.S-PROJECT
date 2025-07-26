@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { DateRange } from 'react-day-picker';
+import type { DateRange } from 'react-day-picker';
 
 export interface SearchFilters {
   query: string;

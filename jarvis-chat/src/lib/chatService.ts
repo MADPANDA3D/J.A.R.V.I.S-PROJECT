@@ -1,6 +1,6 @@
 import { supabase } from './supabase';
 import { webhookService, WebhookPayload } from './webhookService';
-import { DateRange } from 'react-day-picker';
+import type { DateRange } from 'react-day-picker';
 
 export interface ChatMessage {
   id: string;
