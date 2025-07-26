@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 import { webhookService, WebhookPayload } from './webhookService';
+import { DateRange } from 'react-day-picker';
 
 export interface ChatMessage {
   id: string;
@@ -15,6 +16,22 @@ export interface N8nWebhookResponse {
   response: string;
   success: boolean;
   error?: string;
+}
+
+export interface SearchFilters {
+  query: string;
+  dateRange?: DateRange;
+  messageTypes: ('user' | 'assistant')[];
+  hasErrors?: boolean;
+}
+
+export interface SearchResult {
+  messageId: string;
+  content: string;
+  role: 'user' | 'assistant';
+  timestamp: Date;
+  highlightedContent: string;
+  matchScore: number;
 }
 
 class ChatService {
@@ -235,6 +252,107 @@ class ChatService {
       console.error('Error processing chat message:', error);
       throw error;
     }
+  }
+
+  /**
+   * Search messages with advanced filtering
+   */
+  async searchMessages(
+    userId: string,
+    filters: SearchFilters
+  ): Promise<SearchResult[]> {
+    try {
+      let query = supabase
+        .from('chat_messages')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false });
+
+      // Apply text search filter
+      if (filters.query.trim()) {
+        query = query.ilike('content', `%${filters.query.trim()}%`);
+      }
+
+      // Apply message type filter
+      if (filters.messageTypes.length > 0 && filters.messageTypes.length < 2) {
+        query = query.in('role', filters.messageTypes);
+      }
+
+      // Apply date range filter
+      if (filters.dateRange?.from) {
+        query = query.gte('created_at', filters.dateRange.from.toISOString());
+      }
+      if (filters.dateRange?.to) {
+        // Include the entire end date by setting time to end of day
+        const endDate = new Date(filters.dateRange.to);
+        endDate.setHours(23, 59, 59, 999);
+        query = query.lte('created_at', endDate.toISOString());
+      }
+
+      // Apply error filter
+      if (filters.hasErrors) {
+        query = query.eq('status', 'error');
+      }
+
+      const { data, error } = await query.limit(100);
+
+      if (error) {
+        throw error;
+      }
+
+      return data.map(msg => ({
+        messageId: msg.id,
+        content: msg.content,
+        role: msg.role,
+        timestamp: new Date(msg.created_at),
+        highlightedContent: this.highlightSearchTerms(msg.content, filters.query),
+        matchScore: this.calculateMatchScore(msg.content, filters.query),
+      }));
+    } catch (error) {
+      console.error('Error searching messages:', error);
+      throw new Error('Failed to search messages');
+    }
+  }
+
+  /**
+   * Highlight search terms in content
+   */
+  private highlightSearchTerms(content: string, query: string): string {
+    if (!query.trim()) return content;
+
+    const terms = query.trim().split(/\s+/);
+    let highlightedContent = content;
+
+    terms.forEach(term => {
+      const regex = new RegExp(`(${term})`, 'gi');
+      highlightedContent = highlightedContent.replace(
+        regex, 
+        '<mark class="bg-yellow-200 dark:bg-yellow-800 px-1 rounded">$1</mark>'
+      );
+    });
+
+    return highlightedContent;
+  }
+
+  /**
+   * Calculate match score based on search relevance
+   */
+  private calculateMatchScore(content: string, query: string): number {
+    if (!query.trim()) return 0;
+
+    const lowerContent = content.toLowerCase();
+    const lowerQuery = query.toLowerCase();
+    
+    // Exact match gets highest score
+    if (lowerContent.includes(lowerQuery)) {
+      return 1.0;
+    }
+
+    // Partial matches get proportional scores
+    const words = lowerQuery.split(/\s+/);
+    const matchedWords = words.filter(word => lowerContent.includes(word));
+    
+    return matchedWords.length / words.length;
   }
 
   /**

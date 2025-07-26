@@ -1,8 +1,10 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { Search, X, Filter } from 'lucide-react';
+import { Search, X, Filter, Calendar } from 'lucide-react';
+import { DateRange } from 'react-day-picker';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Badge } from '../ui/badge';
+import { DateRangePicker } from '../ui/date-range-picker';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,10 +16,7 @@ import {
 
 export interface SearchFilters {
   query: string;
-  dateRange?: {
-    start: Date;
-    end: Date;
-  };
+  dateRange?: DateRange;
   messageTypes: ('user' | 'assistant')[];
   hasErrors?: boolean;
 }
@@ -57,7 +56,7 @@ export function MessageSearch({
 
   const activeFiltersCount = useMemo(() => {
     let count = 0;
-    if (filters.dateRange) count++;
+    if (filters.dateRange && (filters.dateRange.from || filters.dateRange.to)) count++;
     if (filters.messageTypes.length < 2) count++;
     if (filters.hasErrors) count++;
     return count;
@@ -165,6 +164,16 @@ export function MessageSearch({
             </Button>
           )}
         </div>
+
+        {/* Date Range Picker */}
+        <DateRangePicker
+          dateRange={filters.dateRange}
+          onDateRangeChange={(range) => 
+            setFilters(prev => ({ ...prev, dateRange: range }))
+          }
+          placeholder="Select dates"
+          disabled={isSearching}
+        />
 
         {/* Filters Dropdown */}
         <DropdownMenu>
