@@ -19,14 +19,6 @@ describe('usePWAInstall', () => {
   ) => {
     const eventData = { ...mockEvent, ...customEvent };
 
-    // Create a minimal event-like object
-    const mockEventObj = {
-      type: 'beforeinstallprompt',
-      preventDefault: eventData.preventDefault,
-      prompt: eventData.prompt,
-      userChoice: eventData.userChoice,
-    };
-
     // Manually trigger the event handler since we can't properly mock Events
     const event = new CustomEvent('beforeinstallprompt');
     Object.defineProperty(event, 'prompt', {

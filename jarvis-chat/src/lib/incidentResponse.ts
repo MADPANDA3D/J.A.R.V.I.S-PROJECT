@@ -1042,13 +1042,14 @@ class IncidentResponseService {
             condition.operator,
             condition.value
           );
-        case 'duration':
+        case 'duration': {
           const duration = Date.now() - incident.detectedAt;
           return this.evaluateCondition(
             duration / (60 * 1000),
             condition.operator,
             condition.value
           ); // minutes
+        }
         case 'no_acknowledgment':
           return (
             !incident.acknowledgedAt &&
@@ -1061,7 +1062,7 @@ class IncidentResponseService {
             condition.operator,
             condition.value
           );
-        case 'business_impact':
+        case 'business_impact': {
           const impactScore = this.getBusinessImpactScore(
             incident.businessImpact
           );
@@ -1070,6 +1071,7 @@ class IncidentResponseService {
             condition.operator,
             condition.value
           );
+        }
         default:
           return false;
       }

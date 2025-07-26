@@ -5,7 +5,6 @@ import {
   Eye,
   Palette,
   ZoomIn,
-  ZoomOut,
   RotateCcw,
   Sun,
   Moon,
@@ -26,7 +25,12 @@ export const VisualAccessibilityControls: React.FC<
     React.useState<AccessibilityPreferences>(
       accessibilityPrefs.getPreferences()
     );
-  const [contrastReport, setContrastReport] = React.useState<any>(null);
+  const [contrastReport, setContrastReport] = React.useState<{
+    overallScore: number;
+    totalPairs: number;
+    compliantPairs: number;
+    issues: Array<{ element: string; issue: string }>;
+  } | null>(null);
 
   React.useEffect(() => {
     // Update contrast report when preferences change
@@ -79,7 +83,7 @@ export const VisualAccessibilityControls: React.FC<
                   }
                   size="sm"
                   onClick={() =>
-                    handlePreferenceChange('colorScheme', value as any)
+                    handlePreferenceChange('colorScheme', value as AccessibilityPreferences['colorScheme'])
                   }
                   className="flex items-center gap-2"
                   role="radio"
@@ -154,7 +158,7 @@ export const VisualAccessibilityControls: React.FC<
                   <ul className="mt-1 space-y-1 text-xs">
                     {contrastReport.issues
                       .slice(0, 3)
-                      .map((issue: any, index: number) => (
+                      .map((issue, index: number) => (
                         <li key={index} className="text-muted-foreground">
                           {issue.element}: {issue.issue}
                         </li>
@@ -195,7 +199,7 @@ export const VisualAccessibilityControls: React.FC<
                   }
                   size="sm"
                   onClick={() =>
-                    handlePreferenceChange('fontSize', value as any)
+                    handlePreferenceChange('fontSize', value as AccessibilityPreferences['fontSize'])
                   }
                   className="flex flex-col items-center gap-1 h-auto py-2"
                   role="radio"

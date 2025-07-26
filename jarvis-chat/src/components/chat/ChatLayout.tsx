@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MessageInput } from './MessageInput';
 import { MessageList } from './MessageList';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import { screenReader, focusManager } from '@/lib/accessibility';
+import { screenReader } from '@/lib/accessibility';
 
 export interface Message {
   id: string;

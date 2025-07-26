@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { ariaManager, screenReader } from '@/lib/accessibility';
+import { screenReader } from '@/lib/accessibility';
 import type { Message } from './ChatLayout';
 
 interface MessageBubbleProps {

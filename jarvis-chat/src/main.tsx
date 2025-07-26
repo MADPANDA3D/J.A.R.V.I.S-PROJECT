@@ -51,6 +51,11 @@ if (!envResult.isValid && import.meta.env.DEV) {
   envResult.errors.forEach(error => console.error(`  • ${error}`));
 }
 
+// Ensure page loads at the top
+window.addEventListener('load', () => {
+  window.scrollTo(0, 0);
+});
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>

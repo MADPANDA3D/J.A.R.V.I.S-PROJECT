@@ -181,7 +181,7 @@ export class WebhookValidator {
             field: (err.path || []).join('.'),
             message: err.message || 'Validation error',
             received: (err.path || []).reduce(
-              (obj: any, key) => obj?.[key],
+              (obj: unknown, key) => (obj as Record<string, unknown>)?.[key],
               data
             ),
           })),
@@ -231,7 +231,7 @@ export class WebhookValidator {
             field: (err.path || []).join('.'),
             message: err.message || 'Validation error',
             received: (err.path || []).reduce(
-              (obj: any, key) => obj?.[key],
+              (obj: unknown, key) => (obj as Record<string, unknown>)?.[key],
               data
             ),
           })),
@@ -280,7 +280,7 @@ export class WebhookValidator {
             field: (err.path || []).join('.'),
             message: err.message || 'Validation error',
             received: (err.path || []).reduce(
-              (obj: any, key) => obj?.[key],
+              (obj: unknown, key) => (obj as Record<string, unknown>)?.[key],
               data
             ),
           })),
@@ -329,7 +329,7 @@ export class WebhookValidator {
             field: (err.path || []).join('.'),
             message: err.message || 'Validation error',
             received: (err.path || []).reduce(
-              (obj: any, key) => obj?.[key],
+              (obj: unknown, key) => (obj as Record<string, unknown>)?.[key],
               data
             ),
           })),

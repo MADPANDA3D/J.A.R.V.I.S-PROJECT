@@ -10,8 +10,24 @@ vi.mock('../../../hooks/useTools');
 const mockUseTools = vi.mocked(useTools);
 
 // Mock the UI components
+interface MockDropdownProps {
+  children: React.ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+interface MockDropdownItemProps {
+  children: React.ReactNode;
+  checked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
+}
+
+interface MockChildrenProps {
+  children: React.ReactNode;
+}
+
 vi.mock('../../ui/dropdown-menu', () => ({
-  DropdownMenu: ({ children, open, onOpenChange }: any) => (
+  DropdownMenu: ({ children, open, onOpenChange }: MockDropdownProps) => (
     <div
       data-testid="dropdown-menu"
       data-open={open}
@@ -20,13 +36,13 @@ vi.mock('../../ui/dropdown-menu', () => ({
       {children}
     </div>
   ),
-  DropdownMenuTrigger: ({ children, asChild }: any) => (
+  DropdownMenuTrigger: ({ children }: MockChildrenProps) => (
     <div data-testid="dropdown-trigger">{children}</div>
   ),
-  DropdownMenuContent: ({ children }: any) => (
+  DropdownMenuContent: ({ children }: MockChildrenProps) => (
     <div data-testid="dropdown-content">{children}</div>
   ),
-  DropdownMenuCheckboxItem: ({ children, checked, onCheckedChange }: any) => (
+  DropdownMenuCheckboxItem: ({ children, checked, onCheckedChange }: MockDropdownItemProps) => (
     <div
       data-testid="dropdown-checkbox-item"
       data-checked={checked}
@@ -35,14 +51,21 @@ vi.mock('../../ui/dropdown-menu', () => ({
       {children}
     </div>
   ),
-  DropdownMenuLabel: ({ children }: any) => (
+  DropdownMenuLabel: ({ children }: MockChildrenProps) => (
     <div data-testid="dropdown-label">{children}</div>
   ),
   DropdownMenuSeparator: () => <div data-testid="dropdown-separator" />,
 }));
 
+interface MockButtonProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+  'aria-label'?: string;
+}
+
 vi.mock('../../ui/button', () => ({
-  Button: ({ children, onClick, disabled, 'aria-label': ariaLabel }: any) => (
+  Button: ({ children, onClick, disabled, 'aria-label': ariaLabel }: MockButtonProps) => (
     <button
       onClick={onClick}
       disabled={disabled}
@@ -54,8 +77,13 @@ vi.mock('../../ui/button', () => ({
   ),
 }));
 
+interface MockBadgeProps {
+  children: React.ReactNode;
+  variant?: string;
+}
+
 vi.mock('../../ui/badge', () => ({
-  Badge: ({ children, variant }: any) => (
+  Badge: ({ children, variant }: MockBadgeProps) => (
     <span data-testid="badge" data-variant={variant}>
       {children}
     </span>

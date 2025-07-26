@@ -20,7 +20,7 @@ vi.stubGlobal('import', {
 });
 
 describe('Secrets Management System', () => {
-  let secretsManager: SecretsManager;
+  // let secretsManager: SecretsManager;
 
   beforeEach(() => {
     // Clear all environment variables

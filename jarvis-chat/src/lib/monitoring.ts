@@ -164,7 +164,7 @@ class MonitoringService implements APMService {
         userAgent: navigator.userAgent,
         url: window.location.href,
       });
-    } catch (error) {
+    } catch {
       captureError(
         error instanceof Error
           ? error
@@ -210,9 +210,9 @@ class MonitoringService implements APMService {
         // Cumulative Layout Shift (CLS)
         let clsValue = 0;
         const clsObserver = new PerformanceObserver(entryList => {
-          entryList.getEntries().forEach((entry: any) => {
+          entryList.getEntries().forEach((entry: PerformanceEntry & { hadRecentInput?: boolean; value?: number }) => {
             if (!entry.hadRecentInput) {
-              clsValue += entry.value;
+              clsValue += entry.value || 0;
             }
           });
           this.trackCustomMetric('core_web_vitals.cls', clsValue);
@@ -220,7 +220,7 @@ class MonitoringService implements APMService {
 
         clsObserver.observe({ entryTypes: ['layout-shift'] });
       }
-    } catch (error) {
+    } catch {
       captureWarning('Failed to initialize Core Web Vitals monitoring', {
         error,
       });
@@ -248,7 +248,7 @@ class MonitoringService implements APMService {
 
             // Track network information if available
             if ('connection' in navigator) {
-              const connection = (navigator as any).connection;
+              const connection = (navigator as unknown as { connection: { rtt: number; effectiveType: string; downlink: number } }).connection;
               this.trackCustomMetric('network.rtt', connection.rtt || 0, {
                 effectiveType: connection.effectiveType,
                 downlink: connection.downlink,
@@ -271,7 +271,7 @@ class MonitoringService implements APMService {
 
         paintObserver.observe({ entryTypes: ['paint'] });
       }
-    } catch (error) {
+    } catch {
       captureWarning('Failed to initialize performance monitoring', { error });
     }
   }
@@ -301,7 +301,7 @@ class MonitoringService implements APMService {
           }
         );
       });
-    } catch (error) {
+    } catch {
       captureWarning('Failed to initialize error tracking enhancements', {
         error,
       });
@@ -312,7 +312,7 @@ class MonitoringService implements APMService {
     try {
       if ('PerformanceObserver' in window) {
         const resourceObserver = new PerformanceObserver(entryList => {
-          entryList.getEntries().forEach((entry: any) => {
+          entryList.getEntries().forEach((entry: PerformanceResourceTiming) => {
             this.trackCustomMetric('resource.load_time', entry.duration, {
               name: entry.name,
               type: entry.initiatorType,
@@ -324,7 +324,7 @@ class MonitoringService implements APMService {
 
         resourceObserver.observe({ entryTypes: ['resource'] });
       }
-    } catch (error) {
+    } catch {
       captureWarning('Failed to initialize resource monitoring', { error });
     }
   }
@@ -537,7 +537,7 @@ class MonitoringService implements APMService {
             checkComplete();
           });
           lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
-        } catch (e) {
+        } catch {
           vitals.lcp = 0;
         }
       }
@@ -580,7 +580,7 @@ class MonitoringService implements APMService {
   }
 
   // External APM integration
-  private sendToExternalAPM(type: string, data: any): void {
+  private sendToExternalAPM(type: string, data: unknown): void {
     try {
       // DataDog integration
       if (window.DD_RUM && typeof window.DD_RUM.addAction === 'function') {
@@ -599,12 +599,12 @@ class MonitoringService implements APMService {
 
       // Custom webhook integration
       this.sendToCustomEndpoint(type, data);
-    } catch (error) {
+    } catch {
       // Silently fail external integrations
     }
   }
 
-  private sendToCustomEndpoint(type: string, data: any): void {
+  private sendToCustomEndpoint(type: string, data: unknown): void {
     const webhookUrl = import.meta.env.VITE_MONITORING_WEBHOOK_URL;
     if (!webhookUrl) return;
 
@@ -625,7 +625,7 @@ class MonitoringService implements APMService {
       }).catch(() => {
         // Silently fail webhook calls
       });
-    } catch (error) {
+    } catch {
       // Silently fail
     }
   }
@@ -642,7 +642,6 @@ class MonitoringService implements APMService {
   } {
     const recentTimeRange = 5 * 60 * 1000; // 5 minutes
     const recentMetrics = this.getMetrics({ timeRange: recentTimeRange });
-    const recentEvents = this.getEvents({ timeRange: recentTimeRange });
 
     const errorMetrics = recentMetrics.filter(m => m.name.includes('error'));
     const responseTimeMetrics = recentMetrics.filter(
@@ -716,12 +715,12 @@ export const startTransaction = (name: string, operation: string) =>
   monitoringService.startTransaction(name, operation);
 
 // React integration helpers
-export const withMonitoring = <T extends (...args: any[]) => any>(
+export const withMonitoring = <T extends (...args: unknown[]) => unknown>(
   fn: T,
   name: string,
   operation: string = 'function'
 ): T => {
-  return ((...args: any[]) => {
+  return ((...args: unknown[]) => {
     const transaction = startTransaction(name, operation);
     try {
       const result = fn(...args);
@@ -745,7 +744,7 @@ export const withMonitoring = <T extends (...args: any[]) => any>(
         transaction.finish();
         return result;
       }
-    } catch (error) {
+    } catch {
       transaction.setStatus('error');
       transaction.setMetadata({
         error: error instanceof Error ? error.message : String(error),
@@ -764,10 +763,10 @@ export const withMonitoring = <T extends (...args: any[]) => any>(
 declare global {
   interface Window {
     DD_RUM?: {
-      addAction: (name: string, context: any) => void;
+      addAction: (name: string, context: unknown) => void;
     };
     Sentry?: {
-      addBreadcrumb: (breadcrumb: any) => void;
+      addBreadcrumb: (breadcrumb: unknown) => void;
     };
   }
 }

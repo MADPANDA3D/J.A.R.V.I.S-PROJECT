@@ -41,13 +41,14 @@ describe('Webhook Diagnostics', () => {
 
       const metrics = webhookService.getMetrics();
       console.log(`   Response Time: ${metrics.averageResponseTime}ms`);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.log('❌ WEBHOOK ERROR DETECTED');
-      console.log(`   Error Type: ${error.type || 'Unknown'}`);
-      console.log(`   Status Code: ${error.statusCode || 'N/A'}`);
-      console.log(`   Message: ${error.message}`);
+      const errorObj = error as Record<string, unknown>;
+      console.log(`   Error Type: ${errorObj.type || 'Unknown'}`);
+      console.log(`   Status Code: ${errorObj.statusCode || 'N/A'}`);
+      console.log(`   Message: ${errorObj.message || 'No message available'}`);
 
-      if (error.statusCode === 404) {
+      if (errorObj.statusCode === 404) {
         console.log('\n💡 SOLUTION FOR 404 ERROR:');
         console.log('   Your n8n workflow is in TEST MODE.');
         console.log('   To fix this:');

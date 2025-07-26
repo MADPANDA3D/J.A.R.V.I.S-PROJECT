@@ -426,7 +426,7 @@ class HealthMonitoringService {
     try {
       // Get recent metrics for threshold checking
       const metrics = metricsService.getBusinessMetrics(5 * 60 * 1000); // 5 minutes
-      const kpis = metricsService.getKPIs({ timeRange: 5 * 60 * 1000 });
+      // const kpis = metricsService.getKPIs({ timeRange: 5 * 60 * 1000 });
 
       // Check business metrics
       if (metrics.messagesSentPerDay !== undefined) {
@@ -744,7 +744,12 @@ class HealthMonitoringService {
 
   private getMemoryUsage(): number {
     if ('memory' in performance) {
-      const memory = (performance as any).memory;
+      const memory = (performance as typeof performance & {
+        memory: {
+          usedJSHeapSize: number;
+          jsHeapSizeLimit: number;
+        };
+      }).memory;
       return (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100;
     }
     return 0;
@@ -752,7 +757,11 @@ class HealthMonitoringService {
 
   private getNetworkLatency(): number {
     if ('connection' in navigator) {
-      const connection = (navigator as any).connection;
+      const connection = (navigator as typeof navigator & {
+        connection: {
+          rtt?: number;
+        };
+      }).connection;
       return connection.rtt || 0;
     }
     return 0;

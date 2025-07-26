@@ -13,9 +13,6 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
   error,
   resetError,
 }) => {
-  const handleReload = () => {
-    window.location.reload();
-  };
 
   const handleReportError = () => {
     // In a real app, this would send error data to a logging service

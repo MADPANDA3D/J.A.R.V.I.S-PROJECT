@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { ChatLayout } from '@/components/chat/ChatLayout';
 import { useChat } from '@/hooks/useChat';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import { screenReader, focusManager } from '@/lib/accessibility';
+import { screenReader } from '@/lib/accessibility';
 
 export const ChatPage: React.FC = () => {
   const {

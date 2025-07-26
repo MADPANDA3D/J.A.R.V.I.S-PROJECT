@@ -64,6 +64,20 @@
       'rlig' 1,
       'calt' 1;
   }
+
+  /* Ensure page loads at the top position */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    scroll-behavior: smooth;
+  }
+  
+  /* Force initial scroll position to top for main application container */
+  #root {
+    scroll-margin-top: 0;
+  }
 }
 
 /* Accessibility Styles */

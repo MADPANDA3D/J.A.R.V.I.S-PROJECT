@@ -29,10 +29,10 @@ Object.defineProperty(window, 'performance', {
 });
 
 // Mock PerformanceObserver
-global.PerformanceObserver = vi.fn().mockImplementation(callback => ({
+global.PerformanceObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   disconnect: vi.fn(),
-})) as any;
+})) as unknown as typeof PerformanceObserver;
 
 // Mock navigator.connection
 Object.defineProperty(navigator, 'connection', {
@@ -300,8 +300,8 @@ describe('MonitoringService', () => {
   describe('External Integration', () => {
     it('should handle missing external APM services gracefully', () => {
       // Ensure no external services are available
-      delete (window as any).DD_RUM;
-      delete (window as any).Sentry;
+      delete (window as typeof window & { DD_RUM?: unknown }).DD_RUM;
+      delete (window as typeof window & { Sentry?: unknown }).Sentry;
 
       expect(() => {
         monitoringService.trackCustomMetric('test.metric', 1);
@@ -312,8 +312,8 @@ describe('MonitoringService', () => {
       const mockAddAction = vi.fn();
       const mockAddBreadcrumb = vi.fn();
 
-      (window as any).DD_RUM = { addAction: mockAddAction };
-      (window as any).Sentry = { addBreadcrumb: mockAddBreadcrumb };
+      (window as typeof window & { DD_RUM?: { addAction: typeof mockAddAction } }).DD_RUM = { addAction: mockAddAction };
+      (window as typeof window & { Sentry?: { addBreadcrumb: typeof mockAddBreadcrumb } }).Sentry = { addBreadcrumb: mockAddBreadcrumb };
 
       monitoringService.trackCustomMetric('test.metric', 1);
 

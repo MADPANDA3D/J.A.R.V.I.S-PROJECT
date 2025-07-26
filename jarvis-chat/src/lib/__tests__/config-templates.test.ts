@@ -170,7 +170,7 @@ describe('Configuration Templates Validation', () => {
         const template = readFileSync(join(templatesDir, templateFile), 'utf8');
         const lines = template.split('\n');
 
-        lines.forEach((line, index) => {
+        lines.forEach((line) => {
           // Skip empty lines and comments
           if (!line.trim() || line.trim().startsWith('#')) return;
 

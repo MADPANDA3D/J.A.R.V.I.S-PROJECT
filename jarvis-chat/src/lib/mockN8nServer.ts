@@ -196,7 +196,7 @@ export class MockN8nServer {
     this.scenarios.push({
       name: 'slow-response',
       condition: payload => payload.message.includes('__simulate_slow__'),
-      response: async payload => {
+      response: async () => {
         await this.sleep(2000); // 2 seconds
         return {
           response: `Slow response to: ${payload.message}`,
@@ -210,7 +210,7 @@ export class MockN8nServer {
     this.scenarios.push({
       name: 'large-response',
       condition: payload => payload.message.includes('__simulate_large__'),
-      response: async payload => {
+      response: async () => {
         const largeResponse = 'A'.repeat(10000); // 10KB response
         return {
           response: `Large response: ${largeResponse}`,
@@ -226,7 +226,7 @@ export class MockN8nServer {
         payload.message.includes('__simulate_invalid_format__'),
       response: async () => {
         // Return invalid format (missing required fields)
-        return { invalid: true } as any;
+        return { invalid: true } as unknown as WebhookResponse;
       },
     });
   }

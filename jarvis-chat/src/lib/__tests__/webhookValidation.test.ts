@@ -6,16 +6,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   WebhookValidator,
-  WebhookPayloadSchema,
-  EnhancedWebhookPayloadSchema,
-  WebhookResponseSchema,
-  HealthCheckResponseSchema,
   ValidationErrorSchema,
-  WebhookPayload,
-  EnhancedWebhookPayload,
-  WebhookResponse,
-  HealthCheckResponse,
-  ValidationError,
 } from '../webhookValidation';
 
 describe('WebhookValidation', () => {

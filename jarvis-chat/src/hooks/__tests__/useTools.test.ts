@@ -56,7 +56,7 @@ describe('useTools', () => {
 
   describe('initialization', () => {
     it('should initialize with default tools when user is not logged in', async () => {
-      mockUseAuth.mockReturnValue({ user: null } as any);
+      mockUseAuth.mockReturnValue({ user: null, signOut: vi.fn(), loading: false });
 
       const { result } = renderHook(() => useTools());
 
@@ -67,7 +67,7 @@ describe('useTools', () => {
     });
 
     it('should load saved preferences from localStorage when user is logged in', async () => {
-      mockUseAuth.mockReturnValue({ user: mockUser } as any);
+      mockUseAuth.mockReturnValue({ user: mockUser, signOut: vi.fn(), loading: false });
 
       const savedSelections = JSON.stringify([
         {
@@ -103,7 +103,7 @@ describe('useTools', () => {
 
   describe('tool selection', () => {
     it('should toggle tool selection correctly', async () => {
-      mockUseAuth.mockReturnValue({ user: mockUser } as any);
+      mockUseAuth.mockReturnValue({ user: mockUser, signOut: vi.fn(), loading: false });
 
       const { result } = renderHook(() => useTools());
 
@@ -132,7 +132,7 @@ describe('useTools', () => {
     });
 
     it('should save selections to localStorage when changed', async () => {
-      mockUseAuth.mockReturnValue({ user: mockUser } as any);
+      mockUseAuth.mockReturnValue({ user: mockUser, signOut: vi.fn(), loading: false });
 
       const { result } = renderHook(() => useTools());
 
@@ -153,7 +153,7 @@ describe('useTools', () => {
 
   describe('getSelectedToolIds', () => {
     it('should return only enabled tool IDs', async () => {
-      mockUseAuth.mockReturnValue({ user: mockUser } as any);
+      mockUseAuth.mockReturnValue({ user: mockUser, signOut: vi.fn(), loading: false });
 
       const { result } = renderHook(() => useTools());
 
@@ -185,7 +185,7 @@ describe('useTools', () => {
 
   describe('preferences management', () => {
     it('should update preferences correctly', async () => {
-      mockUseAuth.mockReturnValue({ user: mockUser } as any);
+      mockUseAuth.mockReturnValue({ user: mockUser, signOut: vi.fn(), loading: false });
 
       const { result } = renderHook(() => useTools());
 
@@ -208,7 +208,7 @@ describe('useTools', () => {
 
   describe('resetToDefaults', () => {
     it('should reset to default selections and preferences', async () => {
-      mockUseAuth.mockReturnValue({ user: mockUser } as any);
+      mockUseAuth.mockReturnValue({ user: mockUser, signOut: vi.fn(), loading: false });
 
       const { result } = renderHook(() => useTools());
 
@@ -235,7 +235,7 @@ describe('useTools', () => {
 
   describe('error handling', () => {
     it('should handle localStorage errors gracefully', async () => {
-      mockUseAuth.mockReturnValue({ user: mockUser } as any);
+      mockUseAuth.mockReturnValue({ user: mockUser, signOut: vi.fn(), loading: false });
       localStorageMock.getItem.mockImplementation(() => {
         throw new Error('localStorage error');
       });
@@ -254,7 +254,7 @@ describe('useTools', () => {
 
   describe('analytics', () => {
     it('should generate session ID when recording usage', async () => {
-      mockUseAuth.mockReturnValue({ user: mockUser } as any);
+      mockUseAuth.mockReturnValue({ user: mockUser, signOut: vi.fn(), loading: false });
       console.log = vi.fn(); // Mock console.log
 
       const { result } = renderHook(() => useTools());
@@ -274,7 +274,7 @@ describe('useTools', () => {
     });
 
     it('should not record usage when analytics is disabled', async () => {
-      mockUseAuth.mockReturnValue({ user: mockUser } as any);
+      mockUseAuth.mockReturnValue({ user: mockUser, signOut: vi.fn(), loading: false });
       console.log = vi.fn();
 
       const { result } = renderHook(() => useTools());

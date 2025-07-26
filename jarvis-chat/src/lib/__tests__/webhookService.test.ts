@@ -3,25 +3,24 @@
  * Tests for webhook functionality, error handling, retry logic, and performance
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi, Mock } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import {
   WebhookService,
-  WebhookError,
   WebhookErrorType,
   WebhookPayload,
   WebhookResponse,
 } from '../webhookService';
-import { MockN8nServer, mockN8nServer } from '../mockN8nServer';
+import { MockN8nServer } from '../mockN8nServer';
 
 // Mock fetch globally
-const mockFetch = vi.fn() as Mock;
+const mockFetch = vi.fn() as ReturnType<typeof vi.fn>;
 global.fetch = mockFetch;
 
 // Mock AbortController
 global.AbortController = vi.fn(() => ({
   signal: { aborted: false },
   abort: vi.fn(),
-})) as any;
+})) as unknown as typeof AbortController;
 
 // Mock timers for testing
 vi.useFakeTimers();

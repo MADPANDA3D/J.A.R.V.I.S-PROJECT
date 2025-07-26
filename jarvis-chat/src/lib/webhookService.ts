@@ -270,7 +270,7 @@ export class WebhookService {
       let data;
       try {
         data = JSON.parse(responseText);
-      } catch (parseError) {
+      } catch {
         throw new WebhookError(
           `Webhook returned invalid JSON: ${responseText.substring(0, 100)}${responseText.length > 100 ? '...' : ''}`,
           WebhookErrorType.VALIDATION_ERROR,
@@ -492,33 +492,35 @@ export class WebhookService {
     return Math.floor(delay);
   }
 
-  private classifyError(error: any): WebhookError {
-    if (error.name === 'AbortError') {
+  private classifyError(error: unknown): WebhookError {
+    const errorObj = error as Error;
+    
+    if (errorObj.name === 'AbortError') {
       return new WebhookError(
         'Request timeout',
         WebhookErrorType.TIMEOUT_ERROR,
         408,
         true,
-        error
+        errorObj
       );
     }
 
-    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+    if (errorObj.name === 'TypeError' && errorObj.message?.includes('fetch')) {
       return new WebhookError(
         'Network connection failed',
         WebhookErrorType.NETWORK_ERROR,
         undefined,
         true,
-        error
+        errorObj
       );
     }
 
     return new WebhookError(
-      error.message || 'Unknown error',
+      errorObj.message || 'Unknown error',
       WebhookErrorType.UNKNOWN_ERROR,
       undefined,
       true,
-      error
+      errorObj
     );
   }
 
@@ -527,12 +529,13 @@ export class WebhookService {
     return status >= 500 || status === 429 || status === 408;
   }
 
-  private isValidWebhookResponse(data: any): data is WebhookResponse {
+  private isValidWebhookResponse(data: unknown): data is WebhookResponse {
+    const obj = data as Record<string, unknown>;
     return (
       typeof data === 'object' &&
       data !== null &&
-      typeof data.success === 'boolean' &&
-      (data.success === false || typeof data.response === 'string')
+      typeof obj.success === 'boolean' &&
+      (obj.success === false || typeof obj.response === 'string')
     );
   }
 

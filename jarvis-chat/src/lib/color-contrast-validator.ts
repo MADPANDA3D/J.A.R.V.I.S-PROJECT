@@ -380,7 +380,7 @@ export class ColorContrastValidator {
     totalPairs: number;
   } {
     // Get computed styles from CSS variables
-    const rootStyles = getComputedStyle(document.documentElement);
+    // const rootStyles = getComputedStyle(document.documentElement);
 
     const palette: Partial<ColorPalette> = {
       background: 'hsl(var(--background))',

@@ -82,7 +82,7 @@ export class AccessibilityTester {
   ): Promise<AccessibilityResult> {
     await this.loadAxeCore();
 
-    if (!(window as any).axe) {
+    if (!(window as typeof window & { axe?: { run: (options?: unknown) => Promise<unknown> } }).axe) {
       throw new Error('Axe-core not available');
     }
 
@@ -94,19 +94,19 @@ export class AccessibilityTester {
     };
 
     try {
-      const results = await (window as any).axe.run(document, axeConfig);
+      const results = await (window as typeof window & { axe: { run: (element: Element, options?: unknown) => Promise<unknown> } }).axe.run(document, axeConfig);
 
       const processedResult: AccessibilityResult = {
         violations: results.violations.map(this.processViolation),
-        passes: results.passes.map((pass: any) => ({
+        passes: results.passes.map((pass: { id: string; description: string }) => ({
           id: pass.id,
           description: pass.description,
         })),
-        incomplete: results.incomplete.map((incomplete: any) => ({
+        incomplete: results.incomplete.map((incomplete: { id: string; description: string }) => ({
           id: incomplete.id,
           description: incomplete.description,
         })),
-        inapplicable: results.inapplicable.map((inapplicable: any) => ({
+        inapplicable: results.inapplicable.map((inapplicable: { id: string; description: string }) => ({
           id: inapplicable.id,
           description: inapplicable.description,
         })),
@@ -136,7 +136,19 @@ export class AccessibilityTester {
   /**
    * Process violation data
    */
-  private processViolation(violation: any): AccessibilityViolation {
+  private processViolation(violation: {
+    id: string;
+    impact?: string;
+    description: string;
+    help: string;
+    helpUrl: string;
+    tags: string[];
+    nodes: Array<{
+      html: string;
+      target: string[];
+      failureSummary?: string;
+    }>;
+  }): AccessibilityViolation {
     return {
       id: violation.id,
       impact: violation.impact || 'moderate',
@@ -144,7 +156,7 @@ export class AccessibilityTester {
       help: violation.help,
       helpUrl: violation.helpUrl,
       tags: violation.tags,
-      nodes: violation.nodes.map((node: any) => ({
+      nodes: violation.nodes.map((node) => ({
         html: node.html,
         target: node.target,
         failureSummary: node.failureSummary || '',
@@ -156,8 +168,8 @@ export class AccessibilityTester {
    * Calculate accessibility score (0-100)
    */
   private calculateAccessibilityScore(
-    violations: any[],
-    passes: any[]
+    violations: Array<{ impact?: string }>,
+    passes: unknown[]
   ): number {
     const totalChecks = violations.length + passes.length;
     if (totalChecks === 0) return 100;
@@ -380,7 +392,7 @@ export class AccessibilityTester {
   public async testComponent(selector: string): Promise<AccessibilityResult> {
     await this.loadAxeCore();
 
-    if (!(window as any).axe) {
+    if (!(window as typeof window & { axe?: { run: (options?: unknown) => Promise<unknown> } }).axe) {
       throw new Error('Axe-core not available');
     }
 
@@ -390,18 +402,18 @@ export class AccessibilityTester {
     }
 
     try {
-      const results = await (window as any).axe.run(element);
+      const results = await (window as typeof window & { axe: { run: (element: Element, options?: unknown) => Promise<unknown> } }).axe.run(element);
       return {
         violations: results.violations.map(this.processViolation),
-        passes: results.passes.map((pass: any) => ({
+        passes: results.passes.map((pass: { id: string; description: string }) => ({
           id: pass.id,
           description: pass.description,
         })),
-        incomplete: results.incomplete.map((incomplete: any) => ({
+        incomplete: results.incomplete.map((incomplete: { id: string; description: string }) => ({
           id: incomplete.id,
           description: incomplete.description,
         })),
-        inapplicable: results.inapplicable.map((inapplicable: any) => ({
+        inapplicable: results.inapplicable.map((inapplicable: { id: string; description: string }) => ({
           id: inapplicable.id,
           description: inapplicable.description,
         })),

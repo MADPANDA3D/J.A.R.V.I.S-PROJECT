@@ -153,7 +153,7 @@ export class FocusManager {
     container.addEventListener('keydown', handleKeyDown);
 
     // Store cleanup function
-    (container as any)._focusTrapCleanup = () => {
+    (container as HTMLElement & { _focusTrapCleanup?: () => void })._focusTrapCleanup = () => {
       container.removeEventListener('keydown', handleKeyDown);
     };
 
@@ -166,9 +166,10 @@ export class FocusManager {
    */
   releaseFocusTrap(): void {
     const container = this.trapStack.pop();
-    if (container && (container as any)._focusTrapCleanup) {
-      (container as any)._focusTrapCleanup();
-      delete (container as any)._focusTrapCleanup;
+    const containerWithCleanup = container as HTMLElement & { _focusTrapCleanup?: () => void };
+    if (container && containerWithCleanup._focusTrapCleanup) {
+      containerWithCleanup._focusTrapCleanup();
+      delete containerWithCleanup._focusTrapCleanup;
     }
     this.restoreFocus();
   }

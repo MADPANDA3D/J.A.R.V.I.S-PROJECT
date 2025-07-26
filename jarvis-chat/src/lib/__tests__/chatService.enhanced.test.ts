@@ -3,7 +3,7 @@
  * Tests for enhanced webhook integration and error handling
  */
 
-import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { chatService } from '../chatService';
 import * as webhookServiceModule from '../webhookService';
 
@@ -69,7 +69,11 @@ vi.mock('../supabase', () => ({
 }));
 
 describe('ChatService - Enhanced Integration', () => {
-  const mockWebhookService = webhookServiceModule.webhookService as any;
+  const mockWebhookService = webhookServiceModule.webhookService as typeof webhookServiceModule.webhookService & {
+    sendMessage: ReturnType<typeof vi.fn>;
+    healthCheck: ReturnType<typeof vi.fn>;
+    getMetrics: ReturnType<typeof vi.fn>;
+  };
 
   beforeEach(() => {
     vi.clearAllMocks();

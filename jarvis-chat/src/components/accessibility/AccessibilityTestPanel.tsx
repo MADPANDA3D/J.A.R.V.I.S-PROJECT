@@ -269,7 +269,7 @@ export const AccessibilityTestPanel: React.FC<AccessibilityTestPanelProps> = ({
                   Top Violations
                 </h4>
                 <div className="space-y-2">
-                  {lastResult.violations.slice(0, 5).map((violation, index) => (
+                  {lastResult.violations.slice(0, 5).map((violation) => (
                     <div
                       key={violation.id}
                       className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg"

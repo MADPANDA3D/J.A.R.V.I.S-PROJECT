@@ -6,7 +6,6 @@ import {
   Settings,
   User,
   Bell,
-  Palette,
   Database,
   LogOut,
   Save,

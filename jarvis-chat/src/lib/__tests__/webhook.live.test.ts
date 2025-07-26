@@ -51,10 +51,11 @@ describe('Live Webhook Test', () => {
 
         expect(response.success).toBe(true);
         expect(response.response).toBeDefined();
-      } catch (error: any) {
-        console.log('❌ Webhook Error:', error.message);
-        console.log('   Type:', error.type);
-        console.log('   Status:', error.statusCode);
+      } catch (error: unknown) {
+        const err = error as { message?: string; type?: string; statusCode?: number };
+        console.log('❌ Webhook Error:', err.message);
+        console.log('   Type:', err.type);
+        console.log('   Status:', err.statusCode);
 
         // This is expected if n8n returns empty response
         if (error.message.includes('empty response')) {

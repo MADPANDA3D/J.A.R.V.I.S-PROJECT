@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import type { ValidationResult } from '../env-validation';
 
 // Mock import.meta.env
 const mockEnv: Record<string, string | undefined> = {};

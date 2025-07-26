@@ -13,13 +13,13 @@ const mockEnv = {
 
 // Mock the env-validation module with controlled import.meta.env
 vi.mock('../env-validation', async () => {
-  const actual = (await vi.importActual('../env-validation')) as any;
+  const actual = (await vi.importActual('../env-validation')) as Record<string, unknown>;
 
   // Override import.meta.env for this module
   const mockValidateEnvironment = () => {
     const errors: string[] = [];
     const warnings: string[] = [];
-    const config: any = {};
+    const config: Record<string, string> = {};
 
     // Required variables
     const supabaseUrl = mockEnv.VITE_SUPABASE_URL;

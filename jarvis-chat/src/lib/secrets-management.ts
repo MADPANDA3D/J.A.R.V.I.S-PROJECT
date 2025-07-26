@@ -333,7 +333,7 @@ export class SecretsManager {
 
     // Environment-specific validations
     if (environment === 'production') {
-      this.validateProductionSecret(secret, errors, warnings);
+      this.validateProductionSecret(secret, errors);
     }
   }
 
@@ -414,8 +414,7 @@ export class SecretsManager {
    */
   private validateProductionSecret(
     secret: SecretConfig,
-    errors: SecretError[],
-    warnings: SecretWarning[]
+    errors: SecretError[]
   ): void {
     // Production secrets must be strong
     if (

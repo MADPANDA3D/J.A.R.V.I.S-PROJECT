@@ -10,7 +10,6 @@ import {
   ChevronDown,
 } from 'lucide-react';
 import { useTools } from '../../hooks/useTools';
-import { AVAILABLE_TOOLS } from '../../types/tools';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,7 +42,6 @@ export function ToolsSelector({
 }: ToolsSelectorProps) {
   const {
     availableTools,
-    selectedTools,
     toggleTool,
     isToolSelected,
     getSelectedToolIds,

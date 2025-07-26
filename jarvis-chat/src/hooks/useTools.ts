@@ -5,7 +5,6 @@ import {
   type AvailableTool,
   type ToolPreferences,
 } from '../types/tools';
-import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 
 interface UseToolsReturn {

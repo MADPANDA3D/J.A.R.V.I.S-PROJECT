@@ -78,7 +78,7 @@ export interface ConversionFunnel {
 
 class MetricsService {
   private sessions: Map<string, UserSession> = new Map();
-  private dailyMetrics: Map<string, any> = new Map();
+  private dailyMetrics: Map<string, number> = new Map();
   private kpis: KPIData[] = [];
   private currentSessionId: string;
   private sessionStartTime: number;
@@ -218,7 +218,7 @@ class MetricsService {
     });
   }
 
-  private throttle(func: Function, delay: number): () => void {
+  private throttle(func: () => void, delay: number): () => void {
     let timeoutId: number | undefined;
     let lastExecTime = 0;
 
@@ -425,7 +425,6 @@ class MetricsService {
     const messageKPIs = relevantKPIs.filter(kpi =>
       kpi.name.startsWith('message.')
     );
-    const userKPIs = relevantKPIs.filter(kpi => kpi.name.startsWith('user.'));
     const performanceKPIs = relevantKPIs.filter(kpi =>
       kpi.name.startsWith('performance.')
     );
@@ -620,7 +619,7 @@ class MetricsService {
     try {
       // Collect memory usage if available
       if ('memory' in performance) {
-        const memory = (performance as any).memory;
+        const memory = (performance as unknown as { memory: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
         this.trackPerformanceMetric('memory.used', memory.usedJSHeapSize);
         this.trackPerformanceMetric('memory.total', memory.totalJSHeapSize);
         this.trackPerformanceMetric('memory.limit', memory.jsHeapSizeLimit);
@@ -628,14 +627,14 @@ class MetricsService {
 
       // Collect connection info
       if ('connection' in navigator) {
-        const connection = (navigator as any).connection;
+        const connection = (navigator as unknown as { connection: { rtt: number; downlink: number } }).connection;
         this.trackPerformanceMetric('network.rtt', connection.rtt || 0);
         this.trackPerformanceMetric(
           'network.downlink',
           connection.downlink || 0
         );
       }
-    } catch (error) {
+    } catch {
       monitoringService.captureException(
         error instanceof Error
           ? error
@@ -659,7 +658,7 @@ class MetricsService {
 
       if (healthData.checks) {
         Object.entries(healthData.checks).forEach(
-          ([check, result]: [string, any]) => {
+          ([check, result]: [string, { status: string }]) => {
             this.trackKPI(
               `system.${check}`,
               result.status === 'up' ? 1 : 0,
@@ -669,7 +668,7 @@ class MetricsService {
           }
         );
       }
-    } catch (error) {
+    } catch {
       this.trackKPI('system.health_check_status', 0, 'status', 'technical');
     }
   }
@@ -701,7 +700,7 @@ class MetricsService {
           'business'
         );
       }
-    } catch (error) {
+    } catch {
       monitoringService.captureException(
         error instanceof Error
           ? error

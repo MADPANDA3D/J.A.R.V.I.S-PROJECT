@@ -5,7 +5,7 @@
 
 import { errorTracker, ErrorReport } from './errorTracking';
 import { monitoringService } from './monitoring';
-import { captureError, captureWarning, captureInfo } from './errorTracking';
+import { captureError, captureWarning } from './errorTracking';
 
 // Enhanced error interfaces
 export interface ErrorPattern {
@@ -278,7 +278,7 @@ class AdvancedErrorTracker {
     }
 
     // Automatic recovery attempt
-    this.attemptErrorRecovery(errorMessage, error, context);
+    this.attemptErrorRecovery(errorMessage);
 
     // Track in monitoring service
     monitoringService.trackCustomMetric('error.advanced.captured', 1, {
@@ -423,7 +423,7 @@ class AdvancedErrorTracker {
         case 'count':
           value = recentErrors.length;
           break;
-        case 'rate':
+        case 'rate': {
           // Calculate error rate as percentage of total interactions
           const totalInteractions = this.getTotalInteractions(cutoff);
           value =
@@ -431,12 +431,14 @@ class AdvancedErrorTracker {
               ? (recentErrors.length / totalInteractions) * 100
               : 0;
           break;
-        case 'unique_users':
+        }
+        case 'unique_users': {
           const uniqueUsers = new Set(
             recentErrors.map(e => e.userId).filter(Boolean)
           );
           value = uniqueUsers.size;
           break;
+        }
         case 'pattern_frequency':
           value = Math.max(
             ...Array.from(this.patterns.values())
@@ -578,9 +580,7 @@ class AdvancedErrorTracker {
   }
 
   private attemptErrorRecovery(
-    message: string,
-    error: Error | string,
-    context: Record<string, unknown>
+    message: string
   ): void {
     const errorType = this.categorizeError(message);
     const recovery = this.recoveryStrategies.get(errorType);

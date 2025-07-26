@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Send } from 'lucide-react';
 import { ToolsSelector } from './ToolsSelector';
 import { useTools } from '@/hooks/useTools';
-import { focusManager, screenReader } from '@/lib/accessibility';
+import { screenReader } from '@/lib/accessibility';
 
 interface MessageInputProps {
   value: string;

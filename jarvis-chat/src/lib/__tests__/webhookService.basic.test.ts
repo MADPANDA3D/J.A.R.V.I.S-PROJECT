@@ -3,10 +3,9 @@
  * Focused tests for core webhook functionality
  */
 
-import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   WebhookService,
-  WebhookError,
   WebhookErrorType,
   WebhookPayload,
   WebhookResponse,
@@ -20,7 +19,7 @@ global.fetch = mockFetch;
 global.AbortController = vi.fn(() => ({
   signal: { aborted: false },
   abort: vi.fn(),
-})) as any;
+})) as unknown as typeof AbortController;
 
 describe('WebhookService - Basic Tests', () => {
   let webhookService: WebhookService;
