@@ -58,7 +58,30 @@ const performanceMetrics = {
         averageResponseTime: 0,
         p95ResponseTime: 0,
         requestsPerMinute: 0,
-        lastRequestTime: null
+        lastRequestTime: null,
+        // Enhanced error categorization
+        errorCategories: {
+            authenticationErrors: 0,
+            malformedPayloads: 0,
+            processingErrors: 0,
+            networkErrors: 0,
+            timeoutErrors: 0,
+            unknownErrors: 0
+        },
+        // Detailed response time tracking
+        responseTimesByEvent: {
+            ping: [],
+            workflow_run: [],
+            unsupported: []
+        },
+        // Connection status tracking
+        connectionHealth: {
+            githubConnectivity: 'healthy',
+            lastGithubRequest: null,
+            consecutiveFailures: 0,
+            totalRetries: 0,
+            avgLatency: 0
+        }
     },
     serviceHealth: {
         webhookServer: { 
@@ -67,7 +90,9 @@ const performanceMetrics = {
             errors: 0, 
             uptime: 0,
             lastHealthCheck: null,
-            errorRate: 0
+            errorRate: 0,
+            peakRequestsPerMinute: 0,
+            currentLoad: 0
         },
         websocketServer: { 
             status: 'healthy', 
@@ -75,20 +100,37 @@ const performanceMetrics = {
             connections: 0,
             totalConnections: 0,
             messagesDelivered: 0,
-            lastConnectionTime: null
+            lastConnectionTime: null,
+            connectionErrors: 0,
+            messageFailures: 0
         },
         authentication: { 
             status: 'healthy', 
             secretConfigured: false,
             successRate: 100,
             totalAttempts: 0,
-            failures: 0
+            failures: 0,
+            lastFailureTime: null,
+            failureStreak: 0
         }
     },
     systemHealth: {
         memory: { used: 0, total: 0, percentage: 0 },
         cpu: { usage: 0 },
-        disk: { available: 0, used: 0, percentage: 0 }
+        disk: { available: 0, used: 0, percentage: 0 },
+        network: {
+            inboundConnections: 0,
+            outboundConnections: 0,
+            dataTransfer: { in: 0, out: 0 }
+        }
+    },
+    // Performance trends (last 60 data points = 30 minutes at 30-second intervals)
+    performanceTrends: {
+        timestamps: [],
+        successRates: [],
+        responseTimes: [],
+        errorRates: [],
+        connectionCounts: []
     }
 };
 
@@ -146,20 +188,50 @@ const updateSystemHealth = () => {
     });
 };
 
-const recordWebhookProcessing = (processingTime, success = true, authSuccess = true) => {
+const recordWebhookProcessing = (processingTime, success = true, authSuccess = true, eventType = 'unknown', errorCategory = null) => {
+    const now = Date.now();
     performanceMetrics.webhookStats.totalProcessed++;
-    performanceMetrics.webhookStats.lastRequestTime = Date.now();
+    performanceMetrics.webhookStats.lastRequestTime = now;
+    
+    // Update GitHub connectivity status
+    performanceMetrics.webhookStats.connectionHealth.lastGithubRequest = now;
+    if (success) {
+        performanceMetrics.webhookStats.connectionHealth.consecutiveFailures = 0;
+        performanceMetrics.webhookStats.connectionHealth.githubConnectivity = 'healthy';
+    } else {
+        performanceMetrics.webhookStats.connectionHealth.consecutiveFailures++;
+        if (performanceMetrics.webhookStats.connectionHealth.consecutiveFailures >= 3) {
+            performanceMetrics.webhookStats.connectionHealth.githubConnectivity = 'degraded';
+        }
+        if (performanceMetrics.webhookStats.connectionHealth.consecutiveFailures >= 5) {
+            performanceMetrics.webhookStats.connectionHealth.githubConnectivity = 'unhealthy';
+        }
+    }
     
     if (success) {
         performanceMetrics.webhookStats.successful++;
     } else {
         performanceMetrics.webhookStats.failed++;
         performanceMetrics.serviceHealth.webhookServer.errors++;
+        
+        // Categorize the error
+        if (errorCategory) {
+            if (performanceMetrics.webhookStats.errorCategories[errorCategory] !== undefined) {
+                performanceMetrics.webhookStats.errorCategories[errorCategory]++;
+            } else {
+                performanceMetrics.webhookStats.errorCategories.unknownErrors++;
+            }
+        }
     }
     
     if (!authSuccess) {
         performanceMetrics.webhookStats.authFailures++;
         performanceMetrics.serviceHealth.authentication.failures++;
+        performanceMetrics.serviceHealth.authentication.lastFailureTime = now;
+        performanceMetrics.serviceHealth.authentication.failureStreak++;
+        performanceMetrics.webhookStats.errorCategories.authenticationErrors++;
+    } else {
+        performanceMetrics.serviceHealth.authentication.failureStreak = 0;
     }
     
     performanceMetrics.serviceHealth.authentication.totalAttempts++;
@@ -170,7 +242,27 @@ const recordWebhookProcessing = (processingTime, success = true, authSuccess = t
         performanceMetrics.webhookStats.processingTimes.shift();
     }
     
+    // Track response times by event type
+    const eventTypeKey = eventType.toLowerCase().replace(/[^a-z_]/g, '_');
+    if (performanceMetrics.webhookStats.responseTimesByEvent[eventTypeKey]) {
+        performanceMetrics.webhookStats.responseTimesByEvent[eventTypeKey].push(processingTime);
+        // Keep only last 50 times per event type
+        if (performanceMetrics.webhookStats.responseTimesByEvent[eventTypeKey].length > 50) {
+            performanceMetrics.webhookStats.responseTimesByEvent[eventTypeKey].shift();
+        }
+    }
+    
+    // Calculate current load (requests per minute)
+    const oneMinuteAgo = now - 60000;
+    const recentRequests = performanceMetrics.webhookStats.processingTimes.length;
+    performanceMetrics.serviceHealth.webhookServer.currentLoad = recentRequests;
+    
+    if (recentRequests > performanceMetrics.serviceHealth.webhookServer.peakRequestsPerMinute) {
+        performanceMetrics.serviceHealth.webhookServer.peakRequestsPerMinute = recentRequests;
+    }
+    
     updatePerformanceMetrics();
+    recordPerformanceTrend();
 };
 
 const getServiceStatus = () => {
@@ -224,13 +316,28 @@ const getServiceStatus = () => {
                 success_rate: parseFloat(((performanceMetrics.webhookStats.successful / Math.max(performanceMetrics.webhookStats.totalProcessed, 1)) * 100).toFixed(2)),
                 total_processed: performanceMetrics.webhookStats.totalProcessed,
                 avg_response_time: parseFloat(performanceMetrics.webhookStats.averageResponseTime.toFixed(2)),
-                p95_response_time: parseFloat(performanceMetrics.webhookStats.p95ResponseTime.toFixed(2))
+                p95_response_time: parseFloat(performanceMetrics.webhookStats.p95ResponseTime.toFixed(2)),
+                current_load: performanceMetrics.serviceHealth.webhookServer.currentLoad,
+                peak_load: performanceMetrics.serviceHealth.webhookServer.peakRequestsPerMinute
             },
             event_processing: {
                 ping_events: performanceMetrics.webhookStats.eventTypes.ping,
                 workflow_run_events: performanceMetrics.webhookStats.eventTypes.workflow_run,
-                unsupported_events: performanceMetrics.webhookStats.eventTypes.unsupported
+                unsupported_events: performanceMetrics.webhookStats.eventTypes.unsupported,
+                response_times_by_event: {
+                    ping_avg: performanceMetrics.webhookStats.responseTimesByEvent.ping.length > 0 ?
+                        parseFloat((performanceMetrics.webhookStats.responseTimesByEvent.ping.reduce((a, b) => a + b, 0) / 
+                        performanceMetrics.webhookStats.responseTimesByEvent.ping.length).toFixed(2)) : 0,
+                    workflow_run_avg: performanceMetrics.webhookStats.responseTimesByEvent.workflow_run.length > 0 ?
+                        parseFloat((performanceMetrics.webhookStats.responseTimesByEvent.workflow_run.reduce((a, b) => a + b, 0) / 
+                        performanceMetrics.webhookStats.responseTimesByEvent.workflow_run.length).toFixed(2)) : 0,
+                    unsupported_avg: performanceMetrics.webhookStats.responseTimesByEvent.unsupported.length > 0 ?
+                        parseFloat((performanceMetrics.webhookStats.responseTimesByEvent.unsupported.reduce((a, b) => a + b, 0) / 
+                        performanceMetrics.webhookStats.responseTimesByEvent.unsupported.length).toFixed(2)) : 0
+                }
             },
+            error_analysis: getDetailedErrorAnalysis(),
+            connection_status: getConnectionStatusReport(),
             system_resources: {
                 memory: {
                     used_mb: parseFloat((performanceMetrics.systemHealth.memory.used / 1024 / 1024).toFixed(2)),
@@ -239,7 +346,21 @@ const getServiceStatus = () => {
                 },
                 cpu: {
                     usage_percentage: parseFloat(performanceMetrics.systemHealth.cpu.usage.toFixed(2))
+                },
+                network: {
+                    inbound_connections: performanceMetrics.systemHealth.network.inboundConnections,
+                    outbound_connections: performanceMetrics.systemHealth.network.outboundConnections
                 }
+            },
+            performance_trends: {
+                data_points: performanceMetrics.performanceTrends.timestamps.length,
+                time_range_minutes: performanceMetrics.performanceTrends.timestamps.length > 1 ?
+                    Math.round((performanceMetrics.performanceTrends.timestamps[performanceMetrics.performanceTrends.timestamps.length - 1] - 
+                    performanceMetrics.performanceTrends.timestamps[0]) / 60000) : 0,
+                recent_success_rate: performanceMetrics.performanceTrends.successRates.length > 0 ?
+                    performanceMetrics.performanceTrends.successRates[performanceMetrics.performanceTrends.successRates.length - 1] : 0,
+                recent_avg_response_time: performanceMetrics.performanceTrends.responseTimes.length > 0 ?
+                    performanceMetrics.performanceTrends.responseTimes[performanceMetrics.performanceTrends.responseTimes.length - 1] : 0
             }
         }
     };
@@ -255,6 +376,116 @@ const formatUptime = (milliseconds) => {
     if (hours > 0) return `${hours}h ${minutes % 60}m ${seconds % 60}s`;
     if (minutes > 0) return `${minutes}m ${seconds % 60}s`;
     return `${seconds}s`;
+};
+
+// Enhanced performance tracking functions
+const recordPerformanceTrend = () => {
+    const now = Date.now();
+    const trends = performanceMetrics.performanceTrends;
+    
+    // Only record every 30 seconds to avoid excessive data
+    if (trends.timestamps.length === 0 || now - trends.timestamps[trends.timestamps.length - 1] >= 30000) {
+        trends.timestamps.push(now);
+        
+        // Calculate current success rate
+        const total = performanceMetrics.webhookStats.totalProcessed;
+        const successRate = total > 0 ? (performanceMetrics.webhookStats.successful / total) * 100 : 100;
+        trends.successRates.push(parseFloat(successRate.toFixed(2)));
+        
+        // Record current average response time
+        trends.responseTimes.push(parseFloat(performanceMetrics.webhookStats.averageResponseTime.toFixed(2)));
+        
+        // Record current error rate
+        const errorRate = total > 0 ? (performanceMetrics.webhookStats.failed / total) * 100 : 0;
+        trends.errorRates.push(parseFloat(errorRate.toFixed(2)));
+        
+        // Record current connection count
+        trends.connectionCounts.push(performanceMetrics.serviceHealth.websocketServer.connections);
+        
+        // Keep only last 60 data points (30 minutes)
+        const maxPoints = 60;
+        if (trends.timestamps.length > maxPoints) {
+            trends.timestamps.shift();
+            trends.successRates.shift();
+            trends.responseTimes.shift();
+            trends.errorRates.shift();
+            trends.connectionCounts.shift();
+        }
+    }
+};
+
+const getDetailedErrorAnalysis = () => {
+    const errors = performanceMetrics.webhookStats.errorCategories;
+    const totalErrors = Object.values(errors).reduce((sum, count) => sum + count, 0);
+    
+    const analysis = {
+        total_errors: totalErrors,
+        error_breakdown: {},
+        most_common_error: 'none',
+        error_trend: 'stable'
+    };
+    
+    if (totalErrors > 0) {
+        // Calculate error percentages
+        Object.entries(errors).forEach(([category, count]) => {
+            if (count > 0) {
+                analysis.error_breakdown[category] = {
+                    count,
+                    percentage: parseFloat(((count / totalErrors) * 100).toFixed(2))
+                };
+            }
+        });
+        
+        // Find most common error
+        const maxError = Object.entries(errors).reduce((max, [category, count]) => 
+            count > max.count ? { category, count } : max, { category: 'none', count: 0 });
+        analysis.most_common_error = maxError.category;
+        
+        // Determine error trend from recent data
+        const trends = performanceMetrics.performanceTrends;
+        if (trends.errorRates.length >= 3) {
+            const recent = trends.errorRates.slice(-3);
+            const increasing = recent[2] > recent[1] && recent[1] > recent[0];
+            const decreasing = recent[2] < recent[1] && recent[1] < recent[0];
+            
+            if (increasing) analysis.error_trend = 'increasing';
+            else if (decreasing) analysis.error_trend = 'decreasing';
+        }
+    }
+    
+    return analysis;
+};
+
+const getConnectionStatusReport = () => {
+    const connection = performanceMetrics.webhookStats.connectionHealth;
+    const now = Date.now();
+    
+    return {
+        github_connectivity: {
+            status: connection.githubConnectivity,
+            last_request: connection.lastGithubRequest ? 
+                new Date(connection.lastGithubRequest).toISOString() : null,
+            consecutive_failures: connection.consecutiveFailures,
+            total_retries: connection.totalRetries,
+            avg_latency_ms: parseFloat(connection.avgLatency.toFixed(2)),
+            time_since_last_request: connection.lastGithubRequest ? 
+                formatUptime(now - connection.lastGithubRequest) : 'never'
+        },
+        webhook_server: {
+            port: performanceMetrics.serviceHealth.webhookServer.port,
+            current_load: performanceMetrics.serviceHealth.webhookServer.currentLoad,
+            peak_load: performanceMetrics.serviceHealth.webhookServer.peakRequestsPerMinute,
+            error_rate: parseFloat(performanceMetrics.serviceHealth.webhookServer.errorRate.toFixed(2))
+        },
+        websocket_server: {
+            port: performanceMetrics.serviceHealth.websocketServer.port,
+            active_connections: performanceMetrics.serviceHealth.websocketServer.connections,
+            connection_errors: performanceMetrics.serviceHealth.websocketServer.connectionErrors,
+            message_failures: performanceMetrics.serviceHealth.websocketServer.messageFailures,
+            last_connection: performanceMetrics.serviceHealth.websocketServer.lastConnectionTime ?
+                new Date(performanceMetrics.serviceHealth.websocketServer.lastConnectionTime).toISOString() : null
+        }
+    };
 };
 
 // Update metrics every 30 seconds
@@ -632,6 +863,150 @@ app.get('/webhook/health', (req, res) => {
     }
 });
 
+// Enhanced performance metrics endpoint
+app.get('/webhook/metrics', async (req, res) => {
+    try {
+        const now = Date.now();
+        const uptime = now - performanceMetrics.startTime;
+        
+        const metricsReport = {
+            timestamp: new Date(now).toISOString(),
+            collection_period: {
+                start_time: new Date(performanceMetrics.startTime).toISOString(),
+                uptime_ms: uptime,
+                uptime_human: formatUptime(uptime)
+            },
+            webhook_performance: {
+                total_requests: performanceMetrics.webhookStats.totalProcessed,
+                successful_requests: performanceMetrics.webhookStats.successful,
+                failed_requests: performanceMetrics.webhookStats.failed,
+                success_rate: performanceMetrics.webhookStats.totalProcessed > 0 ? 
+                    parseFloat(((performanceMetrics.webhookStats.successful / performanceMetrics.webhookStats.totalProcessed) * 100).toFixed(2)) : 100,
+                authentication: {
+                    total_attempts: performanceMetrics.serviceHealth.authentication.totalAttempts,
+                    failures: performanceMetrics.webhookStats.authFailures,
+                    success_rate: performanceMetrics.serviceHealth.authentication.successRate,
+                    current_failure_streak: performanceMetrics.serviceHealth.authentication.failureStreak,
+                    last_failure: performanceMetrics.serviceHealth.authentication.lastFailureTime ?
+                        new Date(performanceMetrics.serviceHealth.authentication.lastFailureTime).toISOString() : null
+                },
+                response_times: {
+                    average_ms: parseFloat(performanceMetrics.webhookStats.averageResponseTime.toFixed(2)),
+                    p95_ms: parseFloat(performanceMetrics.webhookStats.p95ResponseTime.toFixed(2)),
+                    recent_samples: performanceMetrics.webhookStats.processingTimes.slice(-10),
+                    by_event_type: {
+                        ping: {
+                            count: performanceMetrics.webhookStats.responseTimesByEvent.ping.length,
+                            avg_ms: performanceMetrics.webhookStats.responseTimesByEvent.ping.length > 0 ?
+                                parseFloat((performanceMetrics.webhookStats.responseTimesByEvent.ping.reduce((a, b) => a + b, 0) / 
+                                performanceMetrics.webhookStats.responseTimesByEvent.ping.length).toFixed(2)) : 0
+                        },
+                        workflow_run: {
+                            count: performanceMetrics.webhookStats.responseTimesByEvent.workflow_run.length,
+                            avg_ms: performanceMetrics.webhookStats.responseTimesByEvent.workflow_run.length > 0 ?
+                                parseFloat((performanceMetrics.webhookStats.responseTimesByEvent.workflow_run.reduce((a, b) => a + b, 0) / 
+                                performanceMetrics.webhookStats.responseTimesByEvent.workflow_run.length).toFixed(2)) : 0
+                        },
+                        unsupported: {
+                            count: performanceMetrics.webhookStats.responseTimesByEvent.unsupported.length,
+                            avg_ms: performanceMetrics.webhookStats.responseTimesByEvent.unsupported.length > 0 ?
+                                parseFloat((performanceMetrics.webhookStats.responseTimesByEvent.unsupported.reduce((a, b) => a + b, 0) / 
+                                performanceMetrics.webhookStats.responseTimesByEvent.unsupported.length).toFixed(2)) : 0
+                        }
+                    }
+                },
+                load_metrics: {
+                    current_requests_per_minute: performanceMetrics.serviceHealth.webhookServer.currentLoad,
+                    peak_requests_per_minute: performanceMetrics.serviceHealth.webhookServer.peakRequestsPerMinute,
+                    last_request: performanceMetrics.webhookStats.lastRequestTime ?
+                        new Date(performanceMetrics.webhookStats.lastRequestTime).toISOString() : null,
+                    time_since_last_request: performanceMetrics.webhookStats.lastRequestTime ?
+                        formatUptime(now - performanceMetrics.webhookStats.lastRequestTime) : 'never'
+                }
+            },
+            event_breakdown: {
+                ping_events: {
+                    count: performanceMetrics.webhookStats.eventTypes.ping,
+                    percentage: performanceMetrics.webhookStats.totalProcessed > 0 ?
+                        parseFloat(((performanceMetrics.webhookStats.eventTypes.ping / performanceMetrics.webhookStats.totalProcessed) * 100).toFixed(2)) : 0
+                },
+                workflow_run_events: {
+                    count: performanceMetrics.webhookStats.eventTypes.workflow_run,
+                    percentage: performanceMetrics.webhookStats.totalProcessed > 0 ?
+                        parseFloat(((performanceMetrics.webhookStats.eventTypes.workflow_run / performanceMetrics.webhookStats.totalProcessed) * 100).toFixed(2)) : 0
+                },
+                unsupported_events: {
+                    count: performanceMetrics.webhookStats.eventTypes.unsupported,
+                    percentage: performanceMetrics.webhookStats.totalProcessed > 0 ?
+                        parseFloat(((performanceMetrics.webhookStats.eventTypes.unsupported / performanceMetrics.webhookStats.totalProcessed) * 100).toFixed(2)) : 0
+                }
+            },
+            error_analysis: getDetailedErrorAnalysis(),
+            connection_monitoring: getConnectionStatusReport(),
+            websocket_metrics: {
+                active_connections: performanceMetrics.serviceHealth.websocketServer.connections,
+                total_lifetime_connections: performanceMetrics.serviceHealth.websocketServer.totalConnections,
+                messages_delivered: performanceMetrics.serviceHealth.websocketServer.messagesDelivered,
+                connection_errors: performanceMetrics.serviceHealth.websocketServer.connectionErrors,
+                message_failures: performanceMetrics.serviceHealth.websocketServer.messageFailures,
+                last_connection: performanceMetrics.serviceHealth.websocketServer.lastConnectionTime ?
+                    new Date(performanceMetrics.serviceHealth.websocketServer.lastConnectionTime).toISOString() : null
+            },
+            performance_trends: {
+                data_points: performanceMetrics.performanceTrends.timestamps.length,
+                time_range: {
+                    start: performanceMetrics.performanceTrends.timestamps.length > 0 ?
+                        new Date(performanceMetrics.performanceTrends.timestamps[0]).toISOString() : null,
+                    end: performanceMetrics.performanceTrends.timestamps.length > 0 ?
+                        new Date(performanceMetrics.performanceTrends.timestamps[performanceMetrics.performanceTrends.timestamps.length - 1]).toISOString() : null,
+                    duration_minutes: performanceMetrics.performanceTrends.timestamps.length > 1 ?
+                        Math.round((performanceMetrics.performanceTrends.timestamps[performanceMetrics.performanceTrends.timestamps.length - 1] - 
+                        performanceMetrics.performanceTrends.timestamps[0]) / 60000) : 0
+                },
+                latest_values: {
+                    success_rate: performanceMetrics.performanceTrends.successRates.length > 0 ?
+                        performanceMetrics.performanceTrends.successRates[performanceMetrics.performanceTrends.successRates.length - 1] : 0,
+                    avg_response_time: performanceMetrics.performanceTrends.responseTimes.length > 0 ?
+                        performanceMetrics.performanceTrends.responseTimes[performanceMetrics.performanceTrends.responseTimes.length - 1] : 0,
+                    error_rate: performanceMetrics.performanceTrends.errorRates.length > 0 ?
+                        performanceMetrics.performanceTrends.errorRates[performanceMetrics.performanceTrends.errorRates.length - 1] : 0,
+                    connection_count: performanceMetrics.performanceTrends.connectionCounts.length > 0 ?
+                        performanceMetrics.performanceTrends.connectionCounts[performanceMetrics.performanceTrends.connectionCounts.length - 1] : 0
+                },
+                trend_data: {
+                    timestamps: performanceMetrics.performanceTrends.timestamps,
+                    success_rates: performanceMetrics.performanceTrends.successRates,
+                    response_times: performanceMetrics.performanceTrends.responseTimes,
+                    error_rates: performanceMetrics.performanceTrends.errorRates,
+                    connection_counts: performanceMetrics.performanceTrends.connectionCounts
+                }
+            },
+            system_resources: {
+                memory: {
+                    used_mb: parseFloat((performanceMetrics.systemHealth.memory.used / 1024 / 1024).toFixed(2)),
+                    total_mb: parseFloat((performanceMetrics.systemHealth.memory.total / 1024 / 1024).toFixed(2)),
+                    usage_percentage: parseFloat(performanceMetrics.systemHealth.memory.percentage.toFixed(2))
+                },
+                cpu: {
+                    usage_percentage: parseFloat(performanceMetrics.systemHealth.cpu.usage.toFixed(2))
+                },
+                network: {
+                    inbound_connections: performanceMetrics.systemHealth.network.inboundConnections,
+                    outbound_connections: performanceMetrics.systemHealth.network.outboundConnections
+                }
+            }
+        };
+        
+        res.json(metricsReport);
+    } catch (error) {
+        console.error('❌ Metrics endpoint error:', error);
+        res.status(500).json({
+            error: 'Failed to generate metrics report',
+            timestamp: new Date().toISOString()
+        });
+    }
+});
+
 // GitHub webhook endpoint for deployments
 app.post('/webhook/deploy', async (req, res) => {
     const startTime = Date.now();
@@ -653,7 +1028,7 @@ app.post('/webhook/deploy', async (req, res) => {
                 event: req.headers['x-github-event']
             });
             
-            recordWebhookProcessing(Date.now() - startTime, false, false);
+            recordWebhookProcessing(Date.now() - startTime, false, false, 'authentication', 'authenticationErrors');
             
             return res.status(401).json(createWebhookResponse(
                 RESPONSE_TYPES.ERROR,
@@ -666,11 +1041,16 @@ app.post('/webhook/deploy', async (req, res) => {
         
         // Validate payload structure
         if (!data || typeof data !== 'object') {
+            processingSuccess = false;
+            
             await logAction('WEBHOOK_MALFORMED_PAYLOAD', { 
                 event,
                 content_type: req.headers['content-type'],
                 body_type: typeof req.body
             });
+            
+            recordWebhookProcessing(Date.now() - startTime, false, authSuccess, event, 'malformedPayloads');
+            
             return res.status(400).json(createWebhookResponse(
                 RESPONSE_TYPES.ERROR,
                 'Malformed payload - expected JSON object'
@@ -727,18 +1107,22 @@ app.post('/webhook/deploy', async (req, res) => {
                 }
         }
         
-        recordWebhookProcessing(Date.now() - startTime, true, authSuccess);
+        recordWebhookProcessing(Date.now() - startTime, true, authSuccess, event);
         res.json(response);
         
     } catch (error) {
         processingSuccess = false;
-        recordWebhookProcessing(Date.now() - startTime, false, authSuccess);
+        const errorCategory = error.code === 'TIMEOUT' ? 'timeoutErrors' : 
+                             error.code === 'ECONNREFUSED' ? 'networkErrors' : 'processingErrors';
+        
+        recordWebhookProcessing(Date.now() - startTime, false, authSuccess, req.headers['x-github-event'] || 'unknown', errorCategory);
         
         console.error('❌ Webhook error:', error);
         await logAction('WEBHOOK_ERROR', { 
             error: error.message,
             stack: error.stack,
-            event: req.headers['x-github-event']
+            event: req.headers['x-github-event'],
+            error_category: errorCategory
         });
         res.status(500).json(createWebhookResponse(
             RESPONSE_TYPES.ERROR,
