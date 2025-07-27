@@ -1,0 +1,652 @@
+workflow:
+  id: readme-agent
+  name: README Documentation & VPS Deployment Agent
+  description: >-
+    Agent workflow for maintaining up-to-date README files and ensuring comprehensive
+    VPS deployment documentation with Docker and webhook setup. Handles both new README
+    creation and updates to existing documentation based on project changes.
+  type: maintenance
+  project_types:
+    - readme-creation
+    - readme-update
+    - documentation-sync
+    - deployment-guide
+    - vps-setup
+
+  sequence:
+    - step: project_assessment
+      agent: analyst
+      action: analyze project and documentation state
+      creates: project-analysis.md
+      notes: |
+        Assess current project state and documentation needs:
+        - Review existing README.md for completeness and accuracy
+        - Identify recent code changes that need documentation updates
+        - Check if VPS deployment section exists and is current
+        - Analyze project type (frontend, backend, fullstack) for deployment strategy
+        - Document current technology stack and dependencies
+        SAVE OUTPUT: Copy final project-analysis.md to your project's docs/ folder.
+
+    - step: readme_classification
+      agent: analyst
+      action: classify README update scope
+      notes: |
+        Determine README update complexity to route to appropriate path:
+        - Minor updates (version bumps, small changes) → Use quick-update path
+        - Major updates (new features, architecture changes) → Use comprehensive-update path
+        - New README creation → Use full-creation path
+        - VPS deployment missing → Add deployment section
+        
+        Ask user: "What type of README work is needed? Minor updates, major changes, new creation, or adding VPS deployment documentation?"
+
+    - step: routing_decision
+      condition: based_on_classification
+      routes:
+        minor_updates:
+          agent: technical-writer
+          action: quick_readme_update
+          notes: "Update existing README with minor changes. Focus on accuracy and consistency."
+        major_updates:
+          continue: to_comprehensive_update
+          notes: "Continue with comprehensive README overhaul workflow."
+        new_creation:
+          continue: to_full_creation
+          notes: "Continue with complete README creation workflow."
+        vps_deployment:
+          continue: to_deployment_documentation
+          notes: "Continue with VPS deployment documentation workflow."
+
+    - step: template_selection
+      agent: technical-writer
+      action: select appropriate README template
+      condition: major_updates_or_new_creation
+      notes: |
+        Select README template based on project analysis:
+        - Use MADPANDA3D_README_TEMPLATE.md for comprehensive projects
+        - Use MADPANDA3D_README_TEMPLATE_SIMPLE.md for smaller projects
+        - Reference PLACEHOLDER_QUICK_REFERENCE.md for customization
+        - Consider project complexity and target audience
+
+    - agent: technical-writer
+      creates: readme-content.md
+      uses: selected_template
+      requires: project-analysis.md
+      condition: comprehensive_update_or_creation
+      notes: |
+        Create comprehensive README content:
+        - Replace all template placeholders with project-specific information
+        - Ensure all sections are relevant and accurate
+        - Include proper badges, links, and formatting
+        - Add project-specific features and capabilities
+        - Follow MADPANDA3D branding guidelines
+        SAVE OUTPUT: Copy final readme-content.md to your project's docs/ folder.
+
+    - step: vps_deployment_section
+      agent: devops-specialist
+      creates: vps-deployment-guide.md
+      requires: project-analysis.md
+      condition: needs_vps_documentation
+      notes: |
+        Create comprehensive VPS deployment documentation:
+        - Include step-by-step VPS setup from scratch
+        - Document Docker installation and configuration
+        - Add webhook service setup if applicable
+        - Include troubleshooting and common issues
+        - Provide specific commands for the project type
+        SAVE OUTPUT: Copy final vps-deployment-guide.md to your project's docs/ folder.
+
+    - agent: technical-writer
+      action: integrate_vps_section
+      updates: readme-content.md
+      requires: vps-deployment-guide.md
+      condition: vps_documentation_created
+      notes: |
+        Integrate VPS deployment section into main README:
+        - Add VPS deployment section to README structure
+        - Ensure proper formatting and flow
+        - Link to detailed deployment guide if needed
+        - Maintain consistency with overall document style
+
+    - agent: qa-specialist
+      validates: readme_documentation
+      uses: readme-quality-checklist
+      requires: readme-content.md
+      notes: |
+        Validate README quality and completeness:
+        - Check all links are functional
+        - Verify installation instructions are accurate
+        - Ensure proper formatting and grammar
+        - Validate badge URLs and project information
+        - Test deployment instructions if possible
+        - Check for consistency with project state
+
+    - agent: technical-writer
+      updates: readme-content.md
+      condition: qa_issues_found
+      notes: |
+        Address QA feedback:
+        - Fix broken links and formatting issues
+        - Update inaccurate information
+        - Improve clarity and completeness
+        - Re-export updated README content
+
+    - step: image_placeholder_review
+      agent: technical-writer
+      action: review_image_placeholders
+      requires: readme-content.md
+      notes: |
+        Review and document image requirements:
+        - Identify all image placeholders in README
+        - Create list of required images with descriptions
+        - Provide guidance for image creation or sourcing
+        - Document image specifications and requirements
+
+    - agent: technical-writer
+      action: finalize_readme
+      creates: README.md
+      requires: validated_readme_content
+      notes: |
+        Finalize and deploy README:
+        - Copy final content to project root as README.md
+        - Ensure proper formatting for GitHub display
+        - Verify all sections are complete and accurate
+        - Create backup of previous README if exists
+        - Update project documentation index
+
+    - step: deployment_testing
+      agent: devops-specialist
+      action: test_deployment_instructions
+      requires: README.md
+      optional: true
+      condition: vps_instructions_included
+      notes: |
+        OPTIONAL: Test VPS deployment instructions:
+        - Verify commands work on clean VPS instance
+        - Test Docker setup and configuration
+        - Validate webhook service setup if applicable
+        - Document any issues or improvements needed
+
+    - agent: technical-writer
+      updates: README.md
+      condition: deployment_testing_issues
+      notes: |
+        Update README based on deployment testing:
+        - Fix any command errors or missing steps
+        - Add troubleshooting information
+        - Improve clarity of instructions
+        - Update version requirements if needed
+
+    - step: documentation_sync
+      agent: technical-writer
+      action: sync_related_documentation
+      requires: README.md
+      notes: |
+        Sync README with related documentation:
+        - Update CHANGELOG.md if exists
+        - Sync with package.json or requirements.txt versions
+        - Update API documentation links
+        - Ensure consistency across all project docs
+
+    - workflow_end:
+      action: documentation_complete
+      notes: |
+        README documentation complete!
+        - README.md updated and deployed
+        - VPS deployment instructions included
+        - All documentation synchronized
+        - Quality validation passed
+        
+        Next steps: Commit changes and update project repository
+
+  flow_diagram: |
+    ```mermaid
+    graph TD
+        A[Start: README Agent] --> B[analyst: project assessment]
+        B --> C[analyst: classify README scope]
+        C --> D{Update Type?}
+        
+        D -->|Minor Updates| E[technical-writer: quick update]
+        D -->|Major Updates| F[technical-writer: select template]
+        D -->|New Creation| F
+        D -->|VPS Deployment| G[devops-specialist: VPS guide]
+        
+        E --> H[technical-writer: finalize README]
+        
+        F --> I[technical-writer: create README content]
+        I --> J{Needs VPS docs?}
+        J -->|Yes| G
+        J -->|No| K[qa-specialist: validate README]
+        
+        G --> L[technical-writer: integrate VPS section]
+        L --> K
+        
+        K --> M{QA issues?}
+        M -->|Yes| N[technical-writer: fix issues]
+        M -->|No| O[technical-writer: review image placeholders]
+        N --> K
+        
+        O --> H
+        H --> P{Test deployment?}
+        P -->|Yes| Q[devops-specialist: test instructions]
+        P -->|No| R[technical-writer: sync documentation]
+        
+        Q --> S{Testing issues?}
+        S -->|Yes| T[technical-writer: update README]
+        S -->|No| R
+        T --> R
+        
+        R --> U[Documentation Complete]
+
+        style U fill:#90EE90
+        style E fill:#87CEEB
+        style I fill:#FFE4B5
+        style G fill:#FFE4B5
+        style K fill:#F0E68C
+        style Q fill:#F0E68C
+        style H fill:#ADD8E6
+        style R fill:#ADD8E6
+    ```
+
+  decision_guidance:
+    when_to_use:
+      - README is outdated or incomplete
+      - New features need documentation
+      - VPS deployment instructions missing
+      - Project structure has changed significantly
+      - Documentation quality issues identified
+      - New project needs comprehensive README
+
+  handoff_prompts:
+    assessment_complete: |
+      Project assessment complete. Documentation state: {{current_state}}
+      README update type needed: {{update_type}}
+      VPS deployment documentation: {{vps_status}}
+      Proceeding with {{selected_path}} workflow.
+    
+    template_selected: |
+      README template selected: {{template_type}}
+      Based on project complexity: {{complexity_level}}
+      Template customization requirements: {{customization_notes}}
+    
+    content_creation_complete: |
+      README content creation complete. Key sections included:
+      - {{section_list}}
+      VPS deployment section: {{vps_included}}
+      Ready for quality validation.
+    
+    vps_documentation_complete: |
+      VPS deployment documentation complete. Includes:
+      - Step-by-step VPS setup
+      - Docker installation and configuration
+      - {{webhook_setup}}
+      - Troubleshooting guide
+      Ready for integration into main README.
+    
+    qa_validation_complete: |
+      Quality validation complete.
+      Issues found: {{issue_count}}
+      {{if issues}}: Returning to technical writer for fixes.
+      {{if no_issues}}: Proceeding to image placeholder review.
+    
+    deployment_testing_complete: |
+      Deployment testing complete.
+      Instructions tested: {{test_results}}
+      {{if issues}}: Issues found and documented for README updates.
+      {{if success}}: All deployment instructions verified working.
+    
+    complete: |
+      README documentation workflow complete!
+      - README.md updated and finalized
+      - VPS deployment instructions included
+      - Quality validation passed
+      - Documentation synchronized
+      Ready for repository commit.
+
+  vps_deployment_template: |
+    ## 🚀 VPS Deployment Guide
+
+    This section provides step-by-step instructions for deploying {{PROJECT_NAME}} on a VPS using Docker.
+
+    ### Prerequisites
+    - Ubuntu 20.04+ VPS with root access
+    - Domain name with DNS management access
+    - Basic command line knowledge
+
+    ### Step 1: Initial VPS Setup
+
+    ```bash
+    # Update system packages
+    sudo apt update && sudo apt upgrade -y
+
+    # Install essential packages
+    sudo apt install -y curl wget git unzip software-properties-common
+
+    # Create deployment user (optional but recommended)
+    sudo adduser deploy
+    sudo usermod -aG sudo deploy
+    su - deploy
+    ```
+
+    ### Step 2: Docker Installation
+
+    ```bash
+    # Install Docker
+    curl -fsSL https://get.docker.com -o get-docker.sh
+    sudo sh get-docker.sh
+
+    # Add user to docker group
+    sudo usermod -aG docker $USER
+
+    # Install Docker Compose
+    sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+
+    # Verify installation
+    docker --version
+    docker-compose --version
+
+    # Start Docker service
+    sudo systemctl enable docker
+    sudo systemctl start docker
+    ```
+
+    ### Step 3: Project Deployment
+
+    ```bash
+    # Clone the repository
+    git clone https://github.com/{{GITHUB_USERNAME}}/{{REPO_NAME}}.git
+    cd {{REPO_NAME}}
+
+    # Copy environment template
+    cp .env.example .env
+
+    # Edit environment variables
+    nano .env
+    # Add your configuration:
+    # {{ENV_VARIABLES_LIST}}
+
+    # Build and start with Docker Compose
+    docker-compose up -d --build
+
+    # Check deployment status
+    docker-compose ps
+    docker-compose logs
+    ```
+
+    ### Step 4: Nginx Proxy Manager Setup
+
+    ```bash
+    # Create NPM directory
+    mkdir -p ~/nginx-proxy-manager
+    cd ~/nginx-proxy-manager
+
+    # Create docker-compose.yml for NPM
+    cat > docker-compose.yml << EOF
+    version: '3'
+    services:
+      app:
+        image: 'jc21/nginx-proxy-manager:latest'
+        restart: unless-stopped
+        ports:
+          - '80:80'
+          - '81:81'
+          - '443:443'
+        volumes:
+          - ./data:/data
+          - ./letsencrypt:/etc/letsencrypt
+    EOF
+
+    # Start Nginx Proxy Manager
+    docker-compose up -d
+
+    # Access NPM at http://YOUR_VPS_IP:81
+    # Default login: admin@example.com / changeme
+    ```
+
+    ### Step 5: Domain Configuration
+
+    #### DNS Setup
+    1. Create an **A record** for your domain/subdomain pointing to your VPS IP
+    2. Wait for DNS propagation (5-30 minutes)
+
+    #### Nginx Proxy Manager Configuration
+    1. Access NPM web interface at `http://YOUR_VPS_IP:81`
+    2. Login and change default credentials
+    3. Add new Proxy Host:
+       - **Domain Names**: `{{DOMAIN_NAME}}`
+       - **Scheme**: `http`
+       - **Forward Hostname/IP**: `{{FORWARD_IP}}`
+       - **Forward Port**: `{{APPLICATION_PORT}}`
+       - **SSL**: Enable SSL and Force SSL
+
+    ### Step 6: Webhook Setup (if applicable)
+
+    ```bash
+    # Create webhook service directory
+    mkdir -p ~/webhooks
+    cd ~/webhooks
+
+    # Create webhook handler script
+    cat > webhook-handler.sh << EOF
+    #!/bin/bash
+    cd /path/to/{{REPO_NAME}}
+    git pull origin main
+    docker-compose down
+    docker-compose up -d --build
+    echo "Deployment updated: $(date)" >> /var/log/webhook.log
+    EOF
+
+    # Make script executable
+    chmod +x webhook-handler.sh
+
+    # Install webhook service
+    sudo apt install -y webhook
+
+    # Create webhook configuration
+    cat > hooks.json << EOF
+    [
+      {
+        "id": "{{PROJECT_NAME}}-deploy",
+        "execute-command": "/home/deploy/webhooks/webhook-handler.sh",
+        "command-working-directory": "/home/deploy/webhooks",
+        "response-message": "Deployment triggered successfully"
+      }
+    ]
+    EOF
+
+    # Create systemd service for webhook
+    sudo tee /etc/systemd/system/webhook.service > /dev/null << EOF
+    [Unit]
+    Description=Webhook Service
+    After=network.target
+
+    [Service]
+    Type=simple
+    User=deploy
+    ExecStart=/usr/bin/webhook -hooks /home/deploy/webhooks/hooks.json -verbose -port 9000
+    Restart=always
+
+    [Install]
+    WantedBy=multi-user.target
+    EOF
+
+    # Enable and start webhook service
+    sudo systemctl daemon-reload
+    sudo systemctl enable webhook
+    sudo systemctl start webhook
+
+    # Add webhook proxy in NPM for subdomain webhook.yourdomain.com
+    # Forward to localhost:9000
+    ```
+
+    ### Step 7: SSL Certificate Setup
+
+    NPM automatically handles SSL certificates via Let's Encrypt:
+    1. In NPM Proxy Host settings, go to SSL tab
+    2. Select "Request a new SSL Certificate"
+    3. Enable "Force SSL" and "HTTP/2 Support"
+    4. Click Save
+
+    ### Step 8: Monitoring and Maintenance
+
+    ```bash
+    # Check application status
+    docker-compose ps
+    docker-compose logs -f
+
+    # Update application
+    git pull origin main
+    docker-compose down
+    docker-compose up -d --build
+
+    # Monitor system resources
+    htop
+    df -h
+    docker system df
+
+    # Backup important data
+    docker-compose exec db mysqldump -u root -p database_name > backup.sql
+    ```
+
+    ### Troubleshooting
+
+    #### Common Issues
+
+    **Application not accessible:**
+    ```bash
+    # Check if containers are running
+    docker-compose ps
+
+    # Check application logs
+    docker-compose logs app
+
+    # Check NPM configuration
+    docker-compose -f ~/nginx-proxy-manager/docker-compose.yml logs
+    ```
+
+    **SSL Certificate issues:**
+    ```bash
+    # Check NPM logs
+    docker-compose -f ~/nginx-proxy-manager/docker-compose.yml logs
+
+    # Verify domain DNS
+    nslookup yourdomain.com
+
+    # Check port accessibility
+    sudo netstat -tlnp | grep :80
+    sudo netstat -tlnp | grep :443
+    ```
+
+    **Webhook not triggering:**
+    ```bash
+    # Check webhook service status
+    sudo systemctl status webhook
+
+    # Check webhook logs
+    sudo journalctl -u webhook -f
+
+    # Test webhook manually
+    curl -X POST http://YOUR_VPS_IP:9000/hooks/{{PROJECT_NAME}}-deploy
+    ```
+
+    **Docker issues:**
+    ```bash
+    # Restart Docker service
+    sudo systemctl restart docker
+
+    # Clean up Docker resources
+    docker system prune -a
+
+    # Check Docker daemon logs
+    sudo journalctl -u docker -f
+    ```
+
+    ### Security Considerations
+
+    1. **Firewall Configuration:**
+    ```bash
+    # Install and configure UFW
+    sudo ufw enable
+    sudo ufw allow ssh
+    sudo ufw allow 80
+    sudo ufw allow 443
+    sudo ufw allow 81  # NPM admin (consider restricting to specific IPs)
+    ```
+
+    2. **Regular Updates:**
+    ```bash
+    # Update system packages
+    sudo apt update && sudo apt upgrade -y
+
+    # Update Docker images
+    docker-compose pull
+    docker-compose up -d
+    ```
+
+    3. **Backup Strategy:**
+    - Regular database backups
+    - Configuration file backups
+    - Docker volume backups
+
+    ### Performance Optimization
+
+    ```bash
+    # Monitor resource usage
+    docker stats
+
+    # Optimize Docker images
+    # Use multi-stage builds
+    # Minimize image layers
+    # Use .dockerignore
+
+    # Configure log rotation
+    sudo nano /etc/docker/daemon.json
+    # Add log rotation settings
+    ```
+
+    For additional support or issues, please refer to the project's issue tracker or contact support.
+
+  readme_quality_checklist:
+    structure:
+      - [ ] Project title and description are clear and accurate
+      - [ ] Badges are present and functional
+      - [ ] Table of contents is complete (if applicable)
+      - [ ] All major sections are included
+      - [ ] Proper heading hierarchy is maintained
+
+    content:
+      - [ ] Installation instructions are complete and tested
+      - [ ] Prerequisites are clearly listed
+      - [ ] Usage examples are provided
+      - [ ] API documentation links are functional
+      - [ ] Contributing guidelines are included
+      - [ ] License information is accurate
+
+    technical:
+      - [ ] All code examples are syntactically correct
+      - [ ] Environment variables are documented
+      - [ ] Configuration options are explained
+      - [ ] Troubleshooting section is comprehensive
+      - [ ] Version requirements are specified
+
+    deployment:
+      - [ ] VPS deployment instructions are complete
+      - [ ] Docker setup is documented
+      - [ ] Webhook configuration is included (if applicable)
+      - [ ] Domain and SSL setup is explained
+      - [ ] Troubleshooting guide is provided
+
+    quality:
+      - [ ] Grammar and spelling are correct
+      - [ ] Links are functional and up-to-date
+      - [ ] Images load properly (if included)
+      - [ ] Formatting is consistent
+      - [ ] Information is current and accurate
+
+    branding:
+      - [ ] MADPANDA3D branding is consistent
+      - [ ] Company contact information is correct
+      - [ ] License and copyright are properly attributed
+      - [ ] Professional tone is maintained
+      - [ ] Visual elements align with brand guidelines
+

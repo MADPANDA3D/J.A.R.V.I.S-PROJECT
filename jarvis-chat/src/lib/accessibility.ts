@@ -398,7 +398,7 @@ export class AriaManager {
     element: HTMLElement,
     properties: Record<string, string | boolean | number>
   ): void {
-    Object.entries(properties).forEach(([key, value]) {
+    Object.entries(properties).forEach(([key, value]) => {
       const ariaKey = key.startsWith('aria-') ? key : `aria-${key}`;
       element.setAttribute(ariaKey, String(value));
     });
@@ -569,7 +569,7 @@ export class AccessibilityPreferencesManager {
 
     // Listen for color scheme changes
     const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    darkModeQuery.addEventListener('change', () {
+    darkModeQuery.addEventListener('change', () => {
       if (this.preferences.colorScheme === 'auto') {
         this.applyPreferences();
       }
@@ -745,7 +745,7 @@ export class AccessibilityTester {
 
       report += `## Detailed Issues\n\n`;
 
-      audit.issues.forEach((issue, index) {
+      audit.issues.forEach((issue, index) => {
         report += `### ${index + 1}. ${issue.type} (${issue.severity})\n`;
         report += `${issue.message}\n\n`;
       });

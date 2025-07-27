@@ -184,7 +184,7 @@ class SessionTracker {
     this.resetActivityTimer();
 
     // Track when user leaves/returns to page
-    document.addEventListener('visibilitychange', () {
+    document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
         this.handlePageHidden();
       } else {

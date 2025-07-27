@@ -175,7 +175,7 @@ export class AccessibilityTester {
     if (totalChecks === 0) return 100;
 
     // Weight violations by impact
-    const violationScore = violations.reduce((score, violation) {
+    const violationScore = violations.reduce((score, violation) => {
       switch (violation.impact) {
         case 'critical':
           return score + 10;
