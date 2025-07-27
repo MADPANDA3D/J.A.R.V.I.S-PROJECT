@@ -48,7 +48,7 @@ export function AssignmentInterface({
   bugId, 
   currentAssignee, 
   onAssignmentChange 
-}: AssignmentInterfaceProps) {
+}: AssignmentInterfaceProps) => {
   const { toast } = useToast();
   const { bugReport, loading: bugLoading } = useBugLifecycle(bugId);
   
@@ -71,7 +71,7 @@ export function AssignmentInterface({
   const loadData = async () => {
     try {
       // Load recommendations
-      if (bugReport) {
+      if (bugReport) => {
         const recs = await bugAssignmentSystem.getAssignmentRecommendations(bugReport);
         setRecommendations(recs);
       }
@@ -83,7 +83,7 @@ export function AssignmentInterface({
       // Load team members (in a real app, this would be from an API)
       const members = Array.from((bugAssignmentSystem as any).teamMembers.values());
       setTeamMembers(members);
-    } catch (error) {
+    } catch (error) => {
       console.error('Failed to load assignment data:', error);
       toast({
         title: "Error",
@@ -94,7 +94,7 @@ export function AssignmentInterface({
   };
 
   const handleAssignment = async () => {
-    if (!selectedAssignee) {
+    if (!selectedAssignee) => {
       toast({
         title: "Error",
         description: "Please select an assignee",
@@ -113,7 +113,7 @@ export function AssignmentInterface({
         assignmentReason || undefined
       );
 
-      if (result.success) {
+      if (result.success) => {
         toast({
           title: "Success",
           description: "Bug assigned successfully"
@@ -123,7 +123,7 @@ export function AssignmentInterface({
         setSelectedAssignee('');
         setAssignmentReason('');
         
-        if (onAssignmentChange) {
+        if (onAssignmentChange) => {
           onAssignmentChange(selectedAssignee);
         }
         
@@ -131,7 +131,7 @@ export function AssignmentInterface({
       } else {
         throw new Error(result.error || 'Assignment failed');
       }
-    } catch (error) {
+    } catch (error) => {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to assign bug",
@@ -147,13 +147,13 @@ export function AssignmentInterface({
     try {
       const assignedTo = await bugAssignmentSystem.autoAssignBug(bugId);
       
-      if (assignedTo) {
+      if (assignedTo) => {
         toast({
           title: "Success",
           description: "Bug auto-assigned successfully"
         });
         
-        if (onAssignmentChange) {
+        if (onAssignmentChange) => {
           onAssignmentChange(assignedTo);
         }
         
@@ -165,7 +165,7 @@ export function AssignmentInterface({
           variant: "destructive"
         });
       }
-    } catch (error) {
+    } catch (error) => {
       toast({
         title: "Error",
         description: "Auto-assignment failed",
@@ -185,8 +185,8 @@ export function AssignmentInterface({
     return matchesSearch && matchesRole && matchesAvailability;
   });
 
-  const getAvailabilityColor = (availability: string) {
-    switch (availability) {
+  const getAvailabilityColor = (availability: string) => {
+    switch (availability) => {
       case 'available': return 'bg-green-500';
       case 'busy': return 'bg-yellow-500';
       case 'unavailable': return 'bg-red-500';
@@ -195,8 +195,8 @@ export function AssignmentInterface({
     }
   };
 
-  const getRoleIcon = (role: string) {
-    switch (role) {
+  const getRoleIcon = (role: string) => {
+    switch (role) => {
       case 'admin': return <Star className="h-4 w-4" />;
       case 'senior_dev': return <TrendingUp className="h-4 w-4" />;
       case 'developer': return <User className="h-4 w-4" />;
@@ -206,13 +206,13 @@ export function AssignmentInterface({
     }
   };
 
-  const getConfidenceColor = (confidence: number) {
+  const getConfidenceColor = (confidence: number) => {
     if (confidence >= 0.8) return 'text-green-600';
     if (confidence >= 0.6) return 'text-yellow-600';
     return 'text-red-600';
   };
 
-  if (bugLoading) {
+  if (bugLoading) => {
     return (
       <Card>
         <CardContent className="p-6">
@@ -336,7 +336,7 @@ export function AssignmentInterface({
         <CardContent>
           <ScrollArea className="h-64">
             <div className="space-y-3">
-              {workloadMetrics.map((metrics) {
+              {workloadMetrics.map((metrics) => {
                 const member = teamMembers.find(m => m.id === metrics.userId);
                 if (!member) return null;
 
@@ -446,7 +446,7 @@ export function AssignmentInterface({
             {/* Team Members List */}
             <ScrollArea className="h-64 border rounded-md p-2">
               <div className="space-y-2">
-                {filteredTeamMembers.map((member) {
+                {filteredTeamMembers.map((member) => {
                   const metrics = workloadMetrics.find(m => m.userId === member.id);
                   const isSelected = selectedAssignee === member.id;
 
@@ -551,7 +551,7 @@ export function AssignmentInterface({
           <TabsContent value="recommendations" className="mt-4 space-y-4">
             {recommendations.length > 0 ? (
               <div className="space-y-3">
-                {recommendations.map((rec) {
+                {recommendations.map((rec) => {
                   const isSelected = selectedAssignee === rec.userId;
                   
                   return (

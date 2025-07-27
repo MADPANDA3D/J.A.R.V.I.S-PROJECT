@@ -72,7 +72,7 @@ function CommentEditor({
   placeholder = "Add a comment...",
   onSubmit,
   onCancel
-}: CommentEditorProps) {
+}: CommentEditorProps) => {
   const { toast } = useToast();
   const [content, setContent] = useState('');
   const [commentType, setCommentType] = useState<CommentType>('note');
@@ -82,10 +82,10 @@ function CommentEditor({
   const [attachments, setAttachments] = useState<File[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleSubmit = async (e: React.FormEvent) {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!content.trim()) {
+    if (!content.trim()) => {
       toast({
         title: "Error",
         description: "Please enter a comment",
@@ -109,12 +109,12 @@ function CommentEditor({
         }
       );
 
-      if (result.success && result.commentId) {
+      if (result.success && result.commentId) => {
         // Get the created comment for callback
         const comments = internalCommunicationService.getBugComments(bugId);
         const newComment = comments.find(c => c.id === result.commentId);
         
-        if (newComment && onSubmit) {
+        if (newComment && onSubmit) => {
           onSubmit(newComment);
         }
 
@@ -129,7 +129,7 @@ function CommentEditor({
       } else {
         throw new Error(result.error || 'Failed to add comment');
       }
-    } catch (error) {
+    } catch (error) => {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to add comment",
@@ -140,18 +140,18 @@ function CommentEditor({
     }
   };
 
-  const handleFileAttachment = (e: React.ChangeEvent<HTMLInputElement>) {
+  const handleFileAttachment = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     setAttachments(prev => [...prev, ...files]);
   };
 
-  const removeAttachment = (index: number) {
+  const removeAttachment = (index: number) => {
     setAttachments(prev => prev.filter((_, i) => i !== index));
   };
 
-  const insertMention = (username: string) {
+  const insertMention = (username: string) => {
     const textarea = textareaRef.current;
-    if (textarea) {
+    if (textarea) => {
       const start = textarea.selectionStart;
       const end = textarea.selectionEnd;
       const newContent = content.substring(0, start) + `@${username} ` + content.substring(end);
@@ -337,14 +337,14 @@ function CommentItem({
   onDelete,
   onReaction,
   showReplies = true
-}: CommentItemProps) {
+}: CommentItemProps) => {
   const { toast } = useToast();
   const [showReplyEditor, setShowReplyEditor] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
 
-  const getCommentTypeIcon = (type: CommentType) {
-    switch (type) {
+  const getCommentTypeIcon = (type: CommentType) => {
+    switch (type) => {
       case 'note': return <MessageSquare className="h-4 w-4 text-blue-600" />;
       case 'status_change': return <CheckCircle className="h-4 w-4 text-green-600" />;
       case 'resolution': return <CheckCircle className="h-4 w-4 text-green-600" />;
@@ -354,26 +354,26 @@ function CommentItem({
     }
   };
 
-  const getVisibilityIcon = (visibility: CommentVisibility) {
-    switch (visibility) {
+  const getVisibilityIcon = (visibility: CommentVisibility) => {
+    switch (visibility) => {
       case 'internal': return <Eye className="h-3 w-3 text-red-500" />;
       case 'team_only': return <Users className="h-3 w-3 text-yellow-500" />;
       case 'public': return <Eye className="h-3 w-3 text-green-500" />;
     }
   };
 
-  const formatContent = (content: string) {
+  const formatContent = (content: string) => {
     // Simple formatting for mentions
     return content.replace(/@(\w+)/g, '<span class="text-blue-600 font-medium">@$1</span>');
   };
 
-  const handleReaction = async (emoji: string) {
+  const handleReaction = async (emoji: string) => {
     try {
       await internalCommunicationService.addReaction(comment.id, currentUserId, emoji);
-      if (onReaction) {
+      if (onReaction) => {
         onReaction(comment, emoji);
       }
-    } catch (error) {
+    } catch (error) => {
       toast({
         title: "Error",
         description: "Failed to add reaction",
@@ -390,9 +390,9 @@ function CommentItem({
         editContent
       );
       
-      if (result.success) {
+      if (result.success) => {
         setShowEditDialog(false);
-        if (onEdit) {
+        if (onEdit) => {
           onEdit({ ...comment, content: editContent, isEdited: true });
         }
         toast({
@@ -402,7 +402,7 @@ function CommentItem({
       } else {
         throw new Error(result.error);
       }
-    } catch (error) {
+    } catch (error) => {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to edit comment",
@@ -419,8 +419,8 @@ function CommentItem({
         'Deleted by user'
       );
       
-      if (result.success) {
-        if (onDelete) {
+      if (result.success) => {
+        if (onDelete) => {
           onDelete(comment);
         }
         toast({
@@ -430,7 +430,7 @@ function CommentItem({
       } else {
         throw new Error(result.error);
       }
-    } catch (error) {
+    } catch (error) => {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to delete comment",
@@ -439,7 +439,7 @@ function CommentItem({
     }
   };
 
-  if (comment.isDeleted) {
+  if (comment.isDeleted) => {
     return (
       <div className="flex gap-3 py-3 opacity-50">
         <Avatar className="h-8 w-8">
@@ -507,9 +507,9 @@ function CommentItem({
           {/* Reactions */}
           {comment.reactions.length > 0 && (
             <div className="flex flex-wrap gap-1">
-              {comment.reactions.reduce((acc, reaction) {
+              {comment.reactions.reduce((acc, reaction) => {
                 const existing = acc.find(r => r.emoji === reaction.emoji);
-                if (existing) {
+                if (existing) => {
                   existing.count++;
                   existing.users.push(reaction.userName);
                 } else {
@@ -596,9 +596,9 @@ function CommentItem({
             authorId={currentUserId}
             parentCommentId={comment.id}
             placeholder="Reply to this comment..."
-            onSubmit={(newComment) {
+            onSubmit={(newComment) => {
               setShowReplyEditor(false);
-              if (onReply) {
+              if (onReply) => {
                 onReply(newComment);
               }
             }}
@@ -649,7 +649,7 @@ export function InternalComments({
   currentUserId,
   showPrivateComments = false,
   onCommentAdded
-}: InternalCommentsProps) {
+}: InternalCommentsProps) => {
   const { toast } = useToast();
   const [comments, setComments] = useState<InternalComment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -676,7 +676,7 @@ export function InternalComments({
         : loadedComments.filter(c => !c.isPrivate);
       
       setComments(filteredComments);
-    } catch (error) {
+    } catch (error) => {
       toast({
         title: "Error",
         description: "Failed to load comments",
@@ -687,20 +687,20 @@ export function InternalComments({
     }
   };
 
-  const handleCommentAdded = (newComment: InternalComment) {
+  const handleCommentAdded = (newComment: InternalComment) => {
     setComments(prev => [...prev, newComment]);
-    if (onCommentAdded) {
+    if (onCommentAdded) => {
       onCommentAdded(newComment);
     }
   };
 
-  const handleCommentUpdated = (updatedComment: InternalComment) {
+  const handleCommentUpdated = (updatedComment: InternalComment) => {
     setComments(prev =>
       prev.map(c => c.id === updatedComment.id ? updatedComment : c)
     );
   };
 
-  const handleCommentDeleted = (deletedComment: InternalComment) {
+  const handleCommentDeleted = (deletedComment: InternalComment) => {
     setComments(prev =>
       prev.map(c => c.id === deletedComment.id ? { ...c, isDeleted: true } : c)
     );
@@ -708,24 +708,24 @@ export function InternalComments({
 
   const filteredComments = comments.filter(comment => {
     // Text search
-    if (searchTerm && !comment.content.toLowerCase().includes(searchTerm.toLowerCase())) {
+    if (searchTerm && !comment.content.toLowerCase().includes(searchTerm.toLowerCase())) => {
       return false;
     }
 
     // Type filter
-    if (filterType !== 'all' && comment.commentType !== filterType) {
+    if (filterType !== 'all' && comment.commentType !== filterType) => {
       return false;
     }
 
     // Visibility filter
-    if (filterVisibility !== 'all' && comment.visibility !== filterVisibility) {
+    if (filterVisibility !== 'all' && comment.visibility !== filterVisibility) => {
       return false;
     }
 
     return true;
   });
 
-  if (loading) {
+  if (loading) => {
     return (
       <Card>
         <CardContent className="p-6">

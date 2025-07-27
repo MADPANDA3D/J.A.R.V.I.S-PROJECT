@@ -19,7 +19,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 // Create enhanced Supabase client with logging
-const createLoggedSupabaseClient = (url: string, key: string, options: Record<string, unknown> = {}) {
+const createLoggedSupabaseClient = (url: string, key: string, options: Record<string, unknown> = {}) => {
   const client = createClient(url, key, {
     ...options,
     global: {

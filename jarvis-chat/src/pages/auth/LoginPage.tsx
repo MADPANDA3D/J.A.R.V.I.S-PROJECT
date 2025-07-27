@@ -17,7 +17,7 @@ export const LoginPage: React.FC = () => {
   const from = location.state?.from?.pathname || '/chat';
 
   // Redirect if already authenticated
-  if (initialized && user) {
+  if (initialized && user) => {
     return <Navigate to={from} replace />;
   }
 

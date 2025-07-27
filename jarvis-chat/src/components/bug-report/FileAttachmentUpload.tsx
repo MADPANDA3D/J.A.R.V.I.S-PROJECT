@@ -35,23 +35,23 @@ export const FileAttachmentUpload: React.FC<FileAttachmentUploadProps> = ({
     const validFiles: File[] = [];
 
     // Check total file count
-    if (files.length + selectedFiles.length > maxFiles) {
+    if (files.length + selectedFiles.length > maxFiles) => {
       errors.push(`Maximum ${maxFiles} files allowed. You've selected ${files.length + selectedFiles.length} files.`);
       return { valid: [], errors };
     }
 
     files.forEach((file, index) => {
       // Check file size
-      if (file.size > maxSizePerFile) {
+      if (file.size > maxSizePerFile) => {
         errors.push(`${file.name}: File size (${formatFileSize(file.size)}) exceeds maximum allowed (${formatFileSize(maxSizePerFile)})`);
         return;
       }
 
       // Check file type
       const isValidType = acceptedTypes.some(type => {
-        if (type.startsWith('.')) {
+        if (type.startsWith('.')) => {
           return file.name.toLowerCase().endsWith(type.toLowerCase());
-        } else if (type.includes('/*')) {
+        } else if (type.includes('/*')) => {
           const mimeCategory = type.split('/')[0];
           return file.type.startsWith(mimeCategory);
         } else {
@@ -59,7 +59,7 @@ export const FileAttachmentUpload: React.FC<FileAttachmentUploadProps> = ({
         }
       });
 
-      if (!isValidType) {
+      if (!isValidType) => {
         errors.push(`${file.name}: File type not supported. Allowed types: ${acceptedTypes.join(', ')}`);
         return;
       }
@@ -68,7 +68,7 @@ export const FileAttachmentUpload: React.FC<FileAttachmentUploadProps> = ({
       const duplicateInSelected = selectedFiles.some(existing => existing.name === file.name);
       const duplicateInCurrent = files.slice(0, index).some(existing => existing.name === file.name);
       
-      if (duplicateInSelected || duplicateInCurrent) {
+      if (duplicateInSelected || duplicateInCurrent) => {
         errors.push(`${file.name}: Duplicate file name`);
         return;
       }
@@ -79,7 +79,7 @@ export const FileAttachmentUpload: React.FC<FileAttachmentUploadProps> = ({
     return { valid: validFiles, errors };
   }, [maxFiles, maxSizePerFile, acceptedTypes, selectedFiles]);
 
-  const handleFileSelection = useCallback((files: FileList | null) {
+  const handleFileSelection = useCallback((files: FileList | null) => {
     if (!files) return;
 
     const filesArray = Array.from(files);
@@ -87,25 +87,25 @@ export const FileAttachmentUpload: React.FC<FileAttachmentUploadProps> = ({
 
     setValidationErrors(errors);
 
-    if (valid.length > 0) {
+    if (valid.length > 0) => {
       const newSelectedFiles = [...selectedFiles, ...valid];
       setSelectedFiles(newSelectedFiles);
       onFileUpload(newSelectedFiles);
     }
   }, [selectedFiles, validateFiles, onFileUpload]);
 
-  const handleDrag = useCallback((e: React.DragEvent) {
+  const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    if (e.type === 'dragenter' || e.type === 'dragover') {
+    if (e.type === 'dragenter' || e.type === 'dragover') => {
       setDragActive(true);
-    } else if (e.type === 'dragleave') {
+    } else if (e.type === 'dragleave') => {
       setDragActive(false);
     }
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) {
+  const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
@@ -114,13 +114,13 @@ export const FileAttachmentUpload: React.FC<FileAttachmentUploadProps> = ({
     handleFileSelection(files);
   }, [handleFileSelection]);
 
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) {
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     handleFileSelection(e.target.files);
     // Reset input value to allow selecting the same file again
     e.target.value = '';
   }, [handleFileSelection]);
 
-  const removeFile = useCallback((index: number) {
+  const removeFile = useCallback((index: number) => {
     const newSelectedFiles = selectedFiles.filter((_, i) => i !== index);
     setSelectedFiles(newSelectedFiles);
     onFileUpload(newSelectedFiles);
@@ -220,7 +220,7 @@ export const FileAttachmentUpload: React.FC<FileAttachmentUploadProps> = ({
             Selected Files ({selectedFiles.length}/{maxFiles})
           </h4>
           <div className="space-y-2">
-            {selectedFiles.map((file, index) {
+            {selectedFiles.map((file, index) => {
               const progress = getUploadProgress(file.name);
               return (
                 <div

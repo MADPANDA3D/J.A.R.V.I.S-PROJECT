@@ -28,7 +28,7 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({
   });
 
   const getSeverityIcon = (severity: 'low' | 'medium' | 'high' | 'critical'): string => {
-    switch (severity) {
+    switch (severity) => {
       case 'critical': return '🚨';
       case 'high': return '⚠️';
       case 'medium': return '⚡';
@@ -38,7 +38,7 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({
   };
 
   const getSeverityColor = (severity: 'low' | 'medium' | 'high' | 'critical'): string => {
-    switch (severity) {
+    switch (severity) => {
       case 'critical': return 'bg-red-100 text-red-800 border-red-200';
       case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
       case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
@@ -65,7 +65,7 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({
     return 'Just now';
   };
 
-  if (alerts.length === 0) {
+  if (alerts.length === 0) => {
     return (
       <div className={`alert-panel ${className}`}>
         <div className="text-center py-8 text-gray-500">
@@ -77,7 +77,7 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({
     );
   }
 
-  if (compact) {
+  if (compact) => {
     // Compact banner view for critical alerts
     const criticalAlerts = filteredAlerts.filter(alert => 
       alert.severity === 'critical' && !alert.acknowledged

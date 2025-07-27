@@ -18,7 +18,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
       'alt+m',
       () => {
         const mainContent = document.querySelector('main');
-        if (mainContent) {
+        if (mainContent) => {
           focusManager.setFocus(
             mainContent as HTMLElement,
             'Navigated to main content'
@@ -45,7 +45,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     keyboardNav.registerShortcut(
       'escape',
       () => {
-        if (sidebarOpen) {
+        if (sidebarOpen) => {
           setSidebarOpen(false);
           screenReader.announce({
             message: 'Navigation menu closed',

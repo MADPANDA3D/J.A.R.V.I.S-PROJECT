@@ -32,7 +32,7 @@ export const ErrorTrendChart: React.FC<ErrorTrendChartProps> = ({
     
     // Create hourly buckets
     const buckets: Record<string, DataPoint> = {};
-    for (let i = timeWindow - 1; i >= 0; i--) {
+    for (let i = timeWindow - 1; i >= 0; i--) => {
       const bucketTime = now - (i * 60 * 60 * 1000);
       const hour = new Date(bucketTime).toLocaleTimeString('en-US', { 
         hour: '2-digit', 
@@ -57,13 +57,13 @@ export const ErrorTrendChart: React.FC<ErrorTrendChartProps> = ({
         const errorTime = new Date(error.timestamp).getTime();
         const bucketKey = Math.floor(errorTime / (60 * 60 * 1000)).toString();
         
-        if (buckets[bucketKey]) {
+        if (buckets[bucketKey]) => {
           const bucket = buckets[bucketKey];
           
-          switch (error.level) {
+          switch (error.level) => {
             case 'error':
               bucket.errorCount++;
-              if (error.context?.critical || error.tags.severity === 'critical') {
+              if (error.context?.critical || error.tags.severity === 'critical') => {
                 bucket.criticalErrors.push(error.message);
               }
               break;
@@ -128,7 +128,7 @@ export const ErrorTrendChart: React.FC<ErrorTrendChartProps> = ({
       {/* Chart */}
       <div className="bg-gray-50 rounded-lg p-4">
         <div className="flex items-end justify-between h-64 space-x-1">
-          {chartData.map((dataPoint, index) {
+          {chartData.map((dataPoint, index) => {
             const totalCount = dataPoint.errorCount + dataPoint.warningCount + dataPoint.infoCount;
             
             return (
@@ -230,7 +230,7 @@ export const ErrorTrendChart: React.FC<ErrorTrendChartProps> = ({
               {Object.entries(
                 errors
                   .filter(e => e.level === 'error')
-                  .reduce((acc, error) {
+                  .reduce((acc, error) => {
                     const key = error.message.substring(0, 50);
                     acc[key] = (acc[key] || 0) + 1;
                     return acc;
@@ -256,7 +256,7 @@ export const ErrorTrendChart: React.FC<ErrorTrendChartProps> = ({
               {Object.entries(
                 errors
                   .filter(e => e.level === 'error')
-                  .reduce((acc, error) {
+                  .reduce((acc, error) => {
                     const source = error.component || error.context?.source || 'Unknown';
                     acc[source] = (acc[source] || 0) + 1;
                     return acc;

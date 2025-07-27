@@ -41,7 +41,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
           setWs(websocket);
         };
         
-        websocket.onmessage = (event) {
+        websocket.onmessage = (event) => {
           try {
             const data = JSON.parse(event.data) as UpdateNotification;
             console.log('📢 Update notification received:', data);
@@ -50,7 +50,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
             setIsVisible(true);
             
             // Auto-hide success messages after 10 seconds
-            if (data.type === 'success') {
+            if (data.type === 'success') => {
               setTimeout(() => {
                 setIsVisible(false);
                 setTimeout(() => setNotification(null), 300);
@@ -58,13 +58,13 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
             }
             
             // Auto-hide info messages after 5 seconds unless they mention restart
-            if (data.type === 'info' && !data.message.toLowerCase().includes('restart')) {
+            if (data.type === 'info' && !data.message.toLowerCase().includes('restart')) => {
               setTimeout(() => {
                 setIsVisible(false);
                 setTimeout(() => setNotification(null), 300);
               }, 5000);
             }
-          } catch (error) {
+          } catch (error) => {
             console.error('❌ Failed to parse update notification:', error);
           }
         };
@@ -79,12 +79,12 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
           setTimeout(connectWebSocket, 5000);
         };
         
-        websocket.onerror = (error) {
+        websocket.onerror = (error) => {
           console.error('❌ WebSocket error:', error);
           setConnectionStatus('disconnected');
         };
         
-      } catch (error) {
+      } catch (error) => {
         console.error('❌ Failed to create WebSocket connection:', error);
         setConnectionStatus('disconnected');
         
@@ -97,15 +97,15 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
 
     // Cleanup on unmount
     return () => {
-      if (currentWebSocket) {
+      if (currentWebSocket) => {
         currentWebSocket.close();
         currentWebSocket = null;
       }
     };
   }, [websocketUrl]);
 
-  const getNotificationIcon = (type: string) {
-    switch (type) {
+  const getNotificationIcon = (type: string) => {
+    switch (type) => {
       case 'warning':
         return <AlertTriangle className="h-4 w-4" />;
       case 'success':
@@ -117,8 +117,8 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
     }
   };
 
-  const getNotificationVariant = (type: string) {
-    switch (type) {
+  const getNotificationVariant = (type: string) => {
+    switch (type) => {
       case 'warning':
         return 'destructive';
       case 'success':
@@ -139,7 +139,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
     window.location.reload();
   };
 
-  if (!notification) {
+  if (!notification) => {
     return (
       <div className="fixed top-4 right-4 z-50">
         <div className="flex items-center gap-2 text-xs text-muted-foreground">

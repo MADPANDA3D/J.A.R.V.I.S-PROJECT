@@ -34,7 +34,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
 
     let highlightedContent = content;
     terms.forEach(term => {
-      if (term.trim()) {
+      if (term.trim()) => {
         const regex = new RegExp(`(${term.trim()})`, 'gi');
         highlightedContent = highlightedContent.replace(
           regex,
@@ -47,11 +47,11 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   };
 
   const getDisplayContent = () => {
-    if (highlightedContent) {
+    if (highlightedContent) => {
       return highlightedContent;
     }
     
-    if (searchTerms && searchTerms.length > 0) {
+    if (searchTerms && searchTerms.length > 0) => {
       return highlightSearchTerms(message.content, searchTerms);
     }
     
@@ -60,7 +60,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
 
   const hasHighlights = highlightedContent || (searchTerms && searchTerms.length > 0);
 
-  const formatTime = (date: Date) {
+  const formatTime = (date: Date) => {
     return new Intl.DateTimeFormat('en-US', {
       hour: 'numeric',
       minute: '2-digit',
@@ -69,7 +69,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   };
 
   const getStatusIcon = () => {
-    switch (message.status) {
+    switch (message.status) => {
       case 'sending':
         return (
           <Clock
@@ -97,7 +97,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   };
 
   const handleRetry = () => {
-    if (onRetry) {
+    if (onRetry) => {
       screenReader.announce({
         message: 'Retrying message send',
         priority: 'polite',

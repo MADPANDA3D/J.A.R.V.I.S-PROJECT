@@ -54,7 +54,7 @@ interface RuntimeErrorMonitorProps {
 export function RuntimeErrorMonitor({ 
   className = '', 
   maxErrors = 500 
-}: RuntimeErrorMonitorProps) {
+}: RuntimeErrorMonitorProps) => {
   const [errors, setErrors] = useState<RuntimeError[]>([]);
   const [filteredErrors, setFilteredErrors] = useState<RuntimeError[]>([]);
   const [isMonitoring, setIsMonitoring] = useState(true);
@@ -73,47 +73,47 @@ export function RuntimeErrorMonitor({
     const metadata: Record<string, unknown> = {};
 
     // Determine error type and severity
-    if (error.message) {
+    if (error.message) => {
       const message = error.message.toLowerCase();
       
       // Categorize by error patterns
-      if (message.includes('cannot read propert') || message.includes('undefined')) {
+      if (message.includes('cannot read propert') || message.includes('undefined')) => {
         errorType = 'undefined_access';
         severity = 'high';
-      } else if (message.includes('network') || message.includes('fetch')) {
+      } else if (message.includes('network') || message.includes('fetch')) => {
         errorType = 'network';
         severity = 'medium';
-      } else if (message.includes('react') || message.includes('component')) {
+      } else if (message.includes('react') || message.includes('component')) => {
         errorType = 'react';
         severity = 'high';
-      } else if (message.includes('promise') || message.includes('async')) {
+      } else if (message.includes('promise') || message.includes('async')) => {
         errorType = 'promise';
         severity = 'medium';
       }
 
       // Determine severity by keywords
-      if (message.includes('critical') || message.includes('fatal')) {
+      if (message.includes('critical') || message.includes('fatal')) => {
         severity = 'critical';
-      } else if (message.includes('warning') || message.includes('deprecated')) {
+      } else if (message.includes('warning') || message.includes('deprecated')) => {
         severity = 'low';
       }
     }
 
     // Extract source information
-    if ('filename' in error && error.filename) {
+    if ('filename' in error && error.filename) => {
       source = error.filename.split('/').pop() || error.filename;
       metadata.filename = error.filename;
       metadata.lineno = 'lineno' in error ? error.lineno : undefined;
       metadata.colno = 'colno' in error ? error.colno : undefined;
     }
 
-    if (error.stack) {
+    if (error.stack) => {
       // Extract first meaningful line from stack trace
       const stackLines = error.stack.split('\n');
       const meaningfulLine = stackLines.find(line => 
         line.includes('.tsx') || line.includes('.ts') || line.includes('.jsx') || line.includes('.js')
       );
-      if (meaningfulLine) {
+      if (meaningfulLine) => {
         source = meaningfulLine.trim();
       }
     }
@@ -135,14 +135,14 @@ export function RuntimeErrorMonitor({
   };
 
   // Add or update error
-  const addError = useCallback((errorData: Omit<RuntimeError, 'id' | 'count' | 'lastOccurrence'>) {
+  const addError = useCallback((errorData: Omit<RuntimeError, 'id' | 'count' | 'lastOccurrence'>) => {
     setErrors(prevErrors => {
       // Check if this error already exists (same message and source)
       const existingIndex = prevErrors.findIndex(e => 
         e.message === errorData.message && e.source === errorData.source
       );
 
-      if (existingIndex !== -1) {
+      if (existingIndex !== -1) => {
         // Update existing error
         const updatedErrors = [...prevErrors];
         updatedErrors[existingIndex] = {
@@ -163,7 +163,7 @@ export function RuntimeErrorMonitor({
         const newErrors = [newError, ...prevErrors];
         
         // Keep only the most recent errors
-        if (newErrors.length > maxErrors) {
+        if (newErrors.length > maxErrors) => {
           return newErrors.slice(0, maxErrors);
         }
         
@@ -177,7 +177,7 @@ export function RuntimeErrorMonitor({
     if (!isMonitoring) return;
 
     // JavaScript errors
-    const handleError = (event: ErrorEvent) {
+    const handleError = (event: ErrorEvent) => {
       const errorData = categorizeError(event);
       addError(errorData);
       
@@ -191,7 +191,7 @@ export function RuntimeErrorMonitor({
     };
 
     // Unhandled promise rejections
-    const handleUnhandledRejection = (event: PromiseRejectionEvent) {
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
       const error = new Error(`Unhandled Promise Rejection: ${event.reason}`);
       const errorData = categorizeError(error);
       errorData.type = 'promise';
@@ -206,7 +206,7 @@ export function RuntimeErrorMonitor({
 
     // Console error monitoring
     const originalConsoleError = console.error;
-    const handleConsoleError = (...args: unknown[]) {
+    const handleConsoleError = (...args: unknown[]) => {
       const message = args.map(arg => 
         typeof arg === 'string' ? arg : JSON.stringify(arg)
       ).join(' ');
@@ -258,8 +258,8 @@ export function RuntimeErrorMonitor({
   }, [errors, typeFilter, severityFilter]);
 
   // Utility functions
-  const getSeverityIcon = (severity: string) {
-    switch (severity) {
+  const getSeverityIcon = (severity: string) => {
+    switch (severity) => {
       case 'critical':
         return <AlertTriangle className="h-4 w-4 text-red-600" />;
       case 'high':
@@ -273,7 +273,7 @@ export function RuntimeErrorMonitor({
     }
   };
 
-  const getSeverityBadge = (severity: string) {
+  const getSeverityBadge = (severity: string) => {
     const variants = {
       critical: 'destructive',
       high: 'destructive',
@@ -288,7 +288,7 @@ export function RuntimeErrorMonitor({
     );
   };
 
-  const getTypeBadge = (type: string) {
+  const getTypeBadge = (type: string) => {
     const colors = {
       javascript: 'bg-yellow-100 text-yellow-800',
       react: 'bg-blue-100 text-blue-800',
@@ -308,7 +308,7 @@ export function RuntimeErrorMonitor({
     );
   };
 
-  const formatTimestamp = (timestamp: Date) {
+  const formatTimestamp = (timestamp: Date) => {
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
       day: 'numeric',
@@ -347,10 +347,10 @@ export function RuntimeErrorMonitor({
     setExpandedErrors(new Set());
   };
 
-  const toggleErrorExpansion = (errorId: string) {
+  const toggleErrorExpansion = (errorId: string) => {
     setExpandedErrors(prev => {
       const newSet = new Set(prev);
-      if (newSet.has(errorId)) {
+      if (newSet.has(errorId)) => {
         newSet.delete(errorId);
       } else {
         newSet.add(errorId);
@@ -359,9 +359,9 @@ export function RuntimeErrorMonitor({
     });
   };
 
-  const toggleFilter = (filter: Set<string>, setFilter: (filter: Set<string>) => void, value: string) {
+  const toggleFilter = (filter: Set<string>, setFilter: (filter: Set<string>) => void, value: string) => {
     const newFilter = new Set(filter);
-    if (newFilter.has(value)) {
+    if (newFilter.has(value)) => {
       newFilter.delete(value);
     } else {
       newFilter.add(value);
@@ -374,7 +374,7 @@ export function RuntimeErrorMonitor({
     try {
       // This will cause an undefined access error
       (window as Record<string, unknown>).nonExistentFunction.call();
-    } catch (error) {
+    } catch (error) => {
       // This error will be caught by our monitoring
     }
   };

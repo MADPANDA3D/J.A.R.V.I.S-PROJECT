@@ -66,7 +66,7 @@ export function MessageSearch({
   enableSessionGrouping = false,
   onSessionGroupedSearch,
   onSessionSelect,
-}: MessageSearchProps) {
+}: MessageSearchProps) => {
   const {
     filters,
     currentQuery,
@@ -108,8 +108,8 @@ export function MessageSearch({
   }, [filters]);
 
   const handleSearch = useCallback(
-    async (searchQuery: string, loadMore = false) {
-      if (!searchQuery.trim()) {
+    async (searchQuery: string, loadMore = false) => {
+      if (!searchQuery.trim()) => {
         setResults([]);
         setSessionGroups([]);
         setShowResults(false);
@@ -124,7 +124,7 @@ export function MessageSearch({
       // Determine if we're doing session-grouped search
       const useSessionGrouping = enableSessionGrouping && onSessionGroupedSearch;
       
-      if (useSessionGrouping) {
+      if (useSessionGrouping) => {
         await handleSessionGroupedSearch(searchQuery, loadMore);
       } else {
         await handleRegularSearch(searchQuery, loadMore);
@@ -134,11 +134,11 @@ export function MessageSearch({
   );
 
   const handleRegularSearch = useCallback(
-    async (searchQuery: string, loadMore = false) {
+    async (searchQuery: string, loadMore = false) => {
       const isLoadingMoreResults = loadMore && results.length > 0;
       const searchStartTime = performance.now();
       
-      if (isLoadingMoreResults) {
+      if (isLoadingMoreResults) => {
         setIsLoadingMore(true);
       } else {
         setIsSearching(true);
@@ -153,7 +153,7 @@ export function MessageSearch({
         const offset = isLoadingMoreResults ? results.length : 0;
         const searchResponse = await onSearch(searchFilters, { limit: 25, offset });
         
-        if (isLoadingMoreResults) {
+        if (isLoadingMoreResults) => {
           setResults(prev => [...prev, ...searchResponse.results]);
         } else {
           setResults(searchResponse.results);
@@ -164,19 +164,19 @@ export function MessageSearch({
         setShowResults(true);
 
         // Add to search history with execution time if this is a new search
-        if (!isLoadingMoreResults && searchResponse.results.length > 0) {
+        if (!isLoadingMoreResults && searchResponse.results.length > 0) => {
           const executionTime = performance.now() - searchStartTime;
           addToHistory(searchQuery, searchResponse.total, executionTime, 'regular');
         }
-      } catch (error) {
+      } catch (error) => {
         console.error('Search failed:', error);
-        if (!isLoadingMoreResults) {
+        if (!isLoadingMoreResults) => {
           setResults([]);
           setSearchTotal(0);
           setHasMoreResults(false);
         }
       } finally {
-        if (isLoadingMoreResults) {
+        if (isLoadingMoreResults) => {
           setIsLoadingMore(false);
         } else {
           setIsSearching(false);
@@ -187,13 +187,13 @@ export function MessageSearch({
   );
 
   const handleSessionGroupedSearch = useCallback(
-    async (searchQuery: string, loadMore = false) {
+    async (searchQuery: string, loadMore = false) => {
       if (!onSessionGroupedSearch) return;
 
       const isLoadingMoreSessions = loadMore && sessionGroups.length > 0;
       const searchStartTime = performance.now();
       
-      if (isLoadingMoreSessions) {
+      if (isLoadingMoreSessions) => {
         setIsLoadingMoreSessions(true);
       } else {
         setIsSearching(true);
@@ -214,7 +214,7 @@ export function MessageSearch({
           messagesPerSession: 5,
         });
         
-        if (isLoadingMoreSessions) {
+        if (isLoadingMoreSessions) => {
           setSessionGroups(prev => [...prev, ...sessionResponse.sessionGroups]);
         } else {
           setSessionGroups(sessionResponse.sessionGroups);
@@ -226,20 +226,20 @@ export function MessageSearch({
         setShowResults(true);
 
         // Add to search history with execution time if this is a new search
-        if (!isLoadingMoreSessions && sessionResponse.sessionGroups.length > 0) {
+        if (!isLoadingMoreSessions && sessionResponse.sessionGroups.length > 0) => {
           const executionTime = performance.now() - searchStartTime;
           addToHistory(searchQuery, sessionResponse.totalMessages, executionTime, 'session-grouped');
         }
-      } catch (error) {
+      } catch (error) => {
         console.error('Session grouped search failed:', error);
-        if (!isLoadingMoreSessions) {
+        if (!isLoadingMoreSessions) => {
           setSessionGroups([]);
           setTotalSessions(0);
           setSearchTotal(0);
           setHasMoreSessions(false);
         }
       } finally {
-        if (isLoadingMoreSessions) {
+        if (isLoadingMoreSessions) => {
           setIsLoadingMoreSessions(false);
         } else {
           setIsSearching(false);
@@ -249,7 +249,7 @@ export function MessageSearch({
     [filters, onSessionGroupedSearch, sessionGroups.length, sessionOrder, addToHistory]
   );
 
-  const handleQueryChange = useCallback((value: string) {
+  const handleQueryChange = useCallback((value: string) => {
     setCurrentQuery(value);
   }, [setCurrentQuery]);
 
@@ -262,7 +262,7 @@ export function MessageSearch({
       try {
         const sessions = await chatService.getConversationSessions(userId);
         setConversationSessions(sessions);
-      } catch (error) {
+      } catch (error) => {
         console.error('Failed to load conversation sessions:', error);
       } finally {
         setLoadingSessions(false);
@@ -275,7 +275,7 @@ export function MessageSearch({
   // Debounced search effect
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (currentQuery) {
+      if (currentQuery) => {
         handleSearch(currentQuery);
       } else {
         setResults([]);
@@ -290,16 +290,16 @@ export function MessageSearch({
   }, [currentQuery, handleSearch, onClearSearch]);
 
   const handleLoadMore = useCallback(() => {
-    if (currentQuery && hasMoreResults && !isLoadingMore) {
+    if (currentQuery && hasMoreResults && !isLoadingMore) => {
       handleSearch(currentQuery, true);
     }
   }, [currentQuery, hasMoreResults, isLoadingMore, handleSearch]);
 
   // Session-specific handlers
-  const handleToggleSessionExpanded = useCallback((sessionId: string) {
+  const handleToggleSessionExpanded = useCallback((sessionId: string) => {
     setExpandedSessions(prev => {
       const newSet = new Set(prev);
-      if (newSet.has(sessionId)) {
+      if (newSet.has(sessionId)) => {
         newSet.delete(sessionId);
       } else {
         newSet.add(sessionId);
@@ -308,21 +308,21 @@ export function MessageSearch({
     });
   }, []);
 
-  const handleSessionSelect = useCallback((sessionId: string) {
+  const handleSessionSelect = useCallback((sessionId: string) => {
     setActiveSessionId(sessionId);
     onSessionSelect?.(sessionId);
   }, [onSessionSelect]);
 
-  const handleSessionOrderChange = useCallback((order: 'chronological' | 'relevance' | 'updated') {
+  const handleSessionOrderChange = useCallback((order: 'chronological' | 'relevance' | 'updated') => {
     setSessionOrder(order);
     // Re-trigger search with new order
-    if (currentQuery.trim()) {
+    if (currentQuery.trim()) => {
       handleSearch(currentQuery, false);
     }
   }, [currentQuery, handleSearch]);
 
   const handleLoadMoreSessions = useCallback(() => {
-    if (currentQuery.trim() && hasMoreSessions && !isLoadingMoreSessions) {
+    if (currentQuery.trim() && hasMoreSessions && !isLoadingMoreSessions) => {
       handleSearch(currentQuery, true);
     }
   }, [currentQuery, hasMoreSessions, isLoadingMoreSessions, handleSearch]);
@@ -335,7 +335,7 @@ export function MessageSearch({
     setExpandedSessions(new Set());
   }, []);
 
-  const handleLoadMoreInSession = useCallback(async (sessionId: string) {
+  const handleLoadMoreInSession = useCallback(async (sessionId: string) => {
     // This would require additional API support to load more messages within a specific session
     console.log('Load more messages in session:', sessionId);
     // Implementation would depend on additional backend support
@@ -367,7 +367,7 @@ export function MessageSearch({
     }, 100);
   };
 
-  const toggleMessageType = (type: 'user' | 'assistant') {
+  const toggleMessageType = (type: 'user' | 'assistant') => {
     const newMessageTypes = filters.messageTypes.includes(type)
       ? filters.messageTypes.filter(t => t !== type)
       : [...filters.messageTypes, type];
@@ -375,12 +375,12 @@ export function MessageSearch({
     updateFilters({ messageTypes: newMessageTypes });
   };
 
-  const handleResultClick = (result: SearchResult) {
+  const handleResultClick = (result: SearchResult) => {
     onResultClick(result.messageId);
     setShowResults(false);
   };
 
-  const formatTimestamp = (timestamp: Date) {
+  const formatTimestamp = (timestamp: Date) => {
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
       day: 'numeric',
@@ -555,7 +555,7 @@ export function MessageSearch({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={(e) {
+                    onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                       clearHistory();
@@ -579,7 +579,7 @@ export function MessageSearch({
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={(e) {
+                        onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
                           removeFromHistory(historyItem.id);

@@ -27,7 +27,7 @@ export function ConversationSessionGroup({
   isActive = false,
   searchTerms = [],
   className = '',
-}: ConversationSessionGroupProps) {
+}: ConversationSessionGroupProps) => {
   const { session, messages, messageCount, hasMoreMessages } = sessionGroup;
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
@@ -63,7 +63,7 @@ export function ConversationSessionGroup({
     }
   };
 
-  const formatDate = (date: Date) {
+  const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
       day: 'numeric',
@@ -73,7 +73,7 @@ export function ConversationSessionGroup({
     }).format(date);
   };
 
-  const formatRelativeTime = (date: Date) {
+  const formatRelativeTime = (date: Date) => {
     const now = new Date();
     const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
     
@@ -116,8 +116,8 @@ export function ConversationSessionGroup({
             onClick={handleSessionSelect}
             role="button"
             tabIndex={0}
-            onKeyDown={(e) {
-              if (e.key === 'Enter' || e.key === ' ') {
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') => {
                 e.preventDefault();
                 handleSessionSelect();
               }
@@ -179,8 +179,8 @@ export function ConversationSessionGroup({
                     onClick={() => onMessageClick(message.messageId)}
                     role="button"
                     tabIndex={0}
-                    onKeyDown={(e) {
-                      if (e.key === 'Enter' || e.key === ' ') {
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') => {
                         e.preventDefault();
                         onMessageClick(message.messageId);
                       }

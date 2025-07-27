@@ -26,33 +26,33 @@ export function DateRangePicker({
   onDateRangeChange,
   placeholder = "Pick a date range",
   disabled = false,
-}: DateRangePickerProps) {
+}: DateRangePickerProps) => {
   const [open, setOpen] = useState(false);
 
-  const formatDateRange = (range?: DateRange) {
+  const formatDateRange = (range?: DateRange) => {
     if (!range) return placeholder;
     
     const { from, to } = range;
     
-    if (from && isValid(from) && to && isValid(to)) {
+    if (from && isValid(from) && to && isValid(to)) => {
       return `${format(from, 'MMM d, yyyy')} - ${format(to, 'MMM d, yyyy')}`;
-    } else if (from && isValid(from)) {
+    } else if (from && isValid(from)) => {
       return format(from, 'MMM d, yyyy');
     }
     
     return placeholder;
   };
 
-  const handleSelect = (range: DateRange | undefined) {
+  const handleSelect = (range: DateRange | undefined) => {
     onDateRangeChange?.(range);
     
     // Close popover when both dates are selected
-    if (range?.from && range?.to) {
+    if (range?.from && range?.to) => {
       setOpen(false);
     }
   };
 
-  const handleClear = (e: React.MouseEvent) {
+  const handleClear = (e: React.MouseEvent) => {
     e.stopPropagation();
     onDateRangeChange?.(undefined);
     setOpen(false);

@@ -132,7 +132,7 @@ export class FocusManager {
     const firstElement = focusableElements[0];
     const lastElement = focusableElements[focusableElements.length - 1];
 
-    const handleKeyDown = (event: KeyboardEvent) {
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key !== 'Tab') return;
 
       if (event.shiftKey) {
@@ -153,7 +153,7 @@ export class FocusManager {
     container.addEventListener('keydown', handleKeyDown);
 
     // Store cleanup function
-    (container as HTMLElement & { _focusTrapCleanup?: () => void })._focusTrapCleanup = () {
+    (container as HTMLElement & { _focusTrapCleanup?: () => void })._focusTrapCleanup = () => {
       container.removeEventListener('keydown', handleKeyDown);
     };
 

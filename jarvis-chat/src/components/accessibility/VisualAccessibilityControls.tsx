@@ -41,7 +41,7 @@ export const VisualAccessibilityControls: React.FC<
   const handlePreferenceChange = <K extends keyof AccessibilityPreferences>(
     key: K,
     value: AccessibilityPreferences[K]
-  ) {
+  ) => {
     accessibilityPrefs.setPreference(key, value);
     setPreferences(accessibilityPrefs.getPreferences());
   };

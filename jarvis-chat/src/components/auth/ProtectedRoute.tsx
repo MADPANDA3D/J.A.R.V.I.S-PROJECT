@@ -15,7 +15,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const location = useLocation();
 
   // Show loading spinner while checking authentication
-  if (!initialized || loading) {
+  if (!initialized || loading) => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center space-y-4">
@@ -29,7 +29,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   // Redirect to login if not authenticated
-  if (!user) {
+  if (!user) => {
     return <Navigate to={redirectTo} state={{ from: location }} replace />;
   }
 

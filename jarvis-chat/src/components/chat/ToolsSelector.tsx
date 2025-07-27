@@ -39,7 +39,7 @@ interface ToolsSelectorProps {
 export function ToolsSelector({
   className = '',
   compact = false,
-}: ToolsSelectorProps) {
+}: ToolsSelectorProps) => {
   const {
     availableTools,
     toggleTool,
@@ -54,8 +54,8 @@ export function ToolsSelector({
 
   // Group tools by category
   const toolsByCategory = availableTools.reduce(
-    (acc, tool) {
-      if (!acc[tool.category]) {
+    (acc, tool) => {
+      if (!acc[tool.category]) => {
         acc[tool.category] = [];
       }
       acc[tool.category].push(tool);
@@ -66,12 +66,12 @@ export function ToolsSelector({
 
   const categories = Object.keys(toolsByCategory).sort();
 
-  const getIcon = (iconName: string) {
+  const getIcon = (iconName: string) => {
     const IconComponent = iconMap[iconName as keyof typeof iconMap] || Settings;
     return IconComponent;
   };
 
-  if (loading) {
+  if (loading) => {
     return (
       <Button
         variant="outline"

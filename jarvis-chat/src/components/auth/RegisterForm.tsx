@@ -68,7 +68,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   };
 
   const getPasswordStrengthColor = (strength: string): string => {
-    switch (strength) {
+    switch (strength) => {
       case 'Very Weak':
         return 'text-red-500';
       case 'Weak':
@@ -84,7 +84,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
     }
   };
 
-  const onSubmit = async (data: RegisterFormData) {
+  const onSubmit = async (data: RegisterFormData) => {
     try {
       setError(null);
       setSuccess(null);
@@ -93,7 +93,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         'Account created successfully! Please check your email to confirm your account.'
       );
       onSuccess?.();
-    } catch (error) {
+    } catch (error) => {
       setError(error instanceof Error ? error.message : 'An error occurred');
     }
   };

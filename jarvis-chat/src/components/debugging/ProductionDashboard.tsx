@@ -34,7 +34,7 @@ interface ProductionDashboardProps {
 export function ProductionDashboard({ 
   className = '',
   enableSensitiveData = false 
-}: ProductionDashboardProps) {
+}: ProductionDashboardProps) => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [systemHealth, setSystemHealth] = useState<Record<string, unknown> | null>(null);
   const [envInfo, setEnvInfo] = useState<Record<string, unknown> | null>(null);
@@ -67,7 +67,7 @@ export function ProductionDashboard({
       setSystemHealth(health);
       setEnvInfo(env);
       setLastRefresh(new Date());
-    } catch (error) {
+    } catch (error) => {
       console.error('Failed to load system data:', error);
     }
   };
@@ -80,8 +80,8 @@ export function ProductionDashboard({
     return () => clearInterval(interval);
   }, []);
 
-  const getStatusIcon = (status: string) {
-    switch (status) {
+  const getStatusIcon = (status: string) => {
+    switch (status) => {
       case 'healthy':
         return <CheckCircle className="h-4 w-4 text-green-500" />;
       case 'warning':
@@ -94,7 +94,7 @@ export function ProductionDashboard({
     }
   };
 
-  const getStatusBadge = (status: string) {
+  const getStatusBadge = (status: string) => {
     const variants = {
       healthy: 'default',
       warning: 'secondary', 
@@ -133,12 +133,12 @@ export function ProductionDashboard({
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-    } catch (error) {
+    } catch (error) => {
       console.error('Failed to export diagnostics:', error);
     }
   };
 
-  if (!systemHealth || !envInfo) {
+  if (!systemHealth || !envInfo) => {
     return (
       <Card className={`w-full ${className}`}>
         <CardHeader>

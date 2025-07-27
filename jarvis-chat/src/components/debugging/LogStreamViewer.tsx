@@ -34,7 +34,7 @@ export function LogStreamViewer({
   enablePersistence = true,
   maxLogEntries = 1000,
   className = '',
-}: LogStreamViewerProps) {
+}: LogStreamViewerProps) => {
   // State management
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [filteredLogs, setFilteredLogs] = useState<LogEntry[]>([]);
@@ -67,7 +67,7 @@ export function LogStreamViewer({
         setConnectionStatus('connected');
       };
 
-      ws.onmessage = (event) {
+      ws.onmessage = (event) => {
         if (isPaused) return;
 
         try {
@@ -84,12 +84,12 @@ export function LogStreamViewer({
           setLogs(prevLogs => {
             const newLogs = [...prevLogs, logEntry];
             // Keep only the most recent entries
-            if (newLogs.length > maxLogEntries) {
+            if (newLogs.length > maxLogEntries) => {
               return newLogs.slice(-maxLogEntries);
             }
             return newLogs;
           });
-        } catch (error) {
+        } catch (error) => {
           // If JSON parsing fails, treat as plain text log
           const logEntry: LogEntry = {
             id: crypto.randomUUID(),
@@ -101,7 +101,7 @@ export function LogStreamViewer({
 
           setLogs(prevLogs => {
             const newLogs = [...prevLogs, logEntry];
-            if (newLogs.length > maxLogEntries) {
+            if (newLogs.length > maxLogEntries) => {
               return newLogs.slice(-maxLogEntries);
             }
             return newLogs;
@@ -117,12 +117,12 @@ export function LogStreamViewer({
         setTimeout(connectWebSocket, 5000);
       };
 
-      ws.onerror = (error) {
+      ws.onerror = (error) => {
         console.error('❌ WebSocket error:', error);
         setConnectionStatus('disconnected');
       };
 
-    } catch (error) {
+    } catch (error) => {
       console.error('❌ Failed to create WebSocket connection:', error);
       setConnectionStatus('disconnected');
       
@@ -136,7 +136,7 @@ export function LogStreamViewer({
     connectWebSocket();
 
     return () => {
-      if (wsRef.current) {
+      if (wsRef.current) => {
         wsRef.current.close();
         wsRef.current = null;
       }
@@ -145,7 +145,7 @@ export function LogStreamViewer({
 
   // Auto-scroll effect
   useEffect(() => {
-    if (autoScroll && logsEndRef.current) {
+    if (autoScroll && logsEndRef.current) => {
       logsEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [filteredLogs, autoScroll]);
@@ -161,7 +161,7 @@ export function LogStreamViewer({
     filtered = filtered.filter(log => sourceFilter.has(log.source));
 
     // Apply search query
-    if (searchQuery.trim()) {
+    if (searchQuery.trim()) => {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(log => 
         log.message.toLowerCase().includes(query) ||
@@ -176,11 +176,11 @@ export function LogStreamViewer({
 
   // Persistence effect
   useEffect(() => {
-    if (enablePersistence && logs.length > 0) {
+    if (enablePersistence && logs.length > 0) => {
       const persistKey = `log-stream-${websocketUrl}`;
       try {
         localStorage.setItem(persistKey, JSON.stringify(logs.slice(-100))); // Persist last 100 logs
-      } catch (error) {
+      } catch (error) => {
         console.warn('Failed to persist logs:', error);
       }
     }
@@ -188,11 +188,11 @@ export function LogStreamViewer({
 
   // Load persisted logs on mount
   useEffect(() => {
-    if (enablePersistence) {
+    if (enablePersistence) => {
       const persistKey = `log-stream-${websocketUrl}`;
       try {
         const persistedLogs = localStorage.getItem(persistKey);
-        if (persistedLogs) {
+        if (persistedLogs) => {
           const parsed = JSON.parse(persistedLogs);
           const logsWithDates = parsed.map((log: Omit<LogEntry, 'timestamp'> & { timestamp: string }) => ({
             ...log,
@@ -200,15 +200,15 @@ export function LogStreamViewer({
           }));
           setLogs(logsWithDates);
         }
-      } catch (error) {
+      } catch (error) => {
         console.warn('Failed to load persisted logs:', error);
       }
     }
   }, [enablePersistence, websocketUrl]);
 
   // Utility functions
-  const getLogLevelIcon = (level: string) {
-    switch (level) {
+  const getLogLevelIcon = (level: string) => {
+    switch (level) => {
       case 'error':
         return <AlertCircle className="h-3 w-3 text-red-500" />;
       case 'warning':
@@ -222,7 +222,7 @@ export function LogStreamViewer({
     }
   };
 
-  const getLogLevelBadge = (level: string) {
+  const getLogLevelBadge = (level: string) => {
     const variants = {
       error: 'destructive',
       warning: 'secondary',
@@ -237,7 +237,7 @@ export function LogStreamViewer({
     );
   };
 
-  const getSourceBadge = (source: string) {
+  const getSourceBadge = (source: string) => {
     const colors = {
       docker: 'bg-blue-100 text-blue-800',
       webhook: 'bg-green-100 text-green-800',
@@ -255,7 +255,7 @@ export function LogStreamViewer({
     );
   };
 
-  const formatTimestamp = (timestamp: Date) {
+  const formatTimestamp = (timestamp: Date) => {
     return new Intl.DateTimeFormat('en-US', {
       hour: '2-digit',
       minute: '2-digit',
@@ -286,15 +286,15 @@ export function LogStreamViewer({
 
   const clearLogs = () => {
     setLogs([]);
-    if (enablePersistence) {
+    if (enablePersistence) => {
       const persistKey = `log-stream-${websocketUrl}`;
       localStorage.removeItem(persistKey);
     }
   };
 
-  const toggleFilter = (filter: Set<string>, setFilter: (filter: Set<string>) => void, value: string) {
+  const toggleFilter = (filter: Set<string>, setFilter: (filter: Set<string>) => void, value: string) => {
     const newFilter = new Set(filter);
-    if (newFilter.has(value)) {
+    if (newFilter.has(value)) => {
       newFilter.delete(value);
     } else {
       newFilter.add(value);
@@ -303,7 +303,7 @@ export function LogStreamViewer({
   };
 
   const handleScroll = useCallback(() => {
-    if (logContainerRef.current) {
+    if (logContainerRef.current) => {
       const { scrollTop, scrollHeight, clientHeight } = logContainerRef.current;
       const isAtBottom = scrollHeight - scrollTop - clientHeight < 5;
       setAutoScroll(isAtBottom);

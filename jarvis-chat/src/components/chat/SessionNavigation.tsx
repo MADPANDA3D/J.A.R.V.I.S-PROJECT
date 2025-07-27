@@ -66,20 +66,20 @@ export function SessionNavigation({
   onExpandAll,
   onCollapseAll,
   className = '',
-}: SessionNavigationProps) {
+}: SessionNavigationProps) => {
   const [showQuickSelect, setShowQuickSelect] = useState(false);
 
   const currentOrderOption = orderOptions.find(option => option.value === sessionOrder);
   const activeSession = sessions.find(s => s.id === activeSessionId);
 
-  const formatSessionTitle = (session: ConversationSession) {
-    if (session.title.length > 30) {
+  const formatSessionTitle = (session: ConversationSession) => {
+    if (session.title.length > 30) => {
       return session.title.substring(0, 30) + '...';
     }
     return session.title;
   };
 
-  const formatDate = (date: Date) {
+  const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
       day: 'numeric',

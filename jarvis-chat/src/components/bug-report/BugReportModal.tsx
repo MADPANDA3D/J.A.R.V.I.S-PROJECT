@@ -27,7 +27,7 @@ export const BugReportModal: React.FC<BugReportModalProps> = ({
 
   // Handle focus management
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen) => {
       // Store the previously focused element
       previouslyFocusedElement.current = document.activeElement as HTMLElement;
       
@@ -43,7 +43,7 @@ export const BugReportModal: React.FC<BugReportModalProps> = ({
       document.body.style.overflow = '';
       
       // Restore focus to previously focused element
-      if (previouslyFocusedElement.current) {
+      if (previouslyFocusedElement.current) => {
         previouslyFocusedElement.current.focus();
       }
     }
@@ -55,32 +55,32 @@ export const BugReportModal: React.FC<BugReportModalProps> = ({
 
   // Handle escape key
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) {
-      if (e.key === 'Escape' && isOpen) {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) => {
         onClose();
       }
     };
 
-    if (isOpen) {
+    if (isOpen) => {
       document.addEventListener('keydown', handleEscape);
       return () => document.removeEventListener('keydown', handleEscape);
     }
   }, [isOpen, onClose]);
 
   // Handle backdrop click
-  const handleBackdropClick = (e: React.MouseEvent) {
-    if (e.target === e.currentTarget) {
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) => {
       onClose();
     }
   };
 
   // Handle successful submission
-  const handleSubmitSuccess = (bugId: string, trackingNumber: string) {
+  const handleSubmitSuccess = (bugId: string, trackingNumber: string) => {
     onSubmitSuccess?.(bugId, trackingNumber);
     // Don't auto-close to show success message
   };
 
-  if (!isOpen) {
+  if (!isOpen) => {
     return null;
   }
 

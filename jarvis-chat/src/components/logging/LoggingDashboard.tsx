@@ -74,7 +74,7 @@ export const LoggingDashboard: React.FC<LoggingDashboardProps> = ({
         setServiceAnalytics(getServiceAnalytics(undefined, filter.timeRange));
         setDbAnalytics(getPerformanceAnalytics(filter.timeRange));
 
-      } catch (error) {
+      } catch (error) => {
         console.error('Failed to refresh logging data:', error);
       } finally {
         setIsLoading(false);
@@ -97,7 +97,7 @@ export const LoggingDashboard: React.FC<LoggingDashboardProps> = ({
 
   // Log level counts
   const logLevelCounts = useMemo(() => {
-    return logs.reduce((acc, log) {
+    return logs.reduce((acc, log) => {
       acc[log.level] = (acc[log.level] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
@@ -105,22 +105,22 @@ export const LoggingDashboard: React.FC<LoggingDashboardProps> = ({
 
   // Service distribution
   const serviceDistribution = useMemo(() => {
-    return logs.reduce((acc, log) {
+    return logs.reduce((acc, log) => {
       acc[log.service] = (acc[log.service] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
   }, [logs]);
 
-  const handleFilterChange = (updates: Partial<LogFilter>) {
+  const handleFilterChange = (updates: Partial<LogFilter>) => {
     setFilter(prev => ({ ...prev, ...updates }));
   };
 
-  const handleLogClick = (log: LogEntry) {
+  const handleLogClick = (log: LogEntry) => {
     setSelectedLog(log);
   };
 
   const getLogLevelColor = (level: LogEntry['level']): string => {
-    switch (level) {
+    switch (level) => {
       case 'critical': return 'text-red-800 bg-red-100';
       case 'error': return 'text-red-600 bg-red-50';
       case 'warn': return 'text-yellow-600 bg-yellow-50';
@@ -131,7 +131,7 @@ export const LoggingDashboard: React.FC<LoggingDashboardProps> = ({
   };
 
   const getCategoryIcon = (category: LogEntry['category']): string => {
-    switch (category) {
+    switch (category) => {
       case 'api': return '🌐';
       case 'database': return '🗄️';
       case 'auth': return '🔐';

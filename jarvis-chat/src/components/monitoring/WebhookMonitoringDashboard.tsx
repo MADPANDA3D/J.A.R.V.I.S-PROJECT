@@ -17,8 +17,8 @@ export const WebhookMonitoringDashboard: React.FC = () => {
     autoRefresh: true
   });
 
-  const getStatusColor = (status: string) {
-    switch (status) {
+  const getStatusColor = (status: string) => {
+    switch (status) => {
       case 'healthy': return 'bg-green-500';
       case 'degraded': return 'bg-yellow-500';
       case 'unhealthy': return 'bg-red-500';
@@ -32,21 +32,21 @@ export const WebhookMonitoringDashboard: React.FC = () => {
     const fetchHistoricalData = async () => {
       try {
         const response = await fetch(`/webhook/analytics/historical?timeRange=${timeRange}&format=detailed`);
-        if (response.ok) {
+        if (response.ok) => {
           const data = await response.json();
           setHistoricalData(data);
         }
-      } catch (error) {
+      } catch (error) => {
         console.error('Failed to fetch historical data:', error);
       }
     };
 
-    if (activeTab === 'historical') {
+    if (activeTab === 'historical') => {
       fetchHistoricalData();
     }
   }, [activeTab, timeRange]);
 
-  if (loading) {
+  if (loading) => {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
@@ -55,7 +55,7 @@ export const WebhookMonitoringDashboard: React.FC = () => {
     );
   }
 
-  if (error) {
+  if (error) => {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Card className="p-6 max-w-md">
@@ -72,7 +72,7 @@ export const WebhookMonitoringDashboard: React.FC = () => {
     );
   }
 
-  if (!metrics) {
+  if (!metrics) => {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <p>No metrics data available</p>

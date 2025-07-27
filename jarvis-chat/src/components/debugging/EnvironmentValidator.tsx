@@ -13,7 +13,7 @@ interface EnvironmentValidatorProps {
 export function EnvironmentValidator({ 
   showSensitiveData = false, 
   className = '' 
-}: EnvironmentValidatorProps) {
+}: EnvironmentValidatorProps) => {
   const [validationResult, setValidationResult] = useState<ValidationResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showSecrets, setShowSecrets] = useState(false);
@@ -27,7 +27,7 @@ export function EnvironmentValidator({
       await new Promise(resolve => setTimeout(resolve, 500));
       const result = validateEnvironment();
       setValidationResult(result);
-    } catch (error) {
+    } catch (error) => {
       console.error('Environment validation failed:', error);
     } finally {
       setIsLoading(false);
@@ -38,8 +38,8 @@ export function EnvironmentValidator({
     runValidation();
   }, []);
 
-  const getSeverityIcon = (severity: 'error' | 'critical' | 'warning' | 'success') {
-    switch (severity) {
+  const getSeverityIcon = (severity: 'error' | 'critical' | 'warning' | 'success') => {
+    switch (severity) => {
       case 'critical':
       case 'error':
         return <AlertCircle className="h-4 w-4 text-red-500" />;
@@ -52,7 +52,7 @@ export function EnvironmentValidator({
     }
   };
 
-  const getSeverityBadge = (severity: 'error' | 'critical' | 'warning' | 'success') {
+  const getSeverityBadge = (severity: 'error' | 'critical' | 'warning' | 'success') => {
     const variants = {
       critical: 'destructive',
       error: 'destructive',
@@ -67,24 +67,24 @@ export function EnvironmentValidator({
     );
   };
 
-  const maskSensitiveValue = (value: string, field: string) {
-    if (!showSensitiveData && !showSecrets) {
+  const maskSensitiveValue = (value: string, field: string) => {
+    if (!showSensitiveData && !showSecrets) => {
       // Mask API keys, secrets, and URLs
       if (field.toLowerCase().includes('key') || 
           field.toLowerCase().includes('secret') || 
-          field.toLowerCase().includes('url')) {
+          field.toLowerCase().includes('url')) => {
         return value.slice(0, 8) + '•'.repeat(Math.max(0, value.length - 12)) + value.slice(-4);
       }
     }
     return value;
   };
 
-  const copyToClipboard = async (text: string, field: string) {
+  const copyToClipboard = async (text: string, field: string) => {
     try {
       await navigator.clipboard.writeText(text);
       setCopiedField(field);
       setTimeout(() => setCopiedField(null), 2000);
-    } catch (error) {
+    } catch (error) => {
       console.error('Failed to copy to clipboard:', error);
     }
   };
@@ -141,7 +141,7 @@ export function EnvironmentValidator({
 
   const configStatus = getConfigurationStatus();
 
-  if (isLoading) {
+  if (isLoading) => {
     return (
       <Card className={`w-full ${className}`}>
         <CardHeader>
@@ -159,7 +159,7 @@ export function EnvironmentValidator({
     );
   }
 
-  if (!validationResult || !configStatus) {
+  if (!validationResult || !configStatus) => {
     return (
       <Card className={`w-full ${className}`}>
         <CardHeader>

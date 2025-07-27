@@ -68,17 +68,17 @@ interface MetricCardProps {
   description?: string;
 }
 
-function MetricCard({ title, value, change, changeType = 'neutral', icon, description }: MetricCardProps) {
-  const getChangeColor = (type: typeof changeType) {
-    switch (type) {
+function MetricCard({ title, value, change, changeType = 'neutral', icon, description }: MetricCardProps) => {
+  const getChangeColor = (type: typeof changeType) => {
+    switch (type) => {
       case 'positive': return 'text-green-600';
       case 'negative': return 'text-red-600';
       default: return 'text-gray-600';
     }
   };
 
-  const getChangeIcon = (type: typeof changeType) {
-    switch (type) {
+  const getChangeIcon = (type: typeof changeType) => {
+    switch (type) => {
       case 'positive': return <TrendingUp className="h-3 w-3" />;
       case 'negative': return <TrendingDown className="h-3 w-3" />;
       default: return null;
@@ -113,7 +113,7 @@ function MetricCard({ title, value, change, changeType = 'neutral', icon, descri
   );
 }
 
-export function BugLifecycleDashboard({ dateRange, teamFilter, onBugSelect }: DashboardProps) {
+export function BugLifecycleDashboard({ dateRange, teamFilter, onBugSelect }: DashboardProps) => {
   const { toast } = useToast();
   const { stats, loading: statsLoading } = useBugLifecycleStats();
   const { bugs, loading: bugsLoading, refreshBugs } = useBugList();
@@ -140,7 +140,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter, onBugSelect }: Da
       setFeedbackAnalytics(analytics);
 
       await refreshBugs();
-    } catch (error) {
+    } catch (error) => {
       toast({
         title: "Error",
         description: "Failed to load dashboard data",
@@ -176,7 +176,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter, onBugSelect }: Da
     feedbackCount: trend.feedbackCount
   })) || [];
 
-  const priorityDistribution = bugs.reduce((acc, bug) {
+  const priorityDistribution = bugs.reduce((acc, bug) => {
     const priority = bug.priority || 'medium';
     acc[priority] = (acc[priority] || 0) + 1;
     return acc;
@@ -212,7 +212,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter, onBugSelect }: Da
     return colors[priority] || '#6b7280';
   }
 
-  if (statsLoading || bugsLoading) {
+  if (statsLoading || bugsLoading) => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mr-3" />
@@ -657,7 +657,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter, onBugSelect }: Da
                 <div>
                   <h4 className="font-medium mb-3">Workflow Bottlenecks</h4>
                   <div className="space-y-2">
-                    {Object.entries(stats?.statusDistribution || {}).map(([status, count]) {
+                    {Object.entries(stats?.statusDistribution || {}).map(([status, count]) => {
                       const percentage = count / (stats?.totalStatusChanges || 1) * 100;
                       return (
                         <div key={status} className="flex items-center justify-between">
