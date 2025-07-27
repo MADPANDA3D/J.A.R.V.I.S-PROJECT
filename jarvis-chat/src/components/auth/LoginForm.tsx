@@ -150,7 +150,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             type="button"
             className="text-sm text-primary hover:underline disabled:opacity-50"
             disabled={isLoading}
-            onClick={() {
+            onClick={() => {
               // TODO: Implement forgot password functionality
               console.log('Forgot password clicked');
             }}

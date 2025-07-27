@@ -21,10 +21,10 @@ if ('serviceWorker' in navigator) {
         console.log('✅ SW registered: ', registration);
 
         // Handle service worker updates
-        registration.addEventListener('updatefound', () {
+        registration.addEventListener('updatefound', () => {
           const newWorker = registration.installing;
           if (newWorker) {
-            newWorker.addEventListener('statechange', () {
+            newWorker.addEventListener('statechange', () => {
               if (
                 newWorker.state === 'installed' &&
                 navigator.serviceWorker.controller
@@ -44,7 +44,7 @@ if ('serviceWorker' in navigator) {
 }
 
 // Initialize centralized logging
-const initializeLogging = async () {
+const initializeLogging = async () => {
   try {
     const loggingConfig = getLoggingConfig();
     const validation = validateLoggingConfig(loggingConfig);
@@ -102,7 +102,7 @@ if (!envResult.isValid && import.meta.env.DEV) {
 }
 
 // Ensure page loads at the top
-window.addEventListener('load', () {
+window.addEventListener('load', () => {
   window.scrollTo(0, 0);
 });
 

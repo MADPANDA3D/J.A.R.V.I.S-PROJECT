@@ -43,21 +43,21 @@ export function ProductionDashboard({
   const [lastRefresh, setLastRefresh] = useState(new Date());
 
   // Monitor online status
-  useEffect(() {
+  useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    return () {
+    return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
   }, []);
 
   // Load system data
-  const loadSystemData = async () {
+  const loadSystemData = async () => {
     try {
       const [health, env] = await Promise.all([
         Promise.resolve(getHealthCheckStatus()),
@@ -72,7 +72,7 @@ export function ProductionDashboard({
     }
   };
 
-  useEffect(() {
+  useEffect(() => {
     loadSystemData();
     
     // Refresh every 30 seconds
@@ -109,7 +109,7 @@ export function ProductionDashboard({
     );
   };
 
-  const exportDiagnostics = async () {
+  const exportDiagnostics = async () => {
     try {
       const diagnostics = {
         timestamp: new Date().toISOString(),

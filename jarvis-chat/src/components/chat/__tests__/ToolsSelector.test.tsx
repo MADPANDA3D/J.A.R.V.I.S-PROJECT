@@ -90,7 +90,7 @@ vi.mock('../../ui/badge', () => ({
   ),
 }));
 
-describe('ToolsSelector', () {
+describe('ToolsSelector', () => {
   const mockToggleTool = vi.fn();
   const mockIsToolSelected = vi.fn();
   const mockGetSelectedToolIds = vi.fn();
@@ -119,7 +119,7 @@ describe('ToolsSelector', () {
     error: null,
   };
 
-  beforeEach(() {
+  beforeEach(() => {
     vi.clearAllMocks();
     mockGetSelectedToolIds.mockReturnValue(['file_analysis']);
     mockIsToolSelected.mockImplementation(
@@ -128,8 +128,8 @@ describe('ToolsSelector', () {
     mockUseTools.mockReturnValue(defaultMockReturn);
   });
 
-  describe('rendering', () {
-    it('should render the tools button with correct selected count', () {
+  describe('rendering', () => {
+    it('should render the tools button with correct selected count', () => {
       render(<ToolsSelector />);
 
       const button = screen.getByTestId('tools-button');
@@ -140,7 +140,7 @@ describe('ToolsSelector', () {
       expect(badge).toHaveTextContent('1');
     });
 
-    it('should render compact version correctly', () {
+    it('should render compact version correctly', () => {
       mockGetSelectedToolIds.mockReturnValue(['file_analysis', 'web_search']);
 
       render(<ToolsSelector compact={true} />);
@@ -149,7 +149,7 @@ describe('ToolsSelector', () {
       expect(badges[0]).toHaveTextContent('2');
     });
 
-    it('should show loading state', () {
+    it('should show loading state', () => {
       mockUseTools.mockReturnValue({
         ...defaultMockReturn,
         loading: true,
@@ -163,14 +163,14 @@ describe('ToolsSelector', () {
     });
   });
 
-  describe('tool selection', () {
-    it('should toggle tool selection when checkbox is clicked', async () {
+  describe('tool selection', () => {
+    it('should toggle tool selection when checkbox is clicked', async () => {
       render(<ToolsSelector />);
 
       // Open dropdown
       fireEvent.click(screen.getByTestId('dropdown-menu'));
 
-      await waitFor(() {
+      await waitFor(() => {
         expect(screen.getByTestId('dropdown-content')).toBeInTheDocument();
       });
 
@@ -186,7 +186,7 @@ describe('ToolsSelector', () {
       expect(mockToggleTool).toHaveBeenCalledWith('web_search');
     });
 
-    it('should display tools grouped by category', () {
+    it('should display tools grouped by category', () => {
       render(<ToolsSelector />);
 
       // Open dropdown
@@ -204,8 +204,8 @@ describe('ToolsSelector', () {
     });
   });
 
-  describe('selected tools display', () {
-    it('should show correct selected count in main label', () {
+  describe('selected tools display', () => {
+    it('should show correct selected count in main label', () => {
       mockGetSelectedToolIds.mockReturnValue([
         'file_analysis',
         'web_search',
@@ -218,7 +218,7 @@ describe('ToolsSelector', () {
       expect(button).toHaveAttribute('aria-label', 'Select tools (3 selected)');
     });
 
-    it('should show "No tools selected" message when none are selected', () {
+    it('should show "No tools selected" message when none are selected', () => {
       mockGetSelectedToolIds.mockReturnValue([]);
 
       render(<ToolsSelector />);
@@ -230,8 +230,8 @@ describe('ToolsSelector', () {
     });
   });
 
-  describe('tool information display', () {
-    it('should display tool names and descriptions', () {
+  describe('tool information display', () => {
+    it('should display tool names and descriptions', () => {
       render(<ToolsSelector />);
 
       // Open dropdown
@@ -244,7 +244,7 @@ describe('ToolsSelector', () {
       ).toBeInTheDocument();
     });
 
-    it('should show helpful message about tool usage', () {
+    it('should show helpful message about tool usage', () => {
       render(<ToolsSelector />);
 
       // Open dropdown
@@ -256,8 +256,8 @@ describe('ToolsSelector', () {
     });
   });
 
-  describe('accessibility', () {
-    it('should have proper aria-label for the main button', () {
+  describe('accessibility', () => {
+    it('should have proper aria-label for the main button', () => {
       mockGetSelectedToolIds.mockReturnValue(['file_analysis']);
 
       render(<ToolsSelector />);
@@ -266,7 +266,7 @@ describe('ToolsSelector', () {
       expect(button).toHaveAttribute('aria-label', 'Select tools (1 selected)');
     });
 
-    it('should update aria-label when selection changes', () {
+    it('should update aria-label when selection changes', () => {
       mockGetSelectedToolIds.mockReturnValue(['file_analysis', 'web_search']);
 
       render(<ToolsSelector />);
@@ -276,8 +276,8 @@ describe('ToolsSelector', () {
     });
   });
 
-  describe('error handling', () {
-    it('should handle tools loading error gracefully', () {
+  describe('error handling', () => {
+    it('should handle tools loading error gracefully', () => {
       mockUseTools.mockReturnValue({
         ...defaultMockReturn,
         loading: false,
@@ -291,8 +291,8 @@ describe('ToolsSelector', () {
     });
   });
 
-  describe('dropdown behavior', () {
-    it('should open and close dropdown correctly', () {
+  describe('dropdown behavior', () => {
+    it('should open and close dropdown correctly', () => {
       render(<ToolsSelector />);
 
       const dropdown = screen.getByTestId('dropdown-menu');

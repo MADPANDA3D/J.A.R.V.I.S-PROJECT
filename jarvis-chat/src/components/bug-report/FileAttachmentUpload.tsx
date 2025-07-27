@@ -301,7 +301,7 @@ export const FileAttachmentUpload: React.FC<FileAttachmentUploadProps> = ({
               type="button"
               variant="outline"
               size="sm"
-              onClick={() {
+              onClick={() => {
                 setSelectedFiles([]);
                 onFileUpload([]);
                 setValidationErrors([]);

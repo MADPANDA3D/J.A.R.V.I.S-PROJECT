@@ -107,11 +107,11 @@ export function FeedbackCollectionForm({
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() {
+  useEffect(() => {
     loadFeedbackData();
   }, [feedbackId]);
 
-  const loadFeedbackData = async () {
+  const loadFeedbackData = async () => {
     try {
       setIsLoading(true);
       
@@ -261,7 +261,7 @@ export function FeedbackCollectionForm({
     }
   };
 
-  const handleCancel = () {
+  const handleCancel = () => {
     if (onCancel) {
       onCancel();
     }

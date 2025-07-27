@@ -58,13 +58,13 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
   const refreshTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize dashboard
-  useEffect(() {
+  useEffect(() => {
     initializeDashboard();
     return () => cleanup();
   }, []);
 
   // Setup auto-refresh
-  useEffect(() {
+  useEffect(() => {
     if (autoRefresh) {
       startAutoRefresh();
     } else {
@@ -74,7 +74,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     return () => stopAutoRefresh();
   }, [autoRefresh, refreshInterval]);
 
-  const initializeDashboard = async () {
+  const initializeDashboard = async () => {
     try {
       setIsLoading(true);
       await refreshData();
@@ -86,7 +86,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     }
   };
 
-  const refreshData = async () {
+  const refreshData = async () => {
     try {
       const [
         performance,
@@ -117,14 +117,14 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     }
   };
 
-  const setupWebSocket = () {
+  const setupWebSocket = () => {
     const wsUrl = import.meta.env.VITE_ACTIVITY_WEBSOCKET_URL;
     if (!wsUrl) return;
 
     try {
       websocketRef.current = new WebSocket(wsUrl);
 
-      websocketRef.current.onopen = () {
+      websocketRef.current.onopen = () => {
         setIsConnected(true);
         console.log('Connected to real-time monitoring WebSocket');
       };
@@ -133,10 +133,10 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
         handleWebSocketMessage(event.data);
       };
 
-      websocketRef.current.onclose = () {
+      websocketRef.current.onclose = () => {
         setIsConnected(false);
         // Attempt reconnection after 5 seconds
-        setTimeout(() {
+        setTimeout(() => {
           if (websocketRef.current?.readyState === WebSocket.CLOSED) {
             setupWebSocket();
           }
@@ -202,20 +202,20 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     }));
   };
 
-  const startAutoRefresh = () {
-    refreshTimerRef.current = setInterval(() {
+  const startAutoRefresh = () => {
+    refreshTimerRef.current = setInterval(() => {
       refreshData();
     }, refreshInterval);
   };
 
-  const stopAutoRefresh = () {
+  const stopAutoRefresh = () => {
     if (refreshTimerRef.current) {
       clearInterval(refreshTimerRef.current);
       refreshTimerRef.current = null;
     }
   };
 
-  const cleanup = () {
+  const cleanup = () => {
     stopAutoRefresh();
     if (websocketRef.current) {
       websocketRef.current.close();

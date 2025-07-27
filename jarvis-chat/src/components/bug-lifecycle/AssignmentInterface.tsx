@@ -64,11 +64,11 @@ export function AssignmentInterface({
   const [roleFilter, setRoleFilter] = useState<string>('all');
   const [availabilityFilter, setAvailabilityFilter] = useState<string>('all');
 
-  useEffect(() {
+  useEffect(() => {
     loadData();
   }, [bugId]);
 
-  const loadData = async () {
+  const loadData = async () => {
     try {
       // Load recommendations
       if (bugReport) {
@@ -93,7 +93,7 @@ export function AssignmentInterface({
     }
   };
 
-  const handleAssignment = async () {
+  const handleAssignment = async () => {
     if (!selectedAssignee) {
       toast({
         title: "Error",
@@ -142,7 +142,7 @@ export function AssignmentInterface({
     }
   };
 
-  const handleAutoAssignment = async () {
+  const handleAutoAssignment = async () => {
     setIsAssigning(true);
     try {
       const assignedTo = await bugAssignmentSystem.autoAssignBug(bugId);
@@ -381,7 +381,7 @@ export function AssignmentInterface({
     </div>
   );
 
-  function AssignmentDialog() {
+  function AssignmentDialog() => {
     return (
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden">
         <DialogHeader>

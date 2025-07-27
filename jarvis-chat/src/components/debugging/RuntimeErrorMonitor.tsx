@@ -173,7 +173,7 @@ export function RuntimeErrorMonitor({
   }, [maxErrors]);
 
   // Set up error monitoring
-  useEffect(() {
+  useEffect(() => {
     if (!isMonitoring) return;
 
     // JavaScript errors
@@ -235,7 +235,7 @@ export function RuntimeErrorMonitor({
     console.error = handleConsoleError;
 
     // Store original functions for cleanup
-    const cleanup = () {
+    const cleanup = () => {
       window.removeEventListener('error', handleError);
       window.removeEventListener('unhandledrejection', handleUnhandledRejection);
       console.error = originalConsoleError;
@@ -245,7 +245,7 @@ export function RuntimeErrorMonitor({
   }, [isMonitoring, addError]);
 
   // Filter errors
-  useEffect(() {
+  useEffect(() => {
     let filtered = errors;
 
     // Apply type filter
@@ -318,7 +318,7 @@ export function RuntimeErrorMonitor({
     }).format(timestamp);
   };
 
-  const exportErrors = () {
+  const exportErrors = () => {
     const data = filteredErrors.map(error => ({
       timestamp: error.timestamp.toISOString(),
       type: error.type,
@@ -342,7 +342,7 @@ export function RuntimeErrorMonitor({
     URL.revokeObjectURL(url);
   };
 
-  const clearErrors = () {
+  const clearErrors = () => {
     setErrors([]);
     setExpandedErrors(new Set());
   };
@@ -370,7 +370,7 @@ export function RuntimeErrorMonitor({
   };
 
   // Trigger a test error
-  const triggerTestError = () {
+  const triggerTestError = () => {
     try {
       // This will cause an undefined access error
       (window as Record<string, unknown>).nonExistentFunction.call();

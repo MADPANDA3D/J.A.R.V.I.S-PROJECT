@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { screenReader } from '@/lib/accessibility';
 
-export const ChatPage: React.FC = () {
+export const ChatPage: React.FC = () => {
   const { user } = useAuth();
   const {
     messages,
@@ -18,7 +18,7 @@ export const ChatPage: React.FC = () {
   } = useChat();
 
   // Announce page load and updates to screen readers
-  useEffect(() {
+  useEffect(() => {
     screenReader.announce({
       message: 'Chat page loaded. Start typing to send a message to JARVIS.',
       priority: 'polite',
@@ -26,7 +26,7 @@ export const ChatPage: React.FC = () {
   }, []);
 
   // Announce errors to screen readers
-  useEffect(() {
+  useEffect(() => {
     if (error) {
       screenReader.announce({
         message: `Error: ${error}`,

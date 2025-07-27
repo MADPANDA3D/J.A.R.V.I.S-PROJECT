@@ -18,11 +18,11 @@ export function Avatar({ src, alt, size = 'md', className }: AvatarProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
-  const handleLoad = () {
+  const handleLoad = () => {
     setIsLoading(false);
   };
 
-  const handleError = () {
+  const handleError = () => {
     setIsLoading(false);
     setHasError(true);
   };

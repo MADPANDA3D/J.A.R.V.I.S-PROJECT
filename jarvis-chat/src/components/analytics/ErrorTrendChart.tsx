@@ -26,7 +26,7 @@ export const ErrorTrendChart: React.FC<ErrorTrendChartProps> = ({
   className = '',
   timeWindow = 24 // 24 hours
 }) => {
-  const chartData = useMemo(() {
+  const chartData = useMemo(() => {
     const now = Date.now();
     const windowStart = now - (timeWindow * 60 * 60 * 1000);
     

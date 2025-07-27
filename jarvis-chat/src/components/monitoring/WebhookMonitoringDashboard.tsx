@@ -6,7 +6,7 @@ import { PerformanceCharts } from './PerformanceCharts';
 import { WebhookEventLog } from './WebhookEventLog';
 import { useWebhookMonitoring } from '../../hooks/useWebhookMonitoring';
 
-export const WebhookMonitoringDashboard: React.FC = () {
+export const WebhookMonitoringDashboard: React.FC = () => {
   const [refreshInterval, setRefreshInterval] = useState(30000); // 30 seconds
   const [activeTab, setActiveTab] = useState('overview');
   const [timeRange, setTimeRange] = useState('24h');
@@ -28,8 +28,8 @@ export const WebhookMonitoringDashboard: React.FC = () {
 
 
   // Effect to fetch historical data when tab is active or time range changes
-  useEffect(() {
-    const fetchHistoricalData = async () {
+  useEffect(() => {
+    const fetchHistoricalData = async () => {
       try {
         const response = await fetch(`/webhook/analytics/historical?timeRange=${timeRange}&format=detailed`);
         if (response.ok) {

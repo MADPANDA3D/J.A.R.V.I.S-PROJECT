@@ -29,7 +29,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
   const [selectedEvent, setSelectedEvent] = useState<TimelineEvent | null>(null);
   const [showAllEvents, setShowAllEvents] = useState(false);
 
-  const timelineEvents = useMemo(() {
+  const timelineEvents = useMemo(() => {
     const events: TimelineEvent[] = [];
 
     // Add page views

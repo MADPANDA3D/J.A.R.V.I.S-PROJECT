@@ -23,11 +23,11 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
-describe('PWAStatus', () {
+describe('PWAStatus', () => {
   const mockInstall = vi.fn();
   const mockClearError = vi.fn();
 
-  beforeEach(() {
+  beforeEach(() => {
     mockUsePWAInstall.mockReturnValue({
       canInstall: false,
       isInstalling: false,
@@ -43,7 +43,7 @@ describe('PWAStatus', () {
     vi.clearAllMocks();
   });
 
-  it('should show "Installed" badge when app is installed', () {
+  it('should show "Installed" badge when app is installed', () => {
     mockUsePWAInstall.mockReturnValue({
       canInstall: false,
       isInstalling: false,
@@ -60,7 +60,7 @@ describe('PWAStatus', () {
     expect(screen.getByText('Installed')).toBeInTheDocument();
   });
 
-  it('should show "Installed" badge when in standalone mode', () {
+  it('should show "Installed" badge when in standalone mode', () => {
     // Mock standalone display mode
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
@@ -80,12 +80,12 @@ describe('PWAStatus', () {
     expect(screen.getByText('Installed')).toBeInTheDocument();
   });
 
-  it('should show "Web App" badge when PWA is supported but not installed', () {
+  it('should show "Web App" badge when PWA is supported but not installed', () => {
     render(<PWAStatus />);
     expect(screen.getByText('Web App')).toBeInTheDocument();
   });
 
-  it('should show "Browser" badge when PWA is not supported', () {
+  it('should show "Browser" badge when PWA is not supported', () => {
     mockUsePWAInstall.mockReturnValue({
       canInstall: false,
       isInstalling: false,
@@ -102,7 +102,7 @@ describe('PWAStatus', () {
     expect(screen.getByText('Browser')).toBeInTheDocument();
   });
 
-  it('should show install button when canInstall is true and showInstallButton is true', () {
+  it('should show install button when canInstall is true and showInstallButton is true', () => {
     mockUsePWAInstall.mockReturnValue({
       canInstall: true,
       isInstalling: false,
@@ -119,7 +119,7 @@ describe('PWAStatus', () {
     expect(screen.getByText('Install')).toBeInTheDocument();
   });
 
-  it('should not show install button when showInstallButton is false', () {
+  it('should not show install button when showInstallButton is false', () => {
     mockUsePWAInstall.mockReturnValue({
       canInstall: true,
       isInstalling: false,
@@ -136,7 +136,7 @@ describe('PWAStatus', () {
     expect(screen.queryByText('Install')).not.toBeInTheDocument();
   });
 
-  it('should call install when install button is clicked', () {
+  it('should call install when install button is clicked', () => {
     mockUsePWAInstall.mockReturnValue({
       canInstall: true,
       isInstalling: false,
@@ -157,7 +157,7 @@ describe('PWAStatus', () {
     expect(mockInstall).toHaveBeenCalled();
   });
 
-  it('should show "Installing..." when isInstalling is true', () {
+  it('should show "Installing..." when isInstalling is true', () => {
     mockUsePWAInstall.mockReturnValue({
       canInstall: true,
       isInstalling: true,
@@ -174,7 +174,7 @@ describe('PWAStatus', () {
     expect(screen.getByText('Installing...')).toBeInTheDocument();
   });
 
-  it('should show "Install App" on mobile devices', () {
+  it('should show "Install App" on mobile devices', () => {
     // Mock mobile user agent
     Object.defineProperty(navigator, 'userAgent', {
       writable: true,

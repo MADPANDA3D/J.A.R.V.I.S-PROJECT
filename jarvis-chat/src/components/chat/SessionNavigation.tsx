@@ -230,7 +230,7 @@ export function SessionNavigation({
           {sessions.map(session => (
             <button
               key={session.id}
-              onClick={() {
+              onClick={() => {
                 onSessionSelect(session.id);
                 setShowQuickSelect(false);
               }}

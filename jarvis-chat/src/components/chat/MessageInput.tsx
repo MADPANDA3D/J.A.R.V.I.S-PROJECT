@@ -34,7 +34,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
     }
   };
 
-  const handleSend = () {
+  const handleSend = () => {
     if (!value.trim() || disabled) return;
 
     // Get selected tools if tools selector is enabled
@@ -50,7 +50,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   };
 
   // Focus management for better accessibility
-  useEffect(() {
+  useEffect(() => {
     if (!disabled && textareaRef.current) {
       textareaRef.current.focus();
     }

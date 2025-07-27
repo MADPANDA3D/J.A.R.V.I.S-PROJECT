@@ -89,7 +89,7 @@ export function SystemHealthMonitor({
         // WebSocket health check
         return new Promise((resolve) {
           const ws = new WebSocket(service.url);
-          const timeout = setTimeout(() {
+          const timeout = setTimeout(() => {
             ws.close();
             resolve({
               service: service.name,
@@ -100,7 +100,7 @@ export function SystemHealthMonitor({
             });
           }, service.timeout);
 
-          ws.onopen = () {
+          ws.onopen = () => {
             clearTimeout(timeout);
             const responseTime = performance.now() - startTime;
             ws.close();
@@ -114,7 +114,7 @@ export function SystemHealthMonitor({
             });
           };
 
-          ws.onerror = () {
+          ws.onerror = () => {
             clearTimeout(timeout);
             resolve({
               service: service.name,
@@ -194,7 +194,7 @@ export function SystemHealthMonitor({
   }, []);
 
   // Run all health checks
-  const runHealthChecks = useCallback(async () {
+  const runHealthChecks = useCallback(async () => {
     setIsLoading(true);
     
     try {
@@ -260,7 +260,7 @@ export function SystemHealthMonitor({
   }, [healthChecks, checkServiceHealth, monitoredServices]);
 
   // Auto-refresh health checks
-  useEffect(() {
+  useEffect(() => {
     runHealthChecks();
     
     const interval = setInterval(runHealthChecks, refreshInterval);

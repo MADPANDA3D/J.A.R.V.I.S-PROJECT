@@ -19,7 +19,7 @@ import {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const useAuth = () {
+export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
@@ -39,9 +39,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     initialized: false,
   });
 
-  useEffect(() {
+  useEffect(() => {
     // Get initial session
-    const getInitialSession = async () {
+    const getInitialSession = async () => {
       try {
         const {
           data: { session },
@@ -73,7 +73,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) {
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('Auth state changed:', event, session?.user?.email);
       
       // Track authentication events
@@ -131,7 +131,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
     });
 
-    return () {
+    return () => {
       subscription.unsubscribe();
     };
   }, []);

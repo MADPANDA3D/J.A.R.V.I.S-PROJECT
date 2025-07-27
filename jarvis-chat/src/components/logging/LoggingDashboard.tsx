@@ -43,8 +43,8 @@ export const LoggingDashboard: React.FC<LoggingDashboardProps> = ({
   const [serviceAnalytics, setServiceAnalytics] = useState<any>(null);
 
   // Refresh data
-  useEffect(() {
-    const refreshData = async () {
+  useEffect(() => {
+    const refreshData = async () => {
       setIsLoading(true);
       try {
         // Get logs
@@ -87,7 +87,7 @@ export const LoggingDashboard: React.FC<LoggingDashboardProps> = ({
   }, [filter, refreshInterval]);
 
   // Filtered and processed logs
-  const processedLogs = useMemo(() {
+  const processedLogs = useMemo(() => {
     return logs.map(log => ({
       ...log,
       formattedTimestamp: new Date(log.timestamp).toLocaleString(),
@@ -96,7 +96,7 @@ export const LoggingDashboard: React.FC<LoggingDashboardProps> = ({
   }, [logs]);
 
   // Log level counts
-  const logLevelCounts = useMemo(() {
+  const logLevelCounts = useMemo(() => {
     return logs.reduce((acc, log) {
       acc[log.level] = (acc[log.level] || 0) + 1;
       return acc;
@@ -104,7 +104,7 @@ export const LoggingDashboard: React.FC<LoggingDashboardProps> = ({
   }, [logs]);
 
   // Service distribution
-  const serviceDistribution = useMemo(() {
+  const serviceDistribution = useMemo(() => {
     return logs.reduce((acc, log) {
       acc[log.service] = (acc[log.service] || 0) + 1;
       return acc;

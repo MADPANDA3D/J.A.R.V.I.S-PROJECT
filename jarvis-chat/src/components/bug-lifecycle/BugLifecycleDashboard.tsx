@@ -123,11 +123,11 @@ export function BugLifecycleDashboard({ dateRange, teamFilter, onBugSelect }: Da
   const [selectedTimeRange, setSelectedTimeRange] = useState<string>('7d');
   const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() {
+  useEffect(() => {
     loadDashboardData();
   }, [dateRange, teamFilter, selectedTimeRange]);
 
-  const loadDashboardData = async () {
+  const loadDashboardData = async () => {
     try {
       setRefreshing(true);
       
@@ -151,7 +151,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter, onBugSelect }: Da
     }
   };
 
-  const handleRefresh = () {
+  const handleRefresh = () => {
     loadDashboardData();
   };
 

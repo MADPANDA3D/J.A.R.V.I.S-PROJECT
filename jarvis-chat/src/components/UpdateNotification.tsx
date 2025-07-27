@@ -22,20 +22,20 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
   const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'disconnected'>('disconnected');
   const [, setWs] = useState<WebSocket | null>(null);
 
-  useEffect(() {
+  useEffect(() => {
     // Only connect if we're in the browser and have a valid URL
     if (typeof window === 'undefined' || !websocketUrl) return;
 
     let currentWebSocket: WebSocket | null = null;
 
-    const connectWebSocket = () {
+    const connectWebSocket = () => {
       setConnectionStatus('connecting');
       
       try {
         const websocket = new WebSocket(websocketUrl);
         currentWebSocket = websocket;
         
-        websocket.onopen = () {
+        websocket.onopen = () => {
           console.log('🔌 Connected to update notifications');
           setConnectionStatus('connected');
           setWs(websocket);
@@ -51,7 +51,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
             
             // Auto-hide success messages after 10 seconds
             if (data.type === 'success') {
-              setTimeout(() {
+              setTimeout(() => {
                 setIsVisible(false);
                 setTimeout(() => setNotification(null), 300);
               }, 10000);
@@ -59,7 +59,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
             
             // Auto-hide info messages after 5 seconds unless they mention restart
             if (data.type === 'info' && !data.message.toLowerCase().includes('restart')) {
-              setTimeout(() {
+              setTimeout(() => {
                 setIsVisible(false);
                 setTimeout(() => setNotification(null), 300);
               }, 5000);
@@ -69,7 +69,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
           }
         };
         
-        websocket.onclose = () {
+        websocket.onclose = () => {
           console.log('🔌 Disconnected from update notifications');
           setConnectionStatus('disconnected');
           setWs(null);
@@ -96,7 +96,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
     connectWebSocket();
 
     // Cleanup on unmount
-    return () {
+    return () => {
       if (currentWebSocket) {
         currentWebSocket.close();
         currentWebSocket = null;
@@ -130,12 +130,12 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
     }
   };
 
-  const dismissNotification = () {
+  const dismissNotification = () => {
     setIsVisible(false);
     setTimeout(() => setNotification(null), 300);
   };
 
-  const refreshPage = () {
+  const refreshPage = () => {
     window.location.reload();
   };
 

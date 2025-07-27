@@ -12,11 +12,11 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Setup global keyboard shortcuts for the application
-  useEffect(() {
+  useEffect(() => {
     // Register global keyboard shortcuts
     keyboardNav.registerShortcut(
       'alt+m',
-      () {
+      () => {
         const mainContent = document.querySelector('main');
         if (mainContent) {
           focusManager.setFocus(
@@ -30,7 +30,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
 
     keyboardNav.registerShortcut(
       'alt+n',
-      () {
+      () => {
         setSidebarOpen(!sidebarOpen);
         screenReader.announce({
           message: sidebarOpen
@@ -44,7 +44,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
 
     keyboardNav.registerShortcut(
       'escape',
-      () {
+      () => {
         if (sidebarOpen) {
           setSidebarOpen(false);
           screenReader.announce({
@@ -57,7 +57,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     );
   }, [sidebarOpen]);
 
-  const handleMenuClick = () {
+  const handleMenuClick = () => {
     setSidebarOpen(true);
     screenReader.announce({
       message: 'Navigation menu opened',
@@ -65,7 +65,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     });
   };
 
-  const handleSidebarClose = () {
+  const handleSidebarClose = () => {
     setSidebarOpen(false);
     screenReader.announce({
       message: 'Navigation menu closed',

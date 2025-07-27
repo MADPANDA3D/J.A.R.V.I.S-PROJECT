@@ -46,7 +46,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
     return highlightedContent;
   };
 
-  const getDisplayContent = () {
+  const getDisplayContent = () => {
     if (highlightedContent) {
       return highlightedContent;
     }
@@ -68,7 +68,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
     }).format(date);
   };
 
-  const getStatusIcon = () {
+  const getStatusIcon = () => {
     switch (message.status) {
       case 'sending':
         return (
@@ -96,7 +96,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
     }
   };
 
-  const handleRetry = () {
+  const handleRetry = () => {
     if (onRetry) {
       screenReader.announce({
         message: 'Retrying message send',

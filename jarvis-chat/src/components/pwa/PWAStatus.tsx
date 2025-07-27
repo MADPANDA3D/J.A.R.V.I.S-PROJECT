@@ -22,7 +22,7 @@ export const PWAStatus: React.FC<PWAStatusProps> = ({
       navigator.userAgent
     );
 
-  const handleInstall = async () {
+  const handleInstall = async () => {
     await install();
   };
 

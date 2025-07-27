@@ -89,7 +89,7 @@ export const AccessibilityTestPanel: React.FC<AccessibilityTestPanelProps> = ({
       document.body.appendChild(announcement);
 
       // Remove after announcement
-      setTimeout(() {
+      setTimeout(() => {
         document.body.removeChild(announcement);
       }, 1000);
     } catch (error) {
@@ -104,7 +104,7 @@ export const AccessibilityTestPanel: React.FC<AccessibilityTestPanelProps> = ({
         'Accessibility test failed. Please try again.';
       document.body.appendChild(errorAnnouncement);
 
-      setTimeout(() {
+      setTimeout(() => {
         document.body.removeChild(errorAnnouncement);
       }, 1000);
     } finally {
@@ -112,7 +112,7 @@ export const AccessibilityTestPanel: React.FC<AccessibilityTestPanelProps> = ({
     }
   };
 
-  const downloadReport = () {
+  const downloadReport = () => {
     if (!lastResult) return;
 
     const report = accessibilityTester.generateReport(lastResult);

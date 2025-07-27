@@ -19,10 +19,10 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({
   const [isDismissed, setIsDismissed] = useState(false);
 
   // Show prompt after delay and user engagement
-  useEffect(() {
+  useEffect(() => {
     if (!canInstall || isDismissed) return;
 
-    const timer = setTimeout(() {
+    const timer = setTimeout(() => {
       setIsVisible(true);
     }, showDelay);
 
@@ -30,22 +30,22 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({
   }, [canInstall, showDelay, isDismissed]);
 
   // Clear error when component unmounts
-  useEffect(() {
-    return () {
+  useEffect(() => {
+    return () => {
       if (installError) {
         clearError();
       }
     };
   }, [installError, clearError]);
 
-  const handleInstall = async () {
+  const handleInstall = async () => {
     const success = await install();
     if (success) {
       setIsVisible(false);
     }
   };
 
-  const handleDismiss = () {
+  const handleDismiss = () => {
     setIsVisible(false);
     setIsDismissed(true);
   };

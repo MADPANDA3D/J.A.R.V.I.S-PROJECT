@@ -48,7 +48,7 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom when new messages arrive
-  useEffect(() {
+  useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
@@ -142,7 +142,7 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
     });
   };
 
-  const handleClearSearch = () {
+  const handleClearSearch = () => {
     setShowSearch(false);
     setCurrentSearchTerms([]);
     setHighlightedMessageId(null);
@@ -154,7 +154,7 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
     setShowSearch(false);
     
     // Scroll to the message if possible
-    setTimeout(() {
+    setTimeout(() => {
       const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
       if (messageElement) {
         messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });

@@ -19,7 +19,7 @@ interface WebhookEvent {
   };
 }
 
-export const WebhookEventLog: React.FC = () {
+export const WebhookEventLog: React.FC = () => {
   const [events, setEvents] = useState<WebhookEvent[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<WebhookEvent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -63,9 +63,9 @@ export const WebhookEventLog: React.FC = () {
     }).sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
   };
 
-  useEffect(() {
+  useEffect(() => {
     // Simulate API call
-    setTimeout(() {
+    setTimeout(() => {
       const mockEvents = generateMockEvents();
       setEvents(mockEvents);
       setFilteredEvents(mockEvents);
@@ -73,7 +73,7 @@ export const WebhookEventLog: React.FC = () {
     }, 1000);
   }, []);
 
-  useEffect(() {
+  useEffect(() => {
     let filtered = events;
 
     // Apply search filter
@@ -148,7 +148,7 @@ export const WebhookEventLog: React.FC = () {
     };
   };
 
-  const getUniqueEventTypes = () {
+  const getUniqueEventTypes = () => {
     return [...new Set(events.map(event => event.event_type))];
   };
 

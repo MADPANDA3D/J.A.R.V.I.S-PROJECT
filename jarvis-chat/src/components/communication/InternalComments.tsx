@@ -158,7 +158,7 @@ function CommentEditor({
       setContent(newContent);
       
       // Move cursor after mention
-      setTimeout(() {
+      setTimeout(() => {
         textarea.selectionStart = textarea.selectionEnd = start + username.length + 2;
         textarea.focus();
       }, 0);
@@ -382,7 +382,7 @@ function CommentItem({
     }
   };
 
-  const handleEdit = async () {
+  const handleEdit = async () => {
     try {
       const result = await internalCommunicationService.editComment(
         comment.id,
@@ -411,7 +411,7 @@ function CommentItem({
     }
   };
 
-  const handleDelete = async () {
+  const handleDelete = async () => {
     try {
       const result = await internalCommunicationService.deleteComment(
         comment.id,
@@ -658,11 +658,11 @@ export function InternalComments({
   const [filterVisibility, setFilterVisibility] = useState<CommentVisibility | 'all'>('all');
   const [showFilters, setShowFilters] = useState(false);
 
-  useEffect(() {
+  useEffect(() => {
     loadComments();
   }, [bugId, showPrivateComments]);
 
-  const loadComments = async () {
+  const loadComments = async () => {
     try {
       setLoading(true);
       const loadedComments = internalCommunicationService.getBugComments(bugId, {

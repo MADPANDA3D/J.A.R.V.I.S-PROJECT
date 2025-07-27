@@ -276,7 +276,7 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({
             {filteredAlerts.filter(a => !a.acknowledged).length} unacknowledged alerts
           </span>
           <button
-            onClick={() {
+            onClick={() => {
               filteredAlerts
                 .filter(a => !a.acknowledged)
                 .forEach(alert => onAcknowledge(alert.id));

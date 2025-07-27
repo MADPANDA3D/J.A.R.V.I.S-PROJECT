@@ -31,7 +31,7 @@ export function ConversationSessionGroup({
   const { session, messages, messageCount, hasMoreMessages } = sessionGroup;
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  const handleToggleExpanded = () {
+  const handleToggleExpanded = () => {
     onToggleExpanded(session.id);
     
     // Announce to screen readers
@@ -48,11 +48,11 @@ export function ConversationSessionGroup({
     setTimeout(() => document.body.removeChild(announcement), 1000);
   };
 
-  const handleSessionSelect = () {
+  const handleSessionSelect = () => {
     onSessionSelect?.(session.id);
   };
 
-  const handleLoadMore = async () {
+  const handleLoadMore = async () => {
     if (isLoadingMore || !hasMoreMessages) return;
     
     setIsLoadingMore(true);
