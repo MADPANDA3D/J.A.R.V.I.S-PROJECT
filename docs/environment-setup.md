@@ -19,6 +19,17 @@ The JARVIS Chat application uses environment variables for configuration managem
 
 ### Environment Types
 
+#### Production Configuration Updates (Story 002.006)
+
+**Critical Production Settings:**
+- **VITE_APP_DOMAIN**: Set to `http://69.62.71.229:3000` for production VPS
+- **VITE_SUPABASE_SITE_URL**: Set to `http://69.62.71.229:3000` for email verification redirects
+- **Supabase Dashboard**: Update Site URL in Authentication > URL Configuration
+
+See `docs/supabase-production-config.md` for detailed Supabase configuration steps.
+
+### Environment Types
+
 - **Development**: Local development environment
 - **Staging**: Pre-production testing environment
 - **Production**: Live production environment

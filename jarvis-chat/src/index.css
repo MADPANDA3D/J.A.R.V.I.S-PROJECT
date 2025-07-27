@@ -65,6 +65,17 @@
       'calt' 1;
   }
 
+  /* Fix: Ensure page loads at the top position instead of centered */
+  html, body, #root {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  /* Reset scroll position on page load */
+  body {
+    scroll-restoration: manual;
+  }
+
   /* Ensure page loads at the top position */
   html {
     scroll-behavior: smooth;
