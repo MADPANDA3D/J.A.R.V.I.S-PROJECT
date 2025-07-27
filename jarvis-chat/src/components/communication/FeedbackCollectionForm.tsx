@@ -225,7 +225,7 @@ export function FeedbackCollectionForm({
       // Convert form data to feedback format
       const feedbackData: Partial<BugFeedback> = {};
       
-      Object.entries(formData).forEach(([key, value]) {
+      Object.entries(formData).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== '') {
           (feedbackData as any)[key] = value;
         }

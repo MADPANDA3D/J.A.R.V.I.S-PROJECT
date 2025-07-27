@@ -40,7 +40,7 @@ export const FileAttachmentUpload: React.FC<FileAttachmentUploadProps> = ({
       return { valid: [], errors };
     }
 
-    files.forEach((file, index) {
+    files.forEach((file, index) => {
       // Check file size
       if (file.size > maxSizePerFile) {
         errors.push(`${file.name}: File size (${formatFileSize(file.size)}) exceeds maximum allowed (${formatFileSize(maxSizePerFile)})`);

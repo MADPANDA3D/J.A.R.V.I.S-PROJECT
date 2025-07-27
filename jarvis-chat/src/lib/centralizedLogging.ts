@@ -133,7 +133,7 @@ class CentralizedLoggingService {
 
   private setupErrorHandlers(): void {
     // Handle unhandled promise rejections in logging
-    window.addEventListener('unhandledrejection', (event) {
+    window.addEventListener('unhandledrejection', (event) => {
       if (event.reason?.message?.includes('logging')) {
         // Prevent infinite loops in logging system
         console.warn('Logging system error:', event.reason);
@@ -147,7 +147,7 @@ class CentralizedLoggingService {
       clearInterval(this.flushTimer);
     }
 
-    this.flushTimer = setInterval(() {
+    this.flushTimer = setInterval(() => {
       this.flushLogs();
     }, this.config.flushInterval);
   }

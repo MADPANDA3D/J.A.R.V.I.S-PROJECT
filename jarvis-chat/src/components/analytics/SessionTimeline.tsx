@@ -33,7 +33,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
     const events: TimelineEvent[] = [];
 
     // Add page views
-    session.pageViews.forEach((pageView: PageView) {
+    session.pageViews.forEach((pageView: PageView) => {
       events.push({
         id: pageView.id,
         timestamp: pageView.timestamp,
@@ -52,7 +52,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
     });
 
     // Add user actions
-    session.userActions.forEach((action: UserAction) {
+    session.userActions.forEach((action: UserAction) => {
       const actionIcons = {
         chat_message: '💬',
         form_submit: '📝',
@@ -76,7 +76,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
     });
 
     // Add auth events
-    session.authEvents.forEach((authEvent: AuthEvent) {
+    session.authEvents.forEach((authEvent: AuthEvent) => {
       const authIcons = {
         sign_in: '🔓',
         sign_up: '📝',
