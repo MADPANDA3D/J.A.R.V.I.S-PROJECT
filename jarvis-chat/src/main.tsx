@@ -13,7 +13,7 @@ import { centralizedLogging } from '@/lib/centralizedLogging';
 import { getLoggingConfig, validateLoggingConfig, testLoggingConfiguration } from '@/config/logging';
 
 // Service Worker Registration
-if ('serviceWorker' in navigator) => {
+if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
       .register('/sw.js')
@@ -23,12 +23,12 @@ if ('serviceWorker' in navigator) => {
         // Handle service worker updates
         registration.addEventListener('updatefound', () => {
           const newWorker = registration.installing;
-          if (newWorker) => {
+          if (newWorker) {
             newWorker.addEventListener('statechange', () => {
               if (
                 newWorker.state === 'installed' &&
                 navigator.serviceWorker.controller
-              ) => {
+              ) {
                 // New service worker available, show update notification
                 console.log('🔄 New service worker available');
                 // TODO: Show user notification for update (future enhancement)
@@ -49,7 +49,7 @@ const initializeLogging = async () => {
     const loggingConfig = getLoggingConfig();
     const validation = validateLoggingConfig(loggingConfig);
     
-    if (!validation.valid) => {
+    if (!validation.valid) {
       console.error('❌ Logging configuration errors:', validation.errors);
       validation.warnings.forEach(warning => console.warn(`⚠️ ${warning}`));
     } else {
@@ -57,11 +57,11 @@ const initializeLogging = async () => {
       centralizedLogging.updateConfig(loggingConfig);
       
       // Test logging configuration in development
-      if (import.meta.env.DEV) => {
+      if (import.meta.env.DEV) {
         console.log('🧪 Testing logging configuration...');
         const testResult = await testLoggingConfiguration();
         
-        if (testResult.success) => {
+        if (testResult.success) {
           console.log('✅ All logging destinations are working');
         } else {
           console.warn('⚠️ Some logging destinations failed:', 
@@ -83,7 +83,7 @@ const initializeLogging = async () => {
         }
       );
     }
-  } catch (error) => {
+  } catch (error) {
     console.error('❌ Failed to initialize logging:', error);
   }
 };
@@ -96,7 +96,7 @@ const envResult = validateEnvironment();
 logEnvironmentStatus(envResult);
 
 // Show critical errors in development
-if (!envResult.isValid && import.meta.env.DEV) => {
+if (!envResult.isValid && import.meta.env.DEV) {
   console.error('❌ Critical environment configuration errors detected:');
   envResult.errors.forEach(error => console.error(`  • ${error}`));
 }

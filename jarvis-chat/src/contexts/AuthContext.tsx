@@ -21,7 +21,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) => {
+  if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
@@ -48,7 +48,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           error,
         } = await supabase.auth.getSession();
 
-        if (error) => {
+        if (error) {
           console.error('Error getting initial session:', error);
         }
 
@@ -58,7 +58,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           loading: false,
           initialized: true,
         });
-      } catch (error) => {
+      } catch (error) {
         console.error('Failed to get initial session:', error);
         setAuthState(prev => ({
           ...prev,
@@ -84,7 +84,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
 
       // Update error tracking and session tracking with user context
-      if (session?.user) => {
+      if (session?.user) {
         setErrorTrackingUser(session.user.id, {
           email: session.user.email,
           role: session.user.role
@@ -146,7 +146,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         password,
       });
 
-      if (error) => {
+      if (error) {
         captureAuthError({
           authEvent: 'sign_in',
           supabaseError: error.message,
@@ -160,10 +160,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       addBreadcrumb('info', 'user_action', 'Sign in successful', { email });
       // AuthContext will be updated via the auth state change event
-    } catch (error) => {
+    } catch (error) {
       setAuthState(prev => ({ ...prev, loading: false }));
 
-      if (error instanceof Error) => {
+      if (error instanceof Error) {
         throw new Error(getAuthErrorMessage(error));
       }
       throw new Error('An unexpected error occurred during sign in');
@@ -180,7 +180,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         password,
       });
 
-      if (error) => {
+      if (error) {
         captureAuthError({
           authEvent: 'sign_up',
           supabaseError: error.message,
@@ -195,10 +195,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       addBreadcrumb('info', 'user_action', 'Sign up successful', { email });
       // Note: User might need to confirm their email depending on Supabase settings
       // AuthContext will be updated via the auth state change event if auto-confirm is enabled
-    } catch (error) => {
+    } catch (error) {
       setAuthState(prev => ({ ...prev, loading: false }));
 
-      if (error instanceof Error) => {
+      if (error instanceof Error) {
         throw new Error(getAuthErrorMessage(error));
       }
       throw new Error('An unexpected error occurred during sign up');
@@ -215,7 +215,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const { error } = await supabase.auth.signOut();
 
-      if (error) => {
+      if (error) {
         captureAuthError({
           authEvent: 'sign_out',
           supabaseError: error.message,
@@ -231,10 +231,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         userId: currentUserId 
       });
       // AuthContext will be updated via the auth state change event
-    } catch (error) => {
+    } catch (error) {
       setAuthState(prev => ({ ...prev, loading: false }));
 
-      if (error instanceof Error) => {
+      if (error instanceof Error) {
         throw new Error(getAuthErrorMessage(error));
       }
       throw new Error('An unexpected error occurred during sign out');
@@ -249,7 +249,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         redirectTo: `${window.location.origin}/reset-password`,
       });
 
-      if (error) => {
+      if (error) {
         captureAuthError({
           authEvent: 'password_reset',
           supabaseError: error.message,
@@ -262,8 +262,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
       
       addBreadcrumb('info', 'user_action', 'Password reset email sent', { email });
-    } catch (error) => {
-      if (error instanceof Error) => {
+    } catch (error) {
+      if (error instanceof Error) {
         throw new Error(getAuthErrorMessage(error));
       }
       throw new Error('An unexpected error occurred while resetting password');
@@ -285,31 +285,31 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 function getAuthErrorMessage(error: Error): string {
   const message = error.message.toLowerCase();
 
-  if (message.includes('invalid login credentials')) => {
+  if (message.includes('invalid login credentials')) {
     return 'Invalid email or password. Please check your credentials and try again.';
   }
 
-  if (message.includes('email not confirmed')) => {
+  if (message.includes('email not confirmed')) {
     return 'Please confirm your email address before signing in.';
   }
 
-  if (message.includes('user already registered')) => {
+  if (message.includes('user already registered')) {
     return 'An account with this email address already exists.';
   }
 
-  if (message.includes('password should be at least')) => {
+  if (message.includes('password should be at least')) {
     return 'Password should be at least 6 characters long.';
   }
 
-  if (message.includes('invalid email')) => {
+  if (message.includes('invalid email')) {
     return 'Please enter a valid email address.';
   }
 
-  if (message.includes('signup is disabled')) => {
+  if (message.includes('signup is disabled')) {
     return 'Account registration is currently disabled. Please contact support.';
   }
 
-  if (message.includes('too many requests')) => {
+  if (message.includes('too many requests')) {
     return 'Too many attempts. Please wait a few minutes before trying again.';
   }
 

@@ -18,13 +18,13 @@ import { UpdateNotification } from '@/components/UpdateNotification';
 import { initializeAccessibility } from '@/lib/accessibility';
 import { accessibilityTester } from '@/lib/accessibility-testing';
 
-function App() => {
+function App() {
   // Initialize accessibility features when the app loads
   useEffect(() => {
     initializeAccessibility();
 
     // Run initial accessibility audit in development
-    if (import.meta.env.DEV) => {
+    if (import.meta.env.DEV) {
       setTimeout(async () => {
         try {
           const result = await accessibilityTester.auditPage();
@@ -34,10 +34,10 @@ function App() => {
             passes: result.passes.length,
           });
 
-          if (result.violations.length > 0) => {
+          if (result.violations.length > 0) {
             console.warn('Accessibility violations found:', result.violations);
           }
-        } catch (error) => {
+        } catch (error) {
           console.warn('Initial accessibility audit failed:', error);
         }
       }, 2000); // Wait 2 seconds for page to fully load
