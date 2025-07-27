@@ -14,7 +14,7 @@ import { getLoggingConfig, validateLoggingConfig, testLoggingConfiguration } fro
 
 // Service Worker Registration
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () {
+  window.addEventListener('load', () => {
     navigator.serviceWorker
       .register('/sw.js')
       .then(registration => {
