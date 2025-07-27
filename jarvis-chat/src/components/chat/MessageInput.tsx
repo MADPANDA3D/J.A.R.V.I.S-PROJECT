@@ -27,14 +27,14 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   const { getSelectedToolIds } = useTools();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     }
   };
 
-  const handleSend = () => {
+  const handleSend = () {
     if (!value.trim() || disabled) return;
 
     // Get selected tools if tools selector is enabled
@@ -50,7 +50,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   };
 
   // Focus management for better accessibility
-  useEffect(() => {
+  useEffect(() {
     if (!disabled && textareaRef.current) {
       textareaRef.current.focus();
     }

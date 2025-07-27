@@ -98,7 +98,7 @@ export function MessageSearch({
   const [hasMoreSessions, setHasMoreSessions] = useState(false);
   const [isLoadingMoreSessions, setIsLoadingMoreSessions] = useState(false);
 
-  const activeFiltersCount = useMemo(() => {
+  const activeFiltersCount = useMemo(() {
     let count = 0;
     if (filters.dateRange && (filters.dateRange.from || filters.dateRange.to)) count++;
     if (filters.messageTypes.length < 2) count++;
@@ -108,7 +108,7 @@ export function MessageSearch({
   }, [filters]);
 
   const handleSearch = useCallback(
-    async (searchQuery: string, loadMore = false) => {
+    async (searchQuery: string, loadMore = false) {
       if (!searchQuery.trim()) {
         setResults([]);
         setSessionGroups([]);
@@ -134,7 +134,7 @@ export function MessageSearch({
   );
 
   const handleRegularSearch = useCallback(
-    async (searchQuery: string, loadMore = false) => {
+    async (searchQuery: string, loadMore = false) {
       const isLoadingMoreResults = loadMore && results.length > 0;
       const searchStartTime = performance.now();
       
@@ -187,7 +187,7 @@ export function MessageSearch({
   );
 
   const handleSessionGroupedSearch = useCallback(
-    async (searchQuery: string, loadMore = false) => {
+    async (searchQuery: string, loadMore = false) {
       if (!onSessionGroupedSearch) return;
 
       const isLoadingMoreSessions = loadMore && sessionGroups.length > 0;
@@ -249,15 +249,15 @@ export function MessageSearch({
     [filters, onSessionGroupedSearch, sessionGroups.length, sessionOrder, addToHistory]
   );
 
-  const handleQueryChange = useCallback((value: string) => {
+  const handleQueryChange = useCallback((value: string) {
     setCurrentQuery(value);
   }, [setCurrentQuery]);
 
   // Load conversation sessions
-  useEffect(() => {
+  useEffect(() {
     if (!userId) return;
 
-    const loadSessions = async () => {
+    const loadSessions = async () {
       setLoadingSessions(true);
       try {
         const sessions = await chatService.getConversationSessions(userId);
@@ -273,8 +273,8 @@ export function MessageSearch({
   }, [userId]);
 
   // Debounced search effect
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
+  useEffect(() {
+    const timeoutId = setTimeout(() {
       if (currentQuery) {
         handleSearch(currentQuery);
       } else {
@@ -289,14 +289,14 @@ export function MessageSearch({
     return () => clearTimeout(timeoutId);
   }, [currentQuery, handleSearch, onClearSearch]);
 
-  const handleLoadMore = useCallback(() => {
+  const handleLoadMore = useCallback(() {
     if (currentQuery && hasMoreResults && !isLoadingMore) {
       handleSearch(currentQuery, true);
     }
   }, [currentQuery, hasMoreResults, isLoadingMore, handleSearch]);
 
   // Session-specific handlers
-  const handleToggleSessionExpanded = useCallback((sessionId: string) => {
+  const handleToggleSessionExpanded = useCallback((sessionId: string) {
     setExpandedSessions(prev => {
       const newSet = new Set(prev);
       if (newSet.has(sessionId)) {
@@ -308,12 +308,12 @@ export function MessageSearch({
     });
   }, []);
 
-  const handleSessionSelect = useCallback((sessionId: string) => {
+  const handleSessionSelect = useCallback((sessionId: string) {
     setActiveSessionId(sessionId);
     onSessionSelect?.(sessionId);
   }, [onSessionSelect]);
 
-  const handleSessionOrderChange = useCallback((order: 'chronological' | 'relevance' | 'updated') => {
+  const handleSessionOrderChange = useCallback((order: 'chronological' | 'relevance' | 'updated') {
     setSessionOrder(order);
     // Re-trigger search with new order
     if (currentQuery.trim()) {
@@ -321,27 +321,27 @@ export function MessageSearch({
     }
   }, [currentQuery, handleSearch]);
 
-  const handleLoadMoreSessions = useCallback(() => {
+  const handleLoadMoreSessions = useCallback(() {
     if (currentQuery.trim() && hasMoreSessions && !isLoadingMoreSessions) {
       handleSearch(currentQuery, true);
     }
   }, [currentQuery, hasMoreSessions, isLoadingMoreSessions, handleSearch]);
 
-  const handleExpandAllSessions = useCallback(() => {
+  const handleExpandAllSessions = useCallback(() {
     setExpandedSessions(new Set(sessionGroups.map(sg => sg.session.id)));
   }, [sessionGroups]);
 
-  const handleCollapseAllSessions = useCallback(() => {
+  const handleCollapseAllSessions = useCallback(() {
     setExpandedSessions(new Set());
   }, []);
 
-  const handleLoadMoreInSession = useCallback(async (sessionId: string) => {
+  const handleLoadMoreInSession = useCallback(async (sessionId: string) {
     // This would require additional API support to load more messages within a specific session
     console.log('Load more messages in session:', sessionId);
     // Implementation would depend on additional backend support
   }, []);
 
-  const handleClearSearch = () => {
+  const handleClearSearch = () {
     clearSearchState();
     setResults([]);
     setSessionGroups([]);
@@ -355,7 +355,7 @@ export function MessageSearch({
     onClearSearch();
     
     // Announce to screen readers
-    setTimeout(() => {
+    setTimeout(() {
       const message = 'Search cleared';
       const announcement = document.createElement('div');
       announcement.setAttribute('aria-live', 'polite');
@@ -367,7 +367,7 @@ export function MessageSearch({
     }, 100);
   };
 
-  const toggleMessageType = (type: 'user' | 'assistant') => {
+  const toggleMessageType = (type: 'user' | 'assistant') {
     const newMessageTypes = filters.messageTypes.includes(type)
       ? filters.messageTypes.filter(t => t !== type)
       : [...filters.messageTypes, type];
@@ -375,12 +375,12 @@ export function MessageSearch({
     updateFilters({ messageTypes: newMessageTypes });
   };
 
-  const handleResultClick = (result: SearchResult) => {
+  const handleResultClick = (result: SearchResult) {
     onResultClick(result.messageId);
     setShowResults(false);
   };
 
-  const formatTimestamp = (timestamp: Date) => {
+  const formatTimestamp = (timestamp: Date) {
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
       day: 'numeric',
@@ -555,7 +555,7 @@ export function MessageSearch({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={(e) => {
+                    onClick={(e) {
                       e.preventDefault();
                       e.stopPropagation();
                       clearHistory();
@@ -579,7 +579,7 @@ export function MessageSearch({
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={(e) => {
+                        onClick={(e) {
                           e.preventDefault();
                           e.stopPropagation();
                           removeFromHistory(historyItem.id);

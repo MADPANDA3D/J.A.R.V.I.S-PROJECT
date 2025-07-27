@@ -9,20 +9,22 @@ import {
   logEnvironmentStatus,
 } from '@/lib/env-validation';
 import '@/lib/errorTracking'; // Initialize error tracking
+import { centralizedLogging } from '@/lib/centralizedLogging';
+import { getLoggingConfig, validateLoggingConfig, testLoggingConfiguration } from '@/config/logging';
 
 // Service Worker Registration
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
+  window.addEventListener('load', () {
     navigator.serviceWorker
       .register('/sw.js')
       .then(registration => {
         console.log('✅ SW registered: ', registration);
 
         // Handle service worker updates
-        registration.addEventListener('updatefound', () => {
+        registration.addEventListener('updatefound', () {
           const newWorker = registration.installing;
           if (newWorker) {
-            newWorker.addEventListener('statechange', () => {
+            newWorker.addEventListener('statechange', () {
               if (
                 newWorker.state === 'installed' &&
                 navigator.serviceWorker.controller
@@ -41,6 +43,54 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+// Initialize centralized logging
+const initializeLogging = async () {
+  try {
+    const loggingConfig = getLoggingConfig();
+    const validation = validateLoggingConfig(loggingConfig);
+    
+    if (!validation.valid) {
+      console.error('❌ Logging configuration errors:', validation.errors);
+      validation.warnings.forEach(warning => console.warn(`⚠️ ${warning}`));
+    } else {
+      // Update centralized logging configuration
+      centralizedLogging.updateConfig(loggingConfig);
+      
+      // Test logging configuration in development
+      if (import.meta.env.DEV) {
+        console.log('🧪 Testing logging configuration...');
+        const testResult = await testLoggingConfiguration();
+        
+        if (testResult.success) {
+          console.log('✅ All logging destinations are working');
+        } else {
+          console.warn('⚠️ Some logging destinations failed:', 
+            testResult.results.filter(r => !r.success)
+          );
+        }
+      }
+
+      // Log application startup
+      centralizedLogging.info(
+        'jarvis-chat',
+        'system',
+        'Application starting up',
+        {
+          environment: import.meta.env.MODE,
+          version: import.meta.env.VITE_APP_VERSION,
+          userAgent: navigator.userAgent,
+          timestamp: new Date().toISOString()
+        }
+      );
+    }
+  } catch (error) {
+    console.error('❌ Failed to initialize logging:', error);
+  }
+};
+
+// Initialize logging
+initializeLogging();
+
 // Validate environment variables on startup
 const envResult = validateEnvironment();
 logEnvironmentStatus(envResult);
@@ -52,7 +102,7 @@ if (!envResult.isValid && import.meta.env.DEV) {
 }
 
 // Ensure page loads at the top
-window.addEventListener('load', () => {
+window.addEventListener('load', () {
   window.scrollTo(0, 0);
 });
 

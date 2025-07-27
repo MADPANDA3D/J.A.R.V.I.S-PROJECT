@@ -1,23 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertTriangle, RefreshCw, Home, Bug } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { BugReportModal } from '@/components/bug-report/BugReportModal';
 
 interface ErrorFallbackProps {
   error: Error;
   resetError: () => void;
+  reportBug?: () => void;
 }
 
 export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
   error,
   resetError,
+  reportBug,
 }) => {
+  const [showBugReport, setShowBugReport] = useState(false);
 
-  const handleReportError = () => {
-    // In a real app, this would send error data to a logging service
-    console.error('User reported error:', error);
-    alert('Error reported. Thank you for helping us improve JARVIS!');
+  const handleReportError = () {
+    reportBug?.();
+    setShowBugReport(true);
+  };
+
+  const handleBugReportSuccess = (bugId: string, trackingNumber: string) {
+    setShowBugReport(false);
+    // You could show a success toast here
+    console.log('Bug report submitted:', { bugId, trackingNumber });
   };
 
   return (
@@ -98,6 +107,19 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
           </div>
         </CardContent>
       </Card>
+
+      {/* Bug Report Modal */}
+      <BugReportModal
+        isOpen={showBugReport}
+        onClose={() => setShowBugReport(false)}
+        onSubmitSuccess={handleBugReportSuccess}
+        initialData={{
+          title: `Application Error: ${error.message}`,
+          description: `An error occurred in the application:\n\nError: ${error.message}\n\nStack trace:\n${error.stack || 'No stack trace available'}`,
+          bugType: 'functionality',
+          severity: 'high'
+        }}
+      />
     </div>
   );
 };

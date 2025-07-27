@@ -13,12 +13,12 @@ import {
 } from 'lucide-react';
 import { performHealthCheck, type HealthCheckResult } from '@/lib/healthCheck';
 
-export const HealthPage: React.FC = () => {
+export const HealthPage: React.FC = () {
   const [healthData, setHealthData] = useState<HealthCheckResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-  const runHealthCheck = async () => {
+  const runHealthCheck = async () {
     setIsLoading(true);
     try {
       const result = await performHealthCheck();
@@ -31,11 +31,11 @@ export const HealthPage: React.FC = () => {
     }
   };
 
-  useEffect(() => {
+  useEffect(() {
     runHealthCheck();
   }, []);
 
-  const getStatusIcon = (status: string) => {
+  const getStatusIcon = (status: string) {
     switch (status) {
       case 'healthy':
       case 'up':
@@ -55,7 +55,7 @@ export const HealthPage: React.FC = () => {
     }
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string) {
     switch (status) {
       case 'healthy':
       case 'up':

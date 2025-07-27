@@ -1,21 +1,21 @@
 import { render, screen } from '@testing-library/react';
 import { Footer } from '../Footer';
 
-describe('Footer', () => {
-  it('renders copyright information', () => {
+describe('Footer', () {
+  it('renders copyright information', () {
     render(<Footer />);
     
     expect(screen.getByText(/© 2024 JARVIS. All rights reserved./)).toBeInTheDocument();
   });
 
-  it('shows version information by default', () => {
+  it('shows version information by default', () {
     render(<Footer />);
     
     expect(screen.getByText('JARVIS v1.0')).toBeInTheDocument();
     expect(screen.getByText('AI Assistant Interface')).toBeInTheDocument();
   });
 
-  it('hides version information when showVersion is false', () => {
+  it('hides version information when showVersion is false', () {
     render(<Footer showVersion={false} />);
     
     expect(screen.queryByText('JARVIS v1.0')).not.toBeInTheDocument();
@@ -23,14 +23,14 @@ describe('Footer', () => {
     expect(screen.getByText(/© 2024 JARVIS. All rights reserved./)).toBeInTheDocument();
   });
 
-  it('applies custom className', () => {
+  it('applies custom className', () {
     render(<Footer className="custom-footer" />);
     
     const footer = screen.getByRole('contentinfo');
     expect(footer).toHaveClass('custom-footer');
   });
 
-  it('has proper ARIA attributes', () => {
+  it('has proper ARIA attributes', () {
     render(<Footer />);
     
     const footer = screen.getByRole('contentinfo');

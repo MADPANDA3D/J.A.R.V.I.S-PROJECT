@@ -116,7 +116,7 @@ class ChatService {
 
       const response = await webhookService.sendMessage(payload);
       return response.response;
-    } catch (error) {
+    } catch {
       console.error('Error calling n8n webhook:', error);
 
       // Provide fallback response for better user experience
@@ -177,7 +177,7 @@ class ChatService {
         user_id: data.user_id,
         conversation_id: data.conversation_id,
       };
-    } catch (error) {
+    } catch {
       console.error('Error saving message:', error);
       throw new Error('Failed to save message');
     }
@@ -211,7 +211,7 @@ class ChatService {
         user_id: msg.user_id,
         conversation_id: msg.conversation_id,
       }));
-    } catch (error) {
+    } catch {
       console.error('Error loading message history:', error);
       return []; // Return empty array on error, don't break the chat
     }
@@ -249,7 +249,7 @@ class ChatService {
       )
       .subscribe();
 
-    return () => {
+    return () {
       supabase.removeChannel(subscription);
     };
   }
@@ -291,7 +291,7 @@ class ChatService {
       });
 
       return { userMsg, aiMsg };
-    } catch (error) {
+    } catch {
       console.error('Error processing chat message:', error);
       throw error;
     }
@@ -361,7 +361,7 @@ class ChatService {
         .order('created_at', { ascending: false });
 
       // Apply optimized filters
-      const applyFilters = (q: ReturnType<typeof supabase.from>) => {
+      const applyFilters = (q: ReturnType<typeof supabase.from>) {
         if (filters.query.trim()) {
           // Use more efficient full-text search if available
           const searchTerm = filters.query.trim();
@@ -456,7 +456,7 @@ class ChatService {
       });
 
       return finalResult;
-    } catch (error) {
+    } catch {
       console.error('Error searching messages:', error);
       
       analytics.recordSearchFailure(
@@ -535,7 +535,7 @@ class ChatService {
         message_count: session.message_count,
         status: session.status,
       }));
-    } catch (error) {
+    } catch {
       console.error('Error loading conversation sessions:', error);
       throw new Error('Failed to load conversation sessions');
     }
@@ -573,7 +573,7 @@ class ChatService {
         message_count: data.message_count,
         status: data.status,
       };
-    } catch (error) {
+    } catch {
       console.error('Error creating conversation session:', error);
       throw new Error('Failed to create conversation session');
     }
@@ -594,7 +594,7 @@ class ChatService {
         metrics: metrics,
         isConfigured: !!this.n8nWebhookUrl,
       };
-    } catch (error) {
+    } catch {
       console.error('Error getting webhook status:', error);
       return {
         health: { status: 'unhealthy' as const, error: 'Failed to get status' },
@@ -701,7 +701,7 @@ class ChatService {
         totalMessages,
         hasMoreSessions,
       };
-    } catch (error) {
+    } catch {
       console.error('Error searching messages grouped by session:', error);
       const analytics = this.getAnalyticsCollector(userId);
       analytics.recordSearchFailure(
@@ -851,7 +851,7 @@ class ChatService {
         messageCount: session.message_count,
         hasMoreMessages: session.message_count > previewCount,
       };
-    } catch (error) {
+    } catch {
       console.error('Error getting session with preview:', error);
       throw new Error('Failed to get session preview');
     }

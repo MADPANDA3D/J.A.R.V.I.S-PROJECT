@@ -87,9 +87,9 @@ export function SystemHealthMonitor({
     try {
       if (service.type === 'websocket') {
         // WebSocket health check
-        return new Promise((resolve) => {
+        return new Promise((resolve) {
           const ws = new WebSocket(service.url);
-          const timeout = setTimeout(() => {
+          const timeout = setTimeout(() {
             ws.close();
             resolve({
               service: service.name,
@@ -100,7 +100,7 @@ export function SystemHealthMonitor({
             });
           }, service.timeout);
 
-          ws.onopen = () => {
+          ws.onopen = () {
             clearTimeout(timeout);
             const responseTime = performance.now() - startTime;
             ws.close();
@@ -114,7 +114,7 @@ export function SystemHealthMonitor({
             });
           };
 
-          ws.onerror = () => {
+          ws.onerror = () {
             clearTimeout(timeout);
             resolve({
               service: service.name,
@@ -162,7 +162,7 @@ export function SystemHealthMonitor({
           try {
             const healthData = await response.json();
             details = { ...details, ...healthData };
-          } catch {
+          } catch (error) {
             // Ignore JSON parsing errors
           }
         }
@@ -194,7 +194,7 @@ export function SystemHealthMonitor({
   }, []);
 
   // Run all health checks
-  const runHealthChecks = useCallback(async () => {
+  const runHealthChecks = useCallback(async () {
     setIsLoading(true);
     
     try {
@@ -202,7 +202,7 @@ export function SystemHealthMonitor({
         monitoredServices.map(service => checkServiceHealth(service))
       );
 
-      const healthResults = results.map((result, index) => {
+      const healthResults = results.map((result, index) {
         if (result.status === 'fulfilled') {
           return result.value;
         } else {
@@ -260,14 +260,14 @@ export function SystemHealthMonitor({
   }, [healthChecks, checkServiceHealth, monitoredServices]);
 
   // Auto-refresh health checks
-  useEffect(() => {
+  useEffect(() {
     runHealthChecks();
     
     const interval = setInterval(runHealthChecks, refreshInterval);
     return () => clearInterval(interval);
   }, [runHealthChecks, refreshInterval]);
 
-  const getStatusIcon = (status: string) => {
+  const getStatusIcon = (status: string) {
     switch (status) {
       case 'healthy':
         return <CheckCircle className="h-4 w-4 text-green-500" />;
@@ -280,7 +280,7 @@ export function SystemHealthMonitor({
     }
   };
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: string) {
     const variants = {
       healthy: 'default',
       warning: 'secondary',
@@ -295,7 +295,7 @@ export function SystemHealthMonitor({
     );
   };
 
-  const getTrendIcon = (service: string) => {
+  const getTrendIcon = (service: string) {
     const trend = trends[service];
     switch (trend) {
       case 'up':
@@ -307,13 +307,13 @@ export function SystemHealthMonitor({
     }
   };
 
-  const formatResponseTime = (ms?: number) => {
+  const formatResponseTime = (ms?: number) {
     if (!ms) return 'N/A';
     if (ms < 1000) return `${Math.round(ms)}ms`;
     return `${(ms / 1000).toFixed(1)}s`;
   };
 
-  const formatUptime = (seconds: number) => {
+  const formatUptime = (seconds: number) {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     if (hours > 0) return `${hours}h ${minutes}m`;

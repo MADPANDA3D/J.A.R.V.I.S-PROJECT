@@ -6,11 +6,11 @@
 import { describe, it, expect } from 'vitest';
 import { WebhookService } from '../webhookService';
 
-describe('Webhook Diagnostics', () => {
+describe('Webhook Diagnostics', () {
   const webhookUrl =
     'https://n8n.madpanda3d.com/webhook-test/4bed7e4e-041a-4f19-b736-d320250a50ca';
 
-  it('should diagnose webhook connectivity and provide setup guidance', async () => {
+  it('should diagnose webhook connectivity and provide setup guidance', async () {
     console.log('\n🔍 WEBHOOK DIAGNOSTIC REPORT');
     console.log('═'.repeat(50));
 
@@ -111,7 +111,7 @@ describe('Webhook Diagnostics', () => {
     expect(config.webhookUrl).toBe(webhookUrl);
   });
 
-  it('should test webhook response format expectations', async () => {
+  it('should test webhook response format expectations', async () {
     console.log('\n📋 WEBHOOK RESPONSE FORMAT REQUIREMENTS');
     console.log('═'.repeat(40));
 
@@ -154,7 +154,7 @@ describe('Webhook Diagnostics', () => {
     expect(true).toBe(true); // Always pass this informational test
   });
 
-  it('should provide n8n workflow setup guidance', async () => {
+  it('should provide n8n workflow setup guidance', async () {
     console.log('\n🛠️  N8N WORKFLOW SETUP GUIDE');
     console.log('═'.repeat(40));
 

@@ -17,14 +17,14 @@ import {
 import { useAuth } from '@/contexts/AuthContext';
 import { getEnvironmentInfo } from '@/lib/env-validation';
 
-export const SettingsPage: React.FC = () => {
+export const SettingsPage: React.FC = () {
   const { user, signOut } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showApiKey, setShowApiKey] = useState(false);
   const envInfo = getEnvironmentInfo();
 
   // Page loaded successfully
-  useEffect(() => {
+  useEffect(() {
     console.log('Settings page mounted successfully');
   }, []);
 
@@ -37,7 +37,7 @@ export const SettingsPage: React.FC = () => {
     import.meta.env.VITE_N8N_WEBHOOK_URL || ''
   );
 
-  const handleSaveProfile = async () => {
+  const handleSaveProfile = async () {
     setIsLoading(true);
     try {
       // Simulate save operation
@@ -50,7 +50,7 @@ export const SettingsPage: React.FC = () => {
     }
   };
 
-  const handleSignOut = async () => {
+  const handleSignOut = async () {
     try {
       await signOut();
     } catch (error) {

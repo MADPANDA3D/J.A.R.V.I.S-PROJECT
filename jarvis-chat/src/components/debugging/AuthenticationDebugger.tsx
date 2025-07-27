@@ -54,9 +54,9 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
   const [authLogs, setAuthLogs] = useState<string[]>([]);
 
   // Initialize auth state monitoring
-  useEffect(() => {
+  useEffect(() {
     // Get current auth state
-    const getCurrentUser = async () => {
+    const getCurrentUser = async () {
       try {
         const { data: { user }, error } = await supabase.auth.getUser();
         if (error) {
@@ -73,7 +73,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
     getCurrentUser();
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) {
       addAuthLog(`Auth event: ${event}, User: ${session?.user?.email || 'None'}`);
       setCurrentUser(session?.user || null);
     });
@@ -81,7 +81,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
     return () => subscription.unsubscribe();
   }, []);
 
-  const addAuthLog = (message: string) => {
+  const addAuthLog = (message: string) {
     const timestamp = new Date().toLocaleTimeString();
     setAuthLogs(prev => [...prev.slice(-19), `[${timestamp}] ${message}`]);
   };
@@ -334,7 +334,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
   };
 
   // Run all authentication tests
-  const runAuthTests = async () => {
+  const runAuthTests = async () {
     setIsRunning(true);
     setAuthTests([]);
     addAuthLog('Starting authentication diagnostics...');
@@ -371,7 +371,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
   };
 
   // Test specific credentials
-  const testCredentialsAuth = async () => {
+  const testCredentialsAuth = async () {
     if (!testCredentials.email || !testCredentials.password) {
       addAuthLog('Test credentials are required');
       return;
@@ -398,7 +398,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
     }
   };
 
-  const getStatusIcon = (status: string) => {
+  const getStatusIcon = (status: string) {
     switch (status) {
       case 'success':
         return <CheckCircle className="h-4 w-4 text-green-500" />;
@@ -413,7 +413,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
     }
   };
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: string) {
     const variants = {
       success: 'default',
       warning: 'secondary',
@@ -429,7 +429,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
     );
   };
 
-  const copyToClipboard = async (text: string) => {
+  const copyToClipboard = async (text: string) {
     try {
       await navigator.clipboard.writeText(text);
     } catch (error) {

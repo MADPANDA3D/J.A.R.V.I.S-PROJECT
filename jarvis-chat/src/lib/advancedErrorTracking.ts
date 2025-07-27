@@ -159,7 +159,7 @@ class AdvancedErrorTracker {
     // Network error recovery
     this.recoveryStrategies.set('NetworkError', {
       errorType: 'NetworkError',
-      recoveryAction: async () => {
+      recoveryAction: async () {
         // Attempt to reconnect or switch to offline mode
         try {
           const response = await fetch('/api/health');
@@ -178,7 +178,7 @@ class AdvancedErrorTracker {
     // Database connection recovery
     this.recoveryStrategies.set('DatabaseError', {
       errorType: 'DatabaseError',
-      recoveryAction: async () => {
+      recoveryAction: async () {
         // Clear connection pools and retry
         try {
           // This would typically involve reconnecting to Supabase
@@ -198,7 +198,7 @@ class AdvancedErrorTracker {
     // Authentication error recovery
     this.recoveryStrategies.set('AuthenticationError', {
       errorType: 'AuthenticationError',
-      recoveryAction: async () => {
+      recoveryAction: async () {
         // Attempt to refresh authentication
         try {
           const { error } = await import('./supabase').then(m =>
@@ -221,7 +221,7 @@ class AdvancedErrorTracker {
     this.isMonitoring = true;
 
     // Check thresholds every 30 seconds
-    this.monitoringInterval = window.setInterval(() => {
+    this.monitoringInterval = window.setInterval(() {
       this.checkThresholds();
       this.detectPatterns();
       this.attemptRecoveries();
@@ -236,7 +236,7 @@ class AdvancedErrorTracker {
     // Intercept and enhance existing error tracking
     const originalCaptureError = errorTracker.captureError.bind(errorTracker);
 
-    errorTracker.captureError = (error, level = 'error', context = {}) => {
+    errorTracker.captureError = (error, level = 'error', context = {}) {
       const errorId = originalCaptureError(error, level, context);
 
       // Enhanced error processing
@@ -526,7 +526,7 @@ class AdvancedErrorTracker {
   }
 
   private attemptRecoveries(): void {
-    this.recoveryStrategies.forEach(async (recovery, errorType) => {
+    this.recoveryStrategies.forEach(async (recovery, errorType) {
       if (recovery.retryCount >= recovery.maxRetries) return;
 
       const lastAttempt = recovery.lastAttempt || 0;
@@ -564,7 +564,7 @@ class AdvancedErrorTracker {
             );
           }
         }
-      } catch (error) {
+      } catch {
         recovery.retryCount++;
         captureError(
           error instanceof Error
@@ -712,7 +712,7 @@ class AdvancedErrorTracker {
           metadata: alert.metadata,
         });
       }
-    } catch (error) {
+    } catch {
       captureWarning('Failed to send error alert', {
         alert_id: alert.id,
         error: error instanceof Error ? error.message : 'Unknown error',
@@ -773,7 +773,7 @@ class AdvancedErrorTracker {
       .filter(error => new Date(error.timestamp).getTime() >= cutoff);
 
     const errorsByLevel = errors.reduce(
-      (acc, error) => {
+      (acc, error) {
         acc[error.level] = (acc[error.level] || 0) + 1;
         return acc;
       },
@@ -781,7 +781,7 @@ class AdvancedErrorTracker {
     );
 
     const errorsByType = errors.reduce(
-      (acc, error) => {
+      (acc, error) {
         const type = this.categorizeError(error.message);
         acc[type] = (acc[type] || 0) + 1;
         return acc;
@@ -790,7 +790,7 @@ class AdvancedErrorTracker {
     );
 
     const errorsByUser = errors.reduce(
-      (acc, error) => {
+      (acc, error) {
         if (error.userId) {
           acc[error.userId] = (acc[error.userId] || 0) + 1;
         }

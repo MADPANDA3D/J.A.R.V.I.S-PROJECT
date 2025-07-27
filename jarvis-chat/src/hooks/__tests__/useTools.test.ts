@@ -38,24 +38,24 @@ Object.defineProperty(window, 'sessionStorage', {
   value: sessionStorageMock,
 });
 
-describe('useTools', () => {
+describe('useTools', () {
   const mockUser = {
     id: 'test-user-id',
     email: 'test@example.com',
   };
 
-  beforeEach(() => {
+  beforeEach(() {
     vi.clearAllMocks();
     localStorageMock.getItem.mockReturnValue(null);
     sessionStorageMock.getItem.mockReturnValue(null);
   });
 
-  afterEach(() => {
+  afterEach(() {
     vi.clearAllMocks();
   });
 
-  describe('initialization', () => {
-    it('should initialize with default tools when user is not logged in', async () => {
+  describe('initialization', () {
+    it('should initialize with default tools when user is not logged in', async () {
       mockUseAuth.mockReturnValue({ user: null, signOut: vi.fn(), loading: false });
 
       const { result } = renderHook(() => useTools());
@@ -66,7 +66,7 @@ describe('useTools', () => {
       expect(result.current.isToolSelected('file_analysis')).toBe(true);
     });
 
-    it('should load saved preferences from localStorage when user is logged in', async () => {
+    it('should load saved preferences from localStorage when user is logged in', async () {
       mockUseAuth.mockReturnValue({ user: mockUser, signOut: vi.fn(), loading: false });
 
       const savedSelections = JSON.stringify([
@@ -90,7 +90,7 @@ describe('useTools', () => {
       const { result } = renderHook(() => useTools());
 
       // Wait for initialization
-      await act(async () => {
+      await act(async () {
         await new Promise(resolve => setTimeout(resolve, 0));
       });
 
@@ -101,13 +101,13 @@ describe('useTools', () => {
     });
   });
 
-  describe('tool selection', () => {
-    it('should toggle tool selection correctly', async () => {
+  describe('tool selection', () {
+    it('should toggle tool selection correctly', async () {
       mockUseAuth.mockReturnValue({ user: mockUser, signOut: vi.fn(), loading: false });
 
       const { result } = renderHook(() => useTools());
 
-      await act(async () => {
+      await act(async () {
         await new Promise(resolve => setTimeout(resolve, 0));
       });
 
@@ -115,7 +115,7 @@ describe('useTools', () => {
       expect(result.current.isToolSelected('web_search')).toBe(false);
 
       // Toggle web_search on
-      act(() => {
+      act(() {
         result.current.toggleTool('web_search');
       });
 
@@ -123,7 +123,7 @@ describe('useTools', () => {
       expect(result.current.getSelectedToolIds()).toContain('web_search');
 
       // Toggle web_search off
-      act(() => {
+      act(() {
         result.current.toggleTool('web_search');
       });
 
@@ -131,16 +131,16 @@ describe('useTools', () => {
       expect(result.current.getSelectedToolIds()).not.toContain('web_search');
     });
 
-    it('should save selections to localStorage when changed', async () => {
+    it('should save selections to localStorage when changed', async () {
       mockUseAuth.mockReturnValue({ user: mockUser, signOut: vi.fn(), loading: false });
 
       const { result } = renderHook(() => useTools());
 
-      await act(async () => {
+      await act(async () {
         await new Promise(resolve => setTimeout(resolve, 0));
       });
 
-      act(() => {
+      act(() {
         result.current.toggleTool('web_search');
       });
 
@@ -151,13 +151,13 @@ describe('useTools', () => {
     });
   });
 
-  describe('getSelectedToolIds', () => {
-    it('should return only enabled tool IDs', async () => {
+  describe('getSelectedToolIds', () {
+    it('should return only enabled tool IDs', async () {
       mockUseAuth.mockReturnValue({ user: mockUser, signOut: vi.fn(), loading: false });
 
       const { result } = renderHook(() => useTools());
 
-      await act(async () => {
+      await act(async () {
         await new Promise(resolve => setTimeout(resolve, 0));
       });
 
@@ -165,7 +165,7 @@ describe('useTools', () => {
       expect(result.current.getSelectedToolIds()).toEqual(['file_analysis']);
 
       // Add web_search
-      act(() => {
+      act(() {
         result.current.toggleTool('web_search');
       });
 
@@ -175,7 +175,7 @@ describe('useTools', () => {
       ]);
 
       // Disable file_analysis
-      act(() => {
+      act(() {
         result.current.toggleTool('file_analysis');
       });
 
@@ -183,17 +183,17 @@ describe('useTools', () => {
     });
   });
 
-  describe('preferences management', () => {
-    it('should update preferences correctly', async () => {
+  describe('preferences management', () {
+    it('should update preferences correctly', async () {
       mockUseAuth.mockReturnValue({ user: mockUser, signOut: vi.fn(), loading: false });
 
       const { result } = renderHook(() => useTools());
 
-      await act(async () => {
+      await act(async () {
         await new Promise(resolve => setTimeout(resolve, 0));
       });
 
-      act(() => {
+      act(() {
         result.current.updatePreferences({
           auto_suggest: false,
           analytics_enabled: false,
@@ -206,24 +206,24 @@ describe('useTools', () => {
     });
   });
 
-  describe('resetToDefaults', () => {
-    it('should reset to default selections and preferences', async () => {
+  describe('resetToDefaults', () {
+    it('should reset to default selections and preferences', async () {
       mockUseAuth.mockReturnValue({ user: mockUser, signOut: vi.fn(), loading: false });
 
       const { result } = renderHook(() => useTools());
 
-      await act(async () => {
+      await act(async () {
         await new Promise(resolve => setTimeout(resolve, 0));
       });
 
       // Make some changes
-      act(() => {
+      act(() {
         result.current.toggleTool('web_search');
         result.current.updatePreferences({ auto_suggest: false });
       });
 
       // Reset to defaults
-      act(() => {
+      act(() {
         result.current.resetToDefaults();
       });
 
@@ -233,16 +233,16 @@ describe('useTools', () => {
     });
   });
 
-  describe('error handling', () => {
-    it('should handle localStorage errors gracefully', async () => {
+  describe('error handling', () {
+    it('should handle localStorage errors gracefully', async () {
       mockUseAuth.mockReturnValue({ user: mockUser, signOut: vi.fn(), loading: false });
-      localStorageMock.getItem.mockImplementation(() => {
+      localStorageMock.getItem.mockImplementation(() {
         throw new Error('localStorage error');
       });
 
       const { result } = renderHook(() => useTools());
 
-      await act(async () => {
+      await act(async () {
         await new Promise(resolve => setTimeout(resolve, 0));
       });
 
@@ -252,18 +252,18 @@ describe('useTools', () => {
     });
   });
 
-  describe('analytics', () => {
-    it('should generate session ID when recording usage', async () => {
+  describe('analytics', () {
+    it('should generate session ID when recording usage', async () {
       mockUseAuth.mockReturnValue({ user: mockUser, signOut: vi.fn(), loading: false });
       console.log = vi.fn(); // Mock console.log
 
       const { result } = renderHook(() => useTools());
 
-      await act(async () => {
+      await act(async () {
         await new Promise(resolve => setTimeout(resolve, 0));
       });
 
-      act(() => {
+      act(() {
         result.current.toggleTool('web_search');
       });
 
@@ -273,22 +273,22 @@ describe('useTools', () => {
       );
     });
 
-    it('should not record usage when analytics is disabled', async () => {
+    it('should not record usage when analytics is disabled', async () {
       mockUseAuth.mockReturnValue({ user: mockUser, signOut: vi.fn(), loading: false });
       console.log = vi.fn();
 
       const { result } = renderHook(() => useTools());
 
-      await act(async () => {
+      await act(async () {
         await new Promise(resolve => setTimeout(resolve, 0));
       });
 
       // Disable analytics
-      act(() => {
+      act(() {
         result.current.updatePreferences({ analytics_enabled: false });
       });
 
-      act(() => {
+      act(() {
         result.current.toggleTool('web_search');
       });
 

@@ -236,27 +236,27 @@ class LogAggregationService {
       debug: console.debug.bind(console),
     };
 
-    console.log = (...args) => {
+    console.log = (...args) {
       this.logEntry('info', args.join(' '), 'console', 'general');
       originalConsole.log(...args);
     };
 
-    console.info = (...args) => {
+    console.info = (...args) {
       this.logEntry('info', args.join(' '), 'console', 'general');
       originalConsole.info(...args);
     };
 
-    console.warn = (...args) => {
+    console.warn = (...args) {
       this.logEntry('warn', args.join(' '), 'console', 'general');
       originalConsole.warn(...args);
     };
 
-    console.error = (...args) => {
+    console.error = (...args) {
       this.logEntry('error', args.join(' '), 'console', 'general');
       originalConsole.error(...args);
     };
 
-    console.debug = (...args) => {
+    console.debug = (...args) {
       this.logEntry('debug', args.join(' '), 'console', 'general');
       originalConsole.debug(...args);
     };
@@ -268,7 +268,7 @@ class LogAggregationService {
     this.isAggregating = true;
 
     // Process logs every 10 seconds
-    this.aggregationInterval = window.setInterval(() => {
+    this.aggregationInterval = window.setInterval(() {
       this.processLogs();
       this.enforceRetentionPolicies();
       this.performAnalysis();
@@ -296,7 +296,7 @@ class LogAggregationService {
 
       // Send logs to external systems if configured
       this.sendToExternalSystems(recentLogs);
-    } catch (error) {
+    } catch {
       captureError(
         error instanceof Error ? error : new Error('Log processing failed'),
         {
@@ -434,7 +434,7 @@ class LogAggregationService {
           metadata: alert.metadata,
         });
       }
-    } catch (error) {
+    } catch {
       captureWarning('Failed to send log alert', {
         alert_id: alert.id,
         error: error instanceof Error ? error.message : 'Unknown error',
@@ -475,7 +475,7 @@ class LogAggregationService {
           (a, b) => a.timestamp - b.timestamp
         );
       }
-    } catch (error) {
+    } catch {
       captureWarning('Failed to enforce log retention policies', { error });
     }
   }
@@ -495,7 +495,7 @@ class LogAggregationService {
 
       // Business insights
       this.analyzeBusinessMetrics(recentLogs);
-    } catch (error) {
+    } catch {
       captureWarning('Failed to perform log analysis', { error });
     }
   }
@@ -554,7 +554,7 @@ class LogAggregationService {
     });
 
     // Track security metrics
-    securityEvents.forEach((count, eventType) => {
+    securityEvents.forEach((count, eventType) {
       monitoringService.trackCustomMetric(
         `log.security_event.${eventType}`,
         count,
@@ -596,7 +596,7 @@ class LogAggregationService {
     });
 
     // Track business metrics
-    businessEvents.forEach((count, eventType) => {
+    businessEvents.forEach((count, eventType) {
       monitoringService.trackCustomMetric(
         `log.business_metric.${eventType}`,
         count,
@@ -720,7 +720,7 @@ class LogAggregationService {
     const logs = this.logs.filter(log => log.timestamp >= cutoff);
 
     const logsByLevel = logs.reduce(
-      (acc, log) => {
+      (acc, log) {
         acc[log.level] = (acc[log.level] || 0) + 1;
         return acc;
       },
@@ -728,7 +728,7 @@ class LogAggregationService {
     );
 
     const logsBySource = logs.reduce(
-      (acc, log) => {
+      (acc, log) {
         acc[log.source] = (acc[log.source] || 0) + 1;
         return acc;
       },
@@ -736,7 +736,7 @@ class LogAggregationService {
     );
 
     const logsByCategory = logs.reduce(
-      (acc, log) => {
+      (acc, log) {
         acc[log.category] = (acc[log.category] || 0) + 1;
         return acc;
       },

@@ -43,17 +43,17 @@ Object.defineProperty(navigator, 'connection', {
   },
 });
 
-describe('MonitoringService', () => {
-  beforeEach(() => {
+describe('MonitoringService', () {
+  beforeEach(() {
     vi.clearAllMocks();
   });
 
-  afterEach(() => {
+  afterEach(() {
     vi.restoreAllMocks();
   });
 
-  describe('Performance Tracking', () => {
-    it('should track page load time', () => {
+  describe('Performance Tracking', () {
+    it('should track page load time', () {
       const url = '/test-page';
       const duration = 1200;
       const metadata = { component: 'TestComponent' };
@@ -68,7 +68,7 @@ describe('MonitoringService', () => {
       expect(metrics[0].tags).toMatchObject({ url, ...metadata });
     });
 
-    it('should track API response times', () => {
+    it('should track API response times', () {
       const endpoint = '/api/messages';
       const duration = 250;
       const status = 200;
@@ -87,7 +87,7 @@ describe('MonitoringService', () => {
       });
     });
 
-    it('should track API errors for 4xx/5xx status codes', () => {
+    it('should track API errors for 4xx/5xx status codes', () {
       const endpoint = '/api/messages';
       const duration = 500;
       const status = 500;
@@ -105,7 +105,7 @@ describe('MonitoringService', () => {
       });
     });
 
-    it('should track user interactions', () => {
+    it('should track user interactions', () {
       const action = 'button_click';
       const metadata = { buttonId: 'send-message' };
 
@@ -120,8 +120,8 @@ describe('MonitoringService', () => {
     });
   });
 
-  describe('Custom Metrics', () => {
-    it('should track custom metrics with tags', () => {
+  describe('Custom Metrics', () {
+    it('should track custom metrics with tags', () {
       const name = 'custom.metric';
       const value = 42;
       const tags = { category: 'business', type: 'counter' };
@@ -135,7 +135,7 @@ describe('MonitoringService', () => {
       expect(metrics[0].tags).toMatchObject(tags);
     });
 
-    it('should track business events', () => {
+    it('should track business events', () {
       const event = 'user.signup';
       const properties = { plan: 'premium', source: 'web' };
 
@@ -147,8 +147,8 @@ describe('MonitoringService', () => {
     });
   });
 
-  describe('User Tracking', () => {
-    it('should set user information', () => {
+  describe('User Tracking', () {
+    it('should set user information', () {
       const userId = 'user123';
       const properties = { email: 'test@example.com', plan: 'premium' };
 
@@ -159,8 +159,8 @@ describe('MonitoringService', () => {
     });
   });
 
-  describe('Transactions', () => {
-    it('should create and finish transactions', () => {
+  describe('Transactions', () {
+    it('should create and finish transactions', () {
       const name = 'message_send';
       const operation = 'api_call';
 
@@ -178,7 +178,7 @@ describe('MonitoringService', () => {
       expect(transaction.endTime).toBeGreaterThan(transaction.startTime);
     });
 
-    it('should track transaction duration as metric', () => {
+    it('should track transaction duration as metric', () {
       const transaction = monitoringService.startTransaction(
         'test_transaction',
         'test'
@@ -200,8 +200,8 @@ describe('MonitoringService', () => {
     });
   });
 
-  describe('Error Tracking', () => {
-    it('should capture exceptions', () => {
+  describe('Error Tracking', () {
+    it('should capture exceptions', () {
       const error = new Error('Test error');
       const context = { component: 'TestComponent' };
 
@@ -216,7 +216,7 @@ describe('MonitoringService', () => {
       });
     });
 
-    it('should capture messages with different levels', () => {
+    it('should capture messages with different levels', () {
       const message = 'Test warning message';
       const level = 'warning';
       const context = { category: 'validation' };
@@ -228,8 +228,8 @@ describe('MonitoringService', () => {
     });
   });
 
-  describe('Core Web Vitals', () => {
-    it('should collect Core Web Vitals', async () => {
+  describe('Core Web Vitals', () {
+    it('should collect Core Web Vitals', async () {
       const vitals = await monitoringService.getCoreWebVitals();
 
       expect(vitals).toHaveProperty('lcp');
@@ -240,8 +240,8 @@ describe('MonitoringService', () => {
     });
   });
 
-  describe('Metrics Filtering', () => {
-    beforeEach(() => {
+  describe('Metrics Filtering', () {
+    beforeEach(() {
       // Add some test metrics
       monitoringService.trackCustomMetric('test.metric1', 10, {
         category: 'A',
@@ -254,13 +254,13 @@ describe('MonitoringService', () => {
       });
     });
 
-    it('should filter metrics by name', () => {
+    it('should filter metrics by name', () {
       const metrics = monitoringService.getMetrics({ name: 'test' });
       expect(metrics).toHaveLength(2);
       expect(metrics.every(m => m.name.includes('test'))).toBe(true);
     });
 
-    it('should filter metrics by time range', () => {
+    it('should filter metrics by time range', () {
       const timeRange = 1000; // 1 second
       const metrics = monitoringService.getMetrics({ timeRange });
 
@@ -272,8 +272,8 @@ describe('MonitoringService', () => {
     });
   });
 
-  describe('Health Monitoring', () => {
-    it('should report monitoring health status', () => {
+  describe('Health Monitoring', () {
+    it('should report monitoring health status', () {
       const health = monitoringService.getMonitoringHealth();
 
       expect(health).toHaveProperty('status');
@@ -286,7 +286,7 @@ describe('MonitoringService', () => {
       expect(['healthy', 'degraded', 'unhealthy']).toContain(health.status);
     });
 
-    it('should report degraded status with many errors', () => {
+    it('should report degraded status with many errors', () {
       // Generate many error metrics
       for (let i = 0; i < 15; i++) {
         monitoringService.trackCustomMetric('error.count', 1);
@@ -297,18 +297,18 @@ describe('MonitoringService', () => {
     });
   });
 
-  describe('External Integration', () => {
-    it('should handle missing external APM services gracefully', () => {
+  describe('External Integration', () {
+    it('should handle missing external APM services gracefully', () {
       // Ensure no external services are available
       delete (window as typeof window & { DD_RUM?: unknown }).DD_RUM;
       delete (window as typeof window & { Sentry?: unknown }).Sentry;
 
-      expect(() => {
+      expect(() {
         monitoringService.trackCustomMetric('test.metric', 1);
       }).not.toThrow();
     });
 
-    it('should send to external services when available', () => {
+    it('should send to external services when available', () {
       const mockAddAction = vi.fn();
       const mockAddBreadcrumb = vi.fn();
 
@@ -322,8 +322,8 @@ describe('MonitoringService', () => {
     });
   });
 
-  describe('Memory Management', () => {
-    it('should limit metrics storage to prevent memory leaks', () => {
+  describe('Memory Management', () {
+    it('should limit metrics storage to prevent memory leaks', () {
       const initialCount = monitoringService.getMetrics().length;
 
       // Add more metrics than the limit
@@ -335,7 +335,7 @@ describe('MonitoringService', () => {
       expect(finalCount).toBeLessThanOrEqual(1000 + initialCount);
     });
 
-    it('should limit events storage to prevent memory leaks', () => {
+    it('should limit events storage to prevent memory leaks', () {
       const initialCount = monitoringService.getEvents().length;
 
       // Add more events than the limit
@@ -348,8 +348,8 @@ describe('MonitoringService', () => {
     });
   });
 
-  describe('Performance Wrapper', () => {
-    it('should wrap functions with monitoring', async () => {
+  describe('Performance Wrapper', () {
+    it('should wrap functions with monitoring', async () {
       const testFunction = vi.fn().mockResolvedValue('success');
       const wrappedFunction = monitoringService.withMonitoring(
         testFunction,
@@ -369,7 +369,7 @@ describe('MonitoringService', () => {
       expect(metrics.some(m => m.tags?.name === 'test_function')).toBe(true);
     });
 
-    it('should handle function errors and track them', async () => {
+    it('should handle function errors and track them', async () {
       const error = new Error('Test error');
       const testFunction = vi.fn().mockRejectedValue(error);
       const wrappedFunction = monitoringService.withMonitoring(

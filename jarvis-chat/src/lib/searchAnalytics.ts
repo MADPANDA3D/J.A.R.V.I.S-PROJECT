@@ -482,7 +482,7 @@ export class SearchAnalyticsCollector {
           timestamp: new Date(event.timestamp as string),
         }));
       }
-    } catch (error) {
+    } catch {
       console.error('Failed to load analytics from storage:', error);
     }
   }
@@ -494,7 +494,7 @@ export class SearchAnalyticsCollector {
         event => event.timestamp > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) // Last 30 days
       );
       localStorage.setItem(`${this.localStorageKey}-${this.userId}`, JSON.stringify(recentEvents));
-    } catch (error) {
+    } catch {
       console.error('Failed to save analytics to storage:', error);
     }
   }
@@ -535,7 +535,7 @@ export class SearchAnalyticsCollector {
     this.events = [];
     try {
       localStorage.removeItem(`${this.localStorageKey}-${this.userId}`);
-    } catch (error) {
+    } catch {
       console.error('Failed to clear analytics data:', error);
     }
   }

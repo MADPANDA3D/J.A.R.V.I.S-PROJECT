@@ -172,18 +172,18 @@ class MetricsService {
 
   private startMetricsCollection(): void {
     // Collect metrics every minute
-    setInterval(() => {
+    setInterval(() {
       this.collectPerformanceMetrics();
       this.collectSystemMetrics();
     }, 60000);
 
     // Collect daily metrics every hour
-    setInterval(() => {
+    setInterval(() {
       this.collectDailyMetrics();
     }, 3600000);
 
     // Collect business metrics every 5 minutes
-    setInterval(() => {
+    setInterval(() {
       this.collectBusinessMetrics();
     }, 300000);
 
@@ -193,7 +193,7 @@ class MetricsService {
 
   private setupActivityTracking(): void {
     // Track page visibility changes
-    document.addEventListener('visibilitychange', () => {
+    document.addEventListener('visibilitychange', () {
       if (document.hidden) {
         this.trackKPI('user.page_hidden', 1, 'events', 'user');
       } else {
@@ -205,7 +205,7 @@ class MetricsService {
     ['click', 'keydown', 'scroll', 'mousemove'].forEach(eventType => {
       document.addEventListener(
         eventType,
-        this.throttle(() => {
+        this.throttle(() {
           this.trackUserInteraction(eventType);
         }, 1000),
         { passive: true }
@@ -213,7 +213,7 @@ class MetricsService {
     });
 
     // Track page unload
-    window.addEventListener('beforeunload', () => {
+    window.addEventListener('beforeunload', () {
       this.endCurrentSession();
     });
   }
@@ -222,7 +222,7 @@ class MetricsService {
     let timeoutId: number | undefined;
     let lastExecTime = 0;
 
-    return () => {
+    return () {
       const currentTime = Date.now();
 
       if (currentTime - lastExecTime > delay) {
@@ -231,7 +231,7 @@ class MetricsService {
       } else {
         clearTimeout(timeoutId);
         timeoutId = window.setTimeout(
-          () => {
+          () {
             func();
             lastExecTime = Date.now();
           },
@@ -573,7 +573,7 @@ class MetricsService {
     const sessions = Array.from(this.sessions.values());
     if (sessions.length === 0) return 0;
 
-    const totalDuration = sessions.reduce((sum, session) => {
+    const totalDuration = sessions.reduce((sum, session) {
       const duration = (session.endTime || Date.now()) - session.startTime;
       return sum + duration;
     }, 0);
@@ -607,7 +607,7 @@ class MetricsService {
         .filter(Boolean)
     ).size;
 
-    this.featureUsage.forEach((stats, featureName) => {
+    this.featureUsage.forEach((stats, featureName) {
       adoptionRates[featureName] =
         totalUsers > 0 ? (stats.users.size / totalUsers) * 100 : 0;
     });
@@ -658,7 +658,7 @@ class MetricsService {
 
       if (healthData.checks) {
         Object.entries(healthData.checks).forEach(
-          ([check, result]: [string, { status: string }]) => {
+          ([check, result]: [string, { status: string }]) {
             this.trackKPI(
               `system.${check}`,
               result.status === 'up' ? 1 : 0,
@@ -841,7 +841,7 @@ export const setMetricsUser = (
 ) => metricsService.setUser(userId, properties);
 
 // React hooks for metrics
-export const useMetrics = () => {
+export const useMetrics = () {
   return {
     trackKPI,
     trackUserInteraction,

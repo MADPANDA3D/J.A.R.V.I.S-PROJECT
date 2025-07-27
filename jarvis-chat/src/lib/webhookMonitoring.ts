@@ -264,7 +264,7 @@ class WebhookMonitoringService {
   subscribeToAlerts(callback: (alert: AlertEvent) => void): () => void {
     this.alertSubscribers.push(callback);
 
-    return () => {
+    return () {
       const index = this.alertSubscribers.indexOf(callback);
       if (index > -1) {
         this.alertSubscribers.splice(index, 1);
@@ -397,7 +397,7 @@ class WebhookMonitoringService {
         this.alertSubscribers.forEach(subscriber => {
           try {
             subscriber(alertEvent);
-          } catch (error) {
+          } catch {
             console.error('Error notifying alert subscriber:', error);
           }
         });

@@ -23,7 +23,7 @@ const chatMessageToMessage = (chatMsg: ChatMessage): Message => ({
 //   user_id: userId,
 // });
 
-export const useChat = () => {
+export const useChat = () {
   const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,10 +31,10 @@ export const useChat = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Load message history when user logs in
-  useEffect(() => {
+  useEffect(() {
     if (!user?.id) return;
 
-    const loadHistory = async () => {
+    const loadHistory = async () {
       try {
         setIsLoadingHistory(true);
         const history = await chatService.loadMessageHistory(user.id);
@@ -51,7 +51,7 @@ export const useChat = () => {
   }, [user?.id]);
 
   // Subscribe to real-time message updates
-  useEffect(() => {
+  useEffect(() {
     if (!user?.id) return;
 
     const unsubscribe = chatService.subscribeToMessages(
@@ -73,7 +73,7 @@ export const useChat = () => {
 
   // Send a new message
   const sendMessage = useCallback(
-    async (content: string, selectedTools?: string[]) => {
+    async (content: string, selectedTools?: string[]) {
       if (!user?.id || !content.trim()) return;
 
       setError(null);
@@ -139,7 +139,7 @@ export const useChat = () => {
 
   // Retry failed message
   const retryMessage = useCallback(
-    async (messageId: string) => {
+    async (messageId: string) {
       const message = messages.find(
         m => m.id === messageId && m.role === 'user'
       );
@@ -153,12 +153,12 @@ export const useChat = () => {
   );
 
   // Clear error
-  const clearError = useCallback(() => {
+  const clearError = useCallback(() {
     setError(null);
   }, []);
 
   // Clear all messages (for new conversation)
-  const clearMessages = useCallback(() => {
+  const clearMessages = useCallback(() {
     setMessages([]);
     setError(null);
   }, []);

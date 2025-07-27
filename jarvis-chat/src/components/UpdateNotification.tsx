@@ -64,7 +64,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
                 setTimeout(() => setNotification(null), 300);
               }, 5000);
             }
-          } catch {
+          } catch (error) {
             console.error('❌ Failed to parse update notification:', error);
           }
         };
@@ -84,7 +84,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
           setConnectionStatus('disconnected');
         };
         
-      } catch {
+      } catch (error) {
         console.error('❌ Failed to create WebSocket connection:', error);
         setConnectionStatus('disconnected');
         

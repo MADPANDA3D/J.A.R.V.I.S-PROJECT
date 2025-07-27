@@ -863,6 +863,159 @@ app.get('/webhook/health', (req, res) => {
     }
 });
 
+// Alert management endpoints
+app.get('/webhook/alerts', (req, res) => {
+    try {
+        const alertSummary = getAlertSummary();
+        res.json({
+            timestamp: new Date().toISOString(),
+            alerting_enabled: performanceMetrics.alerting.enabled,
+            thresholds: performanceMetrics.alerting.thresholds,
+            ...alertSummary
+        });
+    } catch (error) {
+        console.error('❌ Alerts endpoint error:', error);
+        res.status(500).json({
+            error: 'Failed to get alerts',
+            timestamp: new Date().toISOString()
+        });
+    }
+});
+
+// Acknowledge alert endpoint
+app.post('/webhook/alerts/:alertId/acknowledge', (req, res) => {
+    try {
+        const { alertId } = req.params;
+        const { acknowledgedBy = 'unknown' } = req.body;
+        
+        const alert = performanceMetrics.alerting.activeAlerts.get(alertId);
+        if (!alert) {
+            return res.status(404).json({
+                error: 'Alert not found',
+                alert_id: alertId
+            });
+        }
+        
+        alert.acknowledgedBy = acknowledgedBy;
+        alert.acknowledgedAt = Date.now();
+        
+        // Send acknowledgment notification
+        if (performanceMetrics.alerting.notifications.webhook) {
+            const notification = {
+                type: 'alert_acknowledged',
+                alert: {
+                    id: alert.id,
+                    type: alert.type,
+                    message: `Alert acknowledged by ${acknowledgedBy}: ${alert.message}`,
+                    acknowledgedBy,
+                    timestamp: new Date().toISOString()
+                },
+                timestamp: new Date().toISOString()
+            };
+            
+            notifyUsers(JSON.stringify(notification), 'alert_acknowledged');
+        }
+        
+        console.log(`✓ Alert acknowledged: ${alert.type} - ${alert.message} (by ${acknowledgedBy})`);
+        
+        res.json({
+            success: true,
+            alert: {
+                id: alert.id,
+                acknowledged_by: acknowledgedBy,
+                acknowledged_at: new Date(alert.acknowledgedAt).toISOString()
+            }
+        });
+        
+    } catch (error) {
+        console.error('❌ Alert acknowledgment error:', error);
+        res.status(500).json({
+            error: 'Failed to acknowledge alert',
+            message: error.message
+        });
+    }
+});
+
+// Resolve alert endpoint
+app.post('/webhook/alerts/:alertId/resolve', (req, res) => {
+    try {
+        const { alertId } = req.params;
+        const { resolvedBy = 'manual' } = req.body;
+        
+        const success = resolveAlert(alertId, resolvedBy);
+        
+        if (!success) {
+            return res.status(404).json({
+                error: 'Alert not found or already resolved',
+                alert_id: alertId
+            });
+        }
+        
+        res.json({
+            success: true,
+            message: 'Alert resolved successfully',
+            resolved_by: resolvedBy,
+            resolved_at: new Date().toISOString()
+        });
+        
+    } catch (error) {
+        console.error('❌ Alert resolution error:', error);
+        res.status(500).json({
+            error: 'Failed to resolve alert',
+            message: error.message
+        });
+    }
+});
+
+// Update alert thresholds endpoint
+app.post('/webhook/alerts/config', (req, res) => {
+    try {
+        const { thresholds, enabled, notifications } = req.body;
+        
+        if (typeof enabled === 'boolean') {
+            performanceMetrics.alerting.enabled = enabled;
+        }
+        
+        if (thresholds && typeof thresholds === 'object') {
+            // Merge new thresholds with existing ones
+            performanceMetrics.alerting.thresholds = {
+                ...performanceMetrics.alerting.thresholds,
+                ...thresholds
+            };
+        }
+        
+        if (notifications && typeof notifications === 'object') {
+            performanceMetrics.alerting.notifications = {
+                ...performanceMetrics.alerting.notifications,
+                ...notifications
+            };
+        }
+        
+        console.log('📝 Alert configuration updated:', {
+            enabled: performanceMetrics.alerting.enabled,
+            thresholds: performanceMetrics.alerting.thresholds,
+            notifications: performanceMetrics.alerting.notifications
+        });
+        
+        res.json({
+            success: true,
+            message: 'Alert configuration updated',
+            config: {
+                enabled: performanceMetrics.alerting.enabled,
+                thresholds: performanceMetrics.alerting.thresholds,
+                notifications: performanceMetrics.alerting.notifications
+            }
+        });
+        
+    } catch (error) {
+        console.error('❌ Alert configuration error:', error);
+        res.status(500).json({
+            error: 'Failed to update alert configuration',
+            message: error.message
+        });
+    }
+});
+
 // Enhanced performance metrics endpoint
 app.get('/webhook/metrics', async (req, res) => {
     try {
@@ -1282,6 +1435,326 @@ app.get('/dashboard', async (req, res) => {
     }
 });
 
+// Historical Data Persistence System
+const HISTORICAL_DATA_FILE = path.join(LOGS_DIR, 'webhook-historical-data.json');
+const MAX_HISTORICAL_RECORDS = 10000; // Keep last 10,000 records
+const HISTORICAL_SNAPSHOT_INTERVAL = 60000; // 1 minute
+
+let historicalData = {
+    snapshots: [],
+    dailyAggregates: {},
+    weeklyAggregates: {},
+    monthlyAggregates: {},
+    trendAnalysis: {
+        reliability: { current: 100, trend: 'stable', history: [] },
+        performance: { current: 0, trend: 'stable', history: [] },
+        usage: { current: 0, trend: 'stable', history: [] }
+    },
+    lastPersisted: null
+};
+
+// Load existing historical data
+const loadHistoricalData = async () => {
+    try {
+        const data = await fs.readFile(HISTORICAL_DATA_FILE, 'utf8');
+        historicalData = { ...historicalData, ...JSON.parse(data) };
+        console.log(`📊 Loaded ${historicalData.snapshots.length} historical records`);
+    } catch (error) {
+        if (error.code !== 'ENOENT') {
+            console.warn('⚠️ Error loading historical data:', error.message);
+        }
+        // Create logs directory if it doesn't exist
+        await fs.mkdir(LOGS_DIR, { recursive: true });
+    }
+};
+
+// Save historical data to file
+const persistHistoricalData = async () => {
+    try {
+        await fs.writeFile(HISTORICAL_DATA_FILE, JSON.stringify(historicalData, null, 2));
+        historicalData.lastPersisted = Date.now();
+    } catch (error) {
+        console.error('❌ Error persisting historical data:', error.message);
+    }
+};
+
+// Create snapshot of current metrics
+const createMetricsSnapshot = () => {
+    const now = Date.now();
+    const uptime = now - performanceMetrics.startTime;
+    
+    return {
+        timestamp: now,
+        iso_timestamp: new Date(now).toISOString(),
+        uptime_ms: uptime,
+        webhook_metrics: {
+            total_processed: performanceMetrics.webhookStats.totalProcessed,
+            successful: performanceMetrics.webhookStats.successful,
+            failed: performanceMetrics.webhookStats.failed,
+            success_rate: performanceMetrics.webhookStats.totalProcessed > 0 ? 
+                ((performanceMetrics.webhookStats.successful / performanceMetrics.webhookStats.totalProcessed) * 100) : 100,
+            auth_failures: performanceMetrics.webhookStats.authFailures,
+            avg_response_time: performanceMetrics.webhookStats.averageResponseTime,
+            p95_response_time: performanceMetrics.webhookStats.p95ResponseTime,
+            event_types: { ...performanceMetrics.webhookStats.eventTypes },
+            error_categories: { ...performanceMetrics.webhookStats.errorCategories }
+        },
+        service_health: {
+            webhook_server: { ...performanceMetrics.serviceHealth.webhookServer },
+            websocket_server: { ...performanceMetrics.serviceHealth.websocketServer },
+            authentication: { ...performanceMetrics.serviceHealth.authentication }
+        },
+        system_health: { ...performanceMetrics.systemHealth },
+        connection_health: { ...performanceMetrics.webhookStats.connectionHealth }
+    };
+};
+
+// Generate trend analysis
+const generateTrendAnalysis = () => {
+    const snapshots = historicalData.snapshots;
+    if (snapshots.length < 2) return;
+    
+    const recent = snapshots.slice(-30); // Last 30 snapshots (30 minutes)
+    const older = snapshots.slice(-60, -30); // Previous 30 snapshots for comparison
+    
+    if (recent.length === 0 || older.length === 0) return;
+    
+    // Calculate reliability trend (success rate)
+    const recentReliability = recent.reduce((sum, s) => sum + s.webhook_metrics.success_rate, 0) / recent.length;
+    const olderReliability = older.reduce((sum, s) => sum + s.webhook_metrics.success_rate, 0) / older.length;
+    
+    historicalData.trendAnalysis.reliability = {
+        current: parseFloat(recentReliability.toFixed(2)),
+        trend: recentReliability > olderReliability + 1 ? 'improving' : 
+               recentReliability < olderReliability - 1 ? 'declining' : 'stable',
+        history: recent.map(s => ({ 
+            timestamp: s.timestamp, 
+            value: s.webhook_metrics.success_rate 
+        }))
+    };
+    
+    // Calculate performance trend (response time)
+    const recentPerformance = recent.reduce((sum, s) => sum + s.webhook_metrics.avg_response_time, 0) / recent.length;
+    const olderPerformance = older.reduce((sum, s) => sum + s.webhook_metrics.avg_response_time, 0) / older.length;
+    
+    historicalData.trendAnalysis.performance = {
+        current: parseFloat(recentPerformance.toFixed(2)),
+        trend: recentPerformance < olderPerformance - 10 ? 'improving' : 
+               recentPerformance > olderPerformance + 10 ? 'declining' : 'stable',
+        history: recent.map(s => ({ 
+            timestamp: s.timestamp, 
+            value: s.webhook_metrics.avg_response_time 
+        }))
+    };
+    
+    // Calculate usage trend (requests per snapshot period)
+    const recentUsage = recent.reduce((sum, s) => sum + s.webhook_metrics.total_processed, 0) / recent.length;
+    const olderUsage = older.reduce((sum, s) => sum + s.webhook_metrics.total_processed, 0) / older.length;
+    
+    historicalData.trendAnalysis.usage = {
+        current: parseFloat(recentUsage.toFixed(2)),
+        trend: recentUsage > olderUsage + 5 ? 'increasing' : 
+               recentUsage < olderUsage - 5 ? 'decreasing' : 'stable',
+        history: recent.map(s => ({ 
+            timestamp: s.timestamp, 
+            value: s.webhook_metrics.total_processed 
+        }))
+    };
+};
+
+// Generate daily aggregates
+const generateDailyAggregates = () => {
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const todaySnapshots = historicalData.snapshots.filter(s => 
+        new Date(s.timestamp).toISOString().split('T')[0] === today
+    );
+    
+    if (todaySnapshots.length === 0) return;
+    
+    const aggregate = {
+        date: today,
+        snapshots_count: todaySnapshots.length,
+        webhook_metrics: {
+            max_total_processed: Math.max(...todaySnapshots.map(s => s.webhook_metrics.total_processed)),
+            avg_success_rate: todaySnapshots.reduce((sum, s) => sum + s.webhook_metrics.success_rate, 0) / todaySnapshots.length,
+            avg_response_time: todaySnapshots.reduce((sum, s) => sum + s.webhook_metrics.avg_response_time, 0) / todaySnapshots.length,
+            max_p95_response_time: Math.max(...todaySnapshots.map(s => s.webhook_metrics.p95_response_time)),
+            total_auth_failures: Math.max(...todaySnapshots.map(s => s.webhook_metrics.auth_failures)),
+            event_type_breakdown: {
+                ping: Math.max(...todaySnapshots.map(s => s.webhook_metrics.event_types.ping)),
+                workflow_run: Math.max(...todaySnapshots.map(s => s.webhook_metrics.event_types.workflow_run)),
+                unsupported: Math.max(...todaySnapshots.map(s => s.webhook_metrics.event_types.unsupported))
+            }
+        },
+        system_health: {
+            max_memory_usage: Math.max(...todaySnapshots.map(s => s.system_health.memory.percentage)),
+            avg_cpu_usage: todaySnapshots.reduce((sum, s) => sum + s.system_health.cpu.usage, 0) / todaySnapshots.length
+        }
+    };
+    
+    historicalData.dailyAggregates[today] = aggregate;
+};
+
+// Historical data snapshot worker
+const startHistoricalDataCollection = () => {
+    setInterval(() => {
+        // Create and store snapshot
+        const snapshot = createMetricsSnapshot();
+        historicalData.snapshots.push(snapshot);
+        
+        // Maintain max records limit
+        if (historicalData.snapshots.length > MAX_HISTORICAL_RECORDS) {
+            historicalData.snapshots = historicalData.snapshots.slice(-MAX_HISTORICAL_RECORDS);
+        }
+        
+        // Generate analytics
+        generateTrendAnalysis();
+        generateDailyAggregates();
+        
+        // Persist every 5 minutes
+        if (!historicalData.lastPersisted || Date.now() - historicalData.lastPersisted > 300000) {
+            persistHistoricalData();
+        }
+    }, HISTORICAL_SNAPSHOT_INTERVAL);
+    
+    console.log(`📈 Historical data collection started (${HISTORICAL_SNAPSHOT_INTERVAL/1000}s intervals)`);
+};
+
+// Historical analytics endpoints
+app.get('/webhook/analytics/historical', async (req, res) => {
+    try {
+        const { timeRange = '24h', format = 'detailed' } = req.query;
+        
+        let startTime;
+        const now = Date.now();
+        
+        switch (timeRange) {
+            case '1h': startTime = now - (60 * 60 * 1000); break;
+            case '6h': startTime = now - (6 * 60 * 60 * 1000); break;
+            case '24h': startTime = now - (24 * 60 * 60 * 1000); break;
+            case '7d': startTime = now - (7 * 24 * 60 * 60 * 1000); break;
+            case '30d': startTime = now - (30 * 24 * 60 * 60 * 1000); break;
+            default: startTime = now - (24 * 60 * 60 * 1000);
+        }
+        
+        const filteredSnapshots = historicalData.snapshots.filter(s => s.timestamp >= startTime);
+        
+        if (format === 'summary') {
+            res.json({
+                timeRange,
+                summary: {
+                    snapshots_count: filteredSnapshots.length,
+                    date_range: {
+                        start: filteredSnapshots.length > 0 ? new Date(filteredSnapshots[0].timestamp).toISOString() : null,
+                        end: filteredSnapshots.length > 0 ? new Date(filteredSnapshots[filteredSnapshots.length - 1].timestamp).toISOString() : null
+                    },
+                    reliability_trend: historicalData.trendAnalysis.reliability,
+                    performance_trend: historicalData.trendAnalysis.performance,
+                    usage_trend: historicalData.trendAnalysis.usage
+                }
+            });
+        } else {
+            res.json({
+                timeRange,
+                snapshots: filteredSnapshots,
+                trend_analysis: historicalData.trendAnalysis,
+                daily_aggregates: historicalData.dailyAggregates
+            });
+        }
+    } catch (error) {
+        console.error('❌ Historical analytics error:', error);
+        res.status(500).json({
+            error: 'Failed to retrieve historical analytics',
+            message: error.message
+        });
+    }
+});
+
+app.get('/webhook/analytics/usage-patterns', async (req, res) => {
+    try {
+        const { period = 'daily' } = req.query;
+        const snapshots = historicalData.snapshots;
+        
+        if (snapshots.length === 0) {
+            return res.json({
+                period,
+                patterns: [],
+                insights: { message: 'Insufficient data for pattern analysis' }
+            });
+        }
+        
+        // Group snapshots by time period
+        const groups = {};
+        snapshots.forEach(snapshot => {
+            const date = new Date(snapshot.timestamp);
+            let groupKey;
+            
+            switch (period) {
+                case 'hourly':
+                    groupKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:00`;
+                    break;
+                case 'daily':
+                    groupKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+                    break;
+                case 'weekly':
+                    const weekStart = new Date(date);
+                    weekStart.setDate(date.getDate() - date.getDay());
+                    groupKey = `Week of ${weekStart.getFullYear()}-${String(weekStart.getMonth() + 1).padStart(2, '0')}-${String(weekStart.getDate()).padStart(2, '0')}`;
+                    break;
+                default:
+                    groupKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+            }
+            
+            if (!groups[groupKey]) groups[groupKey] = [];
+            groups[groupKey].push(snapshot);
+        });
+        
+        // Analyze patterns
+        const patterns = Object.entries(groups).map(([period, periodSnapshots]) => {
+            const maxProcessed = Math.max(...periodSnapshots.map(s => s.webhook_metrics.total_processed));
+            const avgSuccessRate = periodSnapshots.reduce((sum, s) => sum + s.webhook_metrics.success_rate, 0) / periodSnapshots.length;
+            const avgResponseTime = periodSnapshots.reduce((sum, s) => sum + s.webhook_metrics.avg_response_time, 0) / periodSnapshots.length;
+            
+            return {
+                period,
+                snapshots_count: periodSnapshots.length,
+                webhook_volume: maxProcessed,
+                avg_success_rate: parseFloat(avgSuccessRate.toFixed(2)),
+                avg_response_time: parseFloat(avgResponseTime.toFixed(2)),
+                event_distribution: {
+                    ping: Math.max(...periodSnapshots.map(s => s.webhook_metrics.event_types.ping)),
+                    workflow_run: Math.max(...periodSnapshots.map(s => s.webhook_metrics.event_types.workflow_run)),
+                    unsupported: Math.max(...periodSnapshots.map(s => s.webhook_metrics.event_types.unsupported))
+                }
+            };
+        });
+        
+        // Generate insights
+        const insights = {
+            total_periods: patterns.length,
+            avg_volume_per_period: patterns.reduce((sum, p) => sum + p.webhook_volume, 0) / patterns.length,
+            peak_volume_period: patterns.reduce((max, p) => p.webhook_volume > max.webhook_volume ? p : max, patterns[0]),
+            reliability_consistency: {
+                min_success_rate: Math.min(...patterns.map(p => p.avg_success_rate)),
+                max_success_rate: Math.max(...patterns.map(p => p.avg_success_rate)),
+                avg_success_rate: patterns.reduce((sum, p) => sum + p.avg_success_rate, 0) / patterns.length
+            }
+        };
+        
+        res.json({
+            period,
+            patterns: patterns.sort((a, b) => a.period.localeCompare(b.period)),
+            insights
+        });
+    } catch (error) {
+        console.error('❌ Usage patterns analysis error:', error);
+        res.status(500).json({
+            error: 'Failed to analyze usage patterns',
+            message: error.message
+        });
+    }
+});
+
 // Error handling
 app.use((error, req, res, next) => {
     console.error('💥 Unhandled error:', error);
@@ -1289,24 +1762,90 @@ app.use((error, req, res, next) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
     console.log(`🚀 JARVIS Webhook Server running on port ${PORT}`);
     console.log(`📡 WebSocket notifications on port 9001`);
     console.log(`📝 Logs directory: ${LOGS_DIR}`);
     console.log(`📁 Project root: ${PROJECT_ROOT}`);
+    console.log(`📈 Historical analytics: http://0.0.0.0:${PORT}/webhook/analytics/historical`);
+    console.log(`📊 Usage patterns: http://0.0.0.0:${PORT}/webhook/analytics/usage-patterns`);
+    
+    // Initialize historical data system
+    await loadHistoricalData();
+    startHistoricalDataCollection();
     
     logAction('SERVER_START', {
         port: PORT,
         websocketPort: 9001,
         projectRoot: PROJECT_ROOT,
+        alerting_enabled: performanceMetrics.alerting.enabled,
+        historical_data_enabled: true,
         timestamp: new Date().toISOString()
     });
+    
+    // Log alerting system status
+    console.log(`🚨 Alerting System: ${performanceMetrics.alerting.enabled ? 'ENABLED' : 'DISABLED'}`);
+    console.log(`📋 Alert Thresholds:`);
+    console.log(`   Error Rate: Warning ${performanceMetrics.alerting.thresholds.errorRate.warning}%, Critical ${performanceMetrics.alerting.thresholds.errorRate.critical}%`);
+    console.log(`   Response Time: Warning ${performanceMetrics.alerting.thresholds.responseTime.warning}ms, Critical ${performanceMetrics.alerting.thresholds.responseTime.critical}ms`);
+    console.log(`   Auth Failures: Warning ${performanceMetrics.alerting.thresholds.authFailureRate.warning}%, Critical ${performanceMetrics.alerting.thresholds.authFailureRate.critical}%`);
+    console.log(`🔔 Notifications: WebSocket ${performanceMetrics.alerting.notifications.webhook ? 'ON' : 'OFF'}, Console ${performanceMetrics.alerting.notifications.console ? 'ON' : 'OFF'}`);
 });
 
 // Graceful shutdown
 process.on('SIGTERM', async () => {
     console.log('🛑 Received SIGTERM, shutting down gracefully');
-    await logAction('SERVER_SHUTDOWN', { timestamp: new Date().toISOString() });
+    
+    // Create shutdown alert
+    if (performanceMetrics.alerting.enabled) {
+        createAlert(
+            'system_shutdown',
+            'warning',
+            'Webhook server is shutting down',
+            {
+                shutdown_reason: 'SIGTERM received',
+                uptime: Date.now() - performanceMetrics.startTime,
+                active_alerts: performanceMetrics.alerting.activeAlerts.size,
+                timestamp: new Date().toISOString()
+            }
+        );
+        
+        // Give alerts time to be sent
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+    
+    await logAction('SERVER_SHUTDOWN', { 
+        timestamp: new Date().toISOString(),
+        active_alerts: performanceMetrics.alerting.activeAlerts.size
+    });
+    process.exit(0);
+});
+
+process.on('SIGINT', async () => {
+    console.log('\n🛑 Received interrupt signal, shutting down gracefully');
+    
+    // Create shutdown alert
+    if (performanceMetrics.alerting.enabled) {
+        createAlert(
+            'system_shutdown',
+            'warning',
+            'Webhook server interrupted',
+            {
+                shutdown_reason: 'SIGINT received',
+                uptime: Date.now() - performanceMetrics.startTime,
+                active_alerts: performanceMetrics.alerting.activeAlerts.size,
+                timestamp: new Date().toISOString()
+            }
+        );
+        
+        // Give alerts time to be sent
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+    
+    await logAction('SERVER_SHUTDOWN', { 
+        timestamp: new Date().toISOString(),
+        active_alerts: performanceMetrics.alerting.activeAlerts.size
+    });
     process.exit(0);
 });
 

@@ -3,6 +3,11 @@
  * This service provides robust n8n webhook integration with comprehensive error handling
  */
 
+import { 
+  makeMonitoredCall, 
+  registerService
+} from './serviceMonitoring';
+
 export interface WebhookPayload {
   type: 'Text' | 'Voice' | 'Photo' | 'Video' | 'Document';
   message: string;
@@ -147,6 +152,14 @@ export class WebhookService {
       errorRate: 0,
     };
 
+    // Register service for monitoring
+    if (this.config.webhookUrl) {
+      registerService('n8n-webhook', 'webhook', [this.config.webhookUrl]);
+      if (this.config.backupWebhookUrl) {
+        registerService('n8n-webhook-backup', 'webhook', [this.config.backupWebhookUrl]);
+      }
+    }
+
     // Check circuit breaker recovery on initialization
     this.checkCircuitBreakerRecovery();
   }
@@ -155,63 +168,79 @@ export class WebhookService {
    * Send message to webhook with comprehensive error handling and retry logic
    */
   async sendMessage(payload: WebhookPayload): Promise<WebhookResponse> {
-    // Check circuit breaker state
-    if (this.circuitState === CircuitState.OPEN) {
-      if (!this.shouldAttemptRecovery()) {
-        throw new WebhookError(
-          'Circuit breaker is open - webhook temporarily unavailable',
-          WebhookErrorType.CIRCUIT_BREAKER_OPEN,
-          503,
-          false
-        );
-      }
-      // Attempt recovery
-      this.circuitState = CircuitState.HALF_OPEN;
-    }
-
-    const startTime = Date.now();
-    let lastError: WebhookError;
-
-    for (
-      let attempt = 1;
-      attempt <= this.config.retryConfig.maxAttempts;
-      attempt++
-    ) {
-      try {
-        const response = await this.makeWebhookRequest(payload);
-
-        // Success - update metrics and circuit breaker
-        this.recordSuccess(Date.now() - startTime);
-
-        return response;
-      } catch (error) {
-        lastError =
-          error instanceof WebhookError ? error : this.classifyError(error);
-
-        // Don't retry for non-retryable errors
-        if (!lastError.isRetryable) {
-          this.recordFailure();
-          throw lastError;
+    return makeMonitoredCall(
+      'n8n-webhook',
+      'webhook',
+      this.config.webhookUrl,
+      'POST',
+      async () {
+        // Check circuit breaker state
+        if (this.circuitState === CircuitState.OPEN) {
+          if (!this.shouldAttemptRecovery()) {
+            throw new WebhookError(
+              'Circuit breaker is open - webhook temporarily unavailable',
+              WebhookErrorType.CIRCUIT_BREAKER_OPEN,
+              503,
+              false
+            );
+          }
+          // Attempt recovery
+          this.circuitState = CircuitState.HALF_OPEN;
         }
 
-        // Don't retry on last attempt
-        if (attempt === this.config.retryConfig.maxAttempts) {
-          this.recordFailure();
-          throw lastError;
+        const startTime = Date.now();
+        let lastError: WebhookError;
+
+        for (
+          let attempt = 1;
+          attempt <= this.config.retryConfig.maxAttempts;
+          attempt++
+        ) {
+          try {
+            const response = await this.makeWebhookRequest(payload);
+
+            // Success - update metrics and circuit breaker
+            this.recordSuccess(Date.now() - startTime);
+
+            return response;
+          } catch {
+            lastError =
+              error instanceof WebhookError ? error : this.classifyError(error);
+
+            // Don't retry for non-retryable errors
+            if (!lastError.isRetryable) {
+              this.recordFailure();
+              throw lastError;
+            }
+
+            // Don't retry on last attempt
+            if (attempt === this.config.retryConfig.maxAttempts) {
+              this.recordFailure();
+              throw lastError;
+            }
+
+            // Calculate delay with exponential backoff and jitter
+            const delay = this.calculateRetryDelay(attempt);
+            await this.sleep(delay);
+
+            console.warn(
+              `Webhook attempt ${attempt} failed, retrying in ${delay}ms:`,
+              lastError.message
+            );
+          }
         }
 
-        // Calculate delay with exponential backoff and jitter
-        const delay = this.calculateRetryDelay(attempt);
-        await this.sleep(delay);
-
-        console.warn(
-          `Webhook attempt ${attempt} failed, retrying in ${delay}ms:`,
-          lastError.message
-        );
+        throw lastError!;
+      },
+      {
+        timeout: this.config.timeout,
+        metadata: {
+          payloadType: payload.type,
+          sessionId: payload.sessionId,
+          messageLength: payload.message.length
+        }
       }
-    }
-
-    throw lastError!;
+    );
   }
 
   /**
@@ -319,7 +348,7 @@ export class WebhookService {
       }
 
       return data;
-    } catch (error) {
+    } catch {
       clearTimeout(timeoutId);
 
       if (error.name === 'AbortError') {
@@ -372,7 +401,7 @@ export class WebhookService {
         status: responseTime < 1000 ? 'healthy' : 'degraded',
         responseTime,
       };
-    } catch (error) {
+    } catch {
       return {
         status: 'unhealthy',
         error: error instanceof Error ? error.message : 'Unknown error',
@@ -486,7 +515,7 @@ export class WebhookService {
   }
 
   private checkCircuitBreakerRecovery(): void {
-    setInterval(() => {
+    setInterval(() {
       if (
         this.circuitState === CircuitState.OPEN &&
         this.shouldAttemptRecovery()

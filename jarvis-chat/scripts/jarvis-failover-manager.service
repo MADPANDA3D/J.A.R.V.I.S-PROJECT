@@ -1,0 +1,37 @@
+[Unit]
+Description=JARVIS Chat Webhook Failover Manager
+Documentation=https://github.com/MADPANDA3D/J.A.R.V.I.S-PROJECT
+After=network.target docker.service jarvis-webhook.service jarvis-webhook-backup.service
+Requires=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/J.A.R.V.I.S/J.A.R.V.I.S-PROJECT/jarvis-chat
+ExecStart=/usr/bin/node /root/J.A.R.V.I.S/J.A.R.V.I.S-PROJECT/jarvis-chat/scripts/webhook-failover-manager.cjs
+Restart=always
+RestartSec=15
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=jarvis-failover-manager
+
+# Environment variables
+Environment=NODE_ENV=production
+Environment=FAILOVER_MANAGER_PORT=9003
+Environment=WEBHOOK_SECRET=your-webhook-secret-replace-this
+Environment=PROJECT_ROOT=/root/J.A.R.V.I.S/J.A.R.V.I.S-PROJECT/jarvis-chat
+Environment=GITHUB_TOKEN=your-github-token-replace-this
+Environment=GITHUB_REPO_OWNER=MADPANDA3D
+Environment=GITHUB_REPO_NAME=J.A.R.V.I.S-PROJECT
+Environment=PRIMARY_WEBHOOK_URL=http://your-vps-ip:9000/webhook/deploy
+Environment=BACKUP_WEBHOOK_URL=http://your-vps-ip:9002/webhook/deploy
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=false
+ReadWritePaths=/root/J.A.R.V.I.S/J.A.R.V.I.S-PROJECT/jarvis-chat
+
+[Install]
+WantedBy=multi-user.target

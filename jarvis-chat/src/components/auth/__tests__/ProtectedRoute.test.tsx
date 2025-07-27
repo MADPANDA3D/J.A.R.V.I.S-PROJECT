@@ -21,12 +21,12 @@ const TestComponent = () => (
   <div data-testid="protected-content">Protected Content</div>
 );
 
-describe('ProtectedRoute', () => {
-  beforeEach(() => {
+describe('ProtectedRoute', () {
+  beforeEach(() {
     vi.clearAllMocks();
   });
 
-  it('should show loading spinner when auth is not initialized', () => {
+  it('should show loading spinner when auth is not initialized', () {
     mockUseAuth.mockReturnValue({
       user: null,
       session: null,
@@ -50,7 +50,7 @@ describe('ProtectedRoute', () => {
     expect(screen.queryByTestId('protected-content')).not.toBeInTheDocument();
   });
 
-  it('should show loading spinner when auth is loading', () => {
+  it('should show loading spinner when auth is loading', () {
     mockUseAuth.mockReturnValue({
       user: null,
       session: null,
@@ -74,7 +74,7 @@ describe('ProtectedRoute', () => {
     expect(screen.queryByTestId('protected-content')).not.toBeInTheDocument();
   });
 
-  it('should render protected content when user is authenticated', () => {
+  it('should render protected content when user is authenticated', () {
     mockUseAuth.mockReturnValue({
       user: { id: 'test-user-id', email: 'test@example.com' } as User,
       session: {} as Session,
@@ -100,7 +100,7 @@ describe('ProtectedRoute', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('should redirect to login when user is not authenticated', () => {
+  it('should redirect to login when user is not authenticated', () {
     mockUseAuth.mockReturnValue({
       user: null,
       session: null,

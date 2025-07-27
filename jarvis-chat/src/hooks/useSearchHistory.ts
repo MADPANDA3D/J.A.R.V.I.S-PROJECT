@@ -48,7 +48,7 @@ export function useSearchHistory(
   });
 
   // Analyze search patterns from history
-  const searchPatterns = useMemo(() => {
+  const searchPatterns = useMemo(() {
     const patterns = new Map<string, SearchPattern>();
 
     searchHistory.forEach(item => {
@@ -101,7 +101,7 @@ export function useSearchHistory(
     });
 
     // Add popular query matches
-    popularQueries.forEach((popularQuery, index) => {
+    popularQueries.forEach((popularQuery, index) {
       if (popularQuery.includes(query)) {
         const score = Math.max(0.8 - (index * 0.05), 0.3); // Score based on popularity rank
         suggestions.push({
@@ -146,7 +146,7 @@ export function useSearchHistory(
 
     // Sort by score and relevance, limit to top 8
     return suggestions
-      .sort((a, b) => {
+      .sort((a, b) {
         if (a.score !== b.score) return b.score - a.score;
         // Secondary sort by recency for same scores
         const aTime = a.metadata?.lastUsed?.getTime() || 0;
@@ -157,7 +157,7 @@ export function useSearchHistory(
   }, [searchHistory, popularQueries, searchPatterns]);
 
   // Generate search trends analytics
-  const generateSearchTrends = useCallback(() => {
+  const generateSearchTrends = useCallback(() {
     const daily: Record<string, number> = {};
     const weekly: Record<string, number> = {};
     const monthly: Record<string, number> = {};
@@ -185,7 +185,7 @@ export function useSearchHistory(
   }, [searchHistory]);
 
   // Update state when dependencies change
-  useEffect(() => {
+  useEffect(() {
     setHistoryState(prev => ({
       ...prev,
       frequentQueries: searchPatterns,
@@ -194,7 +194,7 @@ export function useSearchHistory(
   }, [searchPatterns, generateSearchTrends]);
 
   // Save/load suggestions from localStorage
-  useEffect(() => {
+  useEffect(() {
     if (!userId) return;
 
     try {
@@ -203,7 +203,7 @@ export function useSearchHistory(
         const parsed = JSON.parse(savedSuggestions);
         setHistoryState(prev => ({ ...prev, queryCompletions: parsed.completions || [] }));
       }
-    } catch (error) {
+    } catch {
       console.error('Failed to load search suggestions:', error);
     }
   }, [userId]);
@@ -219,7 +219,7 @@ export function useSearchHistory(
   }, [searchPatterns]);
 
   // Get search trends for specified period
-  const getTrends = useCallback((period: 'daily' | 'weekly' | 'monthly', limit = 10) => {
+  const getTrends = useCallback((period: 'daily' | 'weekly' | 'monthly', limit = 10) {
     const trends = historyState.searchTrends[period];
     return Object.entries(trends)
       .sort(([, a], [, b]) => b - a)
@@ -264,16 +264,16 @@ export function useSearchHistory(
 
     // Analytics
     getTotalSearches: () => searchHistory.length,
-    getAverageResults: () => {
+    getAverageResults: () {
       if (searchHistory.length === 0) return 0;
       return searchHistory.reduce((sum, item) => sum + item.resultCount, 0) / searchHistory.length;
     },
-    getSuccessRate: () => {
+    getSuccessRate: () {
       if (searchHistory.length === 0) return 0;
       const successfulSearches = searchHistory.filter(item => item.resultCount > 0).length;
       return (successfulSearches / searchHistory.length) * 100;
     },
-    getMostProductiveTime: () => {
+    getMostProductiveTime: () {
       if (searchHistory.length === 0) return null;
       
       const hourCounts: Record<number, number> = {};

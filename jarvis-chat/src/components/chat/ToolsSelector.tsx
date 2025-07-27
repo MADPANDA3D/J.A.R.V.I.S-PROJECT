@@ -54,7 +54,7 @@ export function ToolsSelector({
 
   // Group tools by category
   const toolsByCategory = availableTools.reduce(
-    (acc, tool) => {
+    (acc, tool) {
       if (!acc[tool.category]) {
         acc[tool.category] = [];
       }
@@ -66,7 +66,7 @@ export function ToolsSelector({
 
   const categories = Object.keys(toolsByCategory).sort();
 
-  const getIcon = (iconName: string) => {
+  const getIcon = (iconName: string) {
     const IconComponent = iconMap[iconName as keyof typeof iconMap] || Settings;
     return IconComponent;
   };

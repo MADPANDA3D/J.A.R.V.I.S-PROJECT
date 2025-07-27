@@ -2,12 +2,12 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-describe('Configuration Templates Validation', () => {
+describe('Configuration Templates Validation', () {
   const templatesDir = join(__dirname, '../../../');
 
-  describe('Environment Template Files', () => {
-    it('should have .env.template for development', () => {
-      expect(() => {
+  describe('Environment Template Files', () {
+    it('should have .env.template for development', () {
+      expect(() {
         const template = readFileSync(
           join(templatesDir, '.env.template'),
           'utf8'
@@ -17,8 +17,8 @@ describe('Configuration Templates Validation', () => {
       }).not.toThrow();
     });
 
-    it('should have .env.staging.template for staging', () => {
-      expect(() => {
+    it('should have .env.staging.template for staging', () {
+      expect(() {
         const template = readFileSync(
           join(templatesDir, '.env.staging.template'),
           'utf8'
@@ -28,8 +28,8 @@ describe('Configuration Templates Validation', () => {
       }).not.toThrow();
     });
 
-    it('should have .env.production.template for production', () => {
-      expect(() => {
+    it('should have .env.production.template for production', () {
+      expect(() {
         const template = readFileSync(
           join(templatesDir, '.env.production.template'),
           'utf8'
@@ -40,8 +40,8 @@ describe('Configuration Templates Validation', () => {
     });
   });
 
-  describe('Template Content Validation', () => {
-    it('should include all required variables in development template', () => {
+  describe('Template Content Validation', () {
+    it('should include all required variables in development template', () {
       const template = readFileSync(
         join(templatesDir, '.env.template'),
         'utf8'
@@ -58,7 +58,7 @@ describe('Configuration Templates Validation', () => {
       expect(template).toContain('LOG_LEVEL=');
     });
 
-    it('should include production-specific variables in production template', () => {
+    it('should include production-specific variables in production template', () {
       const template = readFileSync(
         join(templatesDir, '.env.production.template'),
         'utf8'
@@ -78,7 +78,7 @@ describe('Configuration Templates Validation', () => {
       expect(template).toContain('CSP_ENABLED=');
     });
 
-    it('should include staging-specific variables in staging template', () => {
+    it('should include staging-specific variables in staging template', () {
       const template = readFileSync(
         join(templatesDir, '.env.staging.template'),
         'utf8'
@@ -95,8 +95,8 @@ describe('Configuration Templates Validation', () => {
     });
   });
 
-  describe('Security Annotations', () => {
-    it('should have security warnings in all templates', () => {
+  describe('Security Annotations', () {
+    it('should have security warnings in all templates', () {
       const templates = [
         '.env.template',
         '.env.staging.template',
@@ -122,7 +122,7 @@ describe('Configuration Templates Validation', () => {
       });
     });
 
-    it('should mark sensitive variables appropriately', () => {
+    it('should mark sensitive variables appropriately', () {
       const productionTemplate = readFileSync(
         join(templatesDir, '.env.production.template'),
         'utf8'
@@ -158,8 +158,8 @@ describe('Configuration Templates Validation', () => {
     });
   });
 
-  describe('Template Format Validation', () => {
-    it('should use proper environment variable format', () => {
+  describe('Template Format Validation', () {
+    it('should use proper environment variable format', () {
       const templates = [
         '.env.template',
         '.env.staging.template',
@@ -170,7 +170,7 @@ describe('Configuration Templates Validation', () => {
         const template = readFileSync(join(templatesDir, templateFile), 'utf8');
         const lines = template.split('\n');
 
-        lines.forEach((line) => {
+        lines.forEach((line) {
           // Skip empty lines and comments
           if (!line.trim() || line.trim().startsWith('#')) return;
 
@@ -180,7 +180,7 @@ describe('Configuration Templates Validation', () => {
       });
     });
 
-    it('should have consistent variable naming', () => {
+    it('should have consistent variable naming', () {
       const template = readFileSync(
         join(templatesDir, '.env.template'),
         'utf8'
@@ -210,8 +210,8 @@ describe('Configuration Templates Validation', () => {
     });
   });
 
-  describe('Template Completeness', () => {
-    it('should cover all configuration categories', () => {
+  describe('Template Completeness', () {
+    it('should cover all configuration categories', () {
       const productionTemplate = readFileSync(
         join(templatesDir, '.env.production.template'),
         'utf8'
@@ -240,7 +240,7 @@ describe('Configuration Templates Validation', () => {
       expect(productionTemplate).toContain('CSP_ENABLED');
     });
 
-    it('should provide example values where appropriate', () => {
+    it('should provide example values where appropriate', () {
       const template = readFileSync(
         join(templatesDir, '.env.template'),
         'utf8'
@@ -261,8 +261,8 @@ describe('Configuration Templates Validation', () => {
     });
   });
 
-  describe('Environment-Specific Differences', () => {
-    it('should have appropriate differences between environments', () => {
+  describe('Environment-Specific Differences', () {
+    it('should have appropriate differences between environments', () {
       const devTemplate = readFileSync(
         join(templatesDir, '.env.template'),
         'utf8'
@@ -298,8 +298,8 @@ describe('Configuration Templates Validation', () => {
     });
   });
 
-  describe('Documentation Quality', () => {
-    it('should have comprehensive comments', () => {
+  describe('Documentation Quality', () {
+    it('should have comprehensive comments', () {
       const templates = [
         '.env.template',
         '.env.staging.template',

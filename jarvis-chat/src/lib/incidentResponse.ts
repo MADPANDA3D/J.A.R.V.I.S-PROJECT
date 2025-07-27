@@ -472,13 +472,13 @@ class IncidentResponseService {
     this.isMonitoring = true;
 
     // Monitor for incidents every 30 seconds
-    this.monitoringInterval = window.setInterval(() => {
+    this.monitoringInterval = window.setInterval(() {
       this.detectIncidents();
       this.executeAutomatedActions();
     }, 30000);
 
     // Check escalation rules every minute
-    this.escalationInterval = window.setInterval(() => {
+    this.escalationInterval = window.setInterval(() {
       this.checkEscalationRules();
     }, 60000);
   }
@@ -508,7 +508,7 @@ class IncidentResponseService {
 
       // Check performance monitoring for incidents
       await this.checkPerformanceIncidents();
-    } catch (error) {
+    } catch {
       captureError(
         error instanceof Error ? error : new Error('Incident detection failed'),
         {
@@ -821,7 +821,7 @@ class IncidentResponseService {
       if (incident.severity === 'critical') {
         this.triggerEscalation(incident, 'critical_immediate');
       }
-    } catch (error) {
+    } catch {
       captureError(
         error instanceof Error ? error : new Error('Automated response failed'),
         {
@@ -924,7 +924,7 @@ class IncidentResponseService {
         description: `Completed automated action: ${step.name}`,
         metadata: { actionId: action.id, result },
       });
-    } catch (error) {
+    } catch {
       action.status = 'failed';
       action.result = error instanceof Error ? error.message : 'Unknown error';
       action.completedAt = Date.now();
@@ -1173,7 +1173,7 @@ class IncidentResponseService {
           await this.executeRunbook(incident, action.target);
           break;
       }
-    } catch (error) {
+    } catch {
       captureWarning('Escalation action failed', {
         incidentId: incident.id,
         actionType: action.type,
@@ -1272,7 +1272,7 @@ class IncidentResponseService {
             action.status = 'completed';
             action.result = result;
             action.completedAt = Date.now();
-          } catch (error) {
+          } catch {
             action.status = 'failed';
             action.result =
               error instanceof Error ? error.message : 'Unknown error';
