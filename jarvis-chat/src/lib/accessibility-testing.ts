@@ -58,7 +58,7 @@ export class AccessibilityTester {
       script.src =
         'https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.7.2/axe.min.js';
 
-      await new Promise<void>((resolve, reject) {
+      await new Promise<void>((resolve, reject) => {
         script.onload = () {
           this.axeLoaded = true;
           resolve();

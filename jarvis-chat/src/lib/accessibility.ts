@@ -65,12 +65,12 @@ class ScreenReaderManager {
     region.textContent = '';
 
     // Add new message after a brief delay to ensure screen readers detect the change
-    setTimeout(() {
+    setTimeout(() => {
       region.textContent = announcement.message;
 
       // Clear message after timeout if specified
       if (announcement.timeout) {
-        setTimeout(() {
+        setTimeout(() => {
           region.textContent = '';
         }, announcement.timeout);
       }
