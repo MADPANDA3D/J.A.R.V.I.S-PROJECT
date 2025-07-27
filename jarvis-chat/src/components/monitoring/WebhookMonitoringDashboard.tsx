@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { HealthStatusIndicator } from './HealthStatusIndicator';
@@ -9,6 +9,8 @@ import { useWebhookMonitoring } from '../../hooks/useWebhookMonitoring';
 export const WebhookMonitoringDashboard: React.FC = () => {
   const [refreshInterval, setRefreshInterval] = useState(30000); // 30 seconds
   const [activeTab, setActiveTab] = useState('overview');
+  const [timeRange, setTimeRange] = useState('24h');
+  const [historicalData, setHistoricalData] = useState(null);
 
   const { metrics, loading, error, lastUpdated, refresh } = useWebhookMonitoring({
     refreshInterval,
@@ -24,14 +26,25 @@ export const WebhookMonitoringDashboard: React.FC = () => {
     }
   };
 
-  const getStatusTextColor = (status: string) => {
-    switch (status) {
-      case 'healthy': return 'text-green-700';
-      case 'degraded': return 'text-yellow-700';
-      case 'unhealthy': return 'text-red-700';
-      default: return 'text-gray-700';
+
+  // Effect to fetch historical data when tab is active or time range changes
+  useEffect(() => {
+    const fetchHistoricalData = async () => {
+      try {
+        const response = await fetch(`/webhook/analytics/historical?timeRange=${timeRange}&format=detailed`);
+        if (response.ok) {
+          const data = await response.json();
+          setHistoricalData(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch historical data:', error);
+      }
+    };
+
+    if (activeTab === 'historical') {
+      fetchHistoricalData();
     }
-  };
+  }, [activeTab, timeRange]);
 
   if (loading) {
     return (
@@ -152,6 +165,7 @@ export const WebhookMonitoringDashboard: React.FC = () => {
               {[
                 { id: 'overview', label: 'Overview' },
                 { id: 'performance', label: 'Performance' },
+                { id: 'historical', label: 'Historical Analytics' },
                 { id: 'events', label: 'Event Log' },
                 { id: 'services', label: 'Services' }
               ].map((tab) => (
@@ -248,6 +262,156 @@ export const WebhookMonitoringDashboard: React.FC = () => {
 
             {activeTab === 'events' && (
               <WebhookEventLog />
+            )}
+
+            {activeTab === 'historical' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xl font-semibold text-gray-900">Historical Analytics</h3>
+                  <select
+                    value={timeRange}
+                    onChange={(e) => setTimeRange(e.target.value)}
+                    className="border rounded px-3 py-1 text-sm"
+                  >
+                    <option value="1h">Last Hour</option>
+                    <option value="6h">Last 6 Hours</option>
+                    <option value="24h">Last 24 Hours</option>
+                    <option value="7d">Last 7 Days</option>
+                    <option value="30d">Last 30 Days</option>
+                  </select>
+                </div>
+
+                {historicalData ? (
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Reliability Trend */}
+                    <Card className="p-6">
+                      <h4 className="text-lg font-semibold mb-4 flex items-center">
+                        Reliability Trend
+                        <Badge className={`ml-2 ${
+                          historicalData.trend_analysis.reliability.trend === 'improving' ? 'bg-green-100 text-green-800' :
+                          historicalData.trend_analysis.reliability.trend === 'declining' ? 'bg-red-100 text-red-800' :
+                          'bg-gray-100 text-gray-800'
+                        }`}>
+                          {historicalData.trend_analysis.reliability.trend}
+                        </Badge>
+                      </h4>
+                      <div className="space-y-3">
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-600">Current Success Rate</span>
+                          <span className="font-bold text-2xl text-green-600">
+                            {historicalData.trend_analysis.reliability.current}%
+                          </span>
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          Based on {historicalData.trend_analysis.reliability.history.length} data points
+                        </div>
+                      </div>
+                    </Card>
+
+                    {/* Performance Trend */}
+                    <Card className="p-6">
+                      <h4 className="text-lg font-semibold mb-4 flex items-center">
+                        Performance Trend
+                        <Badge className={`ml-2 ${
+                          historicalData.trend_analysis.performance.trend === 'improving' ? 'bg-green-100 text-green-800' :
+                          historicalData.trend_analysis.performance.trend === 'declining' ? 'bg-red-100 text-red-800' :
+                          'bg-gray-100 text-gray-800'
+                        }`}>
+                          {historicalData.trend_analysis.performance.trend}
+                        </Badge>
+                      </h4>
+                      <div className="space-y-3">
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-600">Avg Response Time</span>
+                          <span className="font-bold text-2xl text-blue-600">
+                            {historicalData.trend_analysis.performance.current}ms
+                          </span>
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          Based on {historicalData.trend_analysis.performance.history.length} data points
+                        </div>
+                      </div>
+                    </Card>
+
+                    {/* Usage Trend */}
+                    <Card className="p-6">
+                      <h4 className="text-lg font-semibold mb-4 flex items-center">
+                        Usage Trend
+                        <Badge className={`ml-2 ${
+                          historicalData.trend_analysis.usage.trend === 'increasing' ? 'bg-blue-100 text-blue-800' :
+                          historicalData.trend_analysis.usage.trend === 'decreasing' ? 'bg-orange-100 text-orange-800' :
+                          'bg-gray-100 text-gray-800'
+                        }`}>
+                          {historicalData.trend_analysis.usage.trend}
+                        </Badge>
+                      </h4>
+                      <div className="space-y-3">
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-600">Current Volume</span>
+                          <span className="font-bold text-2xl text-purple-600">
+                            {historicalData.trend_analysis.usage.current}
+                          </span>
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          Based on {historicalData.trend_analysis.usage.history.length} data points
+                        </div>
+                      </div>
+                    </Card>
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500">Loading historical analytics data...</p>
+                  </div>
+                )}
+
+                {/* Daily Aggregates Summary */}
+                {historicalData && Object.keys(historicalData.daily_aggregates).length > 0 && (
+                  <Card className="p-6">
+                    <h4 className="text-lg font-semibold mb-4">Daily Performance Summary</h4>
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Requests</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Success Rate</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avg Response</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Auth Failures</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {Object.entries(historicalData.daily_aggregates)
+                            .sort(([a], [b]) => b.localeCompare(a))
+                            .slice(0, 7)
+                            .map(([date, aggregate]) => (
+                              <tr key={date}>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{date}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                  {aggregate.webhook_metrics.max_total_processed.toLocaleString()}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                  <span className={`px-2 py-1 rounded-full text-xs ${
+                                    aggregate.webhook_metrics.avg_success_rate >= 95 ? 'bg-green-100 text-green-800' :
+                                    aggregate.webhook_metrics.avg_success_rate >= 85 ? 'bg-yellow-100 text-yellow-800' :
+                                    'bg-red-100 text-red-800'
+                                  }`}>
+                                    {aggregate.webhook_metrics.avg_success_rate.toFixed(1)}%
+                                  </span>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                  {aggregate.webhook_metrics.avg_response_time.toFixed(0)}ms
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                  {aggregate.webhook_metrics.total_auth_failures}
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </Card>
+                )}
+              </div>
             )}
 
             {activeTab === 'services' && (
