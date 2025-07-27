@@ -16,6 +16,14 @@ export interface WebhookMonitoringMetrics {
   healthStatus: 'healthy' | 'degraded' | 'unhealthy';
   requestsPerMinute: number;
   requestsPerHour: number;
+  // Failover-specific metrics
+  activeServer: 'primary' | 'backup' | 'unknown';
+  failoverCount: number;
+  lastFailover?: Date;
+  failoverResponseTime?: number;
+  primaryServerHealth: boolean;
+  backupServerHealth: boolean;
+  deliveryVerificationRate: number;
 }
 
 export interface AlertRule {

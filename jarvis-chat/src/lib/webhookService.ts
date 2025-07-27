@@ -50,10 +50,30 @@ export interface CircuitBreakerOptions {
 
 export interface WebhookServiceConfig {
   webhookUrl: string;
+  backupWebhookUrl?: string;
   timeout: number;
   retryConfig: RetryConfig;
   circuitBreakerOptions: CircuitBreakerOptions;
   enableMetrics: boolean;
+  failoverConfig?: FailoverConfig;
+}
+
+export interface FailoverConfig {
+  enabled: boolean;
+  primaryUrl: string;
+  backupUrls: string[];
+  healthCheckInterval: number;
+  failoverThreshold: number;
+  recoveryThreshold: number;
+  verificationEnabled: boolean;
+}
+
+export interface DeliveryVerification {
+  requestId: string;
+  timestamp: Date;
+  verified: boolean;
+  verificationTime?: number;
+  deploymentTriggered?: boolean;
 }
 
 // Circuit Breaker States
