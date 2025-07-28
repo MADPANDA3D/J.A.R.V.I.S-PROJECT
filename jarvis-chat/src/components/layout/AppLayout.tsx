@@ -18,7 +18,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
       'alt+m',
       () => {
         const mainContent = document.querySelector('main');
-        if (mainContent) => {
+        if (mainContent) {
           focusManager.setFocus(
             mainContent as HTMLElement,
             'Navigated to main content'

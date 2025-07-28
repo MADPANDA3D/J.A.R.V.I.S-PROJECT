@@ -32,7 +32,7 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({
   // Clear error when component unmounts
   useEffect(() => {
     return () => {
-      if (installError) => {
+      if (installError) {
         clearError();
       }
     };

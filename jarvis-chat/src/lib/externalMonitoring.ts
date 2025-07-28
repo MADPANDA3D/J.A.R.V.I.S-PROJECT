@@ -174,11 +174,11 @@ class ExternalMonitoringService {
         replaysSessionSampleRate: 0.1,
         replaysOnErrorSampleRate: 1.0,
         integrations,
-        beforeSend: (event) {
+        beforeSend: (event) => {
           // Apply custom data sanitization
           return this.sanitizeSentryEvent(event);
         },
-        beforeBreadcrumb: (breadcrumb) {
+        beforeBreadcrumb: (breadcrumb) => {
           // Filter sensitive breadcrumbs
           return this.sanitizeSentryBreadcrumb(breadcrumb);
         }
@@ -204,11 +204,11 @@ class ExternalMonitoringService {
       const LogRocket = await import('logrocket');
       
       LogRocket.init(config.projectId!, {
-        shouldCaptureRequest: (request) {
+        shouldCaptureRequest: (request) => {
           // Don't capture authentication requests
           return !request.url.includes('/auth/');
         },
-        shouldCaptureResponse: (response) {
+        shouldCaptureResponse: (response) => {
           // Capture all responses except sensitive ones
           return !response.url.includes('/auth/');
         }
@@ -367,7 +367,7 @@ class ExternalMonitoringService {
     Sentry.setTags(errorReport.tags);
 
     // Add fingerprint for grouping
-    Sentry.withScope((scope: any) {
+    Sentry.withScope((scope: any) => {
       scope.setFingerprint(errorReport.fingerprint);
       
       // Add breadcrumbs

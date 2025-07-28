@@ -50,7 +50,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
             setIsVisible(true);
             
             // Auto-hide success messages after 10 seconds
-            if (data.type === 'success') => {
+            if (data.type === 'success') {
               setTimeout(() => {
                 setIsVisible(false);
                 setTimeout(() => setNotification(null), 300);
