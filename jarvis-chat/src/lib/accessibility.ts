@@ -785,11 +785,11 @@ export function initializeAccessibility(): void {
     border-radius: 4px;
   `;
 
-  skipLink.addEventListener('focus', () {
+  skipLink.addEventListener('focus', () => {
     skipLink.style.top = '6px';
   });
 
-  skipLink.addEventListener('blur', () {
+  skipLink.addEventListener('blur', () => {
     skipLink.style.top = '-40px';
   });
 
@@ -798,7 +798,7 @@ export function initializeAccessibility(): void {
   // Register common keyboard shortcuts
   keyboardNav.registerShortcut(
     'alt+h',
-    () {
+    () => {
       const heading = document.querySelector('h1, h2');
       if (heading) {
         focusManager.setFocus(
