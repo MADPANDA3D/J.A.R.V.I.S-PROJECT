@@ -30,11 +30,11 @@ app.post('/api/bugs/:id/assign', bugDashboardAPI.assignBug.bind(bugDashboardAPI)
 app.post('/api/bugs/search', bugDashboardAPI.searchBugs.bind(bugDashboardAPI));
 app.get('/api/bugs/analytics', bugDashboardAPI.getBugAnalytics.bind(bugDashboardAPI));
 
-describe('Bug Dashboard API', () {
+describe('Bug Dashboard API', () => {
   let validApiKey: string;
   let invalidApiKey: string;
 
-  beforeAll(async () {
+  beforeAll(async () => {
     // Create test API keys
     const userKey = await apiSecurityService.createAPIKey('test-user', 'Test User Key', {
       read: true,
@@ -67,13 +67,13 @@ describe('Bug Dashboard API', () {
     invalidApiKey = 'invalid_key_123';
   });
 
-  beforeEach(() {
+  beforeEach(() => {
     // Reset mocks
     vi.clearAllMocks();
   });
 
-  describe('GET /api/bugs', () {
-    it('should return paginated bugs with valid API key', async () {
+  describe('GET /api/bugs', () => {
+    it('should return paginated bugs with valid API key', async () => {
       // Mock bug data
       const mockBugs = [
         {
@@ -121,7 +121,7 @@ describe('Bug Dashboard API', () {
       expect(response.body.pagination.total).toBe(2);
     });
 
-    it('should return 401 for invalid API key', async () {
+    it('should return 401 for invalid API key', async () => {
       const response = await request(app)
         .get('/api/bugs')
         .set('Authorization', `Bearer ${invalidApiKey}`);

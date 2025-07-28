@@ -172,13 +172,13 @@ class MetricsService {
 
   private startMetricsCollection(): void {
     // Collect metrics every minute
-    setInterval(() {
+    setInterval(() => {
       this.collectPerformanceMetrics();
       this.collectSystemMetrics();
     }, 60000);
 
     // Collect daily metrics every hour
-    setInterval(() {
+    setInterval(() => {
       this.collectDailyMetrics();
     }, 3600000);
 

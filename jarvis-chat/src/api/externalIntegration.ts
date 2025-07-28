@@ -666,7 +666,7 @@ class ExternalIntegrationService {
           total: integrations.length,
           active: integrations.filter(i => i.status === 'active').length,
           healthy: integrations.filter(i => i.healthCheck.status === 'healthy').length,
-          byType: integrations.reduce((acc, i) {
+          byType: integrations.reduce((acc, i) => {
             acc[i.type] = (acc[i.type] || 0) + 1;
             return acc;
           }, {} as Record<string, number>)
@@ -945,7 +945,7 @@ class ExternalIntegrationService {
 
   private startDeliveryProcessor(): void {
     // Start webhook delivery processor
-    setInterval(() {
+    setInterval(() => {
       this.processWebhookQueue();
     }, 5000); // Process every 5 seconds
   }

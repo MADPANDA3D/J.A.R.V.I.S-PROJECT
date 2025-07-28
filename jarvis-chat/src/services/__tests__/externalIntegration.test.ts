@@ -29,11 +29,11 @@ app.post('/api/integrations/datadog', externalIntegrationService.integrateWithDa
 app.get('/api/integrations/:id/status', externalIntegrationService.getIntegrationStatus.bind(externalIntegrationService));
 app.get('/api/integrations', externalIntegrationService.listIntegrations.bind(externalIntegrationService));
 
-describe('External Integration Service', () {
+describe('External Integration Service', () => {
   let validApiKey: string;
   let adminApiKey: string;
 
-  beforeAll(async () {
+  beforeAll(async () => {
     // Create test API keys
     const userKey = await apiSecurityService.createAPIKey('test-user', 'Test User Key', {
       read: true,

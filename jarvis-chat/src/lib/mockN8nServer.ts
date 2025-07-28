@@ -174,7 +174,7 @@ export class MockN8nServer {
     this.scenarios.push({
       name: 'error-simulation',
       condition: payload => payload.message.includes('__simulate_error__'),
-      response: async () {
+      response: async () => {
         throw new Error('Simulated server error');
       },
     });
@@ -183,7 +183,7 @@ export class MockN8nServer {
     this.scenarios.push({
       name: 'timeout-simulation',
       condition: payload => payload.message.includes('__simulate_timeout__'),
-      response: async () {
+      response: async () => {
         await this.sleep(10000); // 10 seconds - should trigger timeout
         return {
           response: 'This should not be reached',

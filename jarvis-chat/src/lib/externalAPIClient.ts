@@ -181,7 +181,7 @@ export class ExternalAPIClient {
       'external',
       fullUrl,
       requestConfig.method,
-      async () {
+      async () => {
         return this.executeRequest<T>(requestConfig, fullUrl);
       },
       {
@@ -245,7 +245,7 @@ export class ExternalAPIClient {
 
       // Convert headers to object
       const responseHeaders: Record<string, string> = {};
-      response.headers.forEach((value, key) {
+      response.headers.forEach((value, key) => {
         responseHeaders[key] = value;
       });
 

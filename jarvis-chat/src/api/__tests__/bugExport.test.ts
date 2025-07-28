@@ -30,12 +30,12 @@ app.get('/api/exports/:id/download', bugExportService.downloadExport.bind(bugExp
 app.post('/api/exports/scheduled', bugExportService.createScheduledExport.bind(bugExportService));
 app.get('/api/exports/templates', bugExportService.getExportTemplates.bind(bugExportService));
 
-describe('Bug Export API', () {
+describe('Bug Export API', () => {
   let validApiKey: string;
   let adminApiKey: string;
   let exportApiKey: string;
 
-  beforeAll(async () {
+  beforeAll(async () => {
     // Create test API keys
     const userKey = await apiSecurityService.createAPIKey('test-user', 'Test User Key', {
       read: true,
@@ -85,12 +85,12 @@ describe('Bug Export API', () {
     await fs.mkdir(exportDir, { recursive: true });
   });
 
-  beforeEach(() {
+  beforeEach(() => {
     // Reset mocks
     vi.clearAllMocks();
   });
 
-  describe('POST /api/exports', () {
+  describe('POST /api/exports', () => {
     it('should create export request with export permissions', async () {
       // Mock bug data
       const mockBugs = [

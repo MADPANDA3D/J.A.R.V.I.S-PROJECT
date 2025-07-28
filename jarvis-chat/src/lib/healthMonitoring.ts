@@ -133,7 +133,7 @@ class HealthMonitoringService {
 
   private initializeDependencies(): void {
     // Database dependency
-    this.dependencies.set('database', async () {
+    this.dependencies.set('database', async () => {
       const startTime = Date.now();
       try {
         const { error } = await supabase
@@ -172,7 +172,7 @@ class HealthMonitoringService {
     });
 
     // API dependency
-    this.dependencies.set('api', async () {
+    this.dependencies.set('api', async () => {
       const startTime = Date.now();
       try {
         const response = await fetch('/api/health', { method: 'GET' });

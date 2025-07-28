@@ -606,7 +606,7 @@ class BugExportService {
 
     // Enrich with additional data based on request
     const enrichedData = await Promise.all(
-      bugs.map(async (bug) {
+      bugs.map(async (bug) => {
         const enriched: Record<string, unknown> = { ...bug };
 
         if (request.includeComments) {
@@ -968,7 +968,7 @@ class BugExportService {
 
   private startScheduledExportProcessor(): void {
     // Check for scheduled exports every 5 minutes
-    setInterval(() {
+    setInterval(() => {
       this.processScheduledExports();
     }, 5 * 60 * 1000);
   }
@@ -1021,7 +1021,7 @@ class BugExportService {
 
   private startCleanupTask(): void {
     // Clean up expired exports every hour
-    setInterval(() {
+    setInterval(() => {
       this.cleanupExpiredExports();
     }, 60 * 60 * 1000);
   }

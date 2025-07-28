@@ -458,7 +458,7 @@ class FeedbackCollectionService {
       .map(f => f.satisfactionRating)
       .filter(Boolean) as SatisfactionRating[];
 
-    const satisfactionDistribution = satisfactionRatings.reduce((acc, rating) {
+    const satisfactionDistribution = satisfactionRatings.reduce((acc, rating) => {
       acc[rating] = (acc[rating] || 0) + 1;
       return acc;
     }, {} as Record<SatisfactionRating, number>);
@@ -780,7 +780,7 @@ class FeedbackCollectionService {
   private scheduleReminders(request: FeedbackRequest, feedback: BugFeedback): void {
     if (!request.reminderSchedule.enabled) return;
 
-    request.reminderSchedule.intervals.forEach((dayInterval, index) {
+    request.reminderSchedule.intervals.forEach((dayInterval, index) => {
       if (index >= request.reminderSchedule.maxReminders) return;
 
       const reminderTime = dayInterval * 24 * 60 * 60 * 1000; // Convert days to milliseconds

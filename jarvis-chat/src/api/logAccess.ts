@@ -496,7 +496,7 @@ class LogAccessService {
     }
 
     // Apply sorting
-    logs.sort((a, b) {
+    logs.sort((a, b) => {
       let aValue: string | number, bValue: string | number;
       
       switch (query.sortBy) {
@@ -783,7 +783,7 @@ class LogAccessService {
       
       if (includeMetadata && log.metadata) {
         xml += '    <metadata>\n';
-        Object.entries(log.metadata).forEach(([key, value]) {
+        Object.entries(log.metadata).forEach(([key, value]) => {
           xml += `      <${key}><![CDATA[${JSON.stringify(value)}]]></${key}>\n`;
         });
         xml += '    </metadata>\n';
