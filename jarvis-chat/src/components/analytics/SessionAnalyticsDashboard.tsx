@@ -72,7 +72,7 @@ export const SessionAnalyticsDashboard: React.FC<SessionAnalyticsDashboardProps>
   }, [refreshInterval]);
 
   const handleAlertAcknowledge = (alertId: string) => {
-    if (acknowledgeAlert(alertId)) => {
+    if (acknowledgeAlert(alertId)) {
       setActiveAlerts(prev => prev.filter(alert => alert.id !== alertId));
     }
   };

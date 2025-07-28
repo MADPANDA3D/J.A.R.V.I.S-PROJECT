@@ -57,13 +57,13 @@ export const ErrorTrendChart: React.FC<ErrorTrendChartProps> = ({
         const errorTime = new Date(error.timestamp).getTime();
         const bucketKey = Math.floor(errorTime / (60 * 60 * 1000)).toString();
         
-        if (buckets[bucketKey]) => {
+        if (buckets[bucketKey]) {
           const bucket = buckets[bucketKey];
           
-          switch (error.level) => {
+          switch (error.level) {
             case 'error':
               bucket.errorCount++;
-              if (error.context?.critical || error.tags.severity === 'critical') => {
+              if (error.context?.critical || error.tags.severity === 'critical') {
                 bucket.criticalErrors.push(error.message);
               }
               break;
