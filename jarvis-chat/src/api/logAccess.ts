@@ -848,7 +848,7 @@ class LogAccessService {
     const streamTimer = setInterval(streamLogs, 1000); // Send every second
 
     // Listen for new logs (simplified - in real implementation, this would be event-driven)
-    const logListener = setInterval(() {
+    const logListener = setInterval(() => {
       try {
         // Get recent logs that match the query
         const recentLogs = this.executeLogSearch({

@@ -47,7 +47,21 @@
       "Bash(sed:*)",
       "Bash(git checkout:*)",
       "mcp__n8n-mcp__n8n_diagnostic",
-      "mcp__n8n-mcp__tools_documentation"
+      "mcp__n8n-mcp__tools_documentation",
+      "mcp__n8n-mcp__get_node_essentials",
+      "mcp__n8n-mcp__validate_workflow",
+      "mcp__n8n-mcp__n8n_health_check",
+      "mcp__n8n-mcp__n8n_create_workflow",
+      "mcp__n8n-mcp__search_nodes",
+      "mcp__n8n-mcp__list_ai_tools",
+      "mcp__n8n-mcp__n8n_list_executions",
+      "mcp__n8n-mcp__validate_workflow_connections",
+      "mcp__n8n-mcp__n8n_list_workflows",
+      "mcp__n8n-mcp__n8n_validate_workflow",
+      "mcp__n8n-mcp__validate_workflow_expressions",
+      "mcp__n8n-mcp__n8n_list_available_tools",
+      "Bash(timeout 30s npm run lint:*)",
+      "Bash(locate:*)"
     ],
     "deny": []
   }

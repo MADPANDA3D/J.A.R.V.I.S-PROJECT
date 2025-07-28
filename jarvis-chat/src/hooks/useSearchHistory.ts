@@ -48,7 +48,7 @@ export function useSearchHistory(
   });
 
   // Analyze search patterns from history
-  const searchPatterns = useMemo(() {
+  const searchPatterns = useMemo(() => {
     const patterns = new Map<string, SearchPattern>();
 
     searchHistory.forEach(item => {

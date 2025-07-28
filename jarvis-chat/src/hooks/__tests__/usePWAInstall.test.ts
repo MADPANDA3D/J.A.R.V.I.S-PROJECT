@@ -37,7 +37,7 @@ describe('usePWAInstall', () {
     window.dispatchEvent(event);
   };
 
-  beforeEach(() {
+  beforeEach(() => {
     // Reset window properties
     Object.defineProperty(window, 'matchMedia', {
       writable: true,

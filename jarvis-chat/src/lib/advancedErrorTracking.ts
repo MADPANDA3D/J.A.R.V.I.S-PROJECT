@@ -159,7 +159,7 @@ class AdvancedErrorTracker {
     // Network error recovery
     this.recoveryStrategies.set('NetworkError', {
       errorType: 'NetworkError',
-      recoveryAction: async () {
+      recoveryAction: async () => {
         // Attempt to reconnect or switch to offline mode
         try {
           const response = await fetch('/api/health');

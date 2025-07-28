@@ -564,7 +564,7 @@ class WebhookDeliveryService {
 
   private startDeliveryProcessor() {
     // Process delivery queue every 2 seconds
-    setInterval(() {
+    setInterval(() => {
       this.processDeliveryQueue();
     }, 2000);
   }

@@ -159,7 +159,7 @@ describe('Bug Export API', () => {
       expect(response.body).toHaveProperty('error', 'Export permission required');
     });
 
-    it('should validate export format', async () {
+    it('should validate export format', async () => {
       const response = await request(app)
         .post('/api/exports')
         .set('Authorization', `Bearer ${exportApiKey}`)

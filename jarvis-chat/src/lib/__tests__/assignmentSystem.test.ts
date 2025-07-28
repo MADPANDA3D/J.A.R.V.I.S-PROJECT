@@ -68,7 +68,7 @@ vi.mock('../bugLifecycle', () => ({
   }
 }));
 
-describe('BugAssignmentSystem', () {
+describe('BugAssignmentSystem', () => {
   const mockBugReport: Partial<BugReport> = {
     id: 'test-bug-id',
     title: 'Test Bug Report',

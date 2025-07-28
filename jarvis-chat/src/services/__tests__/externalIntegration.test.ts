@@ -69,7 +69,7 @@ describe('External Integration Service', () => {
     vi.clearAllMocks();
   });
 
-  describe('POST /api/integrations/webhooks', () {
+  describe('POST /api/integrations/webhooks', () => {
     it('should create webhook configuration with admin permissions', async () {
       const webhookConfig = {
         name: 'Test Webhook',

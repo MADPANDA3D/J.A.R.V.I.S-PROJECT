@@ -115,7 +115,7 @@ export const useWebhookMonitoring = (options: UseWebhookMonitoringOptions = {}) 
     lastUpdated: null
   });
 
-  const fetchMetrics = useCallback(async () {
+  const fetchMetrics = useCallback(async () => {
     try {
       setState(prev => ({ ...prev, loading: true, error: null }));
 

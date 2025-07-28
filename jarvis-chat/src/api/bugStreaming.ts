@@ -797,7 +797,7 @@ class BugStreamingService {
     if (connections.length === 0) return 0;
     
     const now = Date.now();
-    const totalDuration = connections.reduce((sum, conn) {
+    const totalDuration = connections.reduce((sum, conn) => {
       return sum + (now - new Date(conn.connectedAt).getTime());
     }, 0);
     

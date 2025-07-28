@@ -38,7 +38,7 @@ Object.defineProperty(window, 'sessionStorage', {
   value: sessionStorageMock,
 });
 
-describe('useTools', () {
+describe('useTools', () => {
   const mockUser = {
     id: 'test-user-id',
     email: 'test@example.com',

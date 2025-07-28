@@ -52,7 +52,7 @@ export function useBugLifecycle(
   });
 
   // Refresh bug report data
-  const refreshBugReport = useCallback(async () {
+  const refreshBugReport = useCallback(async () => {
     if (!bugId) return;
 
     try {

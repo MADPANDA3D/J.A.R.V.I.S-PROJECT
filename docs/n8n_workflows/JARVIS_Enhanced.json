@@ -4,85 +4,51 @@
     {
       "parameters": {
         "httpMethod": "POST",
-        "path": "jarvis-webhook",
+        "path": "4bed7e4e-041a-4f19-b736-d320250a50ca",
         "responseMode": "responseNode",
         "options": {}
       },
-      "id": "webhook-input",
-      "name": "Webhook Input",
       "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2,
-      "position": [200, 300]
+      "onError": "continueRegularOutput",
+      "typeVersion": 2.1,
+      "position": [-688, -608],
+      "id": "31c16dda-4726-4c3a-8bf5-07fb130d77c9",
+      "name": "Webhook Input",
+      "webhookId": "4bed7e4e-041a-4f19-b736-d320250a50ca"
     },
     {
       "parameters": {
-        "updates": ["message"]
+        "updates": ["message"],
+        "additionalFields": {}
       },
-      "id": "telegram-input",
-      "name": "Telegram Input", 
+      "id": "c21ba31d-abe5-4ff9-8372-2ef03d7f2e6c",
+      "name": "Telegram Input",
       "type": "n8n-nodes-base.telegramTrigger",
-      "typeVersion": 1,
-      "position": [200, 500],
+      "onError": "continueRegularOutput",
+      "typeVersion": 1.2,
+      "position": [-672, -1152],
+      "webhookId": "2194a6b2-2302-4406-9c8c-207161b7eb22",
       "credentials": {
         "telegramApi": {
-          "id": "YOUR_TELEGRAM_CREDENTIAL_ID",
-          "name": "Telegram Bot"
+          "id": "Z0FRi09atYTgjcYc",
+          "name": "Telegram account"
         }
       }
     },
     {
       "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "source",
-              "name": "source",
-              "value": "={{ $node.name.includes('Webhook') ? 'webhook' : 'telegram' }}",
-              "type": "string"
-            },
-            {
-              "id": "message_type",
-              "name": "message_type", 
-              "value": "={{ $node.name.includes('Webhook') ? ($json.type || 'text') : ($json.message.photo ? 'photo' : $json.message.video ? 'video' : $json.message.document ? 'file' : $json.message.voice ? 'voice' : 'text') }}",
-              "type": "string"
-            },
-            {
-              "id": "message_content",
-              "name": "message_content",
-              "value": "={{ $node.name.includes('Webhook') ? $json.message : ($json.message.text || $json.message.caption || 'Media file received') }}",
-              "type": "string"
-            },
-            {
-              "id": "user_id", 
-              "name": "user_id",
-              "value": "={{ $node.name.includes('Webhook') ? ($json.user_id || 'webhook-user') : $json.message.from.id }}",
-              "type": "string"
-            },
-            {
-              "id": "chat_id",
-              "name": "chat_id", 
-              "value": "={{ $node.name.includes('Webhook') ? ($json.chat_id || 'webhook-chat') : $json.message.chat.id }}",
-              "type": "string"
-            },
-            {
-              "id": "file_data",
-              "name": "file_data",
-              "value": "={{ $node.name.includes('Webhook') ? $json.file_data : ($json.message.photo ? $json.message.photo[$json.message.photo.length-1] : $json.message.video || $json.message.document || $json.message.voice || null) }}",
-              "type": "object"
-            }
-          ]
-        },
-        "options": {}
+        "action": "generate",
+        "dataPropertyName": "UUID",
+        "encodingType": "uuid"
       },
-      "id": "normalize-input",
-      "name": "Normalize Input",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3,
-      "position": [400, 400]
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [-464, -608],
+      "id": "185177a2-5be5-4824-89e2-c01a63c01f11",
+      "name": "Generate UUID"
     },
     {
       "parameters": {
-        "mode": "rules",
         "rules": {
           "values": [
             {
@@ -90,13 +56,13 @@
                 "options": {
                   "caseSensitive": true,
                   "leftValue": "",
-                  "typeValidation": "strict"
+                  "typeValidation": "strict",
+                  "version": 2
                 },
                 "conditions": [
                   {
-                    "id": "text-condition",
-                    "leftValue": "={{ $json.message_type }}",
-                    "rightValue": "text",
+                    "leftValue": "={{ $json.body.type }}",
+                    "rightValue": "Voice",
                     "operator": {
                       "type": "string",
                       "operation": "equals"
@@ -106,20 +72,20 @@
                 "combinator": "and"
               },
               "renameOutput": true,
-              "outputKey": "text"
+              "outputKey": "Voice"
             },
             {
               "conditions": {
                 "options": {
                   "caseSensitive": true,
                   "leftValue": "",
-                  "typeValidation": "strict"
+                  "typeValidation": "strict",
+                  "version": 2
                 },
                 "conditions": [
                   {
-                    "id": "voice-condition", 
-                    "leftValue": "={{ $json.message_type }}",
-                    "rightValue": "voice",
+                    "leftValue": "={{ $json.body.type }}",
+                    "rightValue": "Text",
                     "operator": {
                       "type": "string",
                       "operation": "equals"
@@ -129,20 +95,20 @@
                 "combinator": "and"
               },
               "renameOutput": true,
-              "outputKey": "voice"
+              "outputKey": "Text"
             },
             {
               "conditions": {
                 "options": {
                   "caseSensitive": true,
                   "leftValue": "",
-                  "typeValidation": "strict"
+                  "typeValidation": "strict",
+                  "version": 2
                 },
                 "conditions": [
                   {
-                    "id": "photo-condition",
-                    "leftValue": "={{ $json.message_type }}",
-                    "rightValue": "photo", 
+                    "leftValue": "={{ $json.body.type }}",
+                    "rightValue": "Photo",
                     "operator": {
                       "type": "string",
                       "operation": "equals"
@@ -152,43 +118,20 @@
                 "combinator": "and"
               },
               "renameOutput": true,
-              "outputKey": "photo"
+              "outputKey": "Photo"
             },
             {
               "conditions": {
                 "options": {
                   "caseSensitive": true,
                   "leftValue": "",
-                  "typeValidation": "strict"
+                  "typeValidation": "strict",
+                  "version": 2
                 },
                 "conditions": [
                   {
-                    "id": "video-condition",
-                    "leftValue": "={{ $json.message_type }}",
-                    "rightValue": "video",
-                    "operator": {
-                      "type": "string", 
-                      "operation": "equals"
-                    }
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "video"
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict"
-                },
-                "conditions": [
-                  {
-                    "id": "file-condition",
-                    "leftValue": "={{ $json.message_type }}",
-                    "rightValue": "file",
+                    "leftValue": "={{ $json.body.type }}",
+                    "rightValue": "Video",
                     "operator": {
                       "type": "string",
                       "operation": "equals"
@@ -198,309 +141,1084 @@
                 "combinator": "and"
               },
               "renameOutput": true,
-              "outputKey": "file"
+              "outputKey": "Video"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.type }}",
+                    "rightValue": "Document",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Document"
             }
           ]
-        }
+        },
+        "options": {}
       },
-      "id": "message-type-router",
-      "name": "Message Type Router",
+      "id": "webhook-message-router",
+      "name": "Webhook Message Router",
       "type": "n8n-nodes-base.switch",
-      "typeVersion": 3,
-      "position": [600, 400]
+      "typeVersion": 3.2,
+      "position": [-256, -656]
     },
     {
       "parameters": {
-        "operation": "upload",
-        "fileContent": {
-          "fileContent": "={{ $json.file_data }}"
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.voice.file_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Voice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            }
+          ]
         },
-        "name": "={{ 'photo_' + $now.format('yyyy-MM-dd_HH-mm-ss') + '.jpg' }}",
-        "options": {
-          "parents": {
-            "parentId": "JARVIS_MEDIA_FOLDER_ID"
-          }
-        }
+        "options": {}
       },
-      "id": "drive-upload-photo",
-      "name": "Upload Photo to Drive",
-      "type": "n8n-nodes-base.googleDrive",
-      "typeVersion": 3,
-      "position": [800, 200],
+      "id": "telegram-message-router",
+      "name": "Telegram Message Router",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [-448, -1152]
+    },
+    {
+      "parameters": {
+        "url": "={{$json.audioUrl}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [64, -944],
+      "id": "download-webhook-voice",
+      "name": "Download Webhook Voice"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.voice.file_id }}"
+      },
+      "id": "download-telegram-voice",
+      "name": "Download Telegram Voice",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [-224, -1232],
+      "webhookId": "c0b376b1-7b63-41b6-8063-0b3096b8333d",
       "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "YOUR_GOOGLE_DRIVE_CREDENTIAL_ID",
-          "name": "Google Drive"
+        "telegramApi": {
+          "id": "Z0FRi09atYTgjcYc",
+          "name": "Telegram account"
         }
       }
     },
     {
       "parameters": {
-        "operation": "upload",
-        "fileContent": {
-          "fileContent": "={{ $json.file_data }}"
-        },
-        "name": "={{ 'video_' + $now.format('yyyy-MM-dd_HH-mm-ss') + '.mp4' }}",
-        "options": {
-          "parents": {
-            "parentId": "JARVIS_MEDIA_FOLDER_ID"
-          }
-        }
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
       },
-      "id": "drive-upload-video",
-      "name": "Upload Video to Drive",
-      "type": "n8n-nodes-base.googleDrive",
-      "typeVersion": 3,
-      "position": [800, 300],
+      "id": "transcribe-voice",
+      "name": "Transcribe Voice",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.7,
+      "position": [304, -1088],
       "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "YOUR_GOOGLE_DRIVE_CREDENTIAL_ID",
-          "name": "Google Drive"
+        "openAiApi": {
+          "id": "FAioNwMmasg9j9f7",
+          "name": "OpenAi account"
         }
       }
     },
     {
       "parameters": {
-        "operation": "upload",
-        "fileContent": {
-          "fileContent": "={{ $json.file_data }}"
-        },
-        "name": "={{ 'file_' + $now.format('yyyy-MM-dd_HH-mm-ss') + '.' + ($json.file_data.mime_type?.split('/')[1] || 'bin') }}",
+        "url": "={{$json.imageUrl}}",
         "options": {
-          "parents": {
-            "parentId": "JARVIS_MEDIA_FOLDER_ID"
-          }
-        }
-      },
-      "id": "drive-upload-file",
-      "name": "Upload File to Drive", 
-      "type": "n8n-nodes-base.googleDrive",
-      "typeVersion": 3,
-      "position": [800, 400],
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "YOUR_GOOGLE_DRIVE_CREDENTIAL_ID",
-          "name": "Google Drive"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "update",
-        "fileId": "={{ $json.id }}",
-        "options": {
-          "permissions": {
-            "permissionsUi": {
-              "permissionsValues": [
-                {
-                  "role": "reader",
-                  "type": "anyone"
-                }
-              ]
+          "response": {
+            "response": {
+              "responseFormat": "file"
             }
           }
         }
       },
-      "id": "get-share-link",
-      "name": "Get Share Link",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [64, -608],
+      "id": "download-photo",
+      "name": "Download Photo"
+    },
+    {
+      "parameters": {
+        "url": "={{$json.videoUrl}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [64, -448],
+      "id": "download-video",
+      "name": "Download Video"
+    },
+    {
+      "parameters": {
+        "url": "={{$json.documentUrl}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [64, -288],
+      "id": "download-document",
+      "name": "Download Document"
+    },
+    {
+      "parameters": {
+        "name": "={{$json.fileName}}",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "https://drive.google.com/drive/u/3/folders/16But60dgz3XZo7mNvlBX2r0COz2Dgvys",
+          "mode": "url"
+        },
+        "options": {}
+      },
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
-      "position": [1000, 300],
+      "position": [272, -608],
+      "id": "upload-photo-drive",
+      "name": "Upload Photo to Drive",
       "credentials": {
         "googleDriveOAuth2Api": {
-          "id": "YOUR_GOOGLE_DRIVE_CREDENTIAL_ID",
-          "name": "Google Drive"
+          "id": "FoGFhCpBxNQvsTCo",
+          "name": "Google Drive account"
         }
       }
     },
     {
       "parameters": {
-        "operation": "appendRow",
-        "documentId": "YOUR_GOOGLE_SHEETS_ID",
-        "sheetName": "JARVIS_Media_Log",
-        "columnNames": {
+        "name": "={{$json.fileName}}",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "https://drive.google.com/drive/u/3/folders/12Lc840uQNqSigmasniPOxwBtpG6YK4a4",
+          "mode": "url"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [272, -448],
+      "id": "upload-video-drive",
+      "name": "Upload Video to Drive",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "FoGFhCpBxNQvsTCo",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "={{$json.fileName}}",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "https://drive.google.com/drive/u/3/folders/18V7k8kZmfm5BQLPuZGG_qlN9Rj-BOH4i",
+          "mode": "url"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [272, -288],
+      "id": "upload-document-drive",
+      "name": "Upload Document to Drive",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "FoGFhCpBxNQvsTCo",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "file",
+        "operation": "share",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $node[\"upload-photo-drive\"].json.id }}",
+          "mode": "id"
+        },
+        "permissionsUi": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [480, -608],
+      "id": "share-photo",
+      "name": "Share Photo",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "FoGFhCpBxNQvsTCo",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "file",
+        "operation": "share",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $node[\"upload-video-drive\"].json.id }}",
+          "mode": "id"
+        },
+        "permissionsUi": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [480, -448],
+      "id": "share-video",
+      "name": "Share Video",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "FoGFhCpBxNQvsTCo",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "file",
+        "operation": "share",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $node[\"upload-document-drive\"].json.id }}",
+          "mode": "id"
+        },
+        "permissionsUi": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [480, -288],
+      "id": "share-document",
+      "name": "Share Document",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "FoGFhCpBxNQvsTCo",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1FhgvhwK7MJKZFVSvqbi0OHEFaJbV0kEF29RQtetKzU4",
+          "mode": "list",
+          "cachedResultName": "PHOTOS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1FhgvhwK7MJKZFVSvqbi0OHEFaJbV0kEF29RQtetKzU4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 808503049,
+          "mode": "list",
+          "cachedResultName": "PHOTOS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1FhgvhwK7MJKZFVSvqbi0OHEFaJbV0kEF29RQtetKzU4/edit#gid=808503049"
+        },
+        "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "timestamp": "={{ $now.format('yyyy-MM-dd HH:mm:ss') }}",
-            "file_type": "={{ $('Normalize Input').item.json.message_type }}",
-            "file_name": "={{ $json.name }}",
-            "file_id": "={{ $json.id }}",
-            "share_link": "={{ 'https://drive.google.com/file/d/' + $json.id + '/view?usp=sharing' }}",
-            "user_id": "={{ $('Normalize Input').item.json.user_id }}",
-            "source": "={{ $('Normalize Input').item.json.source }}"
-          }
+            "Timestamp": "={{ $now }}",
+            "Type": "Photo",
+            "File Name": "={{ $node[\"upload-photo-drive\"].json.name }}",
+            "Google Drive Link": "={{ $node[\"share-photo\"].json.webViewLink }}",
+            "Original URL": "={{ $json.imageUrl }}",
+            "Uploader": "LEOLARA@MADPANDA3D.COM",
+            "Notes": "Automated upload via n8n"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Type",
+              "displayName": "Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "File Name",
+              "displayName": "File Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Google Drive Link",
+              "displayName": "Google Drive Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Original URL",
+              "displayName": "Original URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Uploader",
+              "displayName": "Uploader",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
         },
-        "options": {}
+        "options": {
+          "useAppend": true
+        }
       },
-      "id": "log-to-sheets",
-      "name": "Log to Google Sheets",
       "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4,
-      "position": [1200, 300],
+      "typeVersion": 4.6,
+      "position": [688, -608],
+      "id": "log-photo-sheets",
+      "name": "Log Photo to Sheets",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
-          "name": "Google Sheets"
+          "id": "ZgY28DOVOewmYtbR",
+          "name": "Google Sheets account"
         }
       }
     },
     {
       "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "file_url",
-              "name": "file_url",
-              "value": "={{ 'https://drive.google.com/file/d/' + $json.id + '/view?usp=sharing' }}",
-              "type": "string"
-            },
-            {
-              "id": "processed_message",
-              "name": "processed_message",
-              "value": "={{ $('Normalize Input').item.json.message_content + ' [File uploaded: ' + $json.name + ']' }}",
-              "type": "string"
-            }
-          ]
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "16WN2MHWkeLdAMqSez4t3qkm_ZhaqJ4M4rm22CKzz3FY",
+          "mode": "list",
+          "cachedResultName": "VIDEOS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16WN2MHWkeLdAMqSez4t3qkm_ZhaqJ4M4rm22CKzz3FY/edit?usp=drivesdk"
         },
-        "options": {}
-      },
-      "id": "merge-file-data",
-      "name": "Merge File Data",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3,
-      "position": [1400, 300]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://api.openai.com/v1/audio/transcriptions",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Authorization",
-              "value": "Bearer {{ $credentials.openAiApi.apiKey }}"
-            }
-          ]
+        "sheetName": {
+          "__rl": true,
+          "value": 26748643,
+          "mode": "list",
+          "cachedResultName": "VIDEOS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16WN2MHWkeLdAMqSez4t3qkm_ZhaqJ4M4rm22CKzz3FY/edit#gid=26748643"
         },
-        "sendBody": true,
-        "bodyContentType": "multipart-form-data",
-        "bodyParameters": {
-          "parameters": [
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now }}",
+            "Type": "Video",
+            "File Name": "={{ $node[\"upload-video-drive\"].json.name }}",
+            "Google Drive Link": "={{ $node[\"share-video\"].json.webViewLink }}",
+            "Original URL": "={{ $json.videoUrl }}",
+            "Uploader": "LEOLARA@MADPANDA3D.COM",
+            "Notes": "Automated upload via n8n"
+          },
+          "matchingColumns": [],
+          "schema": [
             {
-              "name": "file",
-              "value": "={{ $json.file_data }}"
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
             },
             {
-              "name": "model",
-              "value": "whisper-1"
-            }
-          ]
-        }
-      },
-      "id": "voice-transcription",
-      "name": "Voice Transcription",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [800, 500],
-      "credentials": {
-        "openAiApi": {
-          "id": "YOUR_OPENAI_CREDENTIAL_ID",
-          "name": "OpenAI"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
+              "id": "Type",
+              "displayName": "Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
             {
-              "id": "transcribed_text",
-              "name": "transcribed_text",
-              "value": "={{ $json.text }}",
-              "type": "string"
+              "id": "File Name",
+              "displayName": "File Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Google Drive Link",
+              "displayName": "Google Drive Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Original URL",
+              "displayName": "Original URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Uploader",
+              "displayName": "Uploader",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
             }
-          ]
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
         },
-        "options": {}
-      },
-      "id": "extract-transcription",
-      "name": "Extract Transcription",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3,
-      "position": [1000, 500]
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "final_message",
-              "name": "final_message",
-              "value": "={{ $json.processed_message || $json.transcribed_text || $('Normalize Input').item.json.message_content }}",
-              "type": "string"
-            },
-            {
-              "id": "message_type",
-              "name": "message_type",
-              "value": "={{ $('Normalize Input').item.json.message_type }}",
-              "type": "string"
-            },
-            {
-              "id": "source",
-              "name": "source",
-              "value": "={{ $('Normalize Input').item.json.source }}",
-              "type": "string"
-            },
-            {
-              "id": "user_id",
-              "name": "user_id",
-              "value": "={{ $('Normalize Input').item.json.user_id }}",
-              "type": "string"
-            },
-            {
-              "id": "chat_id",
-              "name": "chat_id",
-              "value": "={{ $('Normalize Input').item.json.chat_id }}",
-              "type": "string"
-            },
-            {
-              "id": "file_url",
-              "name": "file_url",
-              "value": "={{ $json.file_url || null }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "prepare-for-jarvis",
-      "name": "Prepare for JARVIS",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3,
-      "position": [1600, 400]
-    },
-    {
-      "parameters": {
-        "agent": "conversationalAgent",
-        "promptType": "define",
-        "text": "You are JARVIS, an advanced AI assistant. You operate using a *command system:\n\n**Core Responsibilities:**\n1. **Conversation Mode**: For general chat, brainstorming, questions, explanations\n2. **Tool Mode**: When user needs actions performed, research, or tool usage\n\n**Decision Logic:**\n- If user wants general conversation, brainstorming, or simple Q&A → Handle directly\n- If user needs tools, actions, research, or complex tasks → Use *operator command to engage Operator Agent\n- If user says *brainstorm → Handle brainstorming session directly\n\n**Command Usage:**\n- *operator [task description] → Engage Operator for tool-based tasks\n- *brainstorm [topic] → Start brainstorming session (you handle this)\n\n**Response Format:**\n- Always be helpful, professional, and engaging\n- For conversations: Respond naturally and conversationally\n- For tool needs: Use *operator command and explain what you're requesting\n- Include file information if provided: {{ $json.file_url ? 'File available: ' + $json.file_url : '' }}\n\n**Current Context:**\n- Message: {{ $json.final_message }}\n- Type: {{ $json.message_type }}\n- Source: {{ $json.source }}\n- User: {{ $json.user_id }}",
-        "hasOutputParser": false,
         "options": {
-          "systemMessage": "You are JARVIS, a conversational AI assistant with access to an Operator agent for tool-based tasks. Use the *operator command when users need actions performed."
+          "useAppend": true
         }
       },
-      "id": "jarvis-agent",
-      "name": "JARVIS Conversational Agent",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [688, -448],
+      "id": "log-video-sheets",
+      "name": "Log Video to Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZgY28DOVOewmYtbR",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "14U7UwR2nVwqoOVjnuQi4DfTWvmqOIakbEfUtDKyMFIc",
+          "mode": "list",
+          "cachedResultName": "DOCUMENTS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14U7UwR2nVwqoOVjnuQi4DfTWvmqOIakbEfUtDKyMFIc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1998266510,
+          "mode": "list",
+          "cachedResultName": "DOCUMENTS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14U7UwR2nVwqoOVjnuQi4DfTWvmqOIakbEfUtDKyMFIc/edit#gid=1998266510"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now }}",
+            "Type": "Document",
+            "File Name": "={{ $node[\"upload-document-drive\"].json.name }}",
+            "Google Drive Link": "={{ $node[\"share-document\"].json.webViewLink }}",
+            "Original URL": "={{ $json.documentUrl }}",
+            "Uploader": "LEOLARA@MADPANDA3D.COM",
+            "Notes": "Automated upload via n8n"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Type",
+              "displayName": "Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "File Name",
+              "displayName": "File Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Google Drive Link",
+              "displayName": "Google Drive Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Original URL",
+              "displayName": "Original URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Uploader",
+              "displayName": "Uploader",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "useAppend": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [688, -288],
+      "id": "log-document-sheets",
+      "name": "Log Document to Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZgY28DOVOewmYtbR",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2ac72e01-b339-4032-bebb-4c1bd29edea9",
+              "name": "agent_summary",
+              "value": "=Photo received from Leo.\nCaption: \"{{ $json.text_message || 'No caption provided' }}\".\nDrive link: {{ $node[\"share-photo\"].json.webViewLink }}.\nFile name: {{ $node[\"upload-photo-drive\"].json.name }}.\nLogged at: {{ $now }}.\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [896, -608],
+      "id": "format-photo-data",
+      "name": "Format Photo Data"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2ac72e01-b339-4032-bebb-4c1bd29edea9",
+              "name": "agent_summary",
+              "value": "=Video received from Leo.\nCaption: \"{{ $json.text_message || 'No caption provided' }}\".\nDrive link: {{ $node[\"share-video\"].json.webViewLink }}.\nFile name: {{ $node[\"upload-video-drive\"].json.name }}.\nLogged at: {{ $now }}.\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [896, -448],
+      "id": "format-video-data",
+      "name": "Format Video Data"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2ac72e01-b339-4032-bebb-4c1bd29edea9",
+              "name": "agent_summary",
+              "value": "=Document received from Leo.\nCaption: \"{{ $json.text_message || 'No caption provided' }}\".\nDrive link: {{ $node[\"share-document\"].json.webViewLink }}.\nFile name: {{ $node[\"upload-document-drive\"].json.name }}.\nLogged at: {{ $now }}.\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [896, -288],
+      "id": "format-document-data",
+      "name": "Format Document Data"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe7ecc99-e1e8-4a5e-bdd6-6fce9757b234",
+              "name": "text",
+              "value": "={{ $json.body.message }}",
+              "type": "string"
+            },
+            {
+              "id": "e5d33cdd-579e-4af9-addb-a4994d62bfbb",
+              "name": "body.type",
+              "value": "={{ $json.body.type }}",
+              "type": "string"
+            },
+            {
+              "id": "da150c6d-1035-4b84-948b-62497eb37b90",
+              "name": "body.source",
+              "value": "={{ $json.body.source }}",
+              "type": "string"
+            },
+            {
+              "id": "6cb2c434-189a-437d-be37-e194a1f5ab12",
+              "name": "body.chatId",
+              "value": "={{ $json.body.chatId }}",
+              "type": "number"
+            },
+            {
+              "id": "cb398220-9224-413f-a1e8-bd6ac9e65d25",
+              "name": "body.sessionId",
+              "value": "={{ $json.body.sessionId }}",
+              "type": "string"
+            },
+            {
+              "id": "1cf51c66-82bb-4659-84e0-038829194079",
+              "name": "UUID",
+              "value": "={{ $json.UUID }}",
+              "type": "string"
+            },
+            {
+              "id": "e1148324-bea0-45b3-aeb4-92537f5293c3",
+              "name": "sender",
+              "value": "user",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "format-webhook-text",
+      "name": "Format Webhook Text",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [64, -784]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe7ecc99-e1e8-4a5e-bdd6-6fce9757b234",
+              "name": "text",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "format-telegram-text",
+      "name": "Format Telegram Text",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-224, -1072]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.text || $json.agent_summary }}",
+        "options": {
+          "systemMessage": "You are a personal assistant AI Agent designed to handle various tasks efficiently. Your primary role is to manage contacts, emails, calendar events, communications, travel planning, and proactive project management for the user. You have access to several tools to help you fulfill requests:\nCore Tools:\nContacts Data: Use this when you need to look up contact information like an email address or phone number. You need to use this tool BEFORE sending an email, BEFORE getting emails, or BEFORE sending WhatsApp messages.\nEmail Agent: Use this for handling all email-related actions, like sending messages, setting up replies, or forwarding emails.\nCalendar Agent: Use this for scheduling, updating, or managing calendar events.\nSend WhatsApp Message: Use this to send a message via WhatsApp Business to contacts. Make sure to get their phone number from Contacts Data first.\nProjects_Agent: Use this tool to access our projects. We can update our projects or get information on our projects. BE PROACTIVE with this tool - regularly check project status, ask for updates, and fill in missing information.\nKnowledge Base: Use this tool to get information about the company, processes, or reference materials.\nResearch Agent: Use this tool to search through Wikipedia, articles, or Google to answer questions that require external research.\nTravel_Agent: Use this tool to plan complete travel itineraries including flights, hotels, and activities. This tool will send detailed travel plans via email.\nCalculator: Use this for mathematical calculations and computations.\nProactive Project Management Behavior:\nREGULARLY CHECK PROJECTS: Periodically use the Projects_Agent to check current project status and identify gaps in information.\nASK FOR UPDATES: When you notice projects haven't been updated recently or are missing key information (status, notes, progress), proactively ask the user for updates.\nFILL INFORMATION GAPS: If you see incomplete project entries (missing status, vague notes, unclear progress), ask specific questions to gather the missing details.\nSUGGEST UPDATES: Based on conversations about work, meetings, or tasks, suggest updating relevant project entries with new information.\nMAINTAIN WORK LOG: Keep project information current by updating entries as the user shares progress, challenges, or status changes.\nIDENTIFY STALE PROJECTS: Flag projects that haven't been updated in a while and ask if they need status changes or if they're complete.\nProject Update Examples:\n\n\"I notice the [Project Name] status is still 'In Progress' from last week. Any updates on how it's going?\"\n\"You mentioned working on [task]. Should I update the [Project Name] notes with this progress?\"\n\"I see several projects are missing status updates. Would you like to quickly run through them?\"\n\"Based on your calendar meeting about [topic], should we update the related project entry?\"\n\nTravel Agent Requirements:\nBefore calling the Travel_Agent tool, you MUST collect all of the following from the user:\n\nOrigin (departure city/location)\nDestination (arrival city/location)\nDeparture date\nReturn date\nNumber of travelers\nPreferred activities (e.g., \"sightseeing\", \"adventure\", \"relaxation\")\nEmail address to send the travel plan to\n\nIf any of this information is missing, ask the user specific follow-up questions to gather the remaining details before proceeding.\nGeneral Approach:\nWhen a task requires using one or more of these tools, identify which tool is most appropriate, pass along the relevant details, and execute the actions needed to complete the task. For travel requests, ensure you collect all required information before calling the Travel_Agent tool.\nBe proactive, precise, and organized in managing these resources to provide a smooth experience for the user. Especially with projects - don't wait to be asked, actively help keep the work log current and complete.\nCurrent time/date: {{ $now.format('DD')}}"
+        }
+      },
+      "id": "dba5caf7-facc-4703-8f8d-e2084d6f526b",
+      "name": "J.A.R.V.I.S",
       "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [1696, -816],
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "options": {}
+      },
+      "id": "7916c141-2e27-4b4a-8889-42963529a4ba",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1,
-      "position": [1800, 400],
+      "position": [1440, 224],
       "credentials": {
         "openAiApi": {
-          "id": "YOUR_OPENAI_CREDENTIAL_ID",
-          "name": "OpenAI"
+          "id": "FAioNwMmasg9j9f7",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.body.sessionId || $json.chat_id || 'default-session' }}",
+        "tableName": "messages",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [1744, -656],
+      "id": "cdb698a2-744e-4550-b134-3fd761cdb748",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "rNY4ny1H9tAhRFQA",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "Email_Agent",
+        "description": "Call this tool to take any email actions",
+        "workflowId": {
+          "__rl": true,
+          "value": "Rj567fRH7ZspNcmI",
+          "mode": "list",
+          "cachedResultName": "EMAIL AGENT"
+        }
+      },
+      "id": "63b83537-a263-48f7-a19e-813aac773af7",
+      "name": "🤖 EMAIL AGENT",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [-720, 512]
+    },
+    {
+      "parameters": {
+        "name": "Calendar_Agent",
+        "description": "Call this tool to take actions within Calendar",
+        "workflowId": {
+          "__rl": true,
+          "value": "ka8opzJezXbSemxz",
+          "mode": "list",
+          "cachedResultName": "CALENDAR AGENT"
+        }
+      },
+      "id": "8a9c0602-081f-4c55-8ef1-e1e3beb189ad",
+      "name": "🤖CALENDAR AGENT",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [-528, 512]
+    },
+    {
+      "parameters": {
+        "name": "Research_Agent",
+        "description": "Call this tool to search through Wikipedia, articles, or google to answer the user's question.",
+        "workflowId": {
+          "__rl": true,
+          "value": "pqCHsTJS0gVQJnYM",
+          "mode": "list",
+          "cachedResultName": "RESEARCH AGENT"
+        }
+      },
+      "id": "957d60ea-0b58-4be7-9aaf-e0ecb9017a8c",
+      "name": "🤖RESEARCH AGENT",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [-336, 512]
+    },
+    {
+      "parameters": {
+        "name": "Projects_Agent",
+        "description": "Call this tool to take action on our projects.",
+        "workflowId": {
+          "__rl": true,
+          "value": "2pQTp3el22KZ7ben",
+          "mode": "list",
+          "cachedResultName": "PROJECTS AGENT"
+        }
+      },
+      "id": "5b7def1d-6323-4de6-9c67-b4dc995a2a22",
+      "name": "🤖PROJECTS AGENT",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [-144, 512]
+    },
+    {
+      "parameters": {
+        "name": "Travel_Agent",
+        "description": "Call this tool to take action on travel planning.",
+        "workflowId": {
+          "__rl": true,
+          "value": "mc60o5mKPwZX2Msh",
+          "mode": "list",
+          "cachedResultName": "TRAVEL AGENT"
+        }
+      },
+      "id": "3fa65526-908a-427b-80ad-87ef24300d78",
+      "name": "🤖TRAVEL AGENT",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [48, 512]
+    },
+    {
+      "parameters": {
+        "name": "Projects_Agent",
+        "description": "Call this tool to take action on our projects.",
+        "workflowId": {
+          "__rl": true,
+          "value": "Jw5NBHrZIz4prGIO",
+          "mode": "list",
+          "cachedResultName": "AI MARKETING TEAM"
+        }
+      },
+      "id": "e6e068fd-bc61-421e-b784-d7c0cfe1d4b9",
+      "name": "🤖MARKETING TEAM",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [240, 512]
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Call this tool to get contact data like email address or phone number",
+        "documentId": {
+          "__rl": true,
+          "value": "1f0-Ihzs3NwQB2gAbj5lxMpAnZexReQxQ6qlpkSPDB_o",
+          "mode": "list",
+          "cachedResultName": "CONTACT DATABASE",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1f0-Ihzs3NwQB2gAbj5lxMpAnZexReQxQ6qlpkSPDB_o/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 358156210,
+          "mode": "list",
+          "cachedResultName": "filesaver-All_Jul 21 25 12_32 am",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1f0-Ihzs3NwQB2gAbj5lxMpAnZexReQxQ6qlpkSPDB_o/edit#gid=358156210"
+        },
+        "options": {}
+      },
+      "id": "45688340-afb2-4fda-ab41-9a45210e7337",
+      "name": "Contacts Data",
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [-720, 96],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZgY28DOVOewmYtbR",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "=712843365245969",
+        "recipientPhoneNumber": "={{ $fromAI(\"phoneNumber\",\"the phone number to send the WhatsApp message to\") }}",
+        "template": "={{ $fromAI(\"message\",\"the message the user wants to send in WhatsApp\") }}"
+      },
+      "type": "n8n-nodes-base.whatsAppTool",
+      "typeVersion": 1,
+      "position": [-560, 96],
+      "id": "5a78af14-33d7-480b-9ecf-5a779c0c7936",
+      "name": "Send WhatsApp Message",
+      "webhookId": "86d70e41-e38b-4aaa-bfb0-14b9f1eb122b",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "u4jZluMI6k6Z902Q",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "cb91275e-44ae-45a1-af95-70784cfa1e87",
+      "name": "Calculator",
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [1808, 96]
+    },
+    {
+      "parameters": {
+        "name": "Knowledge_Base",
+        "description": "Call this tool to get information about the company."
+      },
+      "id": "9cb0f113-9159-479d-9f28-e68cdb792dc5",
+      "name": "Knowledge Base",
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1,
+      "position": [1376, -16]
+    },
+    {
+      "parameters": {
+        "model": "text-embedding-3-small",
+        "options": {}
+      },
+      "id": "b7b56767-c830-4f57-b51a-a55603c9589a",
+      "name": "Embeddings OpenAI",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1,
+      "position": [976, 240],
+      "credentials": {
+        "openAiApi": {
+          "id": "FAioNwMmasg9j9f7",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "qdrantCollection": {
+          "__rl": true,
+          "value": "knowledge_base",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1.3,
+      "position": [976, 80],
+      "id": "27074eea-81b8-4fcb-8cb5-060fafa97685",
+      "name": "Qdrant Vector Store",
+      "credentials": {
+        "qdrantApi": {
+          "id": "YoZv6ZkDBWLygPIg",
+          "name": "QdrantApi account"
         }
       }
     },
@@ -510,75 +1228,30 @@
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "strict"
+            "typeValidation": "strict",
+            "version": 2
           },
           "conditions": [
             {
-              "id": "operator-check",
-              "leftValue": "={{ $json.output }}",
-              "rightValue": "*operator",
+              "id": "4680c93f-003e-46eb-9879-869395594527",
+              "leftValue": "={{ $json.body.type }}",
+              "rightValue": "voice",
               "operator": {
                 "type": "string",
-                "operation": "contains"
+                "operation": "equals",
+                "name": "filter.operator.equals"
               }
             }
           ],
           "combinator": "and"
-        }
-      },
-      "id": "check-operator-needed",
-      "name": "Check if Operator Needed",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2,
-      "position": [2000, 400]
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "operator_task",
-              "name": "operator_task",
-              "value": "={{ $json.output.split('*operator')[1]?.trim() || 'General task assistance needed' }}",
-              "type": "string"
-            },
-            {
-              "id": "original_context",
-              "name": "original_context",
-              "value": "={{ $json }}",
-              "type": "object"
-            }
-          ]
         },
         "options": {}
       },
-      "id": "extract-operator-task",
-      "name": "Extract Operator Task",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3,
-      "position": [2200, 300]
-    },
-    {
-      "parameters": {
-        "agent": "toolsAgent",
-        "promptType": "define",
-        "text": "You are the Operator Agent, specialized in executing tasks and using tools for JARVIS.\n\n**Your Role:**\n1. Execute the requested task: {{ $json.operator_task }}\n2. Use available tools to complete the task\n3. Provide detailed results and actions taken\n4. If you need clarification, ask specific questions\n\n**Task Context:**\n- Original message: {{ $json.original_context.final_message }}\n- Message type: {{ $json.original_context.message_type }}\n- User: {{ $json.original_context.user_id }}\n- File URL: {{ $json.original_context.file_url || 'None' }}\n\n**Task to Execute:** {{ $json.operator_task }}\n\n**Response Requirements:**\n- Be specific about actions taken\n- Include any results or data obtained\n- If task cannot be completed, explain why\n- Provide status: COMPLETED, NEEDS_CLARIFICATION, or PARTIALLY_COMPLETED",
-        "hasOutputParser": false,
-        "options": {
-          "systemMessage": "You are the Operator Agent. Execute tasks using available tools and provide detailed results back to JARVIS."
-        }
-      },
-      "id": "operator-agent",
-      "name": "Operator Agent",
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 1,
-      "position": [2400, 300],
-      "credentials": {
-        "openAiApi": {
-          "id": "YOUR_OPENAI_CREDENTIAL_ID",
-          "name": "OpenAI"
-        }
-      }
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [2528, -624],
+      "id": "check-voice-output-webhook",
+      "name": "Check Voice Output (Webhook)"
     },
     {
       "parameters": {
@@ -586,329 +1259,313 @@
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "strict"
+            "typeValidation": "strict",
+            "version": 2
           },
           "conditions": [
             {
-              "id": "clarification-check",
-              "leftValue": "={{ $json.output }}",
-              "rightValue": "NEEDS_CLARIFICATION",
+              "id": "4680c93f-003e-46eb-9879-869395594527",
+              "leftValue": "={{ $json.body.type }}",
+              "rightValue": "voice",
               "operator": {
                 "type": "string",
-                "operation": "contains"
+                "operation": "equals",
+                "name": "filter.operator.equals"
               }
             }
           ],
           "combinator": "and"
-        }
-      },
-      "id": "operator-response-check",
-      "name": "Check Operator Response",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2,
-      "position": [2600, 300]
-    },
-    {
-      "parameters": {
-        "agent": "conversationalAgent",
-        "promptType": "define",
-        "text": "The Operator Agent needs clarification for the task. Please relay this request to the user in a natural, conversational way.\n\n**Operator's Response:** {{ $json.output }}\n\n**Your Task:**\n1. Explain what the Operator found/attempted\n2. Ask the user for the specific clarification needed\n3. Make it conversational and easy to understand\n4. Let them know you'll retry once they provide the information\n\n**Context:**\n- Original task: {{ $('Extract Operator Task').item.json.operator_task }}\n- User: {{ $('Extract Operator Task').item.json.original_context.user_id }}",
-        "hasOutputParser": false
-      },
-      "id": "jarvis-clarification",
-      "name": "JARVIS Clarification Request",
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 1,
-      "position": [2800, 200],
-      "credentials": {
-        "openAiApi": {
-          "id": "YOUR_OPENAI_CREDENTIAL_ID",
-          "name": "OpenAI"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "agent": "conversationalAgent",
-        "promptType": "define",
-        "text": "Provide a final response to the user based on the Operator's results.\n\n**Operator's Results:** {{ $json.output }}\n\n**Your Task:**\n1. Summarize what was accomplished\n2. Present results in a user-friendly way\n3. Offer any additional help if needed\n4. Be conversational and engaging\n\n**Context:**\n- Original task: {{ $('Extract Operator Task').item.json.operator_task }}\n- User: {{ $('Extract Operator Task').item.json.original_context.user_id }}",
-        "hasOutputParser": false
-      },
-      "id": "jarvis-final-response",
-      "name": "JARVIS Final Response",
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 1,
-      "position": [2800, 400],
-      "credentials": {
-        "openAiApi": {
-          "id": "YOUR_OPENAI_CREDENTIAL_ID",
-          "name": "OpenAI"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "response_text",
-              "name": "response_text",
-              "value": "={{ $json.output }}",
-              "type": "string"
-            },
-            {
-              "id": "source",
-              "name": "source",
-              "value": "={{ $('Prepare for JARVIS').item.json.source }}",
-              "type": "string"
-            },
-            {
-              "id": "chat_id",
-              "name": "chat_id",
-              "value": "={{ $('Prepare for JARVIS').item.json.chat_id }}",
-              "type": "string"
-            },
-            {
-              "id": "original_message_type",
-              "name": "original_message_type",
-              "value": "={{ $('Prepare for JARVIS').item.json.message_type }}",
-              "type": "string"
-            }
-          ]
         },
         "options": {}
       },
-      "id": "format-final-output",
-      "name": "Format Final Output",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3,
-      "position": [3000, 400]
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [2528, -1008],
+      "id": "check-voice-output-telegram",
+      "name": "Check Voice Output (Telegram)"
     },
     {
       "parameters": {
-        "mode": "rules",
-        "rules": {
-          "values": [
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict"
-                },
-                "conditions": [
-                  {
-                    "id": "webhook-text",
-                    "leftValue": "={{ $json.source + '_' + ($json.original_message_type === 'voice' ? 'voice' : 'text') }}",
-                    "rightValue": "webhook_text",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals"
-                    }
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "webhook_text"
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict"
-                },
-                "conditions": [
-                  {
-                    "id": "webhook-voice",
-                    "leftValue": "={{ $json.source + '_' + ($json.original_message_type === 'voice' ? 'voice' : 'text') }}",
-                    "rightValue": "webhook_voice",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals"
-                    }
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "webhook_voice"
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict"
-                },
-                "conditions": [
-                  {
-                    "id": "telegram-text",
-                    "leftValue": "={{ $json.source + '_' + ($json.original_message_type === 'voice' ? 'voice' : 'text') }}",
-                    "rightValue": "telegram_text",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals"
-                    }
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "telegram_text"
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict"
-                },
-                "conditions": [
-                  {
-                    "id": "telegram-voice",
-                    "leftValue": "={{ $json.source + '_' + ($json.original_message_type === 'voice' ? 'voice' : 'text') }}",
-                    "rightValue": "telegram_voice",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals"
-                    }
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "telegram_voice"
-            }
-          ]
-        }
-      },
-      "id": "output-router",
-      "name": "Output Router",
-      "type": "n8n-nodes-base.switch",
-      "typeVersion": 3,
-      "position": [3200, 400]
-    },
-    {
-      "parameters": {
-        "responseBody": "={{ JSON.stringify({ response: $json.response_text, type: 'text', timestamp: $now.toISO() }) }}",
-        "options": {
-          "responseHeaders": {
-            "entries": [
-              {
-                "name": "Content-Type",
-                "value": "application/json"
-              }
-            ]
-          }
-        }
-      },
-      "id": "webhook-text-response",
-      "name": "Webhook Text Response",
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1,
-      "position": [3400, 200]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://api.elevenlabs.io/v1/text-to-speech/YOUR_VOICE_ID",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "xi-api-key",
-              "value": "{{ $credentials.elevenLabsApi.apiKey }}"
-            },
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
+        "resource": "speech",
+        "voice": {
+          "__rl": true,
+          "value": "KEDa3Ed4RdL1BYzSjsxw",
+          "mode": "list",
+          "cachedResultName": "JARVIS 2 "
         },
-        "sendBody": true,
-        "bodyContentType": "json",
-        "jsonBody": "={{ JSON.stringify({ text: $json.response_text, model_id: 'eleven_monolingual_v1', voice_settings: { stability: 0.5, similarity_boost: 0.75 } }) }}"
+        "text": "={{ $json.output }}",
+        "additionalOptions": {},
+        "requestOptions": {}
       },
-      "id": "generate-voice-response",
-      "name": "Generate Voice Response",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [3400, 300],
+      "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
+      "typeVersion": 1,
+      "position": [2960, -784],
+      "id": "convert-to-speech-webhook",
+      "name": "Convert to Speech (Webhook)",
       "credentials": {
         "elevenLabsApi": {
-          "id": "YOUR_ELEVENLABS_CREDENTIAL_ID",
-          "name": "ElevenLabs"
+          "id": "FVibnEIkkpq1yuU5",
+          "name": "ElevenLabs account"
         }
       }
     },
     {
       "parameters": {
-        "responseBody": "={{ JSON.stringify({ response: $json.response_text, audio_data: $json.body, type: 'voice', timestamp: $now.toISO() }) }}",
-        "options": {
-          "responseHeaders": {
-            "entries": [
-              {
-                "name": "Content-Type",
-                "value": "application/json"
-              }
-            ]
-          }
-        }
+        "resource": "speech",
+        "voice": {
+          "__rl": true,
+          "value": "KEDa3Ed4RdL1BYzSjsxw",
+          "mode": "list",
+          "cachedResultName": "JARVIS 2 "
+        },
+        "text": "={{ $json.output }}",
+        "additionalOptions": {},
+        "requestOptions": {}
       },
-      "id": "webhook-voice-response",
-      "name": "Webhook Voice Response",
+      "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
+      "typeVersion": 1,
+      "position": [2960, -1152],
+      "id": "convert-to-speech-telegram",
+      "name": "Convert to Speech (Telegram)",
+      "credentials": {
+        "elevenLabsApi": {
+          "id": "FVibnEIkkpq1yuU5",
+          "name": "ElevenLabs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.output }}",
+        "options": {}
+      },
       "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1,
-      "position": [3600, 300]
+      "typeVersion": 1.4,
+      "position": [3424, -608],
+      "id": "respond-webhook-text",
+      "name": "Respond to Webhook (Text)"
     },
     {
       "parameters": {
-        "operation": "sendMessage",
-        "chatId": "={{ $json.chat_id }}",
-        "text": "={{ $json.response_text }}"
+        "respondWith": "text",
+        "responseBody": "={{ $json.output }}",
+        "options": {}
       },
-      "id": "telegram-text-send",
-      "name": "Send Telegram Text",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [3424, -784],
+      "id": "respond-webhook-voice",
+      "name": "Respond to Webhook (Voice)"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Input').item.json.message.from.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "respond-telegram-text",
+      "name": "Respond to Telegram (Text)",
       "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1,
-      "position": [3400, 500],
+      "typeVersion": 1.2,
+      "position": [3408, -992],
+      "webhookId": "782edf12-3e92-47aa-ac46-e13e26e7e213",
       "credentials": {
         "telegramApi": {
-          "id": "YOUR_TELEGRAM_CREDENTIAL_ID",
-          "name": "Telegram Bot"
+          "id": "Z0FRi09atYTgjcYc",
+          "name": "Telegram account"
         }
       }
     },
     {
       "parameters": {
-        "operation": "sendAudio",
-        "chatId": "={{ $json.chat_id }}",
-        "binaryData": true,
-        "binaryPropertyName": "audio"
+        "chatId": "={{ $('Telegram Input').item.json.message.from.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
       },
-      "id": "telegram-voice-send",
-      "name": "Send Telegram Voice",
+      "id": "respond-telegram-voice",
+      "name": "Respond to Telegram (Voice)",
       "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1,
-      "position": [3600, 500],
+      "typeVersion": 1.2,
+      "position": [3408, -1152],
+      "webhookId": "782edf12-3e92-47aa-ac46-e13e26e7e214",
       "credentials": {
         "telegramApi": {
-          "id": "YOUR_TELEGRAM_CREDENTIAL_ID",
-          "name": "Telegram Bot"
+          "id": "Z0FRi09atYTgjcYc",
+          "name": "Telegram account"
         }
       }
     }
   ],
   "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Knowledge Base",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Knowledge Base": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contacts Data": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send WhatsApp Message": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qdrant Vector Store": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Knowledge Base",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🤖 EMAIL AGENT": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🤖CALENDAR AGENT": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🤖RESEARCH AGENT": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🤖PROJECTS AGENT": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🤖TRAVEL AGENT": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🤖MARKETING TEAM": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Webhook Input": {
       "main": [
         [
           {
-            "node": "Normalize Input",
+            "node": "Generate UUID",
             "type": "main",
             "index": 0
           }
@@ -919,57 +1576,141 @@
       "main": [
         [
           {
-            "node": "Normalize Input",
+            "node": "Telegram Message Router",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Normalize Input": {
+    "Generate UUID": {
       "main": [
         [
           {
-            "node": "Message Type Router",
+            "node": "Webhook Message Router",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Message Type Router": {
+    "Webhook Message Router": {
       "main": [
         [
           {
-            "node": "Prepare for JARVIS",
+            "node": "Download Webhook Voice",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Voice Transcription",
+            "node": "Format Webhook Text",
             "type": "main",
             "index": 0
           }
         ],
+        [
+          {
+            "node": "Download Photo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download Video",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download Document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Message Router": {
+      "main": [
+        [
+          {
+            "node": "Download Telegram Voice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Format Telegram Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Webhook Voice": {
+      "main": [
+        [
+          {
+            "node": "Transcribe Voice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Telegram Voice": {
+      "main": [
+        [
+          {
+            "node": "Transcribe Voice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe Voice": {
+      "main": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Photo": {
+      "main": [
         [
           {
             "node": "Upload Photo to Drive",
             "type": "main",
             "index": 0
           }
-        ],
+        ]
+      ]
+    },
+    "Download Video": {
+      "main": [
         [
           {
             "node": "Upload Video to Drive",
             "type": "main",
             "index": 0
           }
-        ],
+        ]
+      ]
+    },
+    "Download Document": {
+      "main": [
         [
           {
-            "node": "Upload File to Drive",
+            "node": "Upload Document to Drive",
             "type": "main",
             "index": 0
           }
@@ -980,7 +1721,7 @@
       "main": [
         [
           {
-            "node": "Get Share Link",
+            "node": "Share Photo",
             "type": "main",
             "index": 0
           }
@@ -991,236 +1732,213 @@
       "main": [
         [
           {
-            "node": "Get Share Link",
+            "node": "Share Video",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Upload File to Drive": {
+    "Upload Document to Drive": {
       "main": [
         [
           {
-            "node": "Get Share Link",
+            "node": "Share Document",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Get Share Link": {
+    "Share Photo": {
       "main": [
         [
           {
-            "node": "Log to Google Sheets",
+            "node": "Log Photo to Sheets",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Log to Google Sheets": {
+    "Share Video": {
       "main": [
         [
           {
-            "node": "Merge File Data",
+            "node": "Log Video to Sheets",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Merge File Data": {
+    "Share Document": {
       "main": [
         [
           {
-            "node": "Prepare for JARVIS",
+            "node": "Log Document to Sheets",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Voice Transcription": {
+    "Log Photo to Sheets": {
       "main": [
         [
           {
-            "node": "Extract Transcription",
+            "node": "Format Photo Data",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Extract Transcription": {
+    "Log Video to Sheets": {
       "main": [
         [
           {
-            "node": "Prepare for JARVIS",
+            "node": "Format Video Data",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Prepare for JARVIS": {
+    "Log Document to Sheets": {
       "main": [
         [
           {
-            "node": "JARVIS Conversational Agent",
+            "node": "Format Document Data",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "JARVIS Conversational Agent": {
+    "Format Photo Data": {
       "main": [
         [
           {
-            "node": "Check if Operator Needed",
+            "node": "J.A.R.V.I.S",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check if Operator Needed": {
+    "Format Video Data": {
       "main": [
         [
           {
-            "node": "Extract Operator Task",
+            "node": "J.A.R.V.I.S",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Document Data": {
+      "main": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Webhook Text": {
+      "main": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Telegram Text": {
+      "main": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "J.A.R.V.I.S": {
+      "main": [
+        [
+          {
+            "node": "Check Voice Output (Telegram)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Check Voice Output (Webhook)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Voice Output (Webhook)": {
+      "main": [
+        [
+          {
+            "node": "Convert to Speech (Webhook)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Format Final Output",
+            "node": "Respond to Webhook (Text)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Extract Operator Task": {
+    "Check Voice Output (Telegram)": {
       "main": [
         [
           {
-            "node": "Operator Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Operator Agent": {
-      "main": [
-        [
-          {
-            "node": "Check Operator Response",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Check Operator Response": {
-      "main": [
-        [
-          {
-            "node": "JARVIS Clarification Request",
+            "node": "Convert to Speech (Telegram)",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "JARVIS Final Response",
+            "node": "Respond to Telegram (Text)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "JARVIS Clarification Request": {
+    "Convert to Speech (Webhook)": {
       "main": [
         [
           {
-            "node": "Format Final Output",
+            "node": "Respond to Webhook (Voice)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "JARVIS Final Response": {
+    "Convert to Speech (Telegram)": {
       "main": [
         [
           {
-            "node": "Format Final Output",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Format Final Output": {
-      "main": [
-        [
-          {
-            "node": "Output Router",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Output Router": {
-      "main": [
-        [
-          {
-            "node": "Webhook Text Response",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Generate Voice Response",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Send Telegram Text",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Generate Voice Response",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Generate Voice Response": {
-      "main": [
-        [
-          {
-            "node": "Webhook Voice Response",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Send Telegram Voice",
+            "node": "Respond to Telegram (Voice)",
             "type": "main",
             "index": 0
           }
