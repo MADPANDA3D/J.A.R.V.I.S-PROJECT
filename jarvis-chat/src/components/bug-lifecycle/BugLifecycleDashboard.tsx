@@ -68,9 +68,9 @@ interface MetricCardProps {
   description?: string;
 }
 
-function MetricCard({ title, value, change, changeType = 'neutral', icon, description }: MetricCardProps) => {
+function MetricCard({ title, value, change, changeType = 'neutral', icon, description }: MetricCardProps) {
   const getChangeColor = (type: typeof changeType) => {
-    switch (type) => {
+    switch (type) {
       case 'positive': return 'text-green-600';
       case 'negative': return 'text-red-600';
       default: return 'text-gray-600';

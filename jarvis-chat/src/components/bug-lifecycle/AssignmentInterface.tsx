@@ -48,7 +48,7 @@ export function AssignmentInterface({
   bugId, 
   currentAssignee, 
   onAssignmentChange 
-}: AssignmentInterfaceProps) => {
+}: AssignmentInterfaceProps) {
   const { toast } = useToast();
   const { bugReport, loading: bugLoading } = useBugLifecycle(bugId);
   

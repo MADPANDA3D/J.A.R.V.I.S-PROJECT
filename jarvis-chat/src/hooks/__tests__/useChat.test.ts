@@ -43,7 +43,7 @@ describe('useChat', () => {
     } as AuthContextType);
   });
 
-  it('should initialize with empty state', () {
+  it('should initialize with empty state', () => {
     mockUseAuth.mockReturnValue({
       user: null,
       session: null,
