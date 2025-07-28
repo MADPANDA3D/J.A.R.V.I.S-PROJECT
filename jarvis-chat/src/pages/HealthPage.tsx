@@ -24,7 +24,7 @@ export const HealthPage: React.FC = () => {
       const result = await performHealthCheck();
       setHealthData(result);
       setLastUpdated(new Date());
-    } catch (error) => {
+    } catch (error) {
       console.error('Health check failed:', error);
     } finally {
       setIsLoading(false);
@@ -36,7 +36,7 @@ export const HealthPage: React.FC = () => {
   }, []);
 
   const getStatusIcon = (status: string) => {
-    switch (status) => {
+    switch (status) {
       case 'healthy':
       case 'up':
       case 'valid':
@@ -56,7 +56,7 @@ export const HealthPage: React.FC = () => {
   };
 
   const getStatusColor = (status: string) => {
-    switch (status) => {
+    switch (status) {
       case 'healthy':
       case 'up':
       case 'valid':
