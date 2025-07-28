@@ -324,7 +324,7 @@ describe('Bug Report System Integration', () => {
     expect(createCall.monitoringData.submissionId).toBeDefined();
   });
 
-  it('maintains performance under load', async () {
+  it('maintains performance under load', async () => {
     const startTime = performance.now();
     
     // Submit multiple concurrent requests

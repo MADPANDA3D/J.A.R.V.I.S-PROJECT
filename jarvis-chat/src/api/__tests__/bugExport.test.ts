@@ -171,7 +171,7 @@ describe('Bug Export API', () => {
       expect(response.body).toHaveProperty('error', 'Invalid export format');
     });
 
-    it('should support all valid export formats', async () {
+    it('should support all valid export formats', async () => {
       const formats = ['json', 'csv', 'xml', 'excel', 'pdf'];
 
       vi.mocked(bugReportOperations.searchBugReports).mockResolvedValue({

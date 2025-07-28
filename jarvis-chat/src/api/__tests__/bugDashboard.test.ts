@@ -209,7 +209,7 @@ describe('Bug Dashboard API', () => {
     });
   });
 
-  describe('GET /api/bugs/:id', () {
+  describe('GET /api/bugs/:id', () => {
     it('should return bug details with valid ID', async () {
       const mockBug = {
         id: 'bug-123',

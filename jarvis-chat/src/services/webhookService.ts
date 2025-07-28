@@ -571,7 +571,7 @@ class WebhookDeliveryService {
 
   private startLogCleanup() {
     // Clean up old logs every hour
-    setInterval(() {
+    setInterval(() => {
       this.cleanupOldLogs();
     }, 60 * 60 * 1000);
   }

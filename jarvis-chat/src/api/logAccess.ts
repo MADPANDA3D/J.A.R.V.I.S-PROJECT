@@ -869,7 +869,7 @@ class LogAccessService {
     }, 2000); // Check every 2 seconds
 
     // Cleanup on connection close
-    websocket.onclose = () {
+    websocket.onclose = () => {
       clearInterval(heartbeatTimer);
       clearInterval(streamTimer);
       clearInterval(logListener);

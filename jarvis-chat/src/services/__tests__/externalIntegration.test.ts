@@ -70,7 +70,7 @@ describe('External Integration Service', () => {
   });
 
   describe('POST /api/integrations/webhooks', () => {
-    it('should create webhook configuration with admin permissions', async () {
+    it('should create webhook configuration with admin permissions', async () => {
       const webhookConfig = {
         name: 'Test Webhook',
         url: 'https://example.com/webhook',
