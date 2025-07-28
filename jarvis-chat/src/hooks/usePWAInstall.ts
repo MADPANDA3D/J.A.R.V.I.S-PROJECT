@@ -33,8 +33,8 @@ export const usePWAInstall = () => {
   }, []);
 
   // Handle the beforeinstallprompt event
-  useEffect(() {
-    const handleBeforeInstallPrompt = (e: Event) {
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: Event) => {
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
 
@@ -49,7 +49,7 @@ export const usePWAInstall = () => {
       }));
     };
 
-    const handleAppInstalled = () {
+    const handleAppInstalled = () => {
       console.log('✅ PWA was installed');
       setState(prev => ({
         ...prev,
@@ -67,7 +67,7 @@ export const usePWAInstall = () => {
     // Check initial install status
     checkInstallStatus();
 
-    return () {
+    return () => {
       window.removeEventListener(
         'beforeinstallprompt',
         handleBeforeInstallPrompt
@@ -77,7 +77,7 @@ export const usePWAInstall = () => {
   }, [checkInstallStatus]);
 
   // Trigger the install prompt
-  const install = useCallback(async () {
+  const install = useCallback(async () => {
     if (!state.installPrompt) {
       setState(prev => ({
         ...prev,
@@ -123,7 +123,7 @@ export const usePWAInstall = () => {
   }, [state.installPrompt]);
 
   // Reset install error
-  const clearError = useCallback(() {
+  const clearError = useCallback(() => {
     setState(prev => ({ ...prev, installError: null }));
   }, []);
 
