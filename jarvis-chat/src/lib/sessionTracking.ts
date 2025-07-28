@@ -200,7 +200,7 @@ class SessionTracker {
 
   private setupNavigationTracking(): void {
     // Track page navigation
-    const trackNavigation = () {
+    const trackNavigation = () => {
       this.trackPageView();
     };
 
@@ -211,12 +211,12 @@ class SessionTracker {
     const originalPushState = history.pushState;
     const originalReplaceState = history.replaceState;
 
-    history.pushState = (...args) {
+    history.pushState = (...args) => {
       originalPushState.apply(history, args);
       setTimeout(trackNavigation, 0);
     };
 
-    history.replaceState = (...args) {
+    history.replaceState = (...args) => {
       originalReplaceState.apply(history, args);
       setTimeout(trackNavigation, 0);
     };
@@ -234,7 +234,7 @@ class SessionTracker {
     });
 
     // Track button clicks
-    document.addEventListener('click', (event) {
+    document.addEventListener('click', (event) => {
       const target = event.target as HTMLElement;
       if (target.tagName === 'BUTTON' || target.type === 'button' || target.type === 'submit') {
         this.trackUserAction('button_click', {
@@ -292,7 +292,7 @@ class SessionTracker {
       clearTimeout(this.activityTimer);
     }
 
-    this.activityTimer = setTimeout(() {
+    this.activityTimer = setTimeout(() => {
       this.handleInactivityTimeout();
     }, this.activityTimeout);
   }
@@ -532,7 +532,7 @@ class SessionTracker {
       .map(s => new Date(s.endTime!).getTime() - new Date(s.startTime).getTime());
 
     const pageViews = allSessions.flatMap(s => s.pageViews);
-    const pageViewCounts = pageViews.reduce((acc, pv) {
+    const pageViewCounts = pageViews.reduce((acc, pv) => {
       acc[pv.url] = (acc[pv.url] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
