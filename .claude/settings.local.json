@@ -45,7 +45,9 @@
       "Bash(sudo journalctl:*)",
       "Bash(docker logs:*)",
       "Bash(sed:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "mcp__n8n-mcp__n8n_diagnostic",
+      "mcp__n8n-mcp__tools_documentation"
     ],
     "deny": []
   }

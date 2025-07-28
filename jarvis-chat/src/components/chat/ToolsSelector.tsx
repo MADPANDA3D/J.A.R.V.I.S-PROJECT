@@ -39,7 +39,7 @@ interface ToolsSelectorProps {
 export function ToolsSelector({
   className = '',
   compact = false,
-}: ToolsSelectorProps) => {
+}: ToolsSelectorProps) {
   const {
     availableTools,
     toggleTool,
@@ -55,7 +55,7 @@ export function ToolsSelector({
   // Group tools by category
   const toolsByCategory = availableTools.reduce(
     (acc, tool) => {
-      if (!acc[tool.category]) => {
+      if (!acc[tool.category]) {
         acc[tool.category] = [];
       }
       acc[tool.category].push(tool);
@@ -71,7 +71,7 @@ export function ToolsSelector({
     return IconComponent;
   };
 
-  if (loading) => {
+  if (loading) {
     return (
       <Button
         variant="outline"

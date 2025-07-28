@@ -372,7 +372,7 @@ class ServiceMonitoringService {
   }
 
   private timeoutPromise(timeout: number): Promise<never> {
-    return new Promise((_, reject) {
+    return new Promise((_, reject) => {
       setTimeout(() => reject(new Error('Operation timeout')), timeout);
     });
   }

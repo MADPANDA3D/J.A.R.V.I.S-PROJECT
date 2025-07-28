@@ -1,0 +1,1240 @@
+{
+  "name": "JARVIS Enhanced Multi-Channel AI Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "jarvis-webhook",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-input",
+      "name": "Webhook Input",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "updates": ["message"]
+      },
+      "id": "telegram-input",
+      "name": "Telegram Input", 
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1,
+      "position": [200, 500],
+      "credentials": {
+        "telegramApi": {
+          "id": "YOUR_TELEGRAM_CREDENTIAL_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "source",
+              "name": "source",
+              "value": "={{ $node.name.includes('Webhook') ? 'webhook' : 'telegram' }}",
+              "type": "string"
+            },
+            {
+              "id": "message_type",
+              "name": "message_type", 
+              "value": "={{ $node.name.includes('Webhook') ? ($json.type || 'text') : ($json.message.photo ? 'photo' : $json.message.video ? 'video' : $json.message.document ? 'file' : $json.message.voice ? 'voice' : 'text') }}",
+              "type": "string"
+            },
+            {
+              "id": "message_content",
+              "name": "message_content",
+              "value": "={{ $node.name.includes('Webhook') ? $json.message : ($json.message.text || $json.message.caption || 'Media file received') }}",
+              "type": "string"
+            },
+            {
+              "id": "user_id", 
+              "name": "user_id",
+              "value": "={{ $node.name.includes('Webhook') ? ($json.user_id || 'webhook-user') : $json.message.from.id }}",
+              "type": "string"
+            },
+            {
+              "id": "chat_id",
+              "name": "chat_id", 
+              "value": "={{ $node.name.includes('Webhook') ? ($json.chat_id || 'webhook-chat') : $json.message.chat.id }}",
+              "type": "string"
+            },
+            {
+              "id": "file_data",
+              "name": "file_data",
+              "value": "={{ $node.name.includes('Webhook') ? $json.file_data : ($json.message.photo ? $json.message.photo[$json.message.photo.length-1] : $json.message.video || $json.message.document || $json.message.voice || null) }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "normalize-input",
+      "name": "Normalize Input",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [400, 400]
+    },
+    {
+      "parameters": {
+        "mode": "rules",
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "text-condition",
+                    "leftValue": "={{ $json.message_type }}",
+                    "rightValue": "text",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "voice-condition", 
+                    "leftValue": "={{ $json.message_type }}",
+                    "rightValue": "voice",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "voice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "photo-condition",
+                    "leftValue": "={{ $json.message_type }}",
+                    "rightValue": "photo", 
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "photo"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "video-condition",
+                    "leftValue": "={{ $json.message_type }}",
+                    "rightValue": "video",
+                    "operator": {
+                      "type": "string", 
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "video"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "file-condition",
+                    "leftValue": "={{ $json.message_type }}",
+                    "rightValue": "file",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "file"
+            }
+          ]
+        }
+      },
+      "id": "message-type-router",
+      "name": "Message Type Router",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [600, 400]
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "fileContent": {
+          "fileContent": "={{ $json.file_data }}"
+        },
+        "name": "={{ 'photo_' + $now.format('yyyy-MM-dd_HH-mm-ss') + '.jpg' }}",
+        "options": {
+          "parents": {
+            "parentId": "JARVIS_MEDIA_FOLDER_ID"
+          }
+        }
+      },
+      "id": "drive-upload-photo",
+      "name": "Upload Photo to Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [800, 200],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "YOUR_GOOGLE_DRIVE_CREDENTIAL_ID",
+          "name": "Google Drive"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "fileContent": {
+          "fileContent": "={{ $json.file_data }}"
+        },
+        "name": "={{ 'video_' + $now.format('yyyy-MM-dd_HH-mm-ss') + '.mp4' }}",
+        "options": {
+          "parents": {
+            "parentId": "JARVIS_MEDIA_FOLDER_ID"
+          }
+        }
+      },
+      "id": "drive-upload-video",
+      "name": "Upload Video to Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [800, 300],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "YOUR_GOOGLE_DRIVE_CREDENTIAL_ID",
+          "name": "Google Drive"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "fileContent": {
+          "fileContent": "={{ $json.file_data }}"
+        },
+        "name": "={{ 'file_' + $now.format('yyyy-MM-dd_HH-mm-ss') + '.' + ($json.file_data.mime_type?.split('/')[1] || 'bin') }}",
+        "options": {
+          "parents": {
+            "parentId": "JARVIS_MEDIA_FOLDER_ID"
+          }
+        }
+      },
+      "id": "drive-upload-file",
+      "name": "Upload File to Drive", 
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [800, 400],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "YOUR_GOOGLE_DRIVE_CREDENTIAL_ID",
+          "name": "Google Drive"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "fileId": "={{ $json.id }}",
+        "options": {
+          "permissions": {
+            "permissionsUi": {
+              "permissionsValues": [
+                {
+                  "role": "reader",
+                  "type": "anyone"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "id": "get-share-link",
+      "name": "Get Share Link",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [1000, 300],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "YOUR_GOOGLE_DRIVE_CREDENTIAL_ID",
+          "name": "Google Drive"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendRow",
+        "documentId": "YOUR_GOOGLE_SHEETS_ID",
+        "sheetName": "JARVIS_Media_Log",
+        "columnNames": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ $now.format('yyyy-MM-dd HH:mm:ss') }}",
+            "file_type": "={{ $('Normalize Input').item.json.message_type }}",
+            "file_name": "={{ $json.name }}",
+            "file_id": "={{ $json.id }}",
+            "share_link": "={{ 'https://drive.google.com/file/d/' + $json.id + '/view?usp=sharing' }}",
+            "user_id": "={{ $('Normalize Input').item.json.user_id }}",
+            "source": "={{ $('Normalize Input').item.json.source }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "log-to-sheets",
+      "name": "Log to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [1200, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "file_url",
+              "name": "file_url",
+              "value": "={{ 'https://drive.google.com/file/d/' + $json.id + '/view?usp=sharing' }}",
+              "type": "string"
+            },
+            {
+              "id": "processed_message",
+              "name": "processed_message",
+              "value": "={{ $('Normalize Input').item.json.message_content + ' [File uploaded: ' + $json.name + ']' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "merge-file-data",
+      "name": "Merge File Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [1400, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/audio/transcriptions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $credentials.openAiApi.apiKey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyContentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "file",
+              "value": "={{ $json.file_data }}"
+            },
+            {
+              "name": "model",
+              "value": "whisper-1"
+            }
+          ]
+        }
+      },
+      "id": "voice-transcription",
+      "name": "Voice Transcription",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [800, 500],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "transcribed_text",
+              "name": "transcribed_text",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "extract-transcription",
+      "name": "Extract Transcription",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [1000, 500]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "final_message",
+              "name": "final_message",
+              "value": "={{ $json.processed_message || $json.transcribed_text || $('Normalize Input').item.json.message_content }}",
+              "type": "string"
+            },
+            {
+              "id": "message_type",
+              "name": "message_type",
+              "value": "={{ $('Normalize Input').item.json.message_type }}",
+              "type": "string"
+            },
+            {
+              "id": "source",
+              "name": "source",
+              "value": "={{ $('Normalize Input').item.json.source }}",
+              "type": "string"
+            },
+            {
+              "id": "user_id",
+              "name": "user_id",
+              "value": "={{ $('Normalize Input').item.json.user_id }}",
+              "type": "string"
+            },
+            {
+              "id": "chat_id",
+              "name": "chat_id",
+              "value": "={{ $('Normalize Input').item.json.chat_id }}",
+              "type": "string"
+            },
+            {
+              "id": "file_url",
+              "name": "file_url",
+              "value": "={{ $json.file_url || null }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "prepare-for-jarvis",
+      "name": "Prepare for JARVIS",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [1600, 400]
+    },
+    {
+      "parameters": {
+        "agent": "conversationalAgent",
+        "promptType": "define",
+        "text": "You are JARVIS, an advanced AI assistant. You operate using a *command system:\n\n**Core Responsibilities:**\n1. **Conversation Mode**: For general chat, brainstorming, questions, explanations\n2. **Tool Mode**: When user needs actions performed, research, or tool usage\n\n**Decision Logic:**\n- If user wants general conversation, brainstorming, or simple Q&A → Handle directly\n- If user needs tools, actions, research, or complex tasks → Use *operator command to engage Operator Agent\n- If user says *brainstorm → Handle brainstorming session directly\n\n**Command Usage:**\n- *operator [task description] → Engage Operator for tool-based tasks\n- *brainstorm [topic] → Start brainstorming session (you handle this)\n\n**Response Format:**\n- Always be helpful, professional, and engaging\n- For conversations: Respond naturally and conversationally\n- For tool needs: Use *operator command and explain what you're requesting\n- Include file information if provided: {{ $json.file_url ? 'File available: ' + $json.file_url : '' }}\n\n**Current Context:**\n- Message: {{ $json.final_message }}\n- Type: {{ $json.message_type }}\n- Source: {{ $json.source }}\n- User: {{ $json.user_id }}",
+        "hasOutputParser": false,
+        "options": {
+          "systemMessage": "You are JARVIS, a conversational AI assistant with access to an Operator agent for tool-based tasks. Use the *operator command when users need actions performed."
+        }
+      },
+      "id": "jarvis-agent",
+      "name": "JARVIS Conversational Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1,
+      "position": [1800, 400],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "operator-check",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "*operator",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "check-operator-needed",
+      "name": "Check if Operator Needed",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2000, 400]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "operator_task",
+              "name": "operator_task",
+              "value": "={{ $json.output.split('*operator')[1]?.trim() || 'General task assistance needed' }}",
+              "type": "string"
+            },
+            {
+              "id": "original_context",
+              "name": "original_context",
+              "value": "={{ $json }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "extract-operator-task",
+      "name": "Extract Operator Task",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [2200, 300]
+    },
+    {
+      "parameters": {
+        "agent": "toolsAgent",
+        "promptType": "define",
+        "text": "You are the Operator Agent, specialized in executing tasks and using tools for JARVIS.\n\n**Your Role:**\n1. Execute the requested task: {{ $json.operator_task }}\n2. Use available tools to complete the task\n3. Provide detailed results and actions taken\n4. If you need clarification, ask specific questions\n\n**Task Context:**\n- Original message: {{ $json.original_context.final_message }}\n- Message type: {{ $json.original_context.message_type }}\n- User: {{ $json.original_context.user_id }}\n- File URL: {{ $json.original_context.file_url || 'None' }}\n\n**Task to Execute:** {{ $json.operator_task }}\n\n**Response Requirements:**\n- Be specific about actions taken\n- Include any results or data obtained\n- If task cannot be completed, explain why\n- Provide status: COMPLETED, NEEDS_CLARIFICATION, or PARTIALLY_COMPLETED",
+        "hasOutputParser": false,
+        "options": {
+          "systemMessage": "You are the Operator Agent. Execute tasks using available tools and provide detailed results back to JARVIS."
+        }
+      },
+      "id": "operator-agent",
+      "name": "Operator Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1,
+      "position": [2400, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "clarification-check",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "NEEDS_CLARIFICATION",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "operator-response-check",
+      "name": "Check Operator Response",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2600, 300]
+    },
+    {
+      "parameters": {
+        "agent": "conversationalAgent",
+        "promptType": "define",
+        "text": "The Operator Agent needs clarification for the task. Please relay this request to the user in a natural, conversational way.\n\n**Operator's Response:** {{ $json.output }}\n\n**Your Task:**\n1. Explain what the Operator found/attempted\n2. Ask the user for the specific clarification needed\n3. Make it conversational and easy to understand\n4. Let them know you'll retry once they provide the information\n\n**Context:**\n- Original task: {{ $('Extract Operator Task').item.json.operator_task }}\n- User: {{ $('Extract Operator Task').item.json.original_context.user_id }}",
+        "hasOutputParser": false
+      },
+      "id": "jarvis-clarification",
+      "name": "JARVIS Clarification Request",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1,
+      "position": [2800, 200],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "agent": "conversationalAgent",
+        "promptType": "define",
+        "text": "Provide a final response to the user based on the Operator's results.\n\n**Operator's Results:** {{ $json.output }}\n\n**Your Task:**\n1. Summarize what was accomplished\n2. Present results in a user-friendly way\n3. Offer any additional help if needed\n4. Be conversational and engaging\n\n**Context:**\n- Original task: {{ $('Extract Operator Task').item.json.operator_task }}\n- User: {{ $('Extract Operator Task').item.json.original_context.user_id }}",
+        "hasOutputParser": false
+      },
+      "id": "jarvis-final-response",
+      "name": "JARVIS Final Response",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1,
+      "position": [2800, 400],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "response_text",
+              "name": "response_text",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "source",
+              "name": "source",
+              "value": "={{ $('Prepare for JARVIS').item.json.source }}",
+              "type": "string"
+            },
+            {
+              "id": "chat_id",
+              "name": "chat_id",
+              "value": "={{ $('Prepare for JARVIS').item.json.chat_id }}",
+              "type": "string"
+            },
+            {
+              "id": "original_message_type",
+              "name": "original_message_type",
+              "value": "={{ $('Prepare for JARVIS').item.json.message_type }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "format-final-output",
+      "name": "Format Final Output",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [3000, 400]
+    },
+    {
+      "parameters": {
+        "mode": "rules",
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "webhook-text",
+                    "leftValue": "={{ $json.source + '_' + ($json.original_message_type === 'voice' ? 'voice' : 'text') }}",
+                    "rightValue": "webhook_text",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "webhook_text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "webhook-voice",
+                    "leftValue": "={{ $json.source + '_' + ($json.original_message_type === 'voice' ? 'voice' : 'text') }}",
+                    "rightValue": "webhook_voice",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "webhook_voice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "telegram-text",
+                    "leftValue": "={{ $json.source + '_' + ($json.original_message_type === 'voice' ? 'voice' : 'text') }}",
+                    "rightValue": "telegram_text",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "telegram_text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "telegram-voice",
+                    "leftValue": "={{ $json.source + '_' + ($json.original_message_type === 'voice' ? 'voice' : 'text') }}",
+                    "rightValue": "telegram_voice",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "telegram_voice"
+            }
+          ]
+        }
+      },
+      "id": "output-router",
+      "name": "Output Router",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [3200, 400]
+    },
+    {
+      "parameters": {
+        "responseBody": "={{ JSON.stringify({ response: $json.response_text, type: 'text', timestamp: $now.toISO() }) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "webhook-text-response",
+      "name": "Webhook Text Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [3400, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/YOUR_VOICE_ID",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "xi-api-key",
+              "value": "{{ $credentials.elevenLabsApi.apiKey }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={{ JSON.stringify({ text: $json.response_text, model_id: 'eleven_monolingual_v1', voice_settings: { stability: 0.5, similarity_boost: 0.75 } }) }}"
+      },
+      "id": "generate-voice-response",
+      "name": "Generate Voice Response",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [3400, 300],
+      "credentials": {
+        "elevenLabsApi": {
+          "id": "YOUR_ELEVENLABS_CREDENTIAL_ID",
+          "name": "ElevenLabs"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "responseBody": "={{ JSON.stringify({ response: $json.response_text, audio_data: $json.body, type: 'voice', timestamp: $now.toISO() }) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "webhook-voice-response",
+      "name": "Webhook Voice Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [3600, 300]
+    },
+    {
+      "parameters": {
+        "operation": "sendMessage",
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.response_text }}"
+      },
+      "id": "telegram-text-send",
+      "name": "Send Telegram Text",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [3400, 500],
+      "credentials": {
+        "telegramApi": {
+          "id": "YOUR_TELEGRAM_CREDENTIAL_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAudio",
+        "chatId": "={{ $json.chat_id }}",
+        "binaryData": true,
+        "binaryPropertyName": "audio"
+      },
+      "id": "telegram-voice-send",
+      "name": "Send Telegram Voice",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [3600, 500],
+      "credentials": {
+        "telegramApi": {
+          "id": "YOUR_TELEGRAM_CREDENTIAL_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Input": {
+      "main": [
+        [
+          {
+            "node": "Normalize Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Input": {
+      "main": [
+        [
+          {
+            "node": "Normalize Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Input": {
+      "main": [
+        [
+          {
+            "node": "Message Type Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message Type Router": {
+      "main": [
+        [
+          {
+            "node": "Prepare for JARVIS",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Voice Transcription",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Upload Photo to Drive",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Upload Video to Drive",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Upload File to Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Photo to Drive": {
+      "main": [
+        [
+          {
+            "node": "Get Share Link",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Video to Drive": {
+      "main": [
+        [
+          {
+            "node": "Get Share Link",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload File to Drive": {
+      "main": [
+        [
+          {
+            "node": "Get Share Link",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Share Link": {
+      "main": [
+        [
+          {
+            "node": "Log to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log to Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Merge File Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge File Data": {
+      "main": [
+        [
+          {
+            "node": "Prepare for JARVIS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Voice Transcription": {
+      "main": [
+        [
+          {
+            "node": "Extract Transcription",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Transcription": {
+      "main": [
+        [
+          {
+            "node": "Prepare for JARVIS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare for JARVIS": {
+      "main": [
+        [
+          {
+            "node": "JARVIS Conversational Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JARVIS Conversational Agent": {
+      "main": [
+        [
+          {
+            "node": "Check if Operator Needed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if Operator Needed": {
+      "main": [
+        [
+          {
+            "node": "Extract Operator Task",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Format Final Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Operator Task": {
+      "main": [
+        [
+          {
+            "node": "Operator Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Operator Agent": {
+      "main": [
+        [
+          {
+            "node": "Check Operator Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Operator Response": {
+      "main": [
+        [
+          {
+            "node": "JARVIS Clarification Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "JARVIS Final Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JARVIS Clarification Request": {
+      "main": [
+        [
+          {
+            "node": "Format Final Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JARVIS Final Response": {
+      "main": [
+        [
+          {
+            "node": "Format Final Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Final Output": {
+      "main": [
+        [
+          {
+            "node": "Output Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Output Router": {
+      "main": [
+        [
+          {
+            "node": "Webhook Text Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generate Voice Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Telegram Text",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generate Voice Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Voice Response": {
+      "main": [
+        [
+          {
+            "node": "Webhook Voice Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Telegram Voice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 2,
+  "updatedAt": "2025-01-27T00:00:00.000Z",
+  "versionId": "1"
+}

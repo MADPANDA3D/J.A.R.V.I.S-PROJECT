@@ -36,7 +36,7 @@ const bugReportSchema = z.object({
 const attachmentSchema = z.object({
   size: z.number().max(10 * 1024 * 1024, 'File size must be less than 10MB'),
   type: z.string().refine(
-    (type) {
+    (type) => {
       const allowedTypes = [
         'image/jpeg', 'image/png', 'image/gif', 'image/webp',
         'text/plain', 'text/csv', 'application/json',
@@ -48,7 +48,7 @@ const attachmentSchema = z.object({
   )
 });
 
-export const useBugReport = (initialData: Partial<BugReportFormData> = {}) {
+export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
   const [formState, setFormState] = useState<BugReportFormState>({
     data: {
       title: '',
@@ -194,7 +194,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) {
     if (formState.data.attachments) {
       const attachmentErrors: string[] = [];
       
-      formState.data.attachments.forEach((file, index) {
+      formState.data.attachments.forEach((file, index) => {
         try {
           attachmentSchema.parse(file);
         } catch {
@@ -225,7 +225,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) {
   }, [formState.data]);
 
   // Update form data
-  const updateFormData = useCallback((updates: Partial<BugReportFormData>) {
+  const updateFormData = useCallback((updates: Partial<BugReportFormData>) => {
     setFormState(prev => ({
       ...prev,
       data: {
@@ -282,7 +282,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) {
 
       // Upload attachments if any
       if (formData.attachments && formData.attachments.length > 0) {
-        const attachmentPromises = formData.attachments.map(async (file, index) {
+        const attachmentPromises = formData.attachments.map(async (file, index) => {
           try {
             setFormState(prev => ({
               ...prev,
@@ -373,7 +373,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) {
   }, [validateForm, collectBrowserInfo, collectErrorContext]);
 
   // Reset form
-  const resetForm = useCallback(() {
+  const resetForm = useCallback(() => {
     setFormState({
       data: {
         title: '',
@@ -430,14 +430,14 @@ function getBrowserVersion(): string {
 }
 
 async function collectCoreWebVitals(): Promise<any> {
-  return new Promise((resolve) {
+  return new Promise((resolve) => {
     const vitals: any = {};
     
     // Use Performance Observer if available
     if ('PerformanceObserver' in window) {
       try {
         // Largest Contentful Paint
-        const lcpObserver = new PerformanceObserver((list) {
+        const lcpObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
           const lastEntry = entries[entries.length - 1];
           vitals.lcp = lastEntry.startTime;
@@ -445,7 +445,7 @@ async function collectCoreWebVitals(): Promise<any> {
         lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
 
         // First Input Delay
-        const fidObserver = new PerformanceObserver((list) {
+        const fidObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
           entries.forEach((entry: any) {
             vitals.fid = entry.processingStart - entry.startTime;

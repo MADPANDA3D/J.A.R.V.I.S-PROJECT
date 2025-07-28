@@ -27,7 +27,7 @@ export function ConversationSessionGroup({
   isActive = false,
   searchTerms = [],
   className = '',
-}: ConversationSessionGroupProps) => {
+}: ConversationSessionGroupProps) {
   const { session, messages, messageCount, hasMoreMessages } = sessionGroup;
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
@@ -117,7 +117,7 @@ export function ConversationSessionGroup({
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') => {
+              if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 handleSessionSelect();
               }
@@ -180,7 +180,7 @@ export function ConversationSessionGroup({
                     role="button"
                     tabIndex={0}
                     onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') => {
+                      if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
                         onMessageClick(message.messageId);
                       }

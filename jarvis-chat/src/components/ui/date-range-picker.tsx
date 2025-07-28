@@ -26,7 +26,7 @@ export function DateRangePicker({
   onDateRangeChange,
   placeholder = "Pick a date range",
   disabled = false,
-}: DateRangePickerProps) => {
+}: DateRangePickerProps) {
   const [open, setOpen] = useState(false);
 
   const formatDateRange = (range?: DateRange) => {
@@ -34,9 +34,9 @@ export function DateRangePicker({
     
     const { from, to } = range;
     
-    if (from && isValid(from) && to && isValid(to)) => {
+    if (from && isValid(from) && to && isValid(to)) {
       return `${format(from, 'MMM d, yyyy')} - ${format(to, 'MMM d, yyyy')}`;
-    } else if (from && isValid(from)) => {
+    } else if (from && isValid(from)) {
       return format(from, 'MMM d, yyyy');
     }
     
@@ -47,7 +47,7 @@ export function DateRangePicker({
     onDateRangeChange?.(range);
     
     // Close popover when both dates are selected
-    if (range?.from && range?.to) => {
+    if (range?.from && range?.to) {
       setOpen(false);
     }
   };

@@ -161,7 +161,7 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
 
   // Auto-save functionality
   useEffect(() => {
-    if (formState.autoSaveEnabled && formState.isDirty) => {
+    if (formState.autoSaveEnabled && formState.isDirty) {
       const autoSaveTimer = setTimeout(() => {
         localStorage.setItem('bugReportDraft', JSON.stringify(formState.data));
       }, 2000);
@@ -173,11 +173,11 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
   // Load draft on mount
   useEffect(() => {
     const draft = localStorage.getItem('bugReportDraft');
-    if (draft && !initialData.title) => {
+    if (draft && !initialData.title) {
       try {
         const draftData = JSON.parse(draft);
         updateFormData(draftData);
-      } catch (error) => {
+      } catch (error) {
         console.warn('Failed to load bug report draft:', error);
       }
     }
@@ -195,7 +195,7 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
   const handleFormSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!validateForm()) => {
+    if (!validateForm()) {
       return;
     }
 
@@ -205,7 +205,7 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
     try {
       const result = await submitBugReport(formState.data);
       
-      if (result.success && result.bugId && result.trackingNumber) => {
+      if (result.success && result.bugId && result.trackingNumber) {
         setSubmitSuccess({
           bugId: result.bugId,
           trackingNumber: result.trackingNumber
@@ -219,7 +219,7 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
       } else {
         setSubmitError(result.message || 'Failed to submit bug report');
       }
-    } catch (error) => {
+    } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'An unexpected error occurred');
     } finally {
       setIsSubmitting(false);
@@ -227,7 +227,7 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
   }, [formState.data, validateForm, submitBugReport, onSubmit]);
 
   const handleCancel = useCallback(() => {
-    if (formState.isDirty) => {
+    if (formState.isDirty) {
       const confirmCancel = window.confirm(
         'You have unsaved changes. Are you sure you want to cancel?'
       );
@@ -244,7 +244,7 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
   }, []);
 
   // Success state
-  if (submitSuccess) => {
+  if (submitSuccess) {
     return (
       <Card className={`bug-report-form success ${className}`}>
         <div className="p-6 text-center">

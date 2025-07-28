@@ -193,7 +193,7 @@ export function MessageSearch({
       const isLoadingMoreSessions = loadMore && sessionGroups.length > 0;
       const searchStartTime = performance.now();
       
-      if (isLoadingMoreSessions) => {
+      if (isLoadingMoreSessions) {
         setIsLoadingMoreSessions(true);
       } else {
         setIsSearching(true);
@@ -226,13 +226,13 @@ export function MessageSearch({
         setShowResults(true);
 
         // Add to search history with execution time if this is a new search
-        if (!isLoadingMoreSessions && sessionResponse.sessionGroups.length > 0) => {
+        if (!isLoadingMoreSessions && sessionResponse.sessionGroups.length > 0) {
           const executionTime = performance.now() - searchStartTime;
           addToHistory(searchQuery, sessionResponse.totalMessages, executionTime, 'session-grouped');
         }
       } catch (error) {
         console.error('Session grouped search failed:', error);
-        if (!isLoadingMoreSessions) => {
+        if (!isLoadingMoreSessions) {
           setSessionGroups([]);
           setTotalSessions(0);
           setSearchTotal(0);
@@ -275,7 +275,7 @@ export function MessageSearch({
   // Debounced search effect
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (currentQuery) => {
+      if (currentQuery) {
         handleSearch(currentQuery);
       } else {
         setResults([]);
@@ -290,7 +290,7 @@ export function MessageSearch({
   }, [currentQuery, handleSearch, onClearSearch]);
 
   const handleLoadMore = useCallback(() => {
-    if (currentQuery && hasMoreResults && !isLoadingMore) => {
+    if (currentQuery && hasMoreResults && !isLoadingMore) {
       handleSearch(currentQuery, true);
     }
   }, [currentQuery, hasMoreResults, isLoadingMore, handleSearch]);
@@ -299,7 +299,7 @@ export function MessageSearch({
   const handleToggleSessionExpanded = useCallback((sessionId: string) => {
     setExpandedSessions(prev => {
       const newSet = new Set(prev);
-      if (newSet.has(sessionId)) => {
+      if (newSet.has(sessionId)) {
         newSet.delete(sessionId);
       } else {
         newSet.add(sessionId);
@@ -316,13 +316,13 @@ export function MessageSearch({
   const handleSessionOrderChange = useCallback((order: 'chronological' | 'relevance' | 'updated') => {
     setSessionOrder(order);
     // Re-trigger search with new order
-    if (currentQuery.trim()) => {
+    if (currentQuery.trim()) {
       handleSearch(currentQuery, false);
     }
   }, [currentQuery, handleSearch]);
 
   const handleLoadMoreSessions = useCallback(() => {
-    if (currentQuery.trim() && hasMoreSessions && !isLoadingMoreSessions) => {
+    if (currentQuery.trim() && hasMoreSessions && !isLoadingMoreSessions) {
       handleSearch(currentQuery, true);
     }
   }, [currentQuery, hasMoreSessions, isLoadingMoreSessions, handleSearch]);
