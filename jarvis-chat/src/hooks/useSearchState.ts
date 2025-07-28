@@ -172,7 +172,7 @@ export function useSearchState(userId: string) {
   const [searchState, setSearchState] = useState<PersistentSearchState>(defaultState);
 
   // Load persisted state on mount with migration support
-  useEffect(() {
+  useEffect(() => {
     if (!userId) return;
 
     try {
@@ -197,7 +197,7 @@ export function useSearchState(userId: string) {
   }, [userId]);
 
   // Save state to localStorage when it changes
-  useEffect(() {
+  useEffect(() => {
     if (!userId) return;
 
     try {
@@ -222,7 +222,7 @@ export function useSearchState(userId: string) {
   }, [userId, searchState]);
 
   // Update filters
-  const updateFilters = useCallback((newFilters: Partial<SearchFilters>) {
+  const updateFilters = useCallback((newFilters: Partial<SearchFilters>) => {
     setSearchState(prev => ({
       ...prev,
       filters: { ...prev.filters, ...newFilters },

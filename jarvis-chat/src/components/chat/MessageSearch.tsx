@@ -66,7 +66,7 @@ export function MessageSearch({
   enableSessionGrouping = false,
   onSessionGroupedSearch,
   onSessionSelect,
-}: MessageSearchProps) => {
+}: MessageSearchProps) {
   const {
     filters,
     currentQuery,
@@ -109,7 +109,7 @@ export function MessageSearch({
 
   const handleSearch = useCallback(
     async (searchQuery: string, loadMore = false) => {
-      if (!searchQuery.trim()) => {
+      if (!searchQuery.trim()) {
         setResults([]);
         setSessionGroups([]);
         setShowResults(false);
@@ -124,7 +124,7 @@ export function MessageSearch({
       // Determine if we're doing session-grouped search
       const useSessionGrouping = enableSessionGrouping && onSessionGroupedSearch;
       
-      if (useSessionGrouping) => {
+      if (useSessionGrouping) {
         await handleSessionGroupedSearch(searchQuery, loadMore);
       } else {
         await handleRegularSearch(searchQuery, loadMore);
@@ -138,7 +138,7 @@ export function MessageSearch({
       const isLoadingMoreResults = loadMore && results.length > 0;
       const searchStartTime = performance.now();
       
-      if (isLoadingMoreResults) => {
+      if (isLoadingMoreResults) {
         setIsLoadingMore(true);
       } else {
         setIsSearching(true);
@@ -153,7 +153,7 @@ export function MessageSearch({
         const offset = isLoadingMoreResults ? results.length : 0;
         const searchResponse = await onSearch(searchFilters, { limit: 25, offset });
         
-        if (isLoadingMoreResults) => {
+        if (isLoadingMoreResults) {
           setResults(prev => [...prev, ...searchResponse.results]);
         } else {
           setResults(searchResponse.results);
@@ -164,19 +164,19 @@ export function MessageSearch({
         setShowResults(true);
 
         // Add to search history with execution time if this is a new search
-        if (!isLoadingMoreResults && searchResponse.results.length > 0) => {
+        if (!isLoadingMoreResults && searchResponse.results.length > 0) {
           const executionTime = performance.now() - searchStartTime;
           addToHistory(searchQuery, searchResponse.total, executionTime, 'regular');
         }
-      } catch (error) => {
+      } catch (error) {
         console.error('Search failed:', error);
-        if (!isLoadingMoreResults) => {
+        if (!isLoadingMoreResults) {
           setResults([]);
           setSearchTotal(0);
           setHasMoreResults(false);
         }
       } finally {
-        if (isLoadingMoreResults) => {
+        if (isLoadingMoreResults) {
           setIsLoadingMore(false);
         } else {
           setIsSearching(false);
@@ -214,7 +214,7 @@ export function MessageSearch({
           messagesPerSession: 5,
         });
         
-        if (isLoadingMoreSessions) => {
+        if (isLoadingMoreSessions) {
           setSessionGroups(prev => [...prev, ...sessionResponse.sessionGroups]);
         } else {
           setSessionGroups(sessionResponse.sessionGroups);
@@ -230,7 +230,7 @@ export function MessageSearch({
           const executionTime = performance.now() - searchStartTime;
           addToHistory(searchQuery, sessionResponse.totalMessages, executionTime, 'session-grouped');
         }
-      } catch (error) => {
+      } catch (error) {
         console.error('Session grouped search failed:', error);
         if (!isLoadingMoreSessions) => {
           setSessionGroups([]);
@@ -239,7 +239,7 @@ export function MessageSearch({
           setHasMoreSessions(false);
         }
       } finally {
-        if (isLoadingMoreSessions) => {
+        if (isLoadingMoreSessions) {
           setIsLoadingMoreSessions(false);
         } else {
           setIsSearching(false);
@@ -262,7 +262,7 @@ export function MessageSearch({
       try {
         const sessions = await chatService.getConversationSessions(userId);
         setConversationSessions(sessions);
-      } catch (error) => {
+      } catch (error) {
         console.error('Failed to load conversation sessions:', error);
       } finally {
         setLoadingSessions(false);
