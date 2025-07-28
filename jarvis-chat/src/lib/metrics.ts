@@ -193,7 +193,7 @@ class MetricsService {
 
   private setupActivityTracking(): void {
     // Track page visibility changes
-    document.addEventListener('visibilitychange', () {
+    document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
         this.trackKPI('user.page_hidden', 1, 'events', 'user');
       } else {

@@ -188,7 +188,7 @@ class UserActivityTrackingService {
         });
       };
 
-      this.websocket.connection.onclose = () {
+      this.websocket.connection.onclose = () => {
         this.websocket.isConnected = false;
         this.handleWebSocketReconnect();
       };

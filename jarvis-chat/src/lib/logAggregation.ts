@@ -256,7 +256,7 @@ class LogAggregationService {
       originalConsole.error(...args);
     };
 
-    console.debug = (...args) {
+    console.debug = (...args) => {
       this.logEntry('debug', args.join(' '), 'console', 'general');
       originalConsole.debug(...args);
     };

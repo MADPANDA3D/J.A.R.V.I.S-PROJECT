@@ -298,7 +298,7 @@ class HealthMonitoringService {
     this.isMonitoring = true;
 
     // Perform health checks every 30 seconds
-    this.monitoringInterval = window.setInterval(() {
+    this.monitoringInterval = window.setInterval(() => {
       this.performComprehensiveHealthCheck();
     }, 30000);
 

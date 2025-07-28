@@ -363,7 +363,7 @@ export class WebhookDeliveryVerificationService {
     this.pendingVerifications.delete(verificationId);
     
     // Keep result for reporting (cleanup after 1 hour)
-    setTimeout(() {
+    setTimeout(() => {
       this.verificationResults.delete(verificationId);
       this.deploymentStatuses.delete(verificationId);
     }, 3600000);
