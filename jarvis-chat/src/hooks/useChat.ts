@@ -73,7 +73,7 @@ export const useChat = () => {
 
   // Send a new message
   const sendMessage = useCallback(
-    async (content: string, selectedTools?: string[]) {
+    async (content: string, selectedTools?: string[]) => {
       if (!user?.id || !content.trim()) return;
 
       setError(null);
@@ -139,7 +139,7 @@ export const useChat = () => {
 
   // Retry failed message
   const retryMessage = useCallback(
-    async (messageId: string) {
+    async (messageId: string) => {
       const message = messages.find(
         m => m.id === messageId && m.role === 'user'
       );
@@ -153,12 +153,12 @@ export const useChat = () => {
   );
 
   // Clear error
-  const clearError = useCallback(() {
+  const clearError = useCallback(() => {
     setError(null);
   }, []);
 
   // Clear all messages (for new conversation)
-  const clearMessages = useCallback(() {
+  const clearMessages = useCallback(() => {
     setMessages([]);
     setError(null);
   }, []);

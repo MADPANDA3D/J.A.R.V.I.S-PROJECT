@@ -72,7 +72,7 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
         message: 'Message sent successfully',
         priority: 'polite',
       });
-    } catch (error) => {
+    } catch (error) {
       console.error('Failed to send message:', error);
 
       // Announce error to screen readers
@@ -91,14 +91,14 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
   ): Promise<{ results: SearchResult[]; total: number; hasMore: boolean }> => {
     try {
       // Update current search terms for highlighting
-      if (filters.query.trim()) => {
+      if (filters.query.trim()) {
         setCurrentSearchTerms(filters.query.trim().split(/\s+/));
       } else {
         setCurrentSearchTerms([]);
       }
       
       return await chatService.searchMessages(userId, filters, options);
-    } catch (error) => {
+    } catch (error) {
       console.error('Search failed:', error);
       screenReader.announce({
         message: 'Search failed. Please try again.',
@@ -114,14 +114,14 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
   ): Promise<GroupedSearchResponse> => {
     try {
       // Update current search terms for highlighting
-      if (filters.query.trim()) => {
+      if (filters.query.trim()) {
         setCurrentSearchTerms(filters.query.trim().split(/\s+/));
       } else {
         setCurrentSearchTerms([]);
       }
       
       return await chatService.searchMessagesGroupedBySession(userId, filters, options);
-    } catch (error) => {
+    } catch (error) {
       console.error('Session grouped search failed:', error);
       screenReader.announce({
         message: 'Session grouped search failed. Please try again.',
@@ -156,7 +156,7 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
     // Scroll to the message if possible
     setTimeout(() => {
       const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
-      if (messageElement) => {
+      if (messageElement) {
         messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     }, 100);
