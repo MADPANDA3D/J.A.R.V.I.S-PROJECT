@@ -91,7 +91,7 @@ describe('Bug Export API', () => {
   });
 
   describe('POST /api/exports', () => {
-    it('should create export request with export permissions', async () {
+    it('should create export request with export permissions', async () => {
       // Mock bug data
       const mockBugs = [
         {

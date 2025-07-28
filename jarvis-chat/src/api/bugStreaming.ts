@@ -600,7 +600,7 @@ class BugStreamingService {
 
   private startEventProcessor() {
     // Process events every 1 second
-    setInterval(() {
+    setInterval(() => {
       this.processEventQueue();
       this.processAnalyticsQueue();
     }, 1000);

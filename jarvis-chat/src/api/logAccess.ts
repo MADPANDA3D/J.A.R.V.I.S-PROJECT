@@ -814,7 +814,7 @@ class LogAccessService {
     let lastHeartbeat = Date.now();
 
     // Setup heartbeat
-    const heartbeatTimer = setInterval(() {
+    const heartbeatTimer = setInterval(() => {
       if (websocket.readyState === WebSocket.OPEN) {
         websocket.send(JSON.stringify({
           type: 'heartbeat',

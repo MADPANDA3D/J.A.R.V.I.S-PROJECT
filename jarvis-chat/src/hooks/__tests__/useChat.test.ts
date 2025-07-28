@@ -26,7 +26,7 @@ const mockUser = {
   email: 'test@example.com',
 };
 
-describe('useChat', () {
+describe('useChat', () => {
   beforeEach(() {
     vi.clearAllMocks();
 

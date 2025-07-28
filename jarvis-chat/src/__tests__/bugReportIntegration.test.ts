@@ -205,7 +205,7 @@ describe('Bug Report System Integration', () => {
     );
   });
 
-  it('detects and prevents duplicate submissions', async () {
+  it('detects and prevents duplicate submissions', async () => {
     // Configure deduplication enabled
     const processor = bugSubmissionProcessor;
     processor.updateConfiguration({ deduplicationEnabled: true });
@@ -227,7 +227,7 @@ describe('Bug Report System Integration', () => {
     expect(result.message).toContain('Similar bug report already exists');
   });
 
-  it('processes submission queue correctly', async () {
+  it('processes submission queue correctly', async () => {
     
     // Submit multiple bug reports concurrently
     const promises = [

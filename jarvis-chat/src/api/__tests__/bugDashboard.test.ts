@@ -130,7 +130,7 @@ describe('Bug Dashboard API', () => {
       expect(response.body).toHaveProperty('error', 'Invalid API key');
     });
 
-    it('should return 401 for missing API key', async () {
+    it('should return 401 for missing API key', async () => {
       const response = await request(app)
         .get('/api/bugs');
 
@@ -138,7 +138,7 @@ describe('Bug Dashboard API', () => {
       expect(response.body).toHaveProperty('error', 'Invalid API key');
     });
 
-    it('should apply status filters correctly', async () {
+    it('should apply status filters correctly', async () => {
       vi.mocked(bugReportOperations.searchBugReports).mockResolvedValue({
         data: [],
         count: 0,

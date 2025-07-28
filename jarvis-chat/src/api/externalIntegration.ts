@@ -952,7 +952,7 @@ class ExternalIntegrationService {
 
   private startHealthChecks(): void {
     // Start periodic health checks
-    setInterval(() {
+    setInterval(() => {
       this.performAllHealthChecks();
     }, 300000); // Every 5 minutes
   }
