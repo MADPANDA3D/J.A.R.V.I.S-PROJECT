@@ -69,7 +69,7 @@ class DatabaseLoggingService {
 
   private setupPerformanceMonitoring(): void {
     // Clean up old logs every 5 minutes
-    setInterval(() {
+    setInterval(() => {
       this.cleanupOldLogs();
     }, 5 * 60 * 1000);
   }
