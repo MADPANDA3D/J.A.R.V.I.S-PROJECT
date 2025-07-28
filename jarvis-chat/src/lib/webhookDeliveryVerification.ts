@@ -255,7 +255,7 @@ export class WebhookDeliveryVerificationService {
     const maxWaitTime = this.config.deploymentTimeout;
     
     return new Promise((resolve) => {
-      const checkInterval = setInterval(async () {
+      const checkInterval = setInterval(async () => {
         const elapsed = Date.now() - startTime;
         
         if (elapsed > maxWaitTime) {

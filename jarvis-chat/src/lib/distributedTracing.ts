@@ -696,7 +696,7 @@ class DistributedTracingService {
   private startExportTimer(): void {
     if (!this.config.export.endpoint) return;
 
-    this.exportTimer = setInterval(() {
+    this.exportTimer = setInterval(() => {
       this.exportSpans();
     }, this.config.export.flushInterval);
   }

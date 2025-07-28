@@ -213,7 +213,7 @@ class MetricsService {
     });
 
     // Track page unload
-    window.addEventListener('beforeunload', () {
+    window.addEventListener('beforeunload', () => {
       this.endCurrentSession();
     });
   }

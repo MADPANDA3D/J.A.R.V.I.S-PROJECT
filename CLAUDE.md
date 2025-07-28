@@ -119,3 +119,265 @@ n8n_update_partial_workflow({
 - USE diff operations for updates (80-90% token savings)
 - STATE validation results clearly
 - FIX all errors before proceeding
+
+---
+
+# 🤖 JARVIS N8N COMMAND SYSTEM
+*Intelligent Layer-by-Layer Workflow Management*
+
+## 🎯 **Command Philosophy**
+This command system builds JARVIS's intelligence layer by layer. Each command adds cognitive capability, making JARVIS more autonomous and powerful in managing n8n workflows.
+
+**Webhook Endpoint:** `https://n8n.madpanda3d.com/webhook/n8n-management`
+
+---
+
+## 🔥 **SMART COMMANDS**
+
+### `*newworkflow [action] [workflow_name]`
+**The Intelligent Discovery Command**
+
+**Purpose:** Automatically discovers workflows by name and executes actions with real workflow IDs.
+
+**Workflow Process:**
+1. 🔍 **Discovery Phase:** Calls `generate_audit` to get all workflows
+2. 🧠 **Analysis Phase:** Matches user input to actual workflow names (fuzzy matching)
+3. 🎯 **Extraction Phase:** Extracts the real workflow ID from audit data
+4. ⚡ **Execution Phase:** Executes the requested action with correct ID
+
+**Usage Examples:**
+```
+*newworkflow get JARVIS
+*newworkflow activate "Sales Pipeline"
+*newworkflow deactivate marketing
+*newworkflow delete "old workflow"
+```
+
+**Smart Matching Features:**
+- ✅ **Fuzzy Name Matching:** "jarvis" matches "JARVIS Enhanced"
+- ✅ **Partial Matching:** "sales" matches "SALES PIPELINE"
+- ✅ **Case Insensitive:** "MARKETING" matches "Marketing Team"
+- ✅ **Multiple Results:** Shows options when multiple matches found
+
+**Implementation Flow:**
+```
+1. POST /webhook/n8n-management {"action": "generate_audit", "data": {}}
+2. Analyze response.details for workflow names containing user input
+3. Extract matching workflow ID
+4. POST /webhook/n8n-management {"action": "[action]", "data": {"workflowId": "real-id"}}
+```
+
+---
+
+## ⚡ **DIRECT COMMANDS**
+*For when you know exactly what you want*
+
+### `*audit`
+**Security & System Analysis**
+```
+POST {"action": "generate_audit", "data": {}}
+```
+**Returns:** Complete security audit, credential risks, node risks, instance settings
+**Use Case:** System health checks, security reviews, compliance reporting
+
+### `*getworkflow [workflow_id]`
+**Retrieve Complete Workflow**
+```
+POST {"action": "get_workflow", "data": {"workflowId": "PMB7GfBWQa0DA5rF"}}
+```
+**Returns:** Full workflow JSON, nodes, connections, settings, metadata
+**Use Case:** Backup workflows, analyze structure, debugging
+
+### `*createworkflow [workflow_json]`
+**Deploy New Workflow**
+```
+POST {"action": "create_workflow", "data": {"workflow": {complete_workflow_json}}}
+```
+**Returns:** Created workflow with new ID
+**Use Case:** Deploy JARVIS Enhanced, import workflows, system expansion
+
+### `*updateworkflow [workflow_id] [workflow_json]`
+**Update Existing Workflow**
+```
+POST {"action": "update_workflow", "data": {"workflowId": "id", "workflow": {updated_json}}}
+```
+**Returns:** Updated workflow confirmation
+**Use Case:** Modify workflows, add nodes, update configurations
+
+### `*activate [workflow_id]`
+**Enable Workflow Execution**
+```
+POST {"action": "activate_workflow", "data": {"workflowId": "PMB7GfBWQa0DA5rF"}}
+```
+**Returns:** Activation confirmation with trigger count
+**Use Case:** Go live with workflows, enable automation
+
+### `*deactivate [workflow_id]`
+**Disable Workflow Execution**
+```
+POST {"action": "deactivate_workflow", "data": {"workflowId": "PMB7GfBWQa0DA5rF"}}
+```
+**Returns:** Deactivation confirmation
+**Use Case:** Maintenance mode, testing, emergency stops
+
+### `*deleteworkflow [workflow_id]`
+**Permanently Remove Workflow**
+```
+POST {"action": "delete_workflow", "data": {"workflowId": "PMB7GfBWQa0DA5rF"}}
+```
+**Returns:** Deletion confirmation
+**Use Case:** Cleanup old workflows, remove failed experiments
+**⚠️ WARNING:** This action is irreversible
+
+### `*executions [workflow_id] [limit]`
+**Get Execution History**
+```
+POST {"action": "get_executions", "data": {"workflowId": "PMB7GfBWQa0DA5rF", "limit": 50}}
+```
+**Returns:** Execution list with status, timestamps, data
+**Use Case:** Performance monitoring, debugging, success rate analysis
+
+### `*deleteexecution [execution_id]`
+**Remove Execution Record**
+```
+POST {"action": "delete_execution", "data": {"executionId": "exec-id-here"}}
+```
+**Returns:** Deletion confirmation
+**Use Case:** Cleanup execution history, remove sensitive data
+
+### `*createcredential [name] [type] [data]`
+**Add New Credential**
+```
+POST {"action": "create_credential", "data": {"name": "My API", "credentialTypeName": "httpHeaderAuth", "credentialData": {...}}}
+```
+**Returns:** Created credential with ID
+**Use Case:** Add API keys, OAuth tokens, database connections
+
+### `*deletecredential [credential_id]`
+**Remove Credential**
+```
+POST {"action": "delete_credential", "data": {"credentialId": "cred-id-here"}}
+```
+**Returns:** Deletion confirmation
+**Use Case:** Security cleanup, revoke access, credential rotation
+
+---
+
+## 🧠 **INTELLIGENT WORKFLOWS**
+
+### **Best Practice: Layer-by-Layer Approach**
+
+#### **Layer 1: Discovery**
+```
+*audit → Understand current system state
+*newworkflow get [name] → Identify target workflow
+```
+
+#### **Layer 2: Analysis** 
+```
+*executions [id] → Check performance history
+*getworkflow [id] → Analyze structure
+```
+
+#### **Layer 3: Action**
+```
+*activate [id] → Enable workflow
+*updateworkflow [id] → Modify as needed
+```
+
+### **Smart Deployment Sequence**
+```
+1. *audit (check system health)
+2. *createworkflow (deploy new workflow)
+3. *newworkflow activate [name] (smart activation)
+4. *executions [id] 10 (monitor first executions)
+```
+
+### **Maintenance Workflow**
+```
+1. *audit (security scan)
+2. *newworkflow get [name] (backup before changes)
+3. *newworkflow deactivate [name] (safe maintenance)
+4. *newworkflow activate [name] (re-enable)
+```
+
+---
+
+## 🎯 **SUCCESS STRATEGIES**
+
+### **Workflow Discovery Strategy**
+1. **Always start with `*audit`** - Gets complete system overview
+2. **Use `*newworkflow` for name-based operations** - More reliable than manual IDs
+3. **Verify with `*getworkflow`** - Confirm you have the right workflow
+
+### **Error Recovery Strategy**
+1. **Check recent executions first** - `*executions [id] 5`
+2. **Analyze workflow structure** - `*getworkflow [id]`
+3. **Use audit for system-wide issues** - `*audit`
+
+### **Deployment Strategy**
+1. **Test in development** - Create → Test → Validate
+2. **Backup before changes** - `*getworkflow` before `*updateworkflow`
+3. **Monitor after deployment** - `*executions` to verify success
+
+---
+
+## 🔧 **TECHNICAL IMPLEMENTATION**
+
+### **Command Processing Logic**
+```javascript
+// *newworkflow command processing
+1. Parse user input: action + workflow_name
+2. Call audit endpoint to get all workflows
+3. Filter workflows by name matching (fuzzy search)
+4. Extract real workflow ID from matches
+5. Execute target action with real ID
+6. Return formatted results
+```
+
+### **Error Handling**
+- **Invalid workflow names:** Show available options
+- **Multiple matches:** Present selection menu
+- **API failures:** Retry with exponential backoff
+- **Missing IDs:** Auto-discover via audit
+
+### **Response Formatting**
+```json
+{
+  "success": true/false,
+  "action": "command_executed",
+  "timestamp": "ISO_timestamp",
+  "data": {...},
+  "message": "Human readable result"
+}
+```
+
+---
+
+## 🚀 **JARVIS EVOLUTION PATH**
+
+Each command layer builds JARVIS's cognitive abilities:
+
+**🧠 Layer 1: Discovery Intelligence**
+- System awareness via audit
+- Workflow identification by name
+- Smart matching algorithms
+
+**⚡ Layer 2: Execution Intelligence** 
+- Autonomous workflow management
+- Error detection and recovery
+- Performance monitoring
+
+**🎯 Layer 3: Strategic Intelligence**
+- Predictive maintenance
+- Optimization recommendations
+- Self-improving workflows
+
+**🔮 Layer 4: Creative Intelligence**
+- Auto-generate workflows from descriptions
+- Learn from usage patterns
+- Suggest system improvements
+
+---
+
+**🎖️ Remember: Each command makes JARVIS more powerful. Use them to build an ever-expanding automation empire, one layer at a time.**

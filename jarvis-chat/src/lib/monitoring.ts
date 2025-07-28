@@ -263,7 +263,7 @@ class MonitoringService implements APMService {
     try {
       // Monitor navigation timing
       if ('performance' in window && performance.timing) {
-        window.addEventListener('load', () {
+        window.addEventListener('load', () => {
           setTimeout(() {
             const timing = performance.timing;
             const pageLoadTime = timing.loadEventEnd - timing.navigationStart;

@@ -193,7 +193,7 @@ class UserActivityTrackingService {
         this.handleWebSocketReconnect();
       };
 
-      this.websocket.connection.onerror = (error) {
+      this.websocket.connection.onerror = (error) => {
         centralizedLogging.error(
           'activity-tracking',
           'system',

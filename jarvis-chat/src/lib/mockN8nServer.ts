@@ -210,7 +210,7 @@ export class MockN8nServer {
     this.scenarios.push({
       name: 'large-response',
       condition: payload => payload.message.includes('__simulate_large__'),
-      response: async () {
+      response: async () => {
         const largeResponse = 'A'.repeat(10000); // 10KB response
         return {
           response: `Large response: ${largeResponse}`,
@@ -224,7 +224,7 @@ export class MockN8nServer {
       name: 'invalid-format',
       condition: payload =>
         payload.message.includes('__simulate_invalid_format__'),
-      response: async () {
+      response: async () => {
         // Return invalid format (missing required fields)
         return { invalid: true } as unknown as WebhookResponse;
       },

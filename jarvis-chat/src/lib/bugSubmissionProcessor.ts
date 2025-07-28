@@ -232,7 +232,7 @@ class BugSubmissionProcessor {
         errors.push(`Too many attachments. Maximum ${this.config.maxFiles} files allowed`);
       }
 
-      bugData.attachments.forEach((file, index) {
+      bugData.attachments.forEach((file, index) => {
         if (file.size > this.config.maxFileSize) {
           errors.push(`File ${file.name} is too large. Maximum size: ${this.formatFileSize(this.config.maxFileSize)}`);
         }

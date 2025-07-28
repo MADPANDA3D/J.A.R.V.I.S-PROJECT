@@ -257,7 +257,7 @@ class HealthMonitoringService {
     });
 
     // Monitoring service dependency
-    this.dependencies.set('monitoring', async () {
+    this.dependencies.set('monitoring', async () => {
       try {
         const monitoringHealth = monitoringService.getMonitoringHealth();
 
