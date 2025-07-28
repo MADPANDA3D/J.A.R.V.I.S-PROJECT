@@ -58,7 +58,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
             }
             
             // Auto-hide info messages after 5 seconds unless they mention restart
-            if (data.type === 'info' && !data.message.toLowerCase().includes('restart')) => {
+            if (data.type === 'info' && !data.message.toLowerCase().includes('restart')) {
               setTimeout(() => {
                 setIsVisible(false);
                 setTimeout(() => setNotification(null), 300);
@@ -97,7 +97,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
 
     // Cleanup on unmount
     return () => {
-      if (currentWebSocket) => {
+      if (currentWebSocket) {
         currentWebSocket.close();
         currentWebSocket = null;
       }
@@ -139,7 +139,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
     window.location.reload();
   };
 
-  if (!notification) => {
+  if (!notification) {
     return (
       <div className="fixed top-4 right-4 z-50">
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
