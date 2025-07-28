@@ -447,17 +447,17 @@ async function collectCoreWebVitals(): Promise<any> {
         // First Input Delay
         const fidObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
-          entries.forEach((entry: any) {
+          entries.forEach((entry: any) => {
             vitals.fid = entry.processingStart - entry.startTime;
           });
         });
         fidObserver.observe({ type: 'first-input', buffered: true });
 
         // Cumulative Layout Shift
-        const clsObserver = new PerformanceObserver((list) {
+        const clsObserver = new PerformanceObserver((list) => {
           let clsValue = 0;
           const entries = list.getEntries();
-          entries.forEach((entry: any) {
+          entries.forEach((entry: any) => {
             if (!entry.hadRecentInput) {
               clsValue += entry.value;
             }
@@ -467,7 +467,7 @@ async function collectCoreWebVitals(): Promise<any> {
         clsObserver.observe({ type: 'layout-shift', buffered: true });
 
         // Resolve after a short delay to collect metrics
-        setTimeout(() {
+        setTimeout(() => {
           resolve(vitals);
         }, 1000);
       } catch {
