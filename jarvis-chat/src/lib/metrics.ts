@@ -183,7 +183,7 @@ class MetricsService {
     }, 3600000);
 
     // Collect business metrics every 5 minutes
-    setInterval(() {
+    setInterval(() => {
       this.collectBusinessMetrics();
     }, 300000);
 

@@ -196,7 +196,7 @@ export class MockN8nServer {
     this.scenarios.push({
       name: 'slow-response',
       condition: payload => payload.message.includes('__simulate_slow__'),
-      response: async () {
+      response: async () => {
         await this.sleep(2000); // 2 seconds
         return {
           response: `Slow response to: ${payload.message}`,

@@ -147,7 +147,7 @@ describe('Bug Export API', () => {
       expect(response.body).toHaveProperty('metadata');
     });
 
-    it('should return 401 for missing export permissions', async () {
+    it('should return 401 for missing export permissions', async () => {
       const response = await request(app)
         .post('/api/exports')
         .set('Authorization', `Bearer ${validApiKey}`)

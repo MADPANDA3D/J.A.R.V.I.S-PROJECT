@@ -55,7 +55,7 @@ export const SessionAnalyticsDashboard: React.FC<SessionAnalyticsDashboardProps>
         setRecentErrors(getRecentErrors(20));
         setActiveAlerts(getActiveAlerts());
         setBreadcrumbs(getBreadcrumbs().slice(-50)); // Last 50 breadcrumbs
-      } catch (error) => {
+      } catch (error) {
         console.error('Failed to refresh analytics data:', error);
       } finally {
         setIsRefreshing(false);

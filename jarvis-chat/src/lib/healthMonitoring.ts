@@ -206,7 +206,7 @@ class HealthMonitoringService {
     });
 
     // N8N webhook dependency
-    this.dependencies.set('webhook', async () {
+    this.dependencies.set('webhook', async () => {
       const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL;
       if (!webhookUrl) {
         return {

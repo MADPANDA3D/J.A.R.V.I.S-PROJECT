@@ -478,7 +478,7 @@ class IncidentResponseService {
     }, 30000);
 
     // Check escalation rules every minute
-    this.escalationInterval = window.setInterval(() {
+    this.escalationInterval = window.setInterval(() => {
       this.checkEscalationRules();
     }, 60000);
   }

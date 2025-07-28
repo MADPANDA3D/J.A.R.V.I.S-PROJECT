@@ -32,7 +32,7 @@ export const ErrorTrendChart: React.FC<ErrorTrendChartProps> = ({
     
     // Create hourly buckets
     const buckets: Record<string, DataPoint> = {};
-    for (let i = timeWindow - 1; i >= 0; i--) => {
+    for (let i = timeWindow - 1; i >= 0; i--) {
       const bucketTime = now - (i * 60 * 60 * 1000);
       const hour = new Date(bucketTime).toLocaleTimeString('en-US', { 
         hour: '2-digit', 

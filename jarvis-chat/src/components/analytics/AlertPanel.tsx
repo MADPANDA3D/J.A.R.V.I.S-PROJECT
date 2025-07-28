@@ -28,7 +28,7 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({
   });
 
   const getSeverityIcon = (severity: 'low' | 'medium' | 'high' | 'critical'): string => {
-    switch (severity) => {
+    switch (severity) {
       case 'critical': return '🚨';
       case 'high': return '⚠️';
       case 'medium': return '⚡';

@@ -68,7 +68,7 @@ export const AccessibilityTestPanel: React.FC<AccessibilityTestPanelProps> = ({
     try {
       let result: AccessibilityResult;
 
-      if (testType === 'full') => {
+      if (testType === 'full') {
         result = await accessibilityTester.auditPage();
       } else {
         result = await accessibilityTester.runSpecificTests(testType);

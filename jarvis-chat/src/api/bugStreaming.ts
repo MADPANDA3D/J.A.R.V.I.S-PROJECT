@@ -607,7 +607,7 @@ class BugStreamingService {
   }
 
   private startHeartbeat() {
-    this.heartbeatInterval = setInterval(() {
+    this.heartbeatInterval = setInterval(() => {
       this.sendHeartbeats();
     }, this.HEARTBEAT_INTERVAL);
   }

@@ -242,7 +242,7 @@ class MonitoringService implements APMService {
         // Cumulative Layout Shift (CLS)
         let clsValue = 0;
         const clsObserver = new PerformanceObserver(entryList => {
-          entryList.getEntries().forEach((entry: PerformanceEntry & { hadRecentInput?: boolean; value?: number }) {
+          entryList.getEntries().forEach((entry: PerformanceEntry & { hadRecentInput?: boolean; value?: number }) => {
             if (!entry.hadRecentInput) {
               clsValue += entry.value || 0;
             }

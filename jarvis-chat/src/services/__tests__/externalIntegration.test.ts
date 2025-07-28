@@ -65,7 +65,7 @@ describe('External Integration Service', () => {
     adminApiKey = adminKey.apiKey!.key;
   });
 
-  beforeEach(() {
+  beforeEach(() => {
     vi.clearAllMocks();
   });
 

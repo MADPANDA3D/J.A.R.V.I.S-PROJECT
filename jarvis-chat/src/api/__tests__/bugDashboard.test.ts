@@ -160,7 +160,7 @@ describe('Bug Dashboard API', () => {
       );
     });
 
-    it('should apply date range filters correctly', async () {
+    it('should apply date range filters correctly', async () => {
       vi.mocked(bugReportOperations.searchBugReports).mockResolvedValue({
         data: [],
         count: 0,
@@ -186,7 +186,7 @@ describe('Bug Dashboard API', () => {
       );
     });
 
-    it('should enforce pagination limits', async () {
+    it('should enforce pagination limits', async () => {
       vi.mocked(bugReportOperations.searchBugReports).mockResolvedValue({
         data: [],
         count: 0,

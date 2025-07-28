@@ -769,7 +769,7 @@ class NotificationService {
   }
 
   private startEmailProcessor(): void {
-    this.processingInterval = setInterval(() {
+    this.processingInterval = setInterval(() => {
       this.processEmailQueue();
     }, 30000); // Process every 30 seconds
   }

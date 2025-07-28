@@ -256,7 +256,7 @@ describe('Bug Report System Integration', () => {
     expect(queueStatusAfter.processingCount).toBe(0);
   });
 
-  it('maintains data integrity throughout the process', async () {
+  it('maintains data integrity throughout the process', async () => {
     const result = await bugSubmissionProcessor.processBugSubmission(mockBugData);
 
     expect(result.success).toBe(true);
@@ -282,7 +282,7 @@ describe('Bug Report System Integration', () => {
     expect(createCall.monitoringData.submissionId).toBeDefined();
   });
 
-  it('handles system errors and recovers gracefully', async () {
+  it('handles system errors and recovers gracefully', async () => {
     // Simulate system error
     const { bugReportOperations } = await import('@/lib/supabase');
     vi.mocked(bugReportOperations.createBugReport).mockRejectedValueOnce(
@@ -312,7 +312,7 @@ describe('Bug Report System Integration', () => {
     );
   });
 
-  it('generates proper tracking numbers', async () {
+  it('generates proper tracking numbers', async () => {
     const result = await bugSubmissionProcessor.processBugSubmission(mockBugData);
 
     expect(result.success).toBe(true);

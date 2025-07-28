@@ -27,7 +27,7 @@ const mockUser = {
 };
 
 describe('useChat', () => {
-  beforeEach(() {
+  beforeEach(() => {
     vi.clearAllMocks();
 
     // Default auth state

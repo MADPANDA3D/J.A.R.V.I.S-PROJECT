@@ -784,7 +784,7 @@ class FeedbackCollectionService {
       if (index >= request.reminderSchedule.maxReminders) return;
 
       const reminderTime = dayInterval * 24 * 60 * 60 * 1000; // Convert days to milliseconds
-      const timer = setTimeout(() {
+      const timer = setTimeout(() => {
         this.sendReminder(feedback.id, index + 1);
       }, reminderTime);
 
