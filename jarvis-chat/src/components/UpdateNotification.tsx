@@ -64,7 +64,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
                 setTimeout(() => setNotification(null), 300);
               }, 5000);
             }
-          } catch (error) => {
+          } catch (error) {
             console.error('❌ Failed to parse update notification:', error);
           }
         };
@@ -84,7 +84,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
           setConnectionStatus('disconnected');
         };
         
-      } catch (error) => {
+      } catch (error) {
         console.error('❌ Failed to create WebSocket connection:', error);
         setConnectionStatus('disconnected');
         
@@ -105,7 +105,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
   }, [websocketUrl]);
 
   const getNotificationIcon = (type: string) => {
-    switch (type) => {
+    switch (type) {
       case 'warning':
         return <AlertTriangle className="h-4 w-4" />;
       case 'success':
@@ -118,7 +118,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
   };
 
   const getNotificationVariant = (type: string) => {
-    switch (type) => {
+    switch (type) {
       case 'warning':
         return 'destructive';
       case 'success':

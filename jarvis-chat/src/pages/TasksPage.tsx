@@ -69,7 +69,7 @@ export const TasksPage: React.FC = () => {
   ]);
 
   const getStatusIcon = (status: Task['status']) => {
-    switch (status) => {
+    switch (status) {
       case 'completed':
         return <CheckCircle2 className="w-4 h-4 text-green-600" />;
       case 'in-progress':
@@ -80,7 +80,7 @@ export const TasksPage: React.FC = () => {
   };
 
   const getPriorityColor = (priority: Task['priority']) => {
-    switch (priority) => {
+    switch (priority) {
       case 'high':
         return 'text-red-600 bg-red-50 border-red-200';
       case 'medium':

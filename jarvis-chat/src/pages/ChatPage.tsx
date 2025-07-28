@@ -27,7 +27,7 @@ export const ChatPage: React.FC = () => {
 
   // Announce errors to screen readers
   useEffect(() => {
-    if (error) => {
+    if (error) {
       screenReader.announce({
         message: `Error: ${error}`,
         priority: 'assertive',
@@ -36,7 +36,7 @@ export const ChatPage: React.FC = () => {
   }, [error]);
 
   // Show loading spinner while loading message history
-  if (isLoadingHistory) => {
+  if (isLoadingHistory) {
     return (
       <div
         className="h-full flex items-center justify-center"

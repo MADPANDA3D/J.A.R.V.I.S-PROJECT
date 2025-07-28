@@ -40,7 +40,7 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({
 
   const handleInstall = async () => {
     const success = await install();
-    if (success) => {
+    if (success) {
       setIsVisible(false);
     }
   };
@@ -51,7 +51,7 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({
   };
 
   // Don't render if not installable or dismissed
-  if (!canInstall || !isVisible || isDismissed) => {
+  if (!canInstall || !isVisible || isDismissed) {
     return null;
   }
 
