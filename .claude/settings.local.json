@@ -44,7 +44,8 @@
       "Bash(nc:*)",
       "Bash(sudo journalctl:*)",
       "Bash(docker logs:*)",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": []
   }

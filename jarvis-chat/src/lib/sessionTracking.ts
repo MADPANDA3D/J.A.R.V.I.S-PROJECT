@@ -224,7 +224,7 @@ class SessionTracker {
 
   private setupUserActionTracking(): void {
     // Track form submissions
-    document.addEventListener('submit', (event) {
+    document.addEventListener('submit', (event) => {
       const form = event.target as HTMLFormElement;
       this.trackUserAction('form_submit', {
         elementId: form.id,
