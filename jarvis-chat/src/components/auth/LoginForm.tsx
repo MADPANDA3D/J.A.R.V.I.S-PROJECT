@@ -44,7 +44,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       setError(null);
       await signIn(data.email, data.password);
       onSuccess?.();
-    } catch (error) => {
+    } catch (error) {
       setError(error instanceof Error ? error.message : 'An error occurred');
     }
   };
