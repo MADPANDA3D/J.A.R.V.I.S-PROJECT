@@ -13,7 +13,7 @@ interface PWAInstallState {
   installError: string | null;
 }
 
-export const usePWAInstall = () {
+export const usePWAInstall = () => {
   const [state, setState] = useState<PWAInstallState>({
     isInstallable: false,
     isInstalled: false,
@@ -23,7 +23,7 @@ export const usePWAInstall = () {
   });
 
   // Check if app is already installed
-  const checkInstallStatus = useCallback(() {
+  const checkInstallStatus = useCallback(() => {
     const isInstalled =
       window.matchMedia('(display-mode: standalone)').matches ||
       (window.navigator as { standalone?: boolean }).standalone === true ||
