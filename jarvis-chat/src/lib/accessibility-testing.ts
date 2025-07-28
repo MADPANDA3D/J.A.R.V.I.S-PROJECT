@@ -443,13 +443,13 @@ if (process.env.NODE_ENV === 'development') {
   if (document.readyState === 'complete') {
     cleanup = accessibilityTester.schedulePeriodicTests(30);
   } else {
-    window.addEventListener('load', () {
+    window.addEventListener('load', () => {
       cleanup = accessibilityTester.schedulePeriodicTests(30);
     });
   }
 
   // Cleanup on page unload
-  window.addEventListener('beforeunload', () {
+  window.addEventListener('beforeunload', () => {
     if (cleanup) cleanup();
   });
 }

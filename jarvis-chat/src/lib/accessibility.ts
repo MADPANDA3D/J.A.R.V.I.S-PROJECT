@@ -812,7 +812,7 @@ export function initializeAccessibility(): void {
 
   keyboardNav.registerShortcut(
     'alt+m',
-    () {
+    () => {
       const main =
         document.getElementById('main-content') ||
         document.querySelector('main');
@@ -825,7 +825,7 @@ export function initializeAccessibility(): void {
 
   keyboardNav.registerShortcut(
     'alt+/',
-    () {
+    () => {
       // Toggle shortcuts help
       const help = document.getElementById('keyboard-shortcuts-help');
       if (help) {
