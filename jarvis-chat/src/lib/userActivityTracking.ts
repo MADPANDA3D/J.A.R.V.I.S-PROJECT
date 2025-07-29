@@ -289,7 +289,7 @@ class UserActivityTrackingService {
 
   private setupEventListeners(): void {
     // Page visibility change
-    document.addEventListener('visibilitychange', () {
+    document.addEventListener('visibilitychange', () => {
       this.trackEvent('page_view', {
         visibility: document.visibilityState,
         hidden: document.hidden

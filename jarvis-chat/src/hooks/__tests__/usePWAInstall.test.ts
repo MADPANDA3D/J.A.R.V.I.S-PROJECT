@@ -16,7 +16,7 @@ describe('usePWAInstall', () => {
   // Helper function to dispatch mock beforeinstallprompt event
   const dispatchMockInstallPrompt = (
     customEvent?: Partial<MockBeforeInstallPromptEvent>
-  ) {
+  ) => {
     const eventData = { ...mockEvent, ...customEvent };
 
     // Manually trigger the event handler since we can't properly mock Events

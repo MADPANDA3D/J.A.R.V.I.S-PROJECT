@@ -140,7 +140,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter, onBugSelect }: Da
       setFeedbackAnalytics(analytics);
 
       await refreshBugs();
-    } catch (error) => {
+    } catch (error) {
       toast({
         title: "Error",
         description: "Failed to load dashboard data",

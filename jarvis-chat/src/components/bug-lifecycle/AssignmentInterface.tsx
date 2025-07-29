@@ -94,7 +94,7 @@ export function AssignmentInterface({
   };
 
   const handleAssignment = async () => {
-    if (!selectedAssignee) => {
+    if (!selectedAssignee) {
       toast({
         title: "Error",
         description: "Please select an assignee",

@@ -231,7 +231,7 @@ class MetricsService {
       } else {
         clearTimeout(timeoutId);
         timeoutId = window.setTimeout(
-          () {
+          () => {
             func();
             lastExecTime = Date.now();
           },

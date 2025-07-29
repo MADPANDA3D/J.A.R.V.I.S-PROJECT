@@ -707,7 +707,7 @@ class MonitoringService implements APMService {
         }
       }
 
-      const checkComplete = () {
+      const checkComplete = () => {
         if (
           vitals.lcp !== undefined ||
           Date.now() - performance.timing.navigationStart > 5000

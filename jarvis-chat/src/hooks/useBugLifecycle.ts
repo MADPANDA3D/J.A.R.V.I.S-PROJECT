@@ -259,7 +259,7 @@ export function useBugLifecycle(
   }, []);
 
   // Initial load
-  useEffect(() {
+  useEffect(() => {
     if (bugId) {
       refreshBugReport();
     }

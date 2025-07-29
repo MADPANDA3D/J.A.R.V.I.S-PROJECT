@@ -720,7 +720,7 @@ class LogAggregationService {
     const logs = this.logs.filter(log => log.timestamp >= cutoff);
 
     const logsByLevel = logs.reduce(
-      (acc, log) {
+      (acc, log) => {
         acc[log.level] = (acc[log.level] || 0) + 1;
         return acc;
       },

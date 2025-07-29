@@ -1055,7 +1055,7 @@ export const searchLogsEndpoint = async (
   apiKey: ApiKey,
   ipAddress: string,
   userAgent: string
-) {
+) => {
   // Check authorization
   const authorized = await logAccessService.authorizeAction(apiKey, 'read_logs', query);
   if (!authorized) {
