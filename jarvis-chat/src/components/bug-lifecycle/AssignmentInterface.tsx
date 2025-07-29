@@ -131,7 +131,7 @@ export function AssignmentInterface({
       } else {
         throw new Error(result.error || 'Assignment failed');
       }
-    } catch (error) => {
+    } catch (error) {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to assign bug",
@@ -147,13 +147,13 @@ export function AssignmentInterface({
     try {
       const assignedTo = await bugAssignmentSystem.autoAssignBug(bugId);
       
-      if (assignedTo) => {
+      if (assignedTo) {
         toast({
           title: "Success",
           description: "Bug auto-assigned successfully"
         });
         
-        if (onAssignmentChange) => {
+        if (onAssignmentChange) {
           onAssignmentChange(assignedTo);
         }
         
@@ -165,7 +165,7 @@ export function AssignmentInterface({
           variant: "destructive"
         });
       }
-    } catch (error) => {
+    } catch (error) {
       toast({
         title: "Error",
         description: "Auto-assignment failed",
@@ -186,7 +186,7 @@ export function AssignmentInterface({
   });
 
   const getAvailabilityColor = (availability: string) => {
-    switch (availability) => {
+    switch (availability) {
       case 'available': return 'bg-green-500';
       case 'busy': return 'bg-yellow-500';
       case 'unavailable': return 'bg-red-500';
@@ -212,7 +212,7 @@ export function AssignmentInterface({
     return 'text-red-600';
   };
 
-  if (bugLoading) => {
+  if (bugLoading) {
     return (
       <Card>
         <CardContent className="p-6">
@@ -381,7 +381,7 @@ export function AssignmentInterface({
     </div>
   );
 
-  function AssignmentDialog() => {
+  function AssignmentDialog() {
     return (
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden">
         <DialogHeader>

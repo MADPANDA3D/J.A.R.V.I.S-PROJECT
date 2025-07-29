@@ -136,7 +136,7 @@ export function LogStreamViewer({
     connectWebSocket();
 
     return () => {
-      if (wsRef.current) => {
+      if (wsRef.current) {
         wsRef.current.close();
         wsRef.current = null;
       }
@@ -145,7 +145,7 @@ export function LogStreamViewer({
 
   // Auto-scroll effect
   useEffect(() => {
-    if (autoScroll && logsEndRef.current) => {
+    if (autoScroll && logsEndRef.current) {
       logsEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [filteredLogs, autoScroll]);
@@ -161,7 +161,7 @@ export function LogStreamViewer({
     filtered = filtered.filter(log => sourceFilter.has(log.source));
 
     // Apply search query
-    if (searchQuery.trim()) => {
+    if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(log => 
         log.message.toLowerCase().includes(query) ||
@@ -176,7 +176,7 @@ export function LogStreamViewer({
 
   // Persistence effect
   useEffect(() => {
-    if (enablePersistence && logs.length > 0) => {
+    if (enablePersistence && logs.length > 0) {
       const persistKey = `log-stream-${websocketUrl}`;
       try {
         localStorage.setItem(persistKey, JSON.stringify(logs.slice(-100))); // Persist last 100 logs
@@ -188,11 +188,11 @@ export function LogStreamViewer({
 
   // Load persisted logs on mount
   useEffect(() => {
-    if (enablePersistence) => {
+    if (enablePersistence) {
       const persistKey = `log-stream-${websocketUrl}`;
       try {
         const persistedLogs = localStorage.getItem(persistKey);
-        if (persistedLogs) => {
+        if (persistedLogs) {
           const parsed = JSON.parse(persistedLogs);
           const logsWithDates = parsed.map((log: Omit<LogEntry, 'timestamp'> & { timestamp: string }) => ({
             ...log,
@@ -286,7 +286,7 @@ export function LogStreamViewer({
 
   const clearLogs = () => {
     setLogs([]);
-    if (enablePersistence) => {
+    if (enablePersistence) {
       const persistKey = `log-stream-${websocketUrl}`;
       localStorage.removeItem(persistKey);
     }
@@ -294,7 +294,7 @@ export function LogStreamViewer({
 
   const toggleFilter = (filter: Set<string>, setFilter: (filter: Set<string>) => void, value: string) => {
     const newFilter = new Set(filter);
-    if (newFilter.has(value)) => {
+    if (newFilter.has(value)) {
       newFilter.delete(value);
     } else {
       newFilter.add(value);
@@ -303,7 +303,7 @@ export function LogStreamViewer({
   };
 
   const handleScroll = useCallback(() => {
-    if (logContainerRef.current) => {
+    if (logContainerRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = logContainerRef.current;
       const isAtBottom = scrollHeight - scrollTop - clientHeight < 5;
       setAutoScroll(isAtBottom);

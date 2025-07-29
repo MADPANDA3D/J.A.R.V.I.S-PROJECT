@@ -138,7 +138,7 @@ export function ProductionDashboard({
     }
   };
 
-  if (!systemHealth || !envInfo) => {
+  if (!systemHealth || !envInfo) {
     return (
       <Card className={`w-full ${className}`}>
         <CardHeader>

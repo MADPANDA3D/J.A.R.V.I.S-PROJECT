@@ -68,11 +68,11 @@ export function EnvironmentValidator({
   };
 
   const maskSensitiveValue = (value: string, field: string) => {
-    if (!showSensitiveData && !showSecrets) => {
+    if (!showSensitiveData && !showSecrets) {
       // Mask API keys, secrets, and URLs
       if (field.toLowerCase().includes('key') || 
           field.toLowerCase().includes('secret') || 
-          field.toLowerCase().includes('url')) => {
+          field.toLowerCase().includes('url')) {
         return value.slice(0, 8) + '•'.repeat(Math.max(0, value.length - 12)) + value.slice(-4);
       }
     }
@@ -141,7 +141,7 @@ export function EnvironmentValidator({
 
   const configStatus = getConfigurationStatus();
 
-  if (isLoading) => {
+  if (isLoading) {
     return (
       <Card className={`w-full ${className}`}>
         <CardHeader>
@@ -159,7 +159,7 @@ export function EnvironmentValidator({
     );
   }
 
-  if (!validationResult || !configStatus) => {
+  if (!validationResult || !configStatus) {
     return (
       <Card className={`w-full ${className}`}>
         <CardHeader>

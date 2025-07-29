@@ -77,43 +77,43 @@ export function RuntimeErrorMonitor({
       const message = error.message.toLowerCase();
       
       // Categorize by error patterns
-      if (message.includes('cannot read propert') || message.includes('undefined')) => {
+      if (message.includes('cannot read propert') || message.includes('undefined')) {
         errorType = 'undefined_access';
         severity = 'high';
-      } else if (message.includes('network') || message.includes('fetch')) => {
+      } else if (message.includes('network') || message.includes('fetch')) {
         errorType = 'network';
         severity = 'medium';
-      } else if (message.includes('react') || message.includes('component')) => {
+      } else if (message.includes('react') || message.includes('component')) {
         errorType = 'react';
         severity = 'high';
-      } else if (message.includes('promise') || message.includes('async')) => {
+      } else if (message.includes('promise') || message.includes('async')) {
         errorType = 'promise';
         severity = 'medium';
       }
 
       // Determine severity by keywords
-      if (message.includes('critical') || message.includes('fatal')) => {
+      if (message.includes('critical') || message.includes('fatal')) {
         severity = 'critical';
-      } else if (message.includes('warning') || message.includes('deprecated')) => {
+      } else if (message.includes('warning') || message.includes('deprecated')) {
         severity = 'low';
       }
     }
 
     // Extract source information
-    if ('filename' in error && error.filename) => {
+    if ('filename' in error && error.filename) {
       source = error.filename.split('/').pop() || error.filename;
       metadata.filename = error.filename;
       metadata.lineno = 'lineno' in error ? error.lineno : undefined;
       metadata.colno = 'colno' in error ? error.colno : undefined;
     }
 
-    if (error.stack) => {
+    if (error.stack) {
       // Extract first meaningful line from stack trace
       const stackLines = error.stack.split('\n');
       const meaningfulLine = stackLines.find(line => 
         line.includes('.tsx') || line.includes('.ts') || line.includes('.jsx') || line.includes('.js')
       );
-      if (meaningfulLine) => {
+      if (meaningfulLine) {
         source = meaningfulLine.trim();
       }
     }
@@ -142,7 +142,7 @@ export function RuntimeErrorMonitor({
         e.message === errorData.message && e.source === errorData.source
       );
 
-      if (existingIndex !== -1) => {
+      if (existingIndex !== -1) {
         // Update existing error
         const updatedErrors = [...prevErrors];
         updatedErrors[existingIndex] = {
@@ -163,7 +163,7 @@ export function RuntimeErrorMonitor({
         const newErrors = [newError, ...prevErrors];
         
         // Keep only the most recent errors
-        if (newErrors.length > maxErrors) => {
+        if (newErrors.length > maxErrors) {
           return newErrors.slice(0, maxErrors);
         }
         
@@ -350,7 +350,7 @@ export function RuntimeErrorMonitor({
   const toggleErrorExpansion = (errorId: string) => {
     setExpandedErrors(prev => {
       const newSet = new Set(prev);
-      if (newSet.has(errorId)) => {
+      if (newSet.has(errorId)) {
         newSet.delete(errorId);
       } else {
         newSet.add(errorId);
@@ -361,7 +361,7 @@ export function RuntimeErrorMonitor({
 
   const toggleFilter = (filter: Set<string>, setFilter: (filter: Set<string>) => void, value: string) => {
     const newFilter = new Set(filter);
-    if (newFilter.has(value)) => {
+    if (newFilter.has(value)) {
       newFilter.delete(value);
     } else {
       newFilter.add(value);

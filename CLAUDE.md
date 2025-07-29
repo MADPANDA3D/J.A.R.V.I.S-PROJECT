@@ -122,6 +122,133 @@ n8n_update_partial_workflow({
 
 ---
 
+# 🔧 **N8N INSTANCE MANAGEMENT TOOL**
+*Direct Control Over Your n8n Instance*
+
+## 🎯 **Critical Information**
+Due to MCP internal errors with the standard n8n API tools, a **custom webhook management system** has been built to provide complete administrative control over the n8n instance.
+
+**🚨 MANDATORY USAGE:** When you need to interact with the n8n instance (create, update, activate workflows, etc.), you MUST use this webhook tool instead of the standard MCP n8n tools.
+
+## 📡 **Webhook Endpoint**
+```
+POST https://n8n.madpanda3d.com/webhook/n8n-management
+```
+
+## 🔑 **Request Format**
+```json
+{
+  "action": "action_name",
+  "data": {
+    // Action-specific parameters
+  }
+}
+```
+
+## ⚡ **Available Actions**
+
+### **Workflow Operations**
+- `create_workflow` - Create new workflow
+- `get_workflow` - Retrieve workflow by ID  
+- `update_workflow` - Update existing workflow
+- `delete_workflow` - Permanently delete workflow
+- `activate_workflow` - Enable workflow execution
+- `deactivate_workflow` - Disable workflow execution
+
+### **Execution Management**
+- `get_executions` - Get execution history
+- `delete_execution` - Remove execution records
+
+### **Credential Management**
+- `create_credential` - Add new credentials
+- `delete_credential` - Remove credentials
+
+### **System Administration**
+- `generate_audit` - Complete system audit and security report
+
+## 📋 **Usage Examples**
+
+### Create Workflow
+```json
+{
+  "action": "create_workflow",
+  "data": {
+    "workflow": {
+      "name": "My New Workflow",
+      "nodes": [...],
+      "connections": {...}
+    }
+  }
+}
+```
+
+### Get Workflow
+```json
+{
+  "action": "get_workflow",
+  "data": {
+    "workflowId": "PMB7GfBWQa0DA5rF"
+  }
+}
+```
+
+### Activate Workflow
+```json
+{
+  "action": "activate_workflow",
+  "data": {
+    "workflowId": "PMB7GfBWQa0DA5rF"
+  }
+}
+```
+
+### System Audit
+```json
+{
+  "action": "generate_audit",
+  "data": {}
+}
+```
+
+## 🔄 **Response Format**
+### Success Response
+```json
+{
+  "success": true,
+  "action": "action_name",
+  "timestamp": "2024-01-01T12:00:00Z",
+  "data": {
+    // Action result data
+  },
+  "message": "Action completed successfully"
+}
+```
+
+### Error Response
+```json
+{
+  "success": false,
+  "action": "action_name", 
+  "timestamp": "2024-01-01T12:00:00Z",
+  "error": "Error description",
+  "details": {
+    // Error details
+  }
+}
+```
+
+## 🛡️ **Error Handling**
+The webhook includes built-in error handling and will continue processing even if individual operations fail. Always check the `success` field in responses.
+
+## 📝 **Implementation Notes**
+1. **Replace MCP n8n tools** - Use this webhook for ALL n8n interactions
+2. **Full functionality** - Provides complete access to n8n instance capabilities
+3. **Reliable operation** - Built to handle the MCP limitations
+4. **Consistent responses** - Standardized success/error response format
+5. **Production ready** - Used by the JARVIS command system
+
+---
+
 # 🤖 JARVIS N8N COMMAND SYSTEM
 *Intelligent Layer-by-Layer Workflow Management*
 

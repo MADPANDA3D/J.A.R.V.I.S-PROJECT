@@ -120,16 +120,16 @@ export function FeedbackCollectionForm({
       const allFeedback = Array.from((feedbackCollectionService as any).feedbackStorage.values());
       const feedbackData = allFeedback.find((f: BugFeedback) => f.id === feedbackId);
       
-      if (!feedbackData) => {
+      if (!feedbackData) {
         throw new Error('Feedback request not found');
       }
 
-      if (feedbackData.status !== 'pending') => {
+      if (feedbackData.status !== 'pending') {
         throw new Error(`Feedback request is ${feedbackData.status}`);
       }
 
       const templateData = feedbackCollectionService.getFormTemplate(feedbackData.feedbackType);
-      if (!templateData) => {
+      if (!templateData) {
         throw new Error('Form template not found');
       }
 
@@ -139,9 +139,9 @@ export function FeedbackCollectionForm({
       // Initialize form data with default values
       const initialData: Record<string, unknown> = {};
       templateData.fields.forEach(field => {
-        if (field.type === 'rating') => {
+        if (field.type === 'rating') {
           initialData[field.id] = 0;
-        } else if (field.type === 'boolean') => {
+        } else if (field.type === 'boolean') {
           initialData[field.id] = false;
         } else {
           initialData[field.id] = '';
@@ -169,35 +169,35 @@ export function FeedbackCollectionForm({
       const value = formData[field.id];
       
       // Check required fields
-      if (field.required) => {
+      if (field.required) {
         if (value === undefined || value === null || value === '' || 
-            (field.type === 'rating' && value === 0)) => {
+            (field.type === 'rating' && value === 0)) {
           errors[field.id] = `${field.label} is required`;
           return;
         }
       }
 
       // Check field validation
-      if (value && field.validation) => {
+      if (value && field.validation) {
         const validation = field.validation;
         
-        if (typeof value === 'string') => {
-          if (validation.minLength && value.length < validation.minLength) => {
+        if (typeof value === 'string') {
+          if (validation.minLength && value.length < validation.minLength) {
             errors[field.id] = `${field.label} must be at least ${validation.minLength} characters`;
           }
-          if (validation.maxLength && value.length > validation.maxLength) => {
+          if (validation.maxLength && value.length > validation.maxLength) {
             errors[field.id] = `${field.label} must not exceed ${validation.maxLength} characters`;
           }
-          if (validation.pattern && !new RegExp(validation.pattern).test(value)) => {
+          if (validation.pattern && !new RegExp(validation.pattern).test(value)) {
             errors[field.id] = `${field.label} format is invalid`;
           }
         }
       }
 
       // Check conditional visibility
-      if (field.conditional) => {
+      if (field.conditional) {
         const dependentValue = formData[field.conditional.dependsOn];
-        if (dependentValue !== field.conditional.showWhen) => {
+        if (dependentValue !== field.conditional.showWhen) {
           // Field is hidden, remove any validation errors
           delete errors[field.id];
         }
@@ -211,7 +211,7 @@ export function FeedbackCollectionForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!validateForm()) => {
+    if (!validateForm()) {
       toast({
         title: "Validation Error",
         description: "Please fix the errors before submitting",
@@ -226,20 +226,20 @@ export function FeedbackCollectionForm({
       const feedbackData: Partial<BugFeedback> = {};
       
       Object.entries(formData).forEach(([key, value]) => {
-        if (value !== undefined && value !== null && value !== '') => {
+        if (value !== undefined && value !== null && value !== '') {
           (feedbackData as any)[key] = value;
         }
       });
 
       const result = await feedbackCollectionService.submitFeedback(feedbackId, feedbackData);
       
-      if (result.success) => {
+      if (result.success) {
         toast({
           title: "Thank you!",
           description: template?.thankyouMessage || "Your feedback has been submitted successfully",
         });
         
-        if (onSubmissionComplete) => {
+        if (onSubmissionComplete) {
           onSubmissionComplete(true);
         }
       } else {
@@ -253,7 +253,7 @@ export function FeedbackCollectionForm({
         variant: "destructive"
       });
       
-      if (onSubmissionComplete) => {
+      if (onSubmissionComplete) {
         onSubmissionComplete(false);
       }
     } finally {
@@ -262,7 +262,7 @@ export function FeedbackCollectionForm({
   };
 
   const handleCancel = () => {
-    if (onCancel) => {
+    if (onCancel) {
       onCancel();
     }
   };
@@ -274,7 +274,7 @@ export function FeedbackCollectionForm({
     }));
     
     // Clear validation error for this field
-    if (validationErrors[fieldId]) => {
+    if (validationErrors[fieldId]) {
       setValidationErrors(prev => {
         const newErrors = { ...prev };
         delete newErrors[fieldId];
@@ -421,7 +421,7 @@ export function FeedbackCollectionForm({
     }
   };
 
-  if (isLoading) => {
+  if (isLoading) {
     return (
       <Card>
         <CardContent className="p-6">
@@ -434,7 +434,7 @@ export function FeedbackCollectionForm({
     );
   }
 
-  if (!feedback || !template) => {
+  if (!feedback || !template) {
     return (
       <Card>
         <CardContent className="p-6">
@@ -451,7 +451,7 @@ export function FeedbackCollectionForm({
 
   // Check if feedback has expired
   const isExpired = new Date() > new Date(feedback.expiresAt);
-  if (isExpired) => {
+  if (isExpired) {
     return (
       <Card>
         <CardContent className="p-6">
