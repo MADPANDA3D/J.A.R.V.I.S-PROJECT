@@ -120,8 +120,8 @@ vi.mock('../env-validation', async () {
 
 import { validateEnvironment, getEnvironmentInfo } from '../env-validation';
 
-describe('Environment Validation', () {
-  beforeEach(() {
+describe('Environment Validation', () => {
+  beforeEach(() => {
     // Reset mock environment before each test
     mockEnv.VITE_SUPABASE_URL = '';
     mockEnv.VITE_SUPABASE_ANON_KEY = '';
@@ -131,8 +131,8 @@ describe('Environment Validation', () {
     mockEnv.PROD = true;
   });
 
-  describe('validateEnvironment', () {
-    it('should return valid when all required variables are set', () {
+  describe('validateEnvironment', () => {
+    it('should return valid when all required variables are set', () => {
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlc3QiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MDAwMDAwMCwiZXhwIjoxNjQwMDAwMDAwfQ.test-signature-that-is-long-enough';
@@ -143,7 +143,7 @@ describe('Environment Validation', () {
       expect(result.errors).toHaveLength(0);
     });
 
-    it('should return errors when required variables are missing', () {
+    it('should return errors when required variables are missing', () => {
       // Ensure variables are empty
       mockEnv.VITE_SUPABASE_URL = '';
       mockEnv.VITE_SUPABASE_ANON_KEY = '';
@@ -159,7 +159,7 @@ describe('Environment Validation', () {
       );
     });
 
-    it('should validate URL format for Supabase URL', () {
+    it('should validate URL format for Supabase URL', () => {
       mockEnv.VITE_SUPABASE_URL = 'invalid-url';
       mockEnv.VITE_SUPABASE_ANON_KEY =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test';
@@ -170,7 +170,7 @@ describe('Environment Validation', () {
       expect(result.errors).toContain('VITE_SUPABASE_URL is not a valid URL');
     });
 
-    it('should validate JWT format for Supabase anon key', () {
+    it('should validate JWT format for Supabase anon key', () => {
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY = 'invalid-jwt';
 
@@ -182,7 +182,7 @@ describe('Environment Validation', () {
       );
     });
 
-    it('should add warnings for optional missing variables', () {
+    it('should add warnings for optional missing variables', () => {
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test';
@@ -194,8 +194,8 @@ describe('Environment Validation', () {
     });
   });
 
-  describe('getEnvironmentInfo', () {
-    it('should return correct environment info structure', () {
+  describe('getEnvironmentInfo', () => {
+    it('should return correct environment info structure', () => {
       // Set up a properly long Supabase key to avoid warnings
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY =
@@ -218,7 +218,7 @@ describe('Environment Validation', () {
       });
     });
 
-    it('should detect development environment', () {
+    it('should detect development environment', () => {
       mockEnv.DEV = true;
       mockEnv.PROD = false;
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';

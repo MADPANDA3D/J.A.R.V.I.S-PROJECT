@@ -19,10 +19,10 @@ vi.stubGlobal('import', {
   },
 });
 
-describe('Secrets Management System', () {
+describe('Secrets Management System', () => {
   // let secretsManager: SecretsManager;
 
-  beforeEach(() {
+  beforeEach(() => {
     // Clear all environment variables
     Object.keys(mockEnv).forEach(key => {
       delete mockEnv[key];
@@ -35,8 +35,8 @@ describe('Secrets Management System', () {
     secretsManager = new SecretsManager();
   });
 
-  describe('Secret Strength Assessment', () {
-    it('should identify strong secrets', () {
+  describe('Secret Strength Assessment', () => {
+    it('should identify strong secrets', () => {
       // Strong secret: long, mixed case, numbers, symbols
       mockEnv.JWT_SECRET = 'MyVerySecureJWT$ecret123WithSymbols!AndNumbers456';
 
@@ -47,7 +47,7 @@ describe('Secrets Management System', () {
       expect(jwtSecret?.strength).toBe('strong');
     });
 
-    it('should identify medium strength secrets', () {
+    it('should identify medium strength secrets', () => {
       // Medium secret: decent length, some complexity
       mockEnv.JWT_SECRET = 'MediumSecret123';
 
@@ -58,7 +58,7 @@ describe('Secrets Management System', () {
       expect(jwtSecret?.strength).toBe('medium');
     });
 
-    it('should identify weak secrets', () {
+    it('should identify weak secrets', () => {
       // Weak secret: short or simple
       mockEnv.JWT_SECRET = 'weak123';
 
@@ -69,7 +69,7 @@ describe('Secrets Management System', () {
       expect(jwtSecret?.strength).toBe('weak');
     });
 
-    it('should identify empty secrets as weak', () {
+    it('should identify empty secrets as weak', () => {
       mockEnv.JWT_SECRET = '';
 
       const manager = new SecretsManager();
@@ -80,8 +80,8 @@ describe('Secrets Management System', () {
     });
   });
 
-  describe('Required Secrets Validation', () {
-    it('should require Supabase URL and key', () {
+  describe('Required Secrets Validation', () => {
+    it('should require Supabase URL and key', () => {
       // Don't set required variables
 
       const result = validateSecrets();
@@ -99,7 +99,7 @@ describe('Secrets Management System', () {
       ).toBe(true);
     });
 
-    it('should require webhook secret in production', () {
+    it('should require webhook secret in production', () => {
       mockEnv.VITE_APP_ENV = 'production';
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY =
@@ -114,7 +114,7 @@ describe('Secrets Management System', () {
       ).toBe(true);
     });
 
-    it('should require security secrets in production', () {
+    it('should require security secrets in production', () => {
       mockEnv.VITE_APP_ENV = 'production';
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY =
@@ -129,7 +129,7 @@ describe('Secrets Management System', () {
       ).toBe(true);
     });
 
-    it('should not require monitoring secrets in development', () {
+    it('should not require monitoring secrets in development', () => {
       mockEnv.VITE_APP_ENV = 'development';
 
       const result = validateSecrets();
@@ -142,8 +142,8 @@ describe('Secrets Management System', () {
     });
   });
 
-  describe('Security Validation', () {
-    it('should detect weak security secrets as errors', () {
+  describe('Security Validation', () => {
+    it('should detect weak security secrets as errors', () => {
       mockEnv.JWT_SECRET = 'weak';
       mockEnv.N8N_WEBHOOK_SECRET = '123';
 
@@ -161,7 +161,7 @@ describe('Secrets Management System', () {
       ).toBe(true);
     });
 
-    it('should warn about client-exposed security secrets', () {
+    it('should warn about client-exposed security secrets', () => {
       mockEnv.VITE_SECURITY_SECRET = 'test-secret';
 
       const manager = new SecretsManager();
@@ -185,7 +185,7 @@ describe('Secrets Management System', () {
       ).toBe(true);
     });
 
-    it('should warn about service role key exposure', () {
+    it('should warn about service role key exposure', () => {
       mockEnv.SUPABASE_SERVICE_ROLE_KEY =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlc3QiLCJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjQwMDAwMDAwLCJleHAiOjE2NDAwMDAwMDB9.service-role-signature';
 
@@ -200,7 +200,7 @@ describe('Secrets Management System', () {
       ).toBe(true);
     });
 
-    it('should detect default values in production', () {
+    it('should detect default values in production', () => {
       mockEnv.VITE_APP_ENV = 'production';
       mockEnv.JWT_SECRET = 'your-secret-here';
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
@@ -216,7 +216,7 @@ describe('Secrets Management System', () {
       ).toBe(true);
     });
 
-    it('should detect development URLs in production', () {
+    it('should detect development URLs in production', () => {
       mockEnv.VITE_APP_ENV = 'production';
       mockEnv.VITE_SUPABASE_URL = 'http://localhost:3000';
       mockEnv.VITE_SUPABASE_ANON_KEY =
@@ -232,8 +232,8 @@ describe('Secrets Management System', () {
     });
   });
 
-  describe('Secret Categorization', () {
-    it('should categorize secrets correctly', () {
+  describe('Secret Categorization', () => {
+    it('should categorize secrets correctly', () => {
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY = 'test-key';
       mockEnv.N8N_WEBHOOK_SECRET = 'webhook-secret';
@@ -259,8 +259,8 @@ describe('Secrets Management System', () {
     });
   });
 
-  describe('Secret Access Logging', () {
-    it('should log secret access', () {
+  describe('Secret Access Logging', () => {
+    it('should log secret access', () => {
       const manager = new SecretsManager();
 
       manager.getSecret('VITE_SUPABASE_URL');
@@ -281,7 +281,7 @@ describe('Secrets Management System', () {
       ).toBe(true);
     });
 
-    it('should limit audit log size', () {
+    it('should limit audit log size', () => {
       const manager = new SecretsManager();
 
       // Simulate many accesses
@@ -294,8 +294,8 @@ describe('Secrets Management System', () {
     });
   });
 
-  describe('Rotation Status', () {
-    it('should track rotation status', () {
+  describe('Rotation Status', () => {
+    it('should track rotation status', () => {
       mockEnv.N8N_WEBHOOK_SECRET = 'test-webhook-secret';
       mockEnv.JWT_SECRET = 'test-jwt-secret';
 
@@ -310,7 +310,7 @@ describe('Secrets Management System', () {
       ).toBe(true);
     });
 
-    it('should identify overdue rotations', () {
+    it('should identify overdue rotations', () => {
       mockEnv.JWT_SECRET = 'test-jwt-secret';
 
       const manager = new SecretsManager();
@@ -328,7 +328,7 @@ describe('Secrets Management System', () {
       expect(jwtStatus?.status).toBe('overdue');
     });
 
-    it('should identify upcoming rotation needs', () {
+    it('should identify upcoming rotation needs', () => {
       mockEnv.JWT_SECRET = 'test-jwt-secret';
 
       const manager = new SecretsManager();
@@ -347,8 +347,8 @@ describe('Secrets Management System', () {
     });
   });
 
-  describe('Summary Generation', () {
-    it('should generate accurate summary', () {
+  describe('Summary Generation', () => {
+    it('should generate accurate summary', () => {
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlc3QiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MDAwMDAwMCwiZXhwIjoxNjQwMDAwMDAwfQ.test-signature-that-is-long-enough-for-validation';
@@ -365,8 +365,8 @@ describe('Secrets Management System', () {
     });
   });
 
-  describe('Health Status', () {
-    it('should return healthy status for good configuration', () {
+  describe('Health Status', () => {
+    it('should return healthy status for good configuration', () => {
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlc3QiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MDAwMDAwMCwiZXhwIjoxNjQwMDAwMDAwfQ.test-signature-that-is-long-enough-for-validation';
@@ -381,7 +381,7 @@ describe('Secrets Management System', () {
       expect(health.checks.no_exposure_risks).toBe(true);
     });
 
-    it('should return warning status for issues', () {
+    it('should return warning status for issues', () => {
       mockEnv.JWT_SECRET = 'weak';
 
       const health = getSecretsHealthStatus();
@@ -390,7 +390,7 @@ describe('Secrets Management System', () {
       expect(health.checks.secrets_validation).toBe(false);
     });
 
-    it('should include rotation status in health check', () {
+    it('should include rotation status in health check', () => {
       const health = getSecretsHealthStatus();
 
       expect(health).toHaveProperty('rotation_status');
@@ -398,8 +398,8 @@ describe('Secrets Management System', () {
     });
   });
 
-  describe('Environment-Specific Validation', () {
-    it('should be more permissive in development', () {
+  describe('Environment-Specific Validation', () => {
+    it('should be more permissive in development', () => {
       mockEnv.VITE_APP_ENV = 'development';
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY = 'short-key';
@@ -414,7 +414,7 @@ describe('Secrets Management System', () {
       ).toBe(false);
     });
 
-    it('should be strict in production', () {
+    it('should be strict in production', () => {
       mockEnv.VITE_APP_ENV = 'production';
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY =
@@ -431,8 +431,8 @@ describe('Secrets Management System', () {
     });
   });
 
-  describe('Logging', () {
-    it('should log secrets status without revealing values', () {
+  describe('Logging', () => {
+    it('should log secrets status without revealing values', () => {
       const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() {});
 
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
@@ -454,8 +454,8 @@ describe('Secrets Management System', () {
     });
   });
 
-  describe('Integration with Environment Validation', () {
-    it('should complement environment validation', () {
+  describe('Integration with Environment Validation', () => {
+    it('should complement environment validation', () => {
       // Test that secrets validation works alongside env validation
       const secretsResult = validateSecrets();
 

@@ -6,8 +6,8 @@
 import { describe, it, expect } from 'vitest';
 import { chatService } from '../chatService';
 
-describe('ChatService - Production Integration', () {
-  it('should gracefully handle empty webhook responses with fallback', async () {
+describe('ChatService - Production Integration', () => {
+  it('should gracefully handle empty webhook responses with fallback', async () => {
     // This test uses the real production webhook which currently returns empty responses
     const result = await chatService.sendMessageToAI(
       'Hello JARVIS!',
@@ -26,7 +26,7 @@ describe('ChatService - Production Integration', () {
     );
   });
 
-  it('should provide webhook status diagnostics', async () {
+  it('should provide webhook status diagnostics', async () => {
     const status = await chatService.getWebhookStatus();
 
     expect(status).toBeDefined();
@@ -47,7 +47,7 @@ describe('ChatService - Production Integration', () {
     expect(status.isConfigured).toBe(true); // URL is configured
   });
 
-  it('should demonstrate conversation flow with fallback', async () {
+  it('should demonstrate conversation flow with fallback', async () => {
     const conversationId = 'test_conv_' + Date.now();
 
     // Send first message

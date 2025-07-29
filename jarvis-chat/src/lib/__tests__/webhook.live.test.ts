@@ -6,7 +6,7 @@ import { describe, it, expect } from 'vitest';
 import { chatService } from '../chatService';
 import { WebhookService } from '../webhookService';
 
-describe('Live Webhook Test', () {
+describe('Live Webhook Test', () => {
   it(
     'should test the actual n8n webhook with Hello JARVIS message',
     { timeout: 35000 },

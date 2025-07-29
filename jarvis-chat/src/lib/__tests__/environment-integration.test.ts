@@ -21,8 +21,8 @@ import {
 } from '../env-validation';
 import { validateSecrets, getSecretsHealthStatus } from '../secrets-management';
 
-describe('Environment & Secrets Integration', () {
-  beforeEach(() {
+describe('Environment & Secrets Integration', () => {
+  beforeEach(() => {
     // Clear all environment variables
     Object.keys(mockEnv).forEach(key => {
       delete mockEnv[key];
@@ -32,8 +32,8 @@ describe('Environment & Secrets Integration', () {
     mockEnv.VITE_APP_ENV = 'development';
   });
 
-  describe('Complete Development Environment', () {
-    it('should validate complete development setup', () {
+  describe('Complete Development Environment', () => {
+    it('should validate complete development setup', () => {
       // Set up complete development environment
       mockEnv.VITE_APP_ENV = 'development';
       mockEnv.VITE_APP_VERSION = '1.0.0-dev';
@@ -64,7 +64,7 @@ describe('Environment & Secrets Integration', () {
       expect(criticalErrors.length).toBe(0);
     });
 
-    it('should allow insecure configurations in development', () {
+    it('should allow insecure configurations in development', () => {
       mockEnv.VITE_APP_ENV = 'development';
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY = 'short-dev-key';
@@ -84,8 +84,8 @@ describe('Environment & Secrets Integration', () {
     });
   });
 
-  describe('Complete Staging Environment', () {
-    it('should validate complete staging setup', () {
+  describe('Complete Staging Environment', () => {
+    it('should validate complete staging setup', () => {
       // Set up complete staging environment
       mockEnv.VITE_APP_ENV = 'staging';
       mockEnv.VITE_APP_VERSION = '1.0.0-staging';
@@ -113,7 +113,7 @@ describe('Environment & Secrets Integration', () {
       expect(envResult.config.CSP_ENABLED).toBe(true);
     });
 
-    it('should enforce HTTPS in staging', () {
+    it('should enforce HTTPS in staging', () => {
       mockEnv.VITE_APP_ENV = 'staging';
       mockEnv.VITE_SUPABASE_URL = 'https://staging.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY =
@@ -132,8 +132,8 @@ describe('Environment & Secrets Integration', () {
     });
   });
 
-  describe('Complete Production Environment', () {
-    it('should validate complete production setup', () {
+  describe('Complete Production Environment', () => {
+    it('should validate complete production setup', () => {
       // Set up complete production environment
       mockEnv.VITE_APP_ENV = 'production';
       mockEnv.VITE_APP_VERSION = '1.0.0';
@@ -181,7 +181,7 @@ describe('Environment & Secrets Integration', () {
       });
     });
 
-    it('should reject insecure production configurations', () {
+    it('should reject insecure production configurations', () => {
       mockEnv.VITE_APP_ENV = 'production';
       mockEnv.VITE_SUPABASE_URL = 'https://prod.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY =
@@ -205,7 +205,7 @@ describe('Environment & Secrets Integration', () {
       expect(criticalErrors.length).toBeGreaterThan(0);
     });
 
-    it('should require HTTPS for all external services in production', () {
+    it('should require HTTPS for all external services in production', () => {
       mockEnv.VITE_APP_ENV = 'production';
       mockEnv.VITE_SUPABASE_URL = 'https://prod.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY =
@@ -223,8 +223,8 @@ describe('Environment & Secrets Integration', () {
     });
   });
 
-  describe('Health Check Integration', () {
-    it('should provide comprehensive health status', () {
+  describe('Health Check Integration', () => {
+    it('should provide comprehensive health status', () => {
       // Set up a good configuration
       mockEnv.VITE_APP_ENV = 'production';
       mockEnv.VITE_SUPABASE_URL = 'https://prod.supabase.co';
@@ -251,7 +251,7 @@ describe('Environment & Secrets Integration', () {
       expect(secretsHealth.checks.no_exposure_risks).toBe(true);
     });
 
-    it('should detect configuration problems in health checks', () {
+    it('should detect configuration problems in health checks', () => {
       // Set up problematic configuration
       mockEnv.VITE_APP_ENV = 'production';
       mockEnv.JWT_SECRET = 'weak';
@@ -268,8 +268,8 @@ describe('Environment & Secrets Integration', () {
     });
   });
 
-  describe('Production Readiness Assessment', () {
-    it('should correctly assess production readiness', () {
+  describe('Production Readiness Assessment', () => {
+    it('should correctly assess production readiness', () => {
       // Set up production-ready configuration
       mockEnv.VITE_APP_ENV = 'production';
       mockEnv.VITE_SUPABASE_URL = 'https://prod.supabase.co';
@@ -289,7 +289,7 @@ describe('Environment & Secrets Integration', () {
       expect(secretsResult.isValid).toBe(true);
     });
 
-    it('should reject non-production-ready configuration', () {
+    it('should reject non-production-ready configuration', () => {
       // Set up non-production-ready configuration
       mockEnv.VITE_APP_ENV = 'production';
       mockEnv.ENABLE_DEBUG_TOOLS = 'true';
@@ -303,8 +303,8 @@ describe('Environment & Secrets Integration', () {
     });
   });
 
-  describe('Cross-System Dependencies', () {
-    it('should validate database and webhook integration', () {
+  describe('Cross-System Dependencies', () => {
+    it('should validate database and webhook integration', () => {
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test';
@@ -331,7 +331,7 @@ describe('Environment & Secrets Integration', () {
       ).toBe(true);
     });
 
-    it('should validate monitoring integration', () {
+    it('should validate monitoring integration', () => {
       mockEnv.VITE_SENTRY_DSN = 'https://sentry.io/project';
       mockEnv.DATADOG_API_KEY = 'datadog-api-key';
       mockEnv.LOG_LEVEL = 'info';
@@ -357,8 +357,8 @@ describe('Environment & Secrets Integration', () {
     });
   });
 
-  describe('Error Correlation', () {
-    it('should correlate related errors across systems', () {
+  describe('Error Correlation', () => {
+    it('should correlate related errors across systems', () => {
       // Set up configuration with related errors
       mockEnv.VITE_N8N_WEBHOOK_URL = 'https://webhook.example.com';
       // Missing webhook secret will cause issues in both systems
@@ -378,8 +378,8 @@ describe('Environment & Secrets Integration', () {
     });
   });
 
-  describe('Complete System Validation', () {
-    it('should validate entire system health', () {
+  describe('Complete System Validation', () => {
+    it('should validate entire system health', () => {
       // Set up minimal working configuration
       mockEnv.VITE_APP_ENV = 'development';
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
