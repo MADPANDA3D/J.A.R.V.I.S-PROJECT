@@ -29,7 +29,7 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
     height: typeof height === 'number' ? `${height}px` : height,
   };
 
-  if (variant === 'text' && lines > 1) => {
+  if (variant === 'text' && lines > 1) {
     return (
       <div className="space-y-2">
         {Array.from({ length: lines }).map((_, index) => (

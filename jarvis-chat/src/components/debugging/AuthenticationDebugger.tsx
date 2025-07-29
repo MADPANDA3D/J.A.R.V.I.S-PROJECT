@@ -41,7 +41,7 @@ interface SupabaseConnectionTest {
   rls: boolean;
 }
 
-export function AuthenticationDebugger({ className = '' }: AuthenticationDebuggerProps) => {
+export function AuthenticationDebugger({ className = '' }: AuthenticationDebuggerProps) {
   const [authTests, setAuthTests] = useState<AuthTest[]>([]);
   const [isRunning, setIsRunning] = useState(false);
   const [currentUser, setCurrentUser] = useState<Record<string, unknown> | null>(null);

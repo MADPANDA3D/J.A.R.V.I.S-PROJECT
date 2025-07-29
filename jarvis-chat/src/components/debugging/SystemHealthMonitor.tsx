@@ -39,7 +39,7 @@ interface SystemMetrics {
 export function SystemHealthMonitor({ 
   className = '', 
   refreshInterval = 30000 
-}: SystemHealthMonitorProps) => {
+}: SystemHealthMonitorProps) {
   const [healthChecks, setHealthChecks] = useState<HealthCheckResult[]>([]);
   const [systemMetrics, setSystemMetrics] = useState<SystemMetrics | null>(null);
   const [isLoading, setIsLoading] = useState(false);

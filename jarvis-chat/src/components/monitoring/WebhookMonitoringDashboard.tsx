@@ -18,7 +18,7 @@ export const WebhookMonitoringDashboard: React.FC = () => {
   });
 
   const getStatusColor = (status: string) => {
-    switch (status) => {
+    switch (status) {
       case 'healthy': return 'bg-green-500';
       case 'degraded': return 'bg-yellow-500';
       case 'unhealthy': return 'bg-red-500';

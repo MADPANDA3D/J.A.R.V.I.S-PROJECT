@@ -34,7 +34,7 @@ export function LogStreamViewer({
   enablePersistence = true,
   maxLogEntries = 1000,
   className = '',
-}: LogStreamViewerProps) => {
+}: LogStreamViewerProps) {
   // State management
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [filteredLogs, setFilteredLogs] = useState<LogEntry[]>([]);

@@ -71,7 +71,7 @@ export function AssignmentInterface({
   const loadData = async () => {
     try {
       // Load recommendations
-      if (bugReport) => {
+      if (bugReport) {
         const recs = await bugAssignmentSystem.getAssignmentRecommendations(bugReport);
         setRecommendations(recs);
       }

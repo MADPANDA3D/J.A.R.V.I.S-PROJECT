@@ -34,7 +34,7 @@ interface ProductionDashboardProps {
 export function ProductionDashboard({ 
   className = '',
   enableSensitiveData = false 
-}: ProductionDashboardProps) => {
+}: ProductionDashboardProps) {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [systemHealth, setSystemHealth] = useState<Record<string, unknown> | null>(null);
   const [envInfo, setEnvInfo] = useState<Record<string, unknown> | null>(null);

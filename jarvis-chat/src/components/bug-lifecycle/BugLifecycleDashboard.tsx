@@ -78,7 +78,7 @@ function MetricCard({ title, value, change, changeType = 'neutral', icon, descri
   };
 
   const getChangeIcon = (type: typeof changeType) => {
-    switch (type) => {
+    switch (type) {
       case 'positive': return <TrendingUp className="h-3 w-3" />;
       case 'negative': return <TrendingDown className="h-3 w-3" />;
       default: return null;

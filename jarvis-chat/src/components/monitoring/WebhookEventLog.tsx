@@ -77,7 +77,7 @@ export const WebhookEventLog: React.FC = () => {
     let filtered = events;
 
     // Apply search filter
-    if (searchTerm) => {
+    if (searchTerm) {
       filtered = filtered.filter(event =>
         event.event_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
         event.details.repository?.toLowerCase().includes(searchTerm.toLowerCase()) ||

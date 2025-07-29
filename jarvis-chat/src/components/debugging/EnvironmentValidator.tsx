@@ -13,7 +13,7 @@ interface EnvironmentValidatorProps {
 export function EnvironmentValidator({ 
   showSensitiveData = false, 
   className = '' 
-}: EnvironmentValidatorProps) => {
+}: EnvironmentValidatorProps) {
   const [validationResult, setValidationResult] = useState<ValidationResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showSecrets, setShowSecrets] = useState(false);

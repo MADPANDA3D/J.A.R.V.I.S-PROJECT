@@ -74,7 +74,7 @@ export const LoggingDashboard: React.FC<LoggingDashboardProps> = ({
         setServiceAnalytics(getServiceAnalytics(undefined, filter.timeRange));
         setDbAnalytics(getPerformanceAnalytics(filter.timeRange));
 
-      } catch (error) => {
+      } catch (error) {
         console.error('Failed to refresh logging data:', error);
       } finally {
         setIsLoading(false);

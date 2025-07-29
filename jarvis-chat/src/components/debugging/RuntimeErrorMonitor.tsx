@@ -54,7 +54,7 @@ interface RuntimeErrorMonitorProps {
 export function RuntimeErrorMonitor({ 
   className = '', 
   maxErrors = 500 
-}: RuntimeErrorMonitorProps) => {
+}: RuntimeErrorMonitorProps) {
   const [errors, setErrors] = useState<RuntimeError[]>([]);
   const [filteredErrors, setFilteredErrors] = useState<RuntimeError[]>([]);
   const [isMonitoring, setIsMonitoring] = useState(true);

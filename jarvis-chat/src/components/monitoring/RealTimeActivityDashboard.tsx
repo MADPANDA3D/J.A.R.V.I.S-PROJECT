@@ -65,7 +65,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
 
   // Setup auto-refresh
   useEffect(() => {
-    if (autoRefresh) => {
+    if (autoRefresh) {
       startAutoRefresh();
     } else {
       stopAutoRefresh();

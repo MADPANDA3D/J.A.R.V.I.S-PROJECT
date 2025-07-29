@@ -50,7 +50,7 @@ interface StarRatingProps {
   label?: string;
 }
 
-function StarRating({ rating, onRatingChange, readonly = false, label }: StarRatingProps) => {
+function StarRating({ rating, onRatingChange, readonly = false, label }: StarRatingProps) {
   const [hoverRating, setHoverRating] = useState(0);
 
   return (

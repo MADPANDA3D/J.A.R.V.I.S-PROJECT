@@ -65,7 +65,7 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({
     return 'Just now';
   };
 
-  if (alerts.length === 0) => {
+  if (alerts.length === 0) {
     return (
       <div className={`alert-panel ${className}`}>
         <div className="text-center py-8 text-gray-500">

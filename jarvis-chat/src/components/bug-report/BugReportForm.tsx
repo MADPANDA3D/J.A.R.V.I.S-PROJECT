@@ -13,10 +13,8 @@ import { FileAttachmentUpload } from './FileAttachmentUpload';
 import { useBugReport } from '@/hooks/useBugReport';
 import type { 
   BugReportFormData, 
-  BugReportFormState,
   BugTypeConfig,
-  SeverityConfig,
-  FileUploadProgress
+  SeverityConfig
 } from '@/types/bugReport';
 
 interface BugReportFormProps {
@@ -239,9 +237,6 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
     onCancel?.();
   }, [formState.isDirty, resetForm, onCancel]);
 
-  const handleStepNavigation = useCallback((step: typeof currentStep) => {
-    setCurrentStep(step);
-  }, []);
 
   // Success state
   if (submitSuccess) {

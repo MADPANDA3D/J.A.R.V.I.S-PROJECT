@@ -72,7 +72,7 @@ function CommentEditor({
   placeholder = "Add a comment...",
   onSubmit,
   onCancel
-}: CommentEditorProps) => {
+}: CommentEditorProps) {
   const { toast } = useToast();
   const [content, setContent] = useState('');
   const [commentType, setCommentType] = useState<CommentType>('note');

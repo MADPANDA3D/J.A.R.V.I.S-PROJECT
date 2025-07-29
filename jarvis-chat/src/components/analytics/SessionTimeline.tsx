@@ -126,15 +126,6 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
     return colors[color as keyof typeof colors] || colors.blue;
   };
 
-  const getEventIcon = (type: string): string => {
-    const icons = {
-      page_view: 'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16',
-      user_action: 'M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122',
-      auth_event: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z',
-      error: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z'
-    };
-    return icons[type as keyof typeof icons] || icons.user_action;
-  };
 
   return (
     <div className={`session-timeline ${className}`}>
@@ -160,7 +151,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
         <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-200"></div>
 
         <div className="space-y-4">
-          {displayEvents.map((event, index) => (
+          {displayEvents.map((event, _index) => (
             <div key={event.id} className="relative flex items-start space-x-4">
               {/* Timeline dot */}
               <div className={`flex-shrink-0 w-4 h-4 rounded-full border-2 border-white shadow ${
