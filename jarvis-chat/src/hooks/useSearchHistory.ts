@@ -101,7 +101,7 @@ export function useSearchHistory(
     });
 
     // Add popular query matches
-    popularQueries.forEach((popularQuery, index) {
+    popularQueries.forEach((popularQuery, index) => {
       if (popularQuery.includes(query)) {
         const score = Math.max(0.8 - (index * 0.05), 0.3); // Score based on popularity rank
         suggestions.push({

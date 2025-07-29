@@ -362,7 +362,7 @@ class HealthMonitoringService {
       );
 
       // Process service results and generate alerts
-      serviceChecks.forEach((result, index) {
+      serviceChecks.forEach((result, index) => {
         if (result.status === 'fulfilled') {
           const service = result.value;
           this.checkServiceThresholds(service);

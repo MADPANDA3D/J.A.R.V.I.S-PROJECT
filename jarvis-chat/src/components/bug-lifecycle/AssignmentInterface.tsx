@@ -83,7 +83,7 @@ export function AssignmentInterface({
       // Load team members (in a real app, this would be from an API)
       const members = Array.from((bugAssignmentSystem as any).teamMembers.values());
       setTeamMembers(members);
-    } catch (error) => {
+    } catch (error) {
       console.error('Failed to load assignment data:', error);
       toast({
         title: "Error",

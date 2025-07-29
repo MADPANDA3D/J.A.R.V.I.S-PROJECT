@@ -1041,11 +1041,11 @@ class LogAccessService {
 export const logAccessService = new LogAccessService();
 
 // Express-style middleware functions (for reference - would be implemented in actual API routes)
-export const authenticateApiKeyMiddleware = async (apiKey: string) {
+export const authenticateApiKeyMiddleware = async (apiKey: string) => {
   return await logAccessService.authenticateApiKey(apiKey);
 };
 
-export const checkRateLimitMiddleware = async (apiKey: ApiKey, ipAddress: string) {
+export const checkRateLimitMiddleware = async (apiKey: ApiKey, ipAddress: string) => {
   return await logAccessService.checkRateLimit(apiKey, ipAddress);
 };
 

@@ -344,7 +344,7 @@ class MonitoringService implements APMService {
     try {
       if ('PerformanceObserver' in window) {
         const resourceObserver = new PerformanceObserver(entryList => {
-          entryList.getEntries().forEach((entry: PerformanceResourceTiming) {
+          entryList.getEntries().forEach((entry: PerformanceResourceTiming) => {
             this.trackCustomMetric('resource.load_time', entry.duration, {
               name: entry.name,
               type: entry.initiatorType,

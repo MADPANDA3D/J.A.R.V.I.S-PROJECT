@@ -77,7 +77,7 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({
     );
   }
 
-  if (compact) => {
+  if (compact) {
     // Compact banner view for critical alerts
     const criticalAlerts = filteredAlerts.filter(alert => 
       alert.severity === 'critical' && !alert.acknowledged

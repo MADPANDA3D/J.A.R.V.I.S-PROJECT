@@ -249,7 +249,7 @@ export function useBugLifecycle(
         'current_user' // In a real app, this would be the current user ID
       );
       return result;
-    } catch {
+    } catch (error) {
       setState(prev => ({
         ...prev,
         error: error instanceof Error ? error.message : 'Failed to mark notification as read'

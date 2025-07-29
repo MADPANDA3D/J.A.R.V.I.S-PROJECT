@@ -222,7 +222,7 @@ class MetricsService {
     let timeoutId: number | undefined;
     let lastExecTime = 0;
 
-    return () {
+    return () => {
       const currentTime = Date.now();
 
       if (currentTime - lastExecTime > delay) {
@@ -607,7 +607,7 @@ class MetricsService {
         .filter(Boolean)
     ).size;
 
-    this.featureUsage.forEach((stats, featureName) {
+    this.featureUsage.forEach((stats, featureName) => {
       adoptionRates[featureName] =
         totalUsers > 0 ? (stats.users.size / totalUsers) * 100 : 0;
     });

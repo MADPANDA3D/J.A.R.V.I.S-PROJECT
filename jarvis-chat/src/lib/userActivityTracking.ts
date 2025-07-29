@@ -230,7 +230,7 @@ class UserActivityTrackingService {
     this.websocket.reconnectAttempts++;
     const delay = this.websocket.reconnectDelay * Math.pow(2, this.websocket.reconnectAttempts - 1);
 
-    setTimeout(() {
+    setTimeout(() => {
       centralizedLogging.info(
         'activity-tracking',
         'system',
@@ -535,7 +535,7 @@ class UserActivityTrackingService {
         const obj = value as Record<string, unknown>;
         const sanitizedObj: Record<string, unknown> = {};
         
-        Object.entries(obj).forEach(([key, val]) {
+        Object.entries(obj).forEach(([key, val]) => {
           const lowerKey = key.toLowerCase();
           if (sensitiveKeys.some(sensitive => lowerKey.includes(sensitive))) {
             sanitizedObj[key] = '[REDACTED]';
@@ -550,7 +550,7 @@ class UserActivityTrackingService {
       return value;
     };
 
-    Object.entries(sanitized).forEach(([key, value]) {
+    Object.entries(sanitized).forEach(([key, value]) => {
       const lowerKey = key.toLowerCase();
       if (sensitiveKeys.some(sensitive => lowerKey.includes(sensitive))) {
         sanitized[key] = '[REDACTED]';

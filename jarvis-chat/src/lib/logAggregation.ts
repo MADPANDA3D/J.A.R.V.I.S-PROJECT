@@ -554,7 +554,7 @@ class LogAggregationService {
     });
 
     // Track security metrics
-    securityEvents.forEach((count, eventType) {
+    securityEvents.forEach((count, eventType) => {
       monitoringService.trackCustomMetric(
         `log.security_event.${eventType}`,
         count,
@@ -596,7 +596,7 @@ class LogAggregationService {
     });
 
     // Track business metrics
-    businessEvents.forEach((count, eventType) {
+    businessEvents.forEach((count, eventType) => {
       monitoringService.trackCustomMetric(
         `log.business_metric.${eventType}`,
         count,
