@@ -417,7 +417,7 @@ export class WebhookDeliveryVerificationService {
    */
   private startVerificationMonitoring() {
     // Clean up old pending verifications
-    setInterval(() {
+    setInterval(() => {
       const now = Date.now();
       for (const [id, request] of this.pendingVerifications.entries()) {
         if (now - request.timestamp.getTime() > this.config.verificationTimeout * 2) {

@@ -268,7 +268,7 @@ class LogAggregationService {
     this.isAggregating = true;
 
     // Process logs every 10 seconds
-    this.aggregationInterval = window.setInterval(() {
+    this.aggregationInterval = window.setInterval(() => {
       this.processLogs();
       this.enforceRetentionPolicies();
       this.performAnalysis();

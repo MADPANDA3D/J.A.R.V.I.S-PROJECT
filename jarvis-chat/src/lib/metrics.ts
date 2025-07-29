@@ -205,7 +205,7 @@ class MetricsService {
     ['click', 'keydown', 'scroll', 'mousemove'].forEach(eventType => {
       document.addEventListener(
         eventType,
-        this.throttle(() {
+        this.throttle(() => {
           this.trackUserInteraction(eventType);
         }, 1000),
         { passive: true }

@@ -343,7 +343,7 @@ class HealthMonitoringService {
 
       // Check all dependencies
       const serviceChecks = await Promise.allSettled(
-        Array.from(this.dependencies.entries()).map(async ([name, checker]) {
+        Array.from(this.dependencies.entries()).map(async ([name, checker]) => {
           try {
             return await checker();
           } catch {

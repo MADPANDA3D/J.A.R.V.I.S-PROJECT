@@ -1005,7 +1005,7 @@ class LogAccessService {
 
   // Cleanup
   private setupCleanupTimer(): void {
-    setInterval(() {
+    setInterval(() => {
       this.cleanupOldData();
     }, 60 * 60 * 1000); // Every hour
   }

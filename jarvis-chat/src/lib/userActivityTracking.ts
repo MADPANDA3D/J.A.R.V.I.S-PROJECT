@@ -202,7 +202,7 @@ class UserActivityTrackingService {
         );
       };
 
-      this.websocket.connection.onmessage = (event) {
+      this.websocket.connection.onmessage = (event) => {
         this.handleWebSocketMessage(event.data);
       };
 

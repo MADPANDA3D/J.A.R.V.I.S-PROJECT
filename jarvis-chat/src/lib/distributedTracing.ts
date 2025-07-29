@@ -703,7 +703,7 @@ class DistributedTracingService {
 
   private setupCleanupTimer(): void {
     // Clean up old data every hour
-    setInterval(() {
+    setInterval(() => {
       this.cleanupOldData();
     }, 60 * 60 * 1000);
   }
