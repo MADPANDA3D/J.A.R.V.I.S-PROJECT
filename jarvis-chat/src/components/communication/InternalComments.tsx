@@ -85,7 +85,7 @@ function CommentEditor({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!content.trim()) => {
+    if (!content.trim()) {
       toast({
         title: "Error",
         description: "Please enter a comment",

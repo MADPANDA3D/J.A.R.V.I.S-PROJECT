@@ -146,7 +146,7 @@ export function useSearchHistory(
 
     // Sort by score and relevance, limit to top 8
     return suggestions
-      .sort((a, b) {
+      .sort((a, b) => {
         if (a.score !== b.score) return b.score - a.score;
         // Secondary sort by recency for same scores
         const aTime = a.metadata?.lastUsed?.getTime() || 0;

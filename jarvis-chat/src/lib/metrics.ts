@@ -573,7 +573,7 @@ class MetricsService {
     const sessions = Array.from(this.sessions.values());
     if (sessions.length === 0) return 0;
 
-    const totalDuration = sessions.reduce((sum, session) {
+    const totalDuration = sessions.reduce((sum, session) => {
       const duration = (session.endTime || Date.now()) - session.startTime;
       return sum + duration;
     }, 0);

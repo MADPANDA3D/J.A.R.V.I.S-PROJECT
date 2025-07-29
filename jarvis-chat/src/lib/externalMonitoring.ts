@@ -678,7 +678,7 @@ class ExternalMonitoringService {
 
   private async testServiceConnectivity(service: ExternalMonitoringService): Promise<void> {
     switch (service) {
-      case 'custom':
+      case 'custom': {
         const config = this.configs.get('custom') as CustomConfig;
         if (config) {
           const response = await fetch(config.customEndpoint, {
@@ -699,6 +699,7 @@ class ExternalMonitoringService {
           }
         }
         break;
+      }
       // Other services are tested during initialization
       default:
         if (!this.initialized.get(service)) {

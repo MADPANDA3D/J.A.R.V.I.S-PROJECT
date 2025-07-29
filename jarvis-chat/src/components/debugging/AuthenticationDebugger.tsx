@@ -59,7 +59,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
     const getCurrentUser = async () => {
       try {
         const { data: { user }, error } = await supabase.auth.getUser();
-        if (error) => {
+        if (error) {
           addAuthLog(`Auth state error: ${error.message}`);
         } else {
           setCurrentUser(user);

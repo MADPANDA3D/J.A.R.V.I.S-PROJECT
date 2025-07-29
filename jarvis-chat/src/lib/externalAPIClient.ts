@@ -7,7 +7,6 @@ import {
   makeMonitoredCall, 
   registerService, 
   registerDependency,
-  type ServiceCall,
   type ServiceDependency 
 } from './serviceMonitoring';
 
@@ -269,7 +268,7 @@ export class ExternalAPIClient {
       };
 
     } catch {
-      const endTime = performance.now();
+      // const endTime = performance.now(); // For future timing use
       
       if (error instanceof DOMException && error.name === 'TimeoutError') {
         const timeoutError: APIError = new Error(

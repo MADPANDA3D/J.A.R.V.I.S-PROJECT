@@ -5,9 +5,7 @@
 
 import { centralizedLogging } from './centralizedLogging';
 import { bugReportOperations } from './supabase';
-import { errorTracker } from './errorTracking';
 import { trackBugReportEvent } from './monitoring';
-import type { BugReport } from '@/types/bugReport';
 
 // Bug status enumeration
 export enum BugStatus {
@@ -612,6 +610,8 @@ class BugLifecycleService {
     newStatus: BugStatus, 
     statusChange: StatusChange
   ): Promise<void> {
+    // statusChange parameter available for future side effect logic
+    void statusChange;
     try {
       // Side effects based on new status
       switch (newStatus) {

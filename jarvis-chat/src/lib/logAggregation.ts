@@ -728,7 +728,7 @@ class LogAggregationService {
     );
 
     const logsBySource = logs.reduce(
-      (acc, log) {
+      (acc, log) => {
         acc[log.source] = (acc[log.source] || 0) + 1;
         return acc;
       },

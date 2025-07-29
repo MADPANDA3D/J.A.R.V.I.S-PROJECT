@@ -77,7 +77,7 @@ describe('Bug Lifecycle Integration Tests', () => {
   describe('Complete Bug Lifecycle Workflow', () => {
     it('processes complete bug lifecycle from open to closed', async () => {
       const bugId = 'integration-test-bug';
-      const userId = 'user_1';
+      // const userId = 'user_1'; // For future use
       const assignerId = 'admin_user';
 
       // Step 1: Bug starts as OPEN

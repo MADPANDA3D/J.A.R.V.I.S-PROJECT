@@ -73,7 +73,7 @@ export function RuntimeErrorMonitor({
     const metadata: Record<string, unknown> = {};
 
     // Determine error type and severity
-    if (error.message) => {
+    if (error.message) {
       const message = error.message.toLowerCase();
       
       // Categorize by error patterns

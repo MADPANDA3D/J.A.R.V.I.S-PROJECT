@@ -9,7 +9,6 @@ import { performanceMetrics } from './performanceMetrics';
 import { bugReportOperations } from './supabase';
 import type { 
   BugReportData, 
-  BugReport, 
   BugSubmissionResult,
   EnhancedErrorContext,
   ErrorReport,
@@ -167,7 +166,7 @@ class BugReportingService {
   private async collectMonitoringData(): Promise<any> {
     try {
       const currentMetrics = performanceMetrics.getCurrentMetrics();
-      const resourceUtilization = performanceMetrics.getResourceUtilization();
+      // const resourceUtilization = performanceMetrics.getResourceUtilization(); // For future use
       const activeAlerts = performanceMetrics.getActiveAlerts();
 
       return {

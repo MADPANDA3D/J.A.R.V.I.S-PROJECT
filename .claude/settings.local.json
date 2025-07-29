@@ -61,7 +61,25 @@
       "mcp__n8n-mcp__validate_workflow_expressions",
       "mcp__n8n-mcp__n8n_list_available_tools",
       "Bash(timeout 30s npm run lint:*)",
-      "Bash(locate:*)"
+      "Bash(locate:*)",
+      "Bash(env)",
+      "Bash(echo:*)",
+      "Bash(N8N_API_URL=\"https://n8n.madpanda3d.com/\" N8N_API_KEY=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1OTJmYTA1ZS00NDNiLTRmOTktYThlMi01NjhlZmJjYmY5OWEiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwiaWF0IjoxNzUzMzgxMDgxfQ.q-DAifXTL6zAIG6w057fyDpVkNPoFnYvbr2Bjc01TKk\" npx n8n-mcp --help)",
+      "Bash(export N8N_API_URL=\"https://n8n.madpanda3d.com/\")",
+      "Bash(export:*)",
+      "Bash(export N8N_API_URL=\"https://n8n.madpanda3d.com/\")",
+      "Bash(export:*)",
+      "Bash(timeout:*)",
+      "Bash(timeout:*)",
+      "WebFetch(domain:qdrant.tech)",
+      "mcp__n8n-mcp__get_node_for_task",
+      "mcp__n8n-mcp__validate_node_minimal",
+      "mcp__n8n-mcp__search_node_properties",
+      "mcp__n8n-mcp__get_node_info",
+      "Bash(rg:*)",
+      "mcp__n8n-mcp__n8n_update_full_workflow",
+      "mcp__n8n-mcp__get_database_statistics",
+      "mcp__n8n-mcp__n8n_update_partial_workflow"
     ],
     "deny": []
   }

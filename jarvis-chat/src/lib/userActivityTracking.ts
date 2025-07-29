@@ -297,7 +297,7 @@ class UserActivityTrackingService {
     });
 
     // Navigation events
-    window.addEventListener('beforeunload', () {
+    window.addEventListener('beforeunload', () => {
       this.trackEvent('navigation', {
         eventType: 'page_unload',
         url: window.location.href

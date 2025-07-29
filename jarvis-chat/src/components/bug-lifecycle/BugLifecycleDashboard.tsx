@@ -212,7 +212,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter, onBugSelect }: Da
     return colors[priority] || '#6b7280';
   }
 
-  if (statsLoading || bugsLoading) => {
+  if (statsLoading || bugsLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mr-3" />

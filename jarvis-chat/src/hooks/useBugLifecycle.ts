@@ -266,7 +266,7 @@ export function useBugLifecycle(
   }, [bugId, refreshBugReport]);
 
   // Auto-refresh functionality
-  useEffect(() {
+  useEffect(() => {
     if (!autoRefresh || !bugId) return;
 
     const interval = setInterval(() {

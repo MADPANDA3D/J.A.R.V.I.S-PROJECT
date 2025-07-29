@@ -58,7 +58,7 @@ export const HealthStatusIndicator: React.FC<HealthStatusIndicatorProps> = ({ me
   };
 
   const getStatusIcon = (status: string) => {
-    switch (status) => {
+    switch (status) {
       case 'healthy':
         return (
           <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
@@ -87,7 +87,7 @@ export const HealthStatusIndicator: React.FC<HealthStatusIndicatorProps> = ({ me
   };
 
   const getStatusMessage = (status: string) => {
-    switch (status) => {
+    switch (status) {
       case 'healthy':
         return 'All systems operational';
       case 'degraded':

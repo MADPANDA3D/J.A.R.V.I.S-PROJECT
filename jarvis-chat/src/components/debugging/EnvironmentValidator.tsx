@@ -27,7 +27,7 @@ export function EnvironmentValidator({
       await new Promise(resolve => setTimeout(resolve, 500));
       const result = validateEnvironment();
       setValidationResult(result);
-    } catch (error) => {
+    } catch (error) {
       console.error('Environment validation failed:', error);
     } finally {
       setIsLoading(false);
@@ -84,7 +84,7 @@ export function EnvironmentValidator({
       await navigator.clipboard.writeText(text);
       setCopiedField(field);
       setTimeout(() => setCopiedField(null), 2000);
-    } catch (error) => {
+    } catch (error) {
       console.error('Failed to copy to clipboard:', error);
     }
   };

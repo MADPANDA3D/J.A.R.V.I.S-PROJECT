@@ -16,7 +16,6 @@ import {
   AlertNotification 
 } from '@/lib/monitoring';
 import { 
-  getErrors, 
   getRecentErrors, 
   getBreadcrumbs,
   EnhancedErrorReport 
@@ -39,7 +38,7 @@ export const SessionAnalyticsDashboard: React.FC<SessionAnalyticsDashboardProps>
   const [analytics, setAnalytics] = useState(getSessionAnalytics());
   const [recentErrors, setRecentErrors] = useState<EnhancedErrorReport[]>([]);
   const [activeAlerts, setActiveAlerts] = useState<AlertNotification[]>([]);
-  const [breadcrumbs, setBreadcrumbs] = useState(getBreadcrumbs());
+  const [, setBreadcrumbs] = useState(getBreadcrumbs());
   const [selectedTab, setSelectedTab] = useState<'overview' | 'errors' | 'sessions' | 'alerts'>('overview');
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -104,15 +103,16 @@ export const SessionAnalyticsDashboard: React.FC<SessionAnalyticsDashboardProps>
     }
   };
 
-  const getAlertSeverityColor = (severity: 'low' | 'medium' | 'high' | 'critical'): string => {
-    switch (severity) {
-      case 'critical': return 'text-red-800 bg-red-100 border-red-200';
-      case 'high': return 'text-red-700 bg-red-50 border-red-200';
-      case 'medium': return 'text-yellow-700 bg-yellow-50 border-yellow-200';
-      case 'low': return 'text-blue-700 bg-blue-50 border-blue-200';
-      default: return 'text-gray-700 bg-gray-50 border-gray-200';
-    }
-  };
+  // Alert severity color utility function (currently unused)
+  // const getAlertSeverityColor = (severity: 'low' | 'medium' | 'high' | 'critical'): string => {
+  //   switch (severity) {
+  //     case 'critical': return 'text-red-800 bg-red-100 border-red-200';
+  //     case 'high': return 'text-red-700 bg-red-50 border-red-200';
+  //     case 'medium': return 'text-yellow-700 bg-yellow-50 border-yellow-200';
+  //     case 'low': return 'text-blue-700 bg-blue-50 border-blue-200';
+  //     default: return 'text-gray-700 bg-gray-50 border-gray-200';
+  //   }
+  // };
 
   return (
     <div className={`session-analytics-dashboard ${className}`}>

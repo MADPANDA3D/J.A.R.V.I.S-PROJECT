@@ -87,7 +87,7 @@ export const WebhookEventLog: React.FC = () => {
     }
 
     // Apply status filter
-    if (statusFilter !== 'all') => {
+    if (statusFilter !== 'all') {
       filtered = filtered.filter(event => event.status === statusFilter);
     }
 

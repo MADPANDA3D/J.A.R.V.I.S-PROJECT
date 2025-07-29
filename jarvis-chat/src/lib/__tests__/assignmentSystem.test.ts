@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { bugAssignmentSystem, type TeamMember, type AssignmentMethod, BugPriority } from '../assignmentSystem';
+import { bugAssignmentSystem, type TeamMember } from '../assignmentSystem';
 import type { BugReport } from '@/types/bugReport';
 
 // Mock dependencies

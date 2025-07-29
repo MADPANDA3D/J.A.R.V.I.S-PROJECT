@@ -177,7 +177,7 @@ class ErrorTracker {
         
         const { captureExternalError } = await import('./externalMonitoring');
         captureExternalError(errorReport);
-      } catch (e) {
+      } catch {
         // External services not available
       }
     }, 0);
@@ -270,7 +270,7 @@ class ErrorTracker {
       try {
         const { captureExternalBreadcrumb } = await import('./externalMonitoring');
         captureExternalBreadcrumb(breadcrumb);
-      } catch (e) {
+      } catch {
         // External monitoring not available
       }
     }, 0);

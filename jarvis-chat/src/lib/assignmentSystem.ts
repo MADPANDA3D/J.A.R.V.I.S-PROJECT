@@ -7,8 +7,7 @@ import { centralizedLogging } from './centralizedLogging';
 import { bugReportOperations } from './supabase';
 import { trackBugReportEvent } from './monitoring';
 import { sendAssignmentNotification, sendEscalationAlert } from './notificationService';
-import { changeBugStatus, BugStatus, BugPriority } from './bugLifecycle';
-import type { BugReport } from '@/types/bugReport';
+import { BugStatus, BugPriority } from './bugLifecycle';
 
 // Assignment types
 export type AssignmentMethod = 'manual' | 'auto' | 'round_robin' | 'skill_based' | 'workload_balanced';
@@ -785,6 +784,8 @@ class BugAssignmentSystem {
   }
 
   private validateAssignment(assignee: TeamMember, bugReport: any): { isValid: boolean; warnings: string[] } {
+    // bugReport parameter available for future validation logic
+    void bugReport;
     const warnings: string[] = [];
     const isValid = true;
 
@@ -805,6 +806,8 @@ class BugAssignmentSystem {
   }
 
   private setupEscalationMonitoring(bugId: string, assigneeId: string): void {
+    // assigneeId parameter available for future escalation logic
+    void assigneeId;
     // Clear existing escalation timers for this bug
     this.clearEscalationTimers(bugId);
 
@@ -840,10 +843,11 @@ class BugAssignmentSystem {
           case 'increase_priority':
             await this.escalateBugPriority(bugId, `Auto-escalation: ${rule.name}`);
             break;
-          case 'notify_manager':
+          case 'notify_manager': {
             const managerIds = this.getManagerIds();
             await sendEscalationAlert(bugId, BugPriority.HIGH, `Escalation rule: ${rule.name}`, managerIds);
             break;
+          }
         }
       }
     } catch {

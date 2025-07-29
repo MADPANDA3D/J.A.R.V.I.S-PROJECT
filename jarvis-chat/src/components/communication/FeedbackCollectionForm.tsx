@@ -96,7 +96,7 @@ export function FeedbackCollectionForm({
   feedbackId,
   onSubmissionComplete,
   onCancel
-}: FeedbackCollectionFormProps) => {
+}: FeedbackCollectionFormProps) {
   const { toast } = useToast();
   
   const [feedback, setFeedback] = useState<BugFeedback | null>(null);

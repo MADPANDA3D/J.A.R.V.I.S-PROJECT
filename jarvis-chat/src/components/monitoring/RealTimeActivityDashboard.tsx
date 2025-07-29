@@ -79,7 +79,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
       setIsLoading(true);
       await refreshData();
       setupWebSocket();
-    } catch (error) => {
+    } catch (error) {
       console.error('Failed to initialize dashboard:', error);
     } finally {
       setIsLoading(false);
@@ -112,7 +112,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
         activityStats,
         heatmap
       });
-    } catch (error) => {
+    } catch (error) {
       console.error('Failed to refresh dashboard data:', error);
     }
   };
@@ -147,7 +147,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
         console.error('WebSocket error:', error);
         setIsConnected(false);
       };
-    } catch (error) => {
+    } catch (error) {
       console.error('Failed to setup WebSocket:', error);
     }
   };
@@ -172,7 +172,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
         default:
           console.debug('Unknown WebSocket message type:', message.type);
       }
-    } catch (error) => {
+    } catch (error) {
       console.warn('Failed to parse WebSocket message:', error);
     }
   };

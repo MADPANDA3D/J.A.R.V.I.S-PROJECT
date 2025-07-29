@@ -84,7 +84,7 @@ export function LogStreamViewer({
           setLogs(prevLogs => {
             const newLogs = [...prevLogs, logEntry];
             // Keep only the most recent entries
-            if (newLogs.length > maxLogEntries) => {
+            if (newLogs.length > maxLogEntries) {
               return newLogs.slice(-maxLogEntries);
             }
             return newLogs;
@@ -101,7 +101,7 @@ export function LogStreamViewer({
 
           setLogs(prevLogs => {
             const newLogs = [...prevLogs, logEntry];
-            if (newLogs.length > maxLogEntries) => {
+            if (newLogs.length > maxLogEntries) {
               return newLogs.slice(-maxLogEntries);
             }
             return newLogs;

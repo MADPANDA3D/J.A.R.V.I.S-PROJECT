@@ -113,7 +113,7 @@ export function AssignmentInterface({
         assignmentReason || undefined
       );
 
-      if (result.success) => {
+      if (result.success) {
         toast({
           title: "Success",
           description: "Bug assigned successfully"
@@ -123,7 +123,7 @@ export function AssignmentInterface({
         setSelectedAssignee('');
         setAssignmentReason('');
         
-        if (onAssignmentChange) => {
+        if (onAssignmentChange) {
           onAssignmentChange(selectedAssignee);
         }
         

@@ -151,7 +151,7 @@ export const SessionTimeline: React.FC<SessionTimelineProps> = ({
         <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-200"></div>
 
         <div className="space-y-4">
-          {displayEvents.map((event, _index) => (
+          {displayEvents.map((event) => (
             <div key={event.id} className="relative flex items-start space-x-4">
               {/* Timeline dot */}
               <div className={`flex-shrink-0 w-4 h-4 rounded-full border-2 border-white shadow ${

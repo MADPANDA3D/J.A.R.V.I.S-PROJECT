@@ -294,7 +294,7 @@ export const testLoggingConfiguration = async (): Promise<{
           });
           break;
 
-        case 'localStorage':
+        case 'localStorage': {
           // Test localStorage availability
           const testKey = 'jarvis_logging_test';
           localStorage.setItem(testKey, 'test');
@@ -305,6 +305,7 @@ export const testLoggingConfiguration = async (): Promise<{
             responseTime: performance.now() - startTime
           });
           break;
+        }
 
         case 'webhook':
           if (destination.config.endpoint) {

@@ -3,7 +3,7 @@
  * React hook for managing bug report form state, validation, and submission
  */
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { z } from 'zod';
 import { bugReportOperations } from '@/lib/supabase';
 import { centralizedLogging } from '@/lib/centralizedLogging';
@@ -106,8 +106,8 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
       // Get recent errors from error tracking
       const recentErrors = errorTracker.getRecentErrors(10);
       
-      // Get performance metrics
-      const currentMetrics = performanceMetrics.getCurrentMetrics();
+      // Get performance metrics (for future use)
+      // const currentMetrics = performanceMetrics.getCurrentMetrics();
       
       // Collect Core Web Vitals
       const coreWebVitals = await collectCoreWebVitals();
@@ -140,7 +140,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
           deviceInfo: collectBrowserInfo()
         }
       };
-    } catch {
+    } catch (error) {
       centralizedLogging.warn(
         'bug-report-hook',
         'system',
@@ -178,7 +178,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
     try {
       // Validate main form data
       bugReportSchema.parse(formState.data);
-    } catch {
+    } catch (error) {
       if (error instanceof z.ZodError) {
         error.errors.forEach(err => {
           const field = err.path[0] as keyof BugReportFormValidation;
@@ -194,10 +194,10 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
     if (formState.data.attachments) {
       const attachmentErrors: string[] = [];
       
-      formState.data.attachments.forEach((file, index) => {
+      formState.data.attachments.forEach((file) => {
         try {
           attachmentSchema.parse(file);
-        } catch {
+        } catch (error) {
           if (error instanceof z.ZodError) {
             error.errors.forEach(err => {
               attachmentErrors.push(`${file.name}: ${err.message}`);
@@ -282,7 +282,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
 
       // Upload attachments if any
       if (formData.attachments && formData.attachments.length > 0) {
-        const attachmentPromises = formData.attachments.map(async (file, index) => {
+        const attachmentPromises = formData.attachments.map(async (file) => {
           try {
             setFormState(prev => ({
               ...prev,
@@ -312,7 +312,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
             }));
 
             return result.data;
-          } catch {
+          } catch (error) {
             setFormState(prev => ({
               ...prev,
               uploadProgress: prev.uploadProgress.map(p => 
@@ -353,7 +353,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
         message: 'Bug report submitted successfully'
       };
 
-    } catch {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
       
       centralizedLogging.error(

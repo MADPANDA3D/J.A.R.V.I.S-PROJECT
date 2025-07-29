@@ -32,7 +32,7 @@ export const WebhookMonitoringDashboard: React.FC = () => {
     const fetchHistoricalData = async () => {
       try {
         const response = await fetch(`/webhook/analytics/historical?timeRange=${timeRange}&format=detailed`);
-        if (response.ok) => {
+        if (response.ok) {
           const data = await response.json();
           setHistoricalData(data);
         }

@@ -135,15 +135,18 @@ This command system builds JARVIS's intelligence layer by layer. Each command ad
 ## 🔥 **SMART COMMANDS**
 
 ### `*newworkflow [action] [workflow_name]`
-**The Intelligent Discovery Command**
+**The Intelligent Discovery & Deployment Command**
 
-**Purpose:** Automatically discovers workflows by name and executes actions with real workflow IDs.
+**Purpose:** Automatically discovers workflows by name, executes actions with real workflow IDs, and for new workflows, validates and deploys directly to n8n instance with automated testing.
 
-**Workflow Process:**
+**Enhanced Workflow Process:**
 1. 🔍 **Discovery Phase:** Calls `generate_audit` to get all workflows
 2. 🧠 **Analysis Phase:** Matches user input to actual workflow names (fuzzy matching)
 3. 🎯 **Extraction Phase:** Extracts the real workflow ID from audit data
 4. ⚡ **Execution Phase:** Executes the requested action with correct ID
+5. 🚀 **Deployment Phase:** For new workflows, push validated workflow to n8n instance using webhook management system
+6. 🧪 **Testing Phase:** Run the deployed workflow with a document from the embeddings docs folder
+7. ✅ **Documentation Phase:** Mark the test document with green checkmark ✅ and "Embedded" tag after successful embedding
 
 **Usage Examples:**
 ```
@@ -151,6 +154,7 @@ This command system builds JARVIS's intelligence layer by layer. Each command ad
 *newworkflow activate "Sales Pipeline"
 *newworkflow deactivate marketing
 *newworkflow delete "old workflow"
+*newworkflow create "Knowledge Base Pipeline"
 ```
 
 **Smart Matching Features:**
@@ -159,13 +163,22 @@ This command system builds JARVIS's intelligence layer by layer. Each command ad
 - ✅ **Case Insensitive:** "MARKETING" matches "Marketing Team"
 - ✅ **Multiple Results:** Shows options when multiple matches found
 
-**Implementation Flow:**
+**Enhanced Implementation Flow:**
 ```
 1. POST /webhook/n8n-management {"action": "generate_audit", "data": {}}
 2. Analyze response.details for workflow names containing user input
 3. Extract matching workflow ID
 4. POST /webhook/n8n-management {"action": "[action]", "data": {"workflowId": "real-id"}}
+5. FOR NEW WORKFLOWS: POST /webhook/n8n-management {"action": "create_workflow", "data": {"workflow": validated_workflow_json}}
+6. Execute workflow with test document from embeddings docs folder
+7. Mark test document with ✅ and "Embedded" tag upon successful completion
 ```
+
+**Testing Protocol:**
+- 📄 **Document Selection**: Use documents from embeddings docs folder for testing
+- ✅ **Success Marking**: Add green checkmark and "Embedded" tag to successfully processed documents
+- 🔄 **Iterative Testing**: Each test run uses a different document to avoid duplicates
+- 📊 **Result Validation**: Verify embedding was successful in Qdrant before marking document
 
 ---
 

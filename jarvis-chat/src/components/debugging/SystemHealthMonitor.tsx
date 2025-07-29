@@ -85,7 +85,7 @@ export function SystemHealthMonitor({
     const startTime = performance.now();
     
     try {
-      if (service.type === 'websocket') => {
+      if (service.type === 'websocket') {
         // WebSocket health check
         return new Promise((resolve) => {
           const ws = new WebSocket(service.url);

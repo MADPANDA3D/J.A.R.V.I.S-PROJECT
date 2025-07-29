@@ -500,11 +500,12 @@ class LogAccessService {
       let aValue: string | number, bValue: string | number;
       
       switch (query.sortBy) {
-        case 'level':
+        case 'level': {
           const levelOrder = ['debug', 'info', 'warn', 'error', 'critical'];
           aValue = levelOrder.indexOf(a.level);
           bValue = levelOrder.indexOf(b.level);
           break;
+        }
         case 'service':
           aValue = a.service;
           bValue = b.service;
@@ -1070,7 +1071,7 @@ export const exportLogsEndpoint = async (
   apiKey: ApiKey,
   ipAddress: string,
   userAgent: string
-) {
+) => {
   // Check authorization
   const authorized = await logAccessService.authorizeAction(apiKey, 'export_logs', request.query);
   if (!authorized) {
@@ -1084,7 +1085,7 @@ export const createLogStreamEndpoint = async (
   request: LogStreamRequest,
   apiKey: ApiKey,
   websocket: WebSocket
-) {
+) => {
   // Check authorization
   const authorized = await logAccessService.authorizeAction(apiKey, 'stream_logs', request.query);
   if (!authorized) {

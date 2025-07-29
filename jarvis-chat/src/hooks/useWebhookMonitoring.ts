@@ -257,7 +257,7 @@ export const useWebhookMonitoring = (options: UseWebhookMonitoringOptions = {}) 
     }
   }, [webhookServerUrl]);
 
-  const refresh = useCallback(() {
+  const refresh = useCallback(() => {
     return fetchMetrics();
   }, [fetchMetrics]);
 

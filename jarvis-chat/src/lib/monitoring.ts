@@ -953,17 +953,17 @@ class MonitoringService implements APMService {
 
   private startRealTimeMonitoring(): void {
     // Check alert rules every 30 seconds
-    setInterval(() {
+    setInterval(() => {
       this.checkAlertRules();
     }, 30000);
 
     // Monitor memory usage every minute
-    setInterval(() {
+    setInterval(() => {
       this.trackMemoryUsage();
     }, 60000);
 
     // Clean up old data every 5 minutes
-    setInterval(() {
+    setInterval(() => {
       this.cleanupOldData();
     }, 300000);
   }

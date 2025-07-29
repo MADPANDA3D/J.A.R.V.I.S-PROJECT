@@ -67,7 +67,7 @@ export function ProductionDashboard({
       setSystemHealth(health);
       setEnvInfo(env);
       setLastRefresh(new Date());
-    } catch (error) => {
+    } catch (error) {
       console.error('Failed to load system data:', error);
     }
   };
@@ -133,7 +133,7 @@ export function ProductionDashboard({
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-    } catch (error) => {
+    } catch (error) {
       console.error('Failed to export diagnostics:', error);
     }
   };
