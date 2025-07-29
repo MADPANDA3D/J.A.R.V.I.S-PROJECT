@@ -150,7 +150,7 @@ export const SessionAnalyticsDashboard: React.FC<SessionAnalyticsDashboardProps>
           ].map(({ key, label, count }) => (
             <button
               key={key}
-              onClick={() => setSelectedTab(key as any)}
+              onClick={() => setSelectedTab(key as 'overview' | 'errors' | 'sessions' | 'alerts')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 selectedTab === key
                   ? 'border-blue-500 text-blue-600'

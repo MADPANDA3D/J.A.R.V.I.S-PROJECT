@@ -3,7 +3,7 @@
  * Comprehensive overview of bug lifecycle management with metrics, workflows, and team insights
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -37,21 +37,16 @@ import {
   CheckCircle,
   AlertTriangle,
   Star,
-  MessageSquare,
   Target,
   Zap,
-  Calendar,
-  Filter,
   RefreshCw,
   Download,
-  Settings
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useBugLifecycleStats, useBugList } from '@/hooks/useBugLifecycle';
-import { bugLifecycleService, BugStatus, BugPriority } from '@/lib/bugLifecycle';
+import { BugStatus, BugPriority } from '@/lib/bugLifecycle';
 import { bugAssignmentSystem, type WorkloadMetrics } from '@/lib/assignmentSystem';
 import { feedbackCollectionService, type FeedbackAnalytics } from '@/lib/feedbackCollection';
-import { internalCommunicationService } from '@/lib/internalCommunication';
 
 interface DashboardProps {
   dateRange?: { start: string; end: string };
@@ -113,7 +108,7 @@ function MetricCard({ title, value, change, changeType = 'neutral', icon, descri
   );
 }
 
-export function BugLifecycleDashboard({ dateRange, teamFilter, onBugSelect }: DashboardProps) {
+export function BugLifecycleDashboard({ dateRange, teamFilter }: DashboardProps) {
   const { toast } = useToast();
   const { stats, loading: statsLoading } = useBugLifecycleStats();
   const { bugs, loading: bugsLoading, refreshBugs } = useBugList();
@@ -123,11 +118,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter, onBugSelect }: Da
   const [selectedTimeRange, setSelectedTimeRange] = useState<string>('7d');
   const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    loadDashboardData();
-  }, [dateRange, teamFilter, selectedTimeRange]);
-
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     try {
       setRefreshing(true);
       
@@ -140,7 +131,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter, onBugSelect }: Da
       setFeedbackAnalytics(analytics);
 
       await refreshBugs();
-    } catch (error) {
+    } catch (_error) {
       toast({
         title: "Error",
         description: "Failed to load dashboard data",
@@ -149,7 +140,11 @@ export function BugLifecycleDashboard({ dateRange, teamFilter, onBugSelect }: Da
     } finally {
       setRefreshing(false);
     }
-  };
+  }, [dateRange, teamFilter, selectedTimeRange, refreshBugs]);
+
+  useEffect(() => {
+    loadDashboardData();
+  }, [loadDashboardData]);
 
   const handleRefresh = () => {
     loadDashboardData();

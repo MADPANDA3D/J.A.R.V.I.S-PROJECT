@@ -183,8 +183,8 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
         error.errors.forEach(err => {
           const field = err.path[0] as keyof BugReportFormValidation;
           if (field in validation) {
-            (validation[field] as any).isValid = false;
-            (validation[field] as any).error = err.message;
+            validation[field].isValid = false;
+            validation[field].error = err.message;
           }
         });
       }
@@ -429,9 +429,17 @@ function getBrowserVersion(): string {
   return match ? match[1] : 'Unknown';
 }
 
-async function collectCoreWebVitals(): Promise<any> {
+interface CoreWebVitals {
+  lcp?: number;
+  fid?: number;
+  cls?: number;
+  fcp?: number;
+  ttfb?: number;
+}
+
+async function collectCoreWebVitals(): Promise<CoreWebVitals> {
   return new Promise((resolve) => {
-    const vitals: any = {};
+    const vitals: CoreWebVitals = {};
     
     // Use Performance Observer if available
     if ('PerformanceObserver' in window) {
@@ -447,7 +455,7 @@ async function collectCoreWebVitals(): Promise<any> {
         // First Input Delay
         const fidObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
-          entries.forEach((entry: any) => {
+          entries.forEach((entry: PerformanceEventTiming) => {
             vitals.fid = entry.processingStart - entry.startTime;
           });
         });

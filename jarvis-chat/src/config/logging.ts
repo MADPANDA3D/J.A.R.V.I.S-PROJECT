@@ -372,7 +372,7 @@ export const testLoggingConfiguration = async (): Promise<{
             };
 
             const body = destination.config.formatter 
-              ? destination.config.formatter(testLog as any)
+              ? destination.config.formatter(testLog)
               : testLog;
 
             const response = await fetch(destination.config.endpoint, {
