@@ -31,7 +31,7 @@ interface AuthProviderProps {
   children: React.ReactNode;
 }
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) {
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [authState, setAuthState] = useState<AuthState>({
     user: null,
     session: null,
@@ -58,7 +58,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) {
           loading: false,
           initialized: true,
         });
-      } catch (error) {
+      } catch (error) => {
         console.error('Failed to get initial session:', error);
         setAuthState(prev => ({
           ...prev,
@@ -131,7 +131,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) {
       });
     });
 
-    return () {
+    return () => {
       subscription.unsubscribe();
     };
   }, []);
@@ -160,7 +160,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) {
 
       addBreadcrumb('info', 'user_action', 'Sign in successful', { email });
       // AuthContext will be updated via the auth state change event
-    } catch (error) {
+    } catch (error) => {
       setAuthState(prev => ({ ...prev, loading: false }));
 
       if (error instanceof Error) {
@@ -195,7 +195,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) {
       addBreadcrumb('info', 'user_action', 'Sign up successful', { email });
       // Note: User might need to confirm their email depending on Supabase settings
       // AuthContext will be updated via the auth state change event if auto-confirm is enabled
-    } catch (error) {
+    } catch (error) => {
       setAuthState(prev => ({ ...prev, loading: false }));
 
       if (error instanceof Error) {
@@ -231,7 +231,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) {
         userId: currentUserId 
       });
       // AuthContext will be updated via the auth state change event
-    } catch (error) {
+    } catch (error) => {
       setAuthState(prev => ({ ...prev, loading: false }));
 
       if (error instanceof Error) {
@@ -262,7 +262,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) {
       }
       
       addBreadcrumb('info', 'user_action', 'Password reset email sent', { email });
-    } catch (error) {
+    } catch (error) => {
       if (error instanceof Error) {
         throw new Error(getAuthErrorMessage(error));
       }

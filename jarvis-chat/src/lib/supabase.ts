@@ -19,7 +19,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 // Create enhanced Supabase client with logging
-const createLoggedSupabaseClient = (url: string, key: string, options: Record<string, unknown> = {}) {
+const createLoggedSupabaseClient = (url: string, key: string, options: Record<string, unknown> = {}) => {
   const client = createClient(url, key, {
     ...options,
     global: {
@@ -69,7 +69,7 @@ const createLoggedSupabaseClient = (url: string, key: string, options: Record<st
                 rowCount = responseData.data.length;
               }
             }
-          } catch (error) {
+          } catch (error) => {
             // Response body couldn't be parsed as JSON
           }
           
@@ -97,7 +97,7 @@ const createLoggedSupabaseClient = (url: string, key: string, options: Record<st
           
           return response;
           
-        } catch (error) {
+        } catch (error) => {
           const endTime = performance.now();
           const executionTime = endTime - startTime;
           
@@ -175,7 +175,7 @@ function parseSupabaseRequest(url: string, method: string): {
     }
     
     return { operation: 'unknown', table: 'unknown' };
-  } catch (error) {
+  } catch (error) => {
     return { operation: 'unknown', table: 'unknown' };
   }
 }
@@ -185,7 +185,7 @@ async function getCurrentUserId(client: SupabaseClient): Promise<string | undefi
   try {
     const { data } = await client.auth.getUser();
     return data.user?.id;
-  } catch (error) {
+  } catch (error) => {
     return undefined;
   }
 }
@@ -293,7 +293,7 @@ export const bugReportOperations = {
   },
 
   // Get bug report by ID
-  async getBugReportById(bugId: string) {
+  async getBugReportById(bugId: string) => {
     const { data, error } = await supabase
       .from('bug_reports')
       .select(`
@@ -382,7 +382,7 @@ export const bugReportOperations = {
   },
 
   // Get bug report statistics
-  async getBugReportStats(userId?: string) {
+  async getBugReportStats(userId?: string) => {
     const { data, error } = await supabase
       .rpc('get_user_bug_summary', userId ? { target_user_id: userId } : {});
 

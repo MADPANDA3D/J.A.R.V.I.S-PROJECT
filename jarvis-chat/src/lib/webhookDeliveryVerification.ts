@@ -60,7 +60,7 @@ export class WebhookDeliveryVerificationService {
   private deploymentStatuses = new Map<string, DeploymentStatus>();
   private verificationCallbacks = new Map<string, (result: VerificationResult) => void>();
 
-  constructor(config: Partial<DeliveryVerificationConfig> = {}) {
+  constructor(config: Partial<DeliveryVerificationConfig> = {}) => {
     this.config = {
       verificationTimeout: 30000, // 30 seconds
       retryAttempts: 3,
@@ -110,7 +110,7 @@ export class WebhookDeliveryVerificationService {
   /**
    * Perform webhook delivery verification
    */
-  private async performVerification(verificationId: string) {
+  private async performVerification(verificationId: string) => {
     const startTime = Date.now();
     const request = this.pendingVerifications.get(verificationId);
     const result = this.verificationResults.get(verificationId);
@@ -157,7 +157,7 @@ export class WebhookDeliveryVerificationService {
 
       this.completeVerification(verificationId, allVerified);
 
-    } catch (error) {
+    } catch (error) => {
       result.error = error instanceof Error ? error.message : 'Unknown verification error';
       result.verificationTime = Date.now() - startTime;
       this.completeVerification(verificationId, false);
@@ -206,7 +206,7 @@ export class WebhookDeliveryVerificationService {
         };
       }
 
-    } catch (error) {
+    } catch (error) => {
       this.log(`[VERIFICATION] Payload delivery check failed: ${error}`);
       
       // Fallback: Check webhook server health and assume delivery if healthy
@@ -228,7 +228,7 @@ export class WebhookDeliveryVerificationService {
             responseValid: true
           };
         }
-      } catch (healthError) {
+      } catch (healthError) => {
         this.log(`[VERIFICATION] Health check also failed: ${healthError}`);
       }
 
@@ -254,7 +254,7 @@ export class WebhookDeliveryVerificationService {
     const startTime = Date.now();
     const maxWaitTime = this.config.deploymentTimeout;
     
-    return new Promise((resolve) {
+    return new Promise((resolve) => {
       const checkInterval = setInterval(async () => {
         const elapsed = Date.now() - startTime;
         
@@ -289,7 +289,7 @@ export class WebhookDeliveryVerificationService {
               verificationTime: elapsed
             });
           }
-        } catch (error) {
+        } catch (error) => {
           this.log(`[VERIFICATION] Deployment check error: ${error}`);
         }
       }, this.config.deploymentCheckInterval);
@@ -324,7 +324,7 @@ export class WebhookDeliveryVerificationService {
       }
 
       return { status: 'unknown' };
-    } catch (error) {
+    } catch (error) => {
       this.log(`[VERIFICATION] Deployment status check failed: ${error}`);
       return { status: 'unknown' };
     }
@@ -343,7 +343,7 @@ export class WebhookDeliveryVerificationService {
   /**
    * Complete verification process
    */
-  private completeVerification(verificationId: string, success: boolean) {
+  private completeVerification(verificationId: string, success: boolean) => {
     const result = this.verificationResults.get(verificationId);
     
     if (result) {
@@ -415,7 +415,7 @@ export class WebhookDeliveryVerificationService {
   /**
    * Start verification monitoring loop
    */
-  private startVerificationMonitoring() {
+  private startVerificationMonitoring() => {
     // Clean up old pending verifications
     setInterval(() => {
       const now = Date.now();
@@ -431,7 +431,7 @@ export class WebhookDeliveryVerificationService {
   /**
    * Logging utility
    */
-  private log(message: string) {
+  private log(message: string) => {
     if (this.config.enableLogging) {
       console.log(`${new Date().toISOString()} ${message}`);
     }

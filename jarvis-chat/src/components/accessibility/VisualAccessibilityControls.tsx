@@ -20,7 +20,7 @@ interface VisualAccessibilityControlsProps {
 
 export const VisualAccessibilityControls: React.FC<
   VisualAccessibilityControlsProps
-> = ({ className = '' }) {
+> = ({ className = '' }) => {
   const [preferences, setPreferences] =
     React.useState<AccessibilityPreferences>(
       accessibilityPrefs.getPreferences()

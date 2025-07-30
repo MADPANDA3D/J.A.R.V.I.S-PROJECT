@@ -235,7 +235,7 @@ class IncidentResponseService {
   private monitoringInterval?: number;
   private escalationInterval?: number;
 
-  constructor() {
+  constructor() => {
     this.initializeEscalationRules();
     this.initializePlaybooks();
     this.startMonitoring();
@@ -508,7 +508,7 @@ class IncidentResponseService {
 
       // Check performance monitoring for incidents
       await this.checkPerformanceIncidents();
-    } catch (error) {
+    } catch (error) => {
       captureError(
         error instanceof Error ? error : new Error('Incident detection failed'),
         {
@@ -639,7 +639,7 @@ class IncidentResponseService {
   }
 
   private mapHealthAlertSeverity(alertType: string): Incident['severity'] {
-    switch (alertType) {
+    switch (alertType) => {
       case 'error':
         return 'high';
       case 'warning':
@@ -733,7 +733,7 @@ class IncidentResponseService {
   private mapSeverityToPriority(
     severity: Incident['severity']
   ): Incident['priority'] {
-    switch (severity) {
+    switch (severity) => {
       case 'critical':
         return 'P1';
       case 'high':
@@ -813,7 +813,7 @@ class IncidentResponseService {
       // Find matching playbooks
       const matchingPlaybooks = this.findMatchingPlaybooks(incident);
 
-      for (const playbook of matchingPlaybooks) {
+      for (const playbook of matchingPlaybooks) => {
         await this.executePlaybook(incident, playbook);
       }
 
@@ -821,7 +821,7 @@ class IncidentResponseService {
       if (incident.severity === 'critical') {
         this.triggerEscalation(incident, 'critical_immediate');
       }
-    } catch (error) {
+    } catch (error) => {
       captureError(
         error instanceof Error ? error : new Error('Automated response failed'),
         {
@@ -839,7 +839,7 @@ class IncidentResponseService {
       if (!playbook.enabled) return;
 
       const matches = playbook.triggers.some(trigger => {
-        switch (trigger.type) {
+        switch (trigger.type) => {
           case 'error_pattern':
             return (
               incident.source === 'error_tracking' &&
@@ -875,7 +875,7 @@ class IncidentResponseService {
       metadata: { playbookId: playbook.id, automated: true },
     });
 
-    for (const step of playbook.steps) {
+    for (const step of playbook.steps) => {
       if (step.requires && !this.arePrerequisitesMet(incident, step.requires)) {
         continue;
       }
@@ -924,7 +924,7 @@ class IncidentResponseService {
         description: `Completed automated action: ${step.name}`,
         metadata: { actionId: action.id, result },
       });
-    } catch (error) {
+    } catch (error) => {
       action.status = 'failed';
       action.result = error instanceof Error ? error.message : 'Unknown error';
       action.completedAt = Date.now();
@@ -940,7 +940,7 @@ class IncidentResponseService {
   private mapStepTypeToActionType(
     stepType: PlaybookStep['type']
   ): AutomatedAction['type'] {
-    switch (stepType) {
+    switch (stepType) => {
       case 'diagnostic':
         return 'diagnostic';
       case 'mitigation':
@@ -959,7 +959,7 @@ class IncidentResponseService {
     parameters?: Record<string, unknown>
   ): Promise<string> {
     // Simulate action execution - in real implementation, these would call actual services
-    switch (action) {
+    switch (action) => {
       case 'check_database_connectivity':
         return this.checkDatabaseConnectivity();
       case 'restart_database_pool':
@@ -1035,7 +1035,7 @@ class IncidentResponseService {
 
   private shouldEscalate(incident: Incident, rule: EscalationRule): boolean {
     return rule.conditions.every(condition => {
-      switch (condition.type) {
+      switch (condition.type) => {
         case 'severity':
           return this.evaluateCondition(
             incident.severity,
@@ -1083,7 +1083,7 @@ class IncidentResponseService {
     operator: EscalationCondition['operator'],
     expected: string | number
   ): boolean {
-    switch (operator) {
+    switch (operator) => {
       case 'equals':
         return actual === expected;
       case 'not_equals':
@@ -1100,7 +1100,7 @@ class IncidentResponseService {
   }
 
   private getBusinessImpactScore(impact: Incident['businessImpact']): number {
-    switch (impact) {
+    switch (impact) => {
       case 'critical':
         return 5;
       case 'high':
@@ -1156,7 +1156,7 @@ class IncidentResponseService {
     action: EscalationAction
   ): Promise<void> {
     try {
-      switch (action.type) {
+      switch (action.type) => {
         case 'notify':
           await this.sendEscalationNotification(incident, action.target);
           break;
@@ -1173,7 +1173,7 @@ class IncidentResponseService {
           await this.executeRunbook(incident, action.target);
           break;
       }
-    } catch (error) {
+    } catch (error) => {
       captureWarning('Escalation action failed', {
         incidentId: incident.id,
         actionType: action.type,
@@ -1272,7 +1272,7 @@ class IncidentResponseService {
             action.status = 'completed';
             action.result = result;
             action.completedAt = Date.now();
-          } catch (error) {
+          } catch (error) => {
             action.status = 'failed';
             action.result =
               error instanceof Error ? error.message : 'Unknown error';

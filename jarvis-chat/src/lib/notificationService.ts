@@ -142,7 +142,7 @@ class NotificationService {
   private deliveryHistory: NotificationDeliveryResult[] = [];
   private processingInterval?: NodeJS.Timeout;
 
-  private constructor() {
+  private constructor() => {
     this.initializeDefaultTemplates();
     this.startEmailProcessor();
   }
@@ -222,7 +222,7 @@ class NotificationService {
 
       return deliveryResults;
 
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.error(
         'notification-service',
         'system',
@@ -297,7 +297,7 @@ class NotificationService {
 
       return deliveryResults;
 
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.error(
         'notification-service',
         'system',
@@ -343,7 +343,7 @@ class NotificationService {
       let message: string;
       let actionText: string;
 
-      switch (requestType) {
+      switch (requestType) => {
         case 'verification':
           title = `Please Verify Bug Fix: ${bugReport.title}`;
           message = 'We believe this bug has been resolved. Please verify that the issue is fixed.';
@@ -394,7 +394,7 @@ class NotificationService {
 
       return deliveryResults;
 
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.error(
         'notification-service',
         'system',
@@ -416,7 +416,7 @@ class NotificationService {
   ): Promise<NotificationDeliveryResult[]> {
     const allResults: NotificationDeliveryResult[] = [];
 
-    for (const userId of recipientIds) {
+    for (const userId of recipientIds) => {
       try {
         const preferences = await this.getUserPreferences(userId);
         if (!preferences.escalationAlerts.enabled || 
@@ -448,7 +448,7 @@ class NotificationService {
         const results = await this.deliverNotification(notification, preferences);
         allResults.push(...results);
 
-      } catch (error) {
+      } catch (error) => {
         centralizedLogging.warn(
           'notification-service',
           'system',
@@ -533,11 +533,11 @@ class NotificationService {
   ): Promise<NotificationDeliveryResult[]> {
     const results: NotificationDeliveryResult[] = [];
 
-    for (const channel of notification.channels) {
+    for (const channel of notification.channels) => {
       try {
         let deliveryResult: NotificationDeliveryResult;
 
-        switch (channel) {
+        switch (channel) => {
           case 'in_app':
             deliveryResult = await this.deliverInAppNotification(notification);
             break;
@@ -562,7 +562,7 @@ class NotificationService {
         results.push(deliveryResult);
         this.deliveryHistory.push(deliveryResult);
 
-      } catch (error) {
+      } catch (error) => {
         const deliveryResult: NotificationDeliveryResult = {
           notificationId: notification.id,
           channel,
@@ -779,7 +779,7 @@ class NotificationService {
 
     const batch = this.emailQueue.splice(0, 10); // Process 10 emails at a time
 
-    for (const email of batch) {
+    for (const email of batch) => {
       try {
         // TODO: Implement actual email sending
         email.sentAt = new Date().toISOString();
@@ -790,7 +790,7 @@ class NotificationService {
           'Email notification sent',
           { emailId: email.id, to: email.to, subject: email.subject }
         );
-      } catch (error) {
+      } catch (error) => {
         email.error = error instanceof Error ? error.message : 'Unknown error';
         
         centralizedLogging.error(
@@ -824,7 +824,7 @@ class NotificationService {
   }
 
   private determinePriority(status: BugStatus): NotificationPriority {
-    switch (status) {
+    switch (status) => {
       case BugStatus.RESOLVED:
       case BugStatus.CLOSED:
         return 'normal';
@@ -836,7 +836,7 @@ class NotificationService {
   }
 
   private mapSeverityToPriority(severity: string): NotificationPriority {
-    switch (severity) {
+    switch (severity) => {
       case 'critical':
         return 'urgent';
       case 'high':

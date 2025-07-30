@@ -79,7 +79,7 @@ export const performHealthCheck = async (): Promise<HealthCheckResult> => {
       };
       healthCheck.checks.services.supabase = 'connected';
     }
-  } catch (dbError) {
+  } catch (dbError) => {
     healthCheck.checks.database = {
       status: 'down',
       error:
@@ -114,7 +114,7 @@ export const getHealthStatus = async (): Promise<{
       status: healthCheck.status,
       timestamp: healthCheck.timestamp,
     };
-  } catch (error) {
+  } catch (error) => {
     return {
       status: 'unhealthy',
       timestamp: new Date().toISOString(),

@@ -19,7 +19,7 @@ interface HeaderProps {
   className?: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onMenuClick, className }) {
+export const Header: React.FC<HeaderProps> = ({ onMenuClick, className }) => {
   const { user, signOut, loading } = useAuth();
 
   const handleSignOut = async () => {
@@ -33,7 +33,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick, className }) {
         message: 'Successfully signed out',
         priority: 'polite',
       });
-    } catch (error) {
+    } catch (error) => {
       console.error('Sign out error:', error);
       screenReader.announce({
         message: 'Sign out failed. Please try again.',

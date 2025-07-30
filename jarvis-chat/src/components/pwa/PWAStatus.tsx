@@ -11,7 +11,7 @@ interface PWAStatusProps {
 export const PWAStatus: React.FC<PWAStatusProps> = ({
   showInstallButton = true,
   className = '',
-}) {
+}) => {
   const { isInstalled, canInstall, isInstalling, install, isPWASupported } =
     usePWAInstall();
 

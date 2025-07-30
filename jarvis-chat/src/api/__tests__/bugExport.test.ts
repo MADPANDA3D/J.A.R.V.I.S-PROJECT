@@ -180,7 +180,7 @@ describe('Bug Export API', () => {
         error: null
       });
 
-      for (const format of formats) {
+      for (const format of formats) => {
         const response = await request(app)
           .post('/api/exports')
           .set('Authorization', `Bearer ${exportApiKey}`)
@@ -215,7 +215,7 @@ describe('Bug Export API', () => {
     it('should return 503 when export queue is full', async () => {
       // Create multiple export requests to fill the queue
       const promises = [];
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 6; i++) => {
         promises.push(
           request(app)
             .post('/api/exports')
@@ -336,7 +336,7 @@ describe('Bug Export API', () => {
       // Wait for export to complete
       let completed = false;
       let attempts = 0;
-      while (!completed && attempts < 10) {
+      while (!completed && attempts < 10) => {
         await new Promise(resolve => setTimeout(resolve, 500));
         
         const statusResponse = await request(app)
@@ -468,7 +468,7 @@ describe('Bug Export API', () => {
         }
       ];
 
-      for (const schedule of scheduleConfigs) {
+      for (const schedule of scheduleConfigs) => {
         const response = await request(app)
           .post('/api/exports/scheduled')
           .set('Authorization', `Bearer ${adminApiKey}`)
@@ -587,7 +587,7 @@ describe('Bug Export API', () => {
       let completed = false;
       let attempts = 0;
 
-      while (!completed && attempts < 10) {
+      while (!completed && attempts < 10) => {
         await new Promise(resolve => setTimeout(resolve, 200));
         
         const statusResponse = await request(app)
@@ -620,7 +620,7 @@ describe('Bug Export API', () => {
       let failed = false;
       let attempts = 0;
 
-      while (!failed && attempts < 10) {
+      while (!failed && attempts < 10) => {
         await new Promise(resolve => setTimeout(resolve, 200));
         
         const statusResponse = await request(app)
@@ -718,7 +718,7 @@ describe('Bug Export API', () => {
     try {
       const exportDir = join(process.cwd(), 'exports');
       const files = await fs.readdir(exportDir);
-      for (const file of files) {
+      for (const file of files) => {
         if (file.startsWith('exp_')) {
           await fs.unlink(join(exportDir, file));
         }

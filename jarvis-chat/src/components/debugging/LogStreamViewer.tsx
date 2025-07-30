@@ -67,7 +67,7 @@ export function LogStreamViewer({
         setConnectionStatus('connected');
       };
 
-      ws.onmessage = (event) {
+      ws.onmessage = (event) => {
         if (isPaused) return;
 
         try {
@@ -89,7 +89,7 @@ export function LogStreamViewer({
             }
             return newLogs;
           });
-        } catch (error) {
+        } catch (error) => {
           // If JSON parsing fails, treat as plain text log
           const logEntry: LogEntry = {
             id: crypto.randomUUID(),
@@ -117,12 +117,12 @@ export function LogStreamViewer({
         setTimeout(connectWebSocket, 5000);
       };
 
-      ws.onerror = (error) {
+      ws.onerror = (error) => {
         console.error('❌ WebSocket error:', error);
         setConnectionStatus('disconnected');
       };
 
-    } catch (error) {
+    } catch (error) => {
       console.error('❌ Failed to create WebSocket connection:', error);
       setConnectionStatus('disconnected');
       
@@ -135,7 +135,7 @@ export function LogStreamViewer({
   useEffect(() => {
     connectWebSocket();
 
-    return () {
+    return () => {
       if (wsRef.current) {
         wsRef.current.close();
         wsRef.current = null;
@@ -180,7 +180,7 @@ export function LogStreamViewer({
       const persistKey = `log-stream-${websocketUrl}`;
       try {
         localStorage.setItem(persistKey, JSON.stringify(logs.slice(-100))); // Persist last 100 logs
-      } catch (error) {
+      } catch (error) => {
         console.warn('Failed to persist logs:', error);
       }
     }
@@ -200,15 +200,15 @@ export function LogStreamViewer({
           }));
           setLogs(logsWithDates);
         }
-      } catch (error) {
+      } catch (error) => {
         console.warn('Failed to load persisted logs:', error);
       }
     }
   }, [enablePersistence, websocketUrl]);
 
   // Utility functions
-  const getLogLevelIcon = (level: string) {
-    switch (level) {
+  const getLogLevelIcon = (level: string) => {
+    switch (level) => {
     }
       case 'error':
         return <AlertCircle className="h-3 w-3 text-red-500" />;
@@ -223,7 +223,7 @@ export function LogStreamViewer({
     }
   };
 
-  const getLogLevelBadge = (level: string) {
+  const getLogLevelBadge = (level: string) => {
     const variants = {
       error: 'destructive',
       warning: 'secondary',
@@ -238,7 +238,7 @@ export function LogStreamViewer({
     );
   };
 
-  const getSourceBadge = (source: string) {
+  const getSourceBadge = (source: string) => {
     const colors = {
       docker: 'bg-blue-100 text-blue-800',
       webhook: 'bg-green-100 text-green-800',
@@ -256,7 +256,7 @@ export function LogStreamViewer({
     );
   };
 
-  const formatTimestamp = (timestamp: Date) {
+  const formatTimestamp = (timestamp: Date) => {
     return new Intl.DateTimeFormat('en-US', {
       hour: '2-digit',
       minute: '2-digit',
@@ -293,7 +293,7 @@ export function LogStreamViewer({
     }
   };
 
-  const toggleFilter = (filter: Set<string>, setFilter: (filter: Set<string>) => void, value: string) {
+  const toggleFilter = (filter: Set<string>, setFilter: (filter: Set<string>) => void, value: string) => {
     const newFilter = new Set(filter);
     if (newFilter.has(value)) {
       newFilter.delete(value);
@@ -495,7 +495,7 @@ export function LogStreamViewer({
             <Button
               variant="outline"
               size="sm"
-              onClick={() {
+              onClick={() => {
                 setAutoScroll(true);
                 logsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
               }}

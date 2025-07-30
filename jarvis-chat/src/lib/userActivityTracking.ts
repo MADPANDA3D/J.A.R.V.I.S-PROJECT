@@ -114,7 +114,7 @@ class UserActivityTrackingService {
   private heartbeatTimer?: NodeJS.Timeout;
   private currentSessionId: string;
 
-  constructor() {
+  constructor() => {
     this.config = this.loadConfiguration();
     this.currentSessionId = this.generateSessionId();
     this.websocket = {
@@ -193,7 +193,7 @@ class UserActivityTrackingService {
         this.handleWebSocketReconnect();
       };
 
-      this.websocket.connection.onerror = (error) {
+      this.websocket.connection.onerror = (error) => {
         centralizedLogging.error(
           'activity-tracking',
           'system',
@@ -202,11 +202,11 @@ class UserActivityTrackingService {
         );
       };
 
-      this.websocket.connection.onmessage = (event) {
+      this.websocket.connection.onmessage = (event) => {
         this.handleWebSocketMessage(event.data);
       };
 
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.error(
         'activity-tracking',
         'system',
@@ -245,7 +245,7 @@ class UserActivityTrackingService {
     if (this.websocket.isConnected && this.websocket.connection) {
       try {
         this.websocket.connection.send(JSON.stringify(data));
-      } catch (error) {
+      } catch (error) => {
         centralizedLogging.warn(
           'activity-tracking',
           'system',
@@ -260,7 +260,7 @@ class UserActivityTrackingService {
     try {
       const message = JSON.parse(data);
       
-      switch (message.type) {
+      switch (message.type) => {
         case 'activity_broadcast':
           // Handle activity updates from other users
           this.handleActivityBroadcast(message.data);
@@ -277,7 +277,7 @@ class UserActivityTrackingService {
             { messageType: message.type }
           );
       }
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.warn(
         'activity-tracking',
         'system',
@@ -307,7 +307,7 @@ class UserActivityTrackingService {
 
     // User interaction events
     ['click', 'keydown', 'scroll', 'touchstart'].forEach(eventType => {
-      document.addEventListener(eventType, (event) {
+      document.addEventListener(eventType, (event) => {
         this.handleUserInteraction(eventType, event);
       }, { passive: true });
     });
@@ -349,7 +349,7 @@ class UserActivityTrackingService {
 
   private setupPerformanceObserver(): void {
     try {
-      const observer = new PerformanceObserver((list) {
+      const observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           if (entry.entryType === 'navigation') {
             const navigationEntry = entry as PerformanceNavigationTiming;
@@ -367,7 +367,7 @@ class UserActivityTrackingService {
       });
 
       observer.observe({ entryTypes: ['navigation', 'paint', 'measure'] });
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.warn(
         'activity-tracking',
         'system',
@@ -410,7 +410,7 @@ class UserActivityTrackingService {
     }
   }
 
-  private getDeviceInfo() {
+  private getDeviceInfo() => {
     return {
       userAgent: navigator.userAgent,
       platform: navigator.platform,
@@ -420,7 +420,7 @@ class UserActivityTrackingService {
     };
   }
 
-  private getLocationInfo() {
+  private getLocationInfo() => {
     return {
       url: window.location.href,
       path: window.location.pathname,

@@ -77,7 +77,7 @@ export class ExternalAPIClient {
   private config: ExternalServiceConfig;
   private baseHeaders: Record<string, string>;
 
-  constructor(config: ExternalServiceConfig) {
+  constructor(config: ExternalServiceConfig) => {
     this.config = {
       timeout: 10000,
       retryPolicy: {
@@ -116,7 +116,7 @@ export class ExternalAPIClient {
   private addAuthenticationHeaders(): void {
     const auth = this.config.authentication!;
     
-    switch (auth.type) {
+    switch (auth.type) => {
       case 'bearer':
         if (auth.token) {
           this.baseHeaders['Authorization'] = `Bearer ${auth.token}`;
@@ -162,7 +162,7 @@ export class ExternalAPIClient {
             timeout: healthCheck.timeout
           });
           return response.status === healthCheck.expectedStatus;
-        } catch (error) {
+        } catch (error) => {
           return false;
         }
       }
@@ -267,7 +267,7 @@ export class ExternalAPIClient {
         timing
       };
 
-    } catch (error) {
+    } catch (error) => {
       // const endTime = performance.now(); // For future timing use
       
       if (error instanceof DOMException && error.name === 'TimeoutError') {
@@ -401,7 +401,7 @@ export class ExternalAPIClient {
         healthy,
         responseTime
       };
-    } catch (error) {
+    } catch (error) => {
       return {
         healthy: false,
         error: error instanceof Error ? error.message : 'Unknown error'

@@ -51,7 +51,7 @@ describe('Live Webhook Test', () => {
 
         expect(response.success).toBe(true);
         expect(response.response).toBeDefined();
-      } catch (error: unknown) {
+      } catch (error: unknown) => {
         const err = error as { message?: string; type?: string; statusCode?: number };
         console.log('❌ Webhook Error:', err.message);
         console.log('   Type:', err.type);

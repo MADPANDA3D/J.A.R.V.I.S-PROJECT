@@ -54,9 +54,14 @@ vi.mock('../monitoring', () => ({
 }));
 
 vi.mock('../notificationService', () => ({
-  sendEscalationAlert: vi.fn(() => Promise.resolve([])),
-  sendFeedbackRequest: vi.fn(() => Promise.resolve({ success: true })),
-  sendNotification: vi.fn(() => Promise.resolve({ success: true }))
+  notificationService: {
+    sendEscalationAlert: vi.fn(() => Promise.resolve([])),
+    sendFeedbackRequest: vi.fn(() => Promise.resolve({ success: true })),
+    sendNotification: vi.fn(() => Promise.resolve({ success: true })),
+    sendBugStatusUpdate: vi.fn(() => Promise.resolve({ success: true })),
+    sendAssignmentNotification: vi.fn(() => Promise.resolve({ success: true })),
+    updateUserPreferences: vi.fn(() => Promise.resolve({ success: true }))
+  }
 }));
 
 describe('Bug Lifecycle Integration Tests', () => {

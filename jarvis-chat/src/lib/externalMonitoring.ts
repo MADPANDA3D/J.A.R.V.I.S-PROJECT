@@ -59,7 +59,7 @@ class ExternalMonitoringService {
   private initialized: Map<ExternalMonitoringService, boolean> = new Map();
   private currentUser?: { id: string; email?: string; metadata?: Record<string, unknown> };
 
-  constructor() {
+  constructor() => {
     // Load configuration from environment variables
     this.loadConfiguration();
     
@@ -121,13 +121,13 @@ class ExternalMonitoringService {
   }
 
   private async initializeServices(): Promise<void> {
-    for (const [service, config] of this.configs) {
+    for (const [service, config] of this.configs) => {
       if (config.enabled) {
         try {
           await this.initializeService(service, config);
           this.initialized.set(service, true);
           console.log(`✅ External monitoring service initialized: ${service}`);
-        } catch (error) {
+        } catch (error) => {
           console.warn(`⚠️ Failed to initialize monitoring service ${service}:`, error);
           this.initialized.set(service, false);
         }
@@ -136,7 +136,7 @@ class ExternalMonitoringService {
   }
 
   private async initializeService(service: ExternalMonitoringService, config: ExternalMonitoringConfig): Promise<void> {
-    switch (service) {
+    switch (service) => {
       case 'sentry':
         await this.initializeSentry(config as SentryConfig);
         break;
@@ -174,11 +174,11 @@ class ExternalMonitoringService {
         replaysSessionSampleRate: 0.1,
         replaysOnErrorSampleRate: 1.0,
         integrations,
-        beforeSend: (event) {
+        beforeSend: (event) => {
           // Apply custom data sanitization
           return this.sanitizeSentryEvent(event);
         },
-        beforeBreadcrumb: (breadcrumb) {
+        beforeBreadcrumb: (breadcrumb) => {
           // Filter sensitive breadcrumbs
           return this.sanitizeSentryBreadcrumb(breadcrumb);
         }
@@ -193,7 +193,7 @@ class ExternalMonitoringService {
 
       // Store Sentry reference for later use
       (window as any).__SENTRY__ = Sentry;
-    } catch (error) {
+    } catch (error) => {
       console.warn('Sentry initialization failed:', error);
       throw error;
     }
@@ -204,11 +204,11 @@ class ExternalMonitoringService {
       const LogRocket = await import('logrocket');
       
       LogRocket.init(config.projectId!, {
-        shouldCaptureRequest: (request) {
+        shouldCaptureRequest: (request) => {
           // Don't capture authentication requests
           return !request.url.includes('/auth/');
         },
-        shouldCaptureResponse: (response) {
+        shouldCaptureResponse: (response) => {
           // Capture all responses except sensitive ones
           return !response.url.includes('/auth/');
         }
@@ -216,7 +216,7 @@ class ExternalMonitoringService {
 
       // Store LogRocket reference
       (window as any).__LOGROCKET__ = LogRocket;
-    } catch (error) {
+    } catch (error) => {
       console.warn('LogRocket initialization failed:', error);
       throw error;
     }
@@ -243,7 +243,7 @@ class ExternalMonitoringService {
 
       // Store DataDog reference
       (window as any).__DATADOG_RUM__ = datadogRum;
-    } catch (error) {
+    } catch (error) => {
       console.warn('DataDog RUM initialization failed:', error);
       throw error;
     }
@@ -274,7 +274,7 @@ class ExternalMonitoringService {
       if (!response.ok) {
         throw new Error(`Custom endpoint health check failed: ${response.status}`);
       }
-    } catch (error) {
+    } catch (error) => {
       console.warn('Custom monitoring endpoint test failed:', error);
       // Don't throw here as the endpoint might not support health checks
     }
@@ -284,7 +284,7 @@ class ExternalMonitoringService {
   async captureError(errorReport: EnhancedErrorReport): Promise<void> {
     const promises = [];
 
-    for (const [service, initialized] of this.initialized) {
+    for (const [service, initialized] of this.initialized) => {
       if (initialized) {
         promises.push(this.sendErrorToService(service, errorReport));
       }
@@ -296,7 +296,7 @@ class ExternalMonitoringService {
   async captureSession(session: UserSession): Promise<void> {
     const promises = [];
 
-    for (const [service, initialized] of this.initialized) {
+    for (const [service, initialized] of this.initialized) => {
       if (initialized) {
         promises.push(this.sendSessionToService(service, session));
       }
@@ -308,7 +308,7 @@ class ExternalMonitoringService {
   async captureBreadcrumb(breadcrumb: ErrorBreadcrumb): Promise<void> {
     const promises = [];
 
-    for (const [service, initialized] of this.initialized) {
+    for (const [service, initialized] of this.initialized) => {
       if (initialized) {
         promises.push(this.sendBreadcrumbToService(service, breadcrumb));
       }
@@ -321,7 +321,7 @@ class ExternalMonitoringService {
     this.currentUser = { id: userId, email, metadata };
 
     // Update user context in all services
-    for (const [service, initialized] of this.initialized) {
+    for (const [service, initialized] of this.initialized) => {
       if (initialized) {
         this.setUserInService(service, this.currentUser);
       }
@@ -331,7 +331,7 @@ class ExternalMonitoringService {
   // Private methods for service-specific implementations
   private async sendErrorToService(service: ExternalMonitoringService, errorReport: EnhancedErrorReport): Promise<void> {
     try {
-      switch (service) {
+      switch (service) => {
         case 'sentry':
           await this.sendErrorToSentry(errorReport);
           break;
@@ -345,7 +345,7 @@ class ExternalMonitoringService {
           await this.sendErrorToCustom(errorReport);
           break;
       }
-    } catch (error) {
+    } catch (error) => {
       console.warn(`Failed to send error to ${service}:`, error);
     }
   }
@@ -367,7 +367,7 @@ class ExternalMonitoringService {
     Sentry.setTags(errorReport.tags);
 
     // Add fingerprint for grouping
-    Sentry.withScope((scope: any) {
+    Sentry.withScope((scope: any) => {
       scope.setFingerprint(errorReport.fingerprint);
       
       // Add breadcrumbs
@@ -474,13 +474,13 @@ class ExternalMonitoringService {
 
   private async sendSessionToService(service: ExternalMonitoringService, session: UserSession): Promise<void> {
     try {
-      switch (service) {
+      switch (service) => {
         case 'custom':
           await this.sendSessionToCustom(session);
           break;
         // Other services handle sessions automatically through their SDKs
       }
-    } catch (error) {
+    } catch (error) => {
       console.warn(`Failed to send session to ${service}:`, error);
     }
   }
@@ -510,7 +510,7 @@ class ExternalMonitoringService {
 
   private async sendBreadcrumbToService(service: ExternalMonitoringService, breadcrumb: ErrorBreadcrumb): Promise<void> {
     try {
-      switch (service) {
+      switch (service) => {
         case 'sentry':
           await this.sendBreadcrumbToSentry(breadcrumb);
           break;
@@ -519,7 +519,7 @@ class ExternalMonitoringService {
           break;
         // LogRocket and DataDog handle breadcrumbs automatically
       }
-    } catch (error) {
+    } catch (error) => {
       console.warn(`Failed to send breadcrumb to ${service}:`, error);
     }
   }
@@ -563,7 +563,7 @@ class ExternalMonitoringService {
 
   private setUserInService(service: ExternalMonitoringService, user: { id: string; email?: string; metadata?: Record<string, unknown> }): void {
     try {
-      switch (service) {
+      switch (service) => {
         case 'sentry': {
           const Sentry = (window as unknown as { __SENTRY__?: unknown }).__SENTRY__;
           if (Sentry) {
@@ -597,7 +597,7 @@ class ExternalMonitoringService {
           break;
         }
       }
-    } catch (error) {
+    } catch (error) => {
       console.warn(`Failed to set user in ${service}:`, error);
     }
   }
@@ -647,7 +647,7 @@ class ExternalMonitoringService {
   getServiceStatus(): Record<ExternalMonitoringService, boolean> {
     const status: Record<string, boolean> = {};
     
-    for (const [service, initialized] of this.initialized) {
+    for (const [service, initialized] of this.initialized) => {
       status[service] = initialized;
     }
 
@@ -667,7 +667,7 @@ class ExternalMonitoringService {
       try {
         await this.testServiceConnectivity(service);
         results[service] = true;
-      } catch (error) {
+      } catch (error) => {
         results[service] = false;
         console.warn(`Service ${service} connectivity test failed:`, error);
       }
@@ -677,7 +677,7 @@ class ExternalMonitoringService {
   }
 
   private async testServiceConnectivity(service: ExternalMonitoringService): Promise<void> {
-    switch (service) {
+    switch (service) => {
       case 'custom': {
         const config = this.configs.get('custom') as CustomConfig;
         if (config) {

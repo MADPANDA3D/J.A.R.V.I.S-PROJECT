@@ -133,7 +133,7 @@ class FeedbackCollectionService {
   private reminderTimers: Map<string, NodeJS.Timeout> = new Map();
   private formTemplates: Map<FeedbackType, FeedbackFormTemplate> = new Map();
 
-  private constructor() {
+  private constructor() => {
     this.initializeFormTemplates();
   }
 
@@ -261,7 +261,7 @@ class FeedbackCollectionService {
         requestId: request.id
       };
 
-    } catch (error) {
+    } catch (error) => {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -363,7 +363,7 @@ class FeedbackCollectionService {
 
       return { success: true };
 
-    } catch (error) {
+    } catch (error) => {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -629,7 +629,7 @@ class FeedbackCollectionService {
     }
 
     // Validate required fields
-    for (const field of template.fields) {
+    for (const field of template.fields) => {
       if (field.required) {
         const value = (data as any)[field.id];
         if (value === undefined || value === null || value === '') {
@@ -639,7 +639,7 @@ class FeedbackCollectionService {
     }
 
     // Validate field formats and constraints
-    for (const field of template.fields) {
+    for (const field of template.fields) => {
       const value = (data as any)[field.id];
       if (value !== undefined && value !== null && field.validation) {
         const validation = field.validation;
@@ -679,7 +679,7 @@ class FeedbackCollectionService {
   private async processFeedbackSubmission(feedback: BugFeedback): Promise<void> {
     try {
       // Process based on feedback type
-      switch (feedback.feedbackType) {
+      switch (feedback.feedbackType) => {
         case 'resolution_verification':
           await this.processResolutionVerification(feedback);
           break;
@@ -690,7 +690,7 @@ class FeedbackCollectionService {
           await this.processAdditionalInfo(feedback);
           break;
       }
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.warn(
         'feedback-collection',
         'system',
@@ -821,7 +821,7 @@ class FeedbackCollectionService {
         'Feedback reminder sent',
         { feedbackId, reminderNumber }
       );
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.error(
         'feedback-collection',
         'system',
@@ -865,7 +865,7 @@ class FeedbackCollectionService {
     return new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
   }
 
-  private getReminderSchedule(feedbackType: FeedbackType, priority: string) {
+  private getReminderSchedule(feedbackType: FeedbackType, priority: string) => {
     const baseSchedule = {
       enabled: true,
       intervals: [1, 3, 7], // Days

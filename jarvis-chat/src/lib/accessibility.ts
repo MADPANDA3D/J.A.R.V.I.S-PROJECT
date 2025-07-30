@@ -14,7 +14,7 @@ class ScreenReaderManager {
   private politeRegion: HTMLElement | null = null;
   private assertiveRegion: HTMLElement | null = null;
 
-  constructor() {
+  constructor() => {
     this.createLiveRegions();
   }
 
@@ -132,7 +132,7 @@ export class FocusManager {
     const firstElement = focusableElements[0];
     const lastElement = focusableElements[focusableElements.length - 1];
 
-    const handleKeyDown = (event: KeyboardEvent) {
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key !== 'Tab') return;
 
       if (event.shiftKey) {
@@ -464,7 +464,7 @@ export class AccessibilityPreferencesManager {
     colorScheme: 'auto',
   };
 
-  constructor() {
+  constructor() => {
     this.loadPreferences();
     this.applyPreferences();
     this.setupMediaQueryListeners();
@@ -492,7 +492,7 @@ export class AccessibilityPreferencesManager {
     if (stored) {
       try {
         this.preferences = { ...this.preferences, ...JSON.parse(stored) };
-      } catch (error) {
+      } catch (error) => {
         console.warn('Failed to load accessibility preferences:', error);
       }
     }
@@ -798,7 +798,7 @@ export function initializeAccessibility(): void {
   // Register common keyboard shortcuts
   keyboardNav.registerShortcut(
     'alt+h',
-    () {
+    () => {
       const heading = document.querySelector('h1, h2');
       if (heading) {
         focusManager.setFocus(
@@ -812,7 +812,7 @@ export function initializeAccessibility(): void {
 
   keyboardNav.registerShortcut(
     'alt+m',
-    () {
+    () => {
       const main =
         document.getElementById('main-content') ||
         document.querySelector('main');
@@ -825,7 +825,7 @@ export function initializeAccessibility(): void {
 
   keyboardNav.registerShortcut(
     'alt+/',
-    () {
+    () => {
       // Toggle shortcuts help
       const help = document.getElementById('keyboard-shortcuts-help');
       if (help) {

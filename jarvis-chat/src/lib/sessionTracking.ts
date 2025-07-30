@@ -75,7 +75,7 @@ class SessionTracker {
   private pageStartTime?: number;
   private currentPageView?: PageView;
 
-  constructor() {
+  constructor() => {
     this.initializeSession();
     this.setupActivityTracking();
     this.setupNavigationTracking();
@@ -150,7 +150,7 @@ class SessionTracker {
       { name: 'Opera', regex: /OPR\/(\d+)/ }
     ];
 
-    for (const browser of browsers) {
+    for (const browser of browsers) => {
       const match = userAgent.match(browser.regex);
       if (match) {
         return { name: browser.name, version: match[1] };
@@ -211,12 +211,12 @@ class SessionTracker {
     const originalPushState = history.pushState;
     const originalReplaceState = history.replaceState;
 
-    history.pushState = (...args) {
+    history.pushState = (...args) => {
       originalPushState.apply(history, args);
       setTimeout(trackNavigation, 0);
     };
 
-    history.replaceState = (...args) {
+    history.replaceState = (...args) => {
       originalReplaceState.apply(history, args);
       setTimeout(trackNavigation, 0);
     };
@@ -224,7 +224,7 @@ class SessionTracker {
 
   private setupUserActionTracking(): void {
     // Track form submissions
-    document.addEventListener('submit', (event) {
+    document.addEventListener('submit', (event) => {
       const form = event.target as HTMLFormElement;
       this.trackUserAction('form_submit', {
         elementId: form.id,
@@ -234,7 +234,7 @@ class SessionTracker {
     });
 
     // Track button clicks
-    document.addEventListener('click', (event) {
+    document.addEventListener('click', (event) => {
       const target = event.target as HTMLElement;
       if (target.tagName === 'BUTTON' || target.type === 'button' || target.type === 'submit') {
         this.trackUserAction('button_click', {
@@ -568,7 +568,7 @@ class SessionTracker {
       };
       
       localStorage.setItem('jarvis_sessions', JSON.stringify(data));
-    } catch (error) {
+    } catch (error) => {
       console.warn('Failed to persist sessions:', error);
     }
   }
@@ -600,7 +600,7 @@ class SessionTracker {
           }
         }
       }
-    } catch (error) {
+    } catch (error) => {
       console.warn('Failed to load persisted sessions:', error);
     }
   }

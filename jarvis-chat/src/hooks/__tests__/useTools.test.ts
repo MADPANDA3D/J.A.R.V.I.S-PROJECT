@@ -236,7 +236,7 @@ describe('useTools', () => {
   describe('error handling', () => {
     it('should handle localStorage errors gracefully', async () => {
       mockUseAuth.mockReturnValue({ user: mockUser, signOut: vi.fn(), loading: false });
-      localStorageMock.getItem.mockImplementation(() {
+      localStorageMock.getItem.mockImplementation(() => {
         throw new Error('localStorage error');
       });
 

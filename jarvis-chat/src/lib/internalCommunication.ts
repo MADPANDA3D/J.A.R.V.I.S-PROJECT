@@ -202,7 +202,7 @@ class InternalCommunicationService {
   private auditTrail: Map<string, AuditTrailEntry[]> = new Map();
   private mentionNotificationQueue: Set<string> = new Set();
 
-  private constructor() {
+  private constructor() => {
     this.initializeSystemComments();
   }
 
@@ -351,7 +351,7 @@ class InternalCommunicationService {
         commentId: comment.id
       };
 
-    } catch (error) {
+    } catch (error) => {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -438,7 +438,7 @@ class InternalCommunicationService {
 
       return { success: true };
 
-    } catch (error) {
+    } catch (error) => {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -518,7 +518,7 @@ class InternalCommunicationService {
 
       return { success: true };
 
-    } catch (error) {
+    } catch (error) => {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -573,7 +573,7 @@ class InternalCommunicationService {
 
       return { success: true };
 
-    } catch (error) {
+    } catch (error) => {
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error'
@@ -609,7 +609,7 @@ class InternalCommunicationService {
     }
 
     // Sort comments
-    switch (options.sortBy) {
+    switch (options.sortBy) => {
       case 'date_asc':
         comments.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
         break;
@@ -744,7 +744,7 @@ class InternalCommunicationService {
       ];
 
       // Add other participants
-      for (const participantId of participantIds) {
+      for (const participantId of participantIds) => {
         participants.push({
           userId: participantId,
           userName: await this.getUserName(participantId),
@@ -769,7 +769,7 @@ class InternalCommunicationService {
       this.collaborationSessions.set(sessionId, session);
 
       // Notify participants
-      for (const participant of participants) {
+      for (const participant of participants) => {
         if (!participant.isHost) {
           // In real implementation, send notification
         }
@@ -788,7 +788,7 @@ class InternalCommunicationService {
         sessionId
       };
 
-    } catch (error) {
+    } catch (error) => {
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error'
@@ -883,7 +883,7 @@ class InternalCommunicationService {
   ): Promise<CommentAttachment[]> {
     const attachments: CommentAttachment[] = [];
 
-    for (const file of files) {
+    for (const file of files) => {
       // In real implementation, this would upload to storage service
       const attachment: CommentAttachment = {
         id: this.generateAttachmentId(),
@@ -962,7 +962,7 @@ class InternalCommunicationService {
   }
 
   private async processMentionNotifications(comment: InternalComment): Promise<void> {
-    for (const mention of comment.mentions) {
+    for (const mention of comment.mentions) => {
       if (!mention.resolved) {
         // In real implementation, send notification
         mention.notifiedAt = new Date().toISOString();

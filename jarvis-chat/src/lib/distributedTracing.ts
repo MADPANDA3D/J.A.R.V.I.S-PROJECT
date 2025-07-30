@@ -104,7 +104,7 @@ class DistributedTracingService {
   private config: TracingConfig;
   private exportTimer?: NodeJS.Timeout;
 
-  constructor() {
+  constructor() => {
     this.config = this.loadConfiguration();
     this.startExportTimer();
     this.setupCleanupTimer();
@@ -550,7 +550,7 @@ class DistributedTracingService {
     if (baggageHeader) {
       try {
         baggage = JSON.parse(baggageHeader);
-      } catch (error) {
+      } catch (error) => {
         // Invalid baggage format
       }
     }
@@ -688,7 +688,7 @@ class DistributedTracingService {
       } else {
         console.warn('Failed to export spans:', response.statusText);
       }
-    } catch (error) {
+    } catch (error) => {
       console.warn('Error exporting spans:', error);
     }
   }
@@ -789,7 +789,7 @@ export const withTracing = async <T>(
     const result = await operation(context);
     distributedTracing.finishSpan(context, 'completed');
     return result;
-  } catch (error) {
+  } catch (error) => {
     distributedTracing.finishSpan(context, 'error', error as Error);
     throw error;
   }

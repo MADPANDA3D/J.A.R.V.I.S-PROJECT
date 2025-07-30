@@ -92,7 +92,7 @@ class TransactionImpl implements Transaction {
   status?: 'ok' | 'error' | 'cancelled';
   metadata?: Record<string, unknown>;
 
-  constructor(name: string, operation: string) {
+  constructor(name: string, operation: string) => {
     this.name = name;
     this.operation = operation;
     this.startTime = performance.now();
@@ -168,7 +168,7 @@ class MonitoringService implements APMService {
   private errorRateThreshold = 10; // errors per minute
   private performanceThreshold = 3000; // 3 seconds
 
-  constructor() {
+  constructor() => {
     this.initialize();
     this.setupDefaultAlertRules();
     this.startRealTimeMonitoring();
@@ -196,7 +196,7 @@ class MonitoringService implements APMService {
         userAgent: navigator.userAgent,
         url: window.location.href,
       });
-    } catch (error) {
+    } catch (error) => {
       captureError(
         error instanceof Error
           ? error
@@ -252,7 +252,7 @@ class MonitoringService implements APMService {
 
         clsObserver.observe({ entryTypes: ['layout-shift'] });
       }
-    } catch (error) {
+    } catch (error) => {
       captureWarning('Failed to initialize Core Web Vitals monitoring', {
         error,
       });
@@ -303,7 +303,7 @@ class MonitoringService implements APMService {
 
         paintObserver.observe({ entryTypes: ['paint'] });
       }
-    } catch (error) {
+    } catch (error) => {
       captureWarning('Failed to initialize performance monitoring', { error });
     }
   }
@@ -312,7 +312,7 @@ class MonitoringService implements APMService {
     try {
       // Enhanced global error handling
       const originalConsoleError = console.error;
-      console.error = (...args) {
+      console.error = (...args) => {
         this.captureMessage(`Console Error: ${args.join(' ')}`, 'error', {
           source: 'console',
           args: args.map(arg =>
@@ -333,7 +333,7 @@ class MonitoringService implements APMService {
           }
         );
       });
-    } catch (error) {
+    } catch (error) => {
       captureWarning('Failed to initialize error tracking enhancements', {
         error,
       });
@@ -356,7 +356,7 @@ class MonitoringService implements APMService {
 
         resourceObserver.observe({ entryTypes: ['resource'] });
       }
-    } catch (error) {
+    } catch (error) => {
       captureWarning('Failed to initialize resource monitoring', { error });
     }
   }
@@ -554,7 +554,7 @@ class MonitoringService implements APMService {
     level: 'info' | 'warning' | 'error',
     context?: Record<string, unknown>
   ): void {
-    switch (level) {
+    switch (level) => {
       case 'error':
         captureError(message, context);
         break;
@@ -685,7 +685,7 @@ class MonitoringService implements APMService {
             checkComplete();
           });
           lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
-        } catch (error) {
+        } catch (error) => {
           vitals.lcp = 0;
         }
       }
@@ -754,7 +754,7 @@ class MonitoringService implements APMService {
       // Send to all services concurrently
       await Promise.allSettled(promises);
       
-    } catch (error) {
+    } catch (error) => {
       // Log but don't throw - monitoring failures shouldn't break the app
       console.warn('External APM integration failed:', error);
     }
@@ -769,7 +769,7 @@ class MonitoringService implements APMService {
           window.DD_RUM.addAction(type, data);
         }
       }
-    } catch (error) {
+    } catch (error) => {
       console.warn('DataDog integration failed:', error);
     }
   }
@@ -792,7 +792,7 @@ class MonitoringService implements APMService {
           });
         }
       }
-    } catch (error) {
+    } catch (error) => {
       console.warn('Sentry integration failed:', error);
     }
   }
@@ -810,7 +810,7 @@ class MonitoringService implements APMService {
           LogRocket.track(type, data);
         }
       }
-    } catch (error) {
+    } catch (error) => {
       console.warn('LogRocket integration failed:', error);
     }
   }
@@ -852,7 +852,7 @@ class MonitoringService implements APMService {
       if (!response.ok) {
         console.warn(`Webhook failed with status: ${response.status}`);
       }
-    } catch (error) {
+    } catch (error) => {
       console.warn('Custom webhook integration failed:', error);
     }
   }
@@ -971,7 +971,7 @@ class MonitoringService implements APMService {
   private checkAlertRules(): void {
     const now = Date.now();
 
-    for (const rule of this.alertRules) {
+    for (const rule of this.alertRules) => {
       if (!rule.enabled) continue;
 
       // Check cooldown
@@ -1009,7 +1009,7 @@ class MonitoringService implements APMService {
     }
 
     // Evaluate condition
-    switch (operator) {
+    switch (operator) => {
       case '>':
         return value > threshold;
       case '<':
@@ -1193,7 +1193,7 @@ export const withMonitoring = <T extends (...args: unknown[]) => unknown>(
   name: string,
   operation: string = 'function'
 ): T => {
-  return ((...args: unknown[]) {
+  return ((...args: unknown[]) => {
     const transaction = startTransaction(name, operation);
     try {
       const result = fn(...args);
@@ -1217,7 +1217,7 @@ export const withMonitoring = <T extends (...args: unknown[]) => unknown>(
         transaction.finish();
         return result;
       }
-    } catch (error) {
+    } catch (error) => {
       transaction.setStatus('error');
       transaction.setMetadata({
         error: error instanceof Error ? error.message : String(error),
@@ -1233,7 +1233,7 @@ export const withMonitoring = <T extends (...args: unknown[]) => unknown>(
 };
 
 // Bug report integration
-export const trackBugReportEvent = (event: string, data: Record<string, unknown>) {
+export const trackBugReportEvent = (event: string, data: Record<string, unknown>) => {
   monitoringService.trackBusinessEvent(event, data);
 };
 

@@ -12,7 +12,7 @@ interface InstallPromptProps {
 export const InstallPrompt: React.FC<InstallPromptProps> = ({
   showDelay = 30000, // 30 seconds default
   className = '',
-}) {
+}) => {
   const { canInstall, isInstalling, install, installError, clearError } =
     usePWAInstall();
   const [isVisible, setIsVisible] = useState(false);
@@ -31,7 +31,7 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({
 
   // Clear error when component unmounts
   useEffect(() => {
-    return () {
+    return () => {
       if (installError) {
         clearError();
       }

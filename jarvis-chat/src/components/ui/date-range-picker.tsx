@@ -29,7 +29,7 @@ export function DateRangePicker({
 }: DateRangePickerProps) {
   const [open, setOpen] = useState(false);
 
-  const formatDateRange = (range?: DateRange) {
+  const formatDateRange = (range?: DateRange) => {
     if (!range) return placeholder;
     
     const { from, to } = range;
@@ -43,7 +43,7 @@ export function DateRangePicker({
     return placeholder;
   };
 
-  const handleSelect = (range: DateRange | undefined) {
+  const handleSelect = (range: DateRange | undefined) => {
     onDateRangeChange?.(range);
     
     // Close popover when both dates are selected
@@ -52,7 +52,7 @@ export function DateRangePicker({
     }
   };
 
-  const handleClear = (e: React.MouseEvent) {
+  const handleClear = (e: React.MouseEvent) => {
     e.stopPropagation();
     onDateRangeChange?.(undefined);
     setOpen(false);

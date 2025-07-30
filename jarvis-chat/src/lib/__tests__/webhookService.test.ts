@@ -602,7 +602,7 @@ describe('WebhookService', () => {
         'string response',
       ];
 
-      for (const invalidResponse of testCases) {
+      for (const invalidResponse of testCases) => {
         mockFetch.mockResolvedValueOnce({
           ok: true,
           status: 200,
@@ -672,7 +672,7 @@ describe('WebhookService', () => {
 
     it('should calculate percentile response times', async () => {
       // Send multiple requests to get response time data
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 10; i++) => {
         mockFetch.mockResolvedValueOnce({
           ok: true,
           status: 200,
@@ -831,7 +831,7 @@ describe('WebhookService', () => {
 
     it('should handle mixed success/failure in concurrent requests', async () => {
       let callCount = 0;
-      mockFetch.mockImplementation(() {
+      mockFetch.mockImplementation(() => {
         callCount++;
         if (callCount % 2 === 0) {
           return Promise.reject(new TypeError('Network error'));

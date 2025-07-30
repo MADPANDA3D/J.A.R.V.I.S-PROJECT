@@ -67,7 +67,7 @@ export class SecretsManager {
     operation: string;
   }> = [];
 
-  constructor() {
+  constructor() => {
     this.initializeSecrets();
     this.setupRotationConfigs();
   }
@@ -238,7 +238,7 @@ export class SecretsManager {
     const environment = import.meta.env.VITE_APP_ENV || 'development';
 
     // Validate each secret
-    for (const secret of secrets) {
+    for (const secret of secrets) => {
       this.validateSecret(secret, errors, warnings, environment);
     }
 
@@ -341,7 +341,7 @@ export class SecretsManager {
    * Check rotation needs for secrets
    */
   private checkRotationNeeds(warnings: SecretWarning[]): void {
-    for (const [secretName, rotationConfig] of this.rotationConfigs) {
+    for (const [secretName, rotationConfig] of this.rotationConfigs) => {
       const secret = this.secrets.get(secretName);
       if (!secret || !secret.value) continue;
 
@@ -579,7 +579,7 @@ export class SecretsManager {
   }> {
     const status = [];
 
-    for (const [secretName, rotationConfig] of this.rotationConfigs) {
+    for (const [secretName, rotationConfig] of this.rotationConfigs) => {
       const secret = this.secrets.get(secretName);
       if (!secret) continue;
 
@@ -659,7 +659,7 @@ export function logSecretsStatus(result: SecretValidationResult): void {
     'monitoring',
     'security',
   ] as const;
-  for (const category of categories) {
+  for (const category of categories) => {
     const categorySecrets = result.secrets.filter(s => s.category === category);
     if (categorySecrets.length > 0) {
       console.log(
@@ -773,7 +773,7 @@ export function logSecretsStatus(result: SecretValidationResult): void {
 /**
  * Get secrets health status for monitoring
  */
-export function getSecretsHealthStatus() {
+export function getSecretsHealthStatus() => {
   const result = validateSecrets();
   const rotationStatus = secretsManager.getRotationStatus();
 

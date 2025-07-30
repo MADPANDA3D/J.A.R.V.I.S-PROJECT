@@ -107,7 +107,7 @@ class HealthMonitoringService {
   private monitoringInterval?: number;
   private dependencies: Map<string, () => Promise<ServiceHealth>> = new Map();
 
-  constructor() {
+  constructor() => {
     this.initializeThresholds();
     this.initializeDependencies();
     this.startMonitoring();
@@ -153,7 +153,7 @@ class HealthMonitoringService {
           dependencies: ['supabase'],
           metadata: { error: error?.message },
         };
-      } catch (dbError) {
+      } catch (dbError) => {
         return {
           name: 'database',
           status: 'down',
@@ -187,7 +187,7 @@ class HealthMonitoringService {
           dependencies: ['server'],
           metadata: { status: response.status },
         };
-      } catch (apiError) {
+      } catch (apiError) => {
         return {
           name: 'api',
           status: 'down',
@@ -238,7 +238,7 @@ class HealthMonitoringService {
           dependencies: ['n8n'],
           metadata: { status: response.status },
         };
-      } catch (webhookError) {
+      } catch (webhookError) => {
         return {
           name: 'webhook',
           status: 'down',
@@ -274,7 +274,7 @@ class HealthMonitoringService {
           dependencies: [],
           metadata: monitoringHealth.metrics,
         };
-      } catch (error) {
+      } catch (error) => {
         return {
           name: 'monitoring',
           status: 'down',
@@ -346,7 +346,7 @@ class HealthMonitoringService {
         Array.from(this.dependencies.entries()).map(async ([name, checker]) => {
           try {
             return await checker();
-          } catch (error) {
+          } catch (error) => {
             return {
               name,
               status: 'down' as const,
@@ -379,7 +379,7 @@ class HealthMonitoringService {
 
       // Check overall system health
       this.checkSystemThresholds();
-    } catch (error) {
+    } catch (error) => {
       captureError(
         error instanceof Error ? error : new Error('Health monitoring failed'),
         {
@@ -455,7 +455,7 @@ class HealthMonitoringService {
           }
         );
       }
-    } catch (error) {
+    } catch (error) => {
       captureWarning('Failed to check system thresholds', { error });
     }
   }
@@ -473,7 +473,7 @@ class HealthMonitoringService {
     let exceedsWarning = false;
     let exceedsCritical = false;
 
-    switch (comparison) {
+    switch (comparison) => {
       case 'greater':
         exceedsWarning = value > warning;
         exceedsCritical = value > critical;
@@ -577,7 +577,7 @@ class HealthMonitoringService {
         message: alert.message,
         metadata: alert.metadata,
       });
-    } catch (error) {
+    } catch (error) => {
       captureWarning('Failed to send critical alert', {
         alert_id: alert.id,
         error: error instanceof Error ? error.message : 'Unknown error',

@@ -675,7 +675,7 @@ function isValidUrl(string: string): boolean {
   try {
     new URL(string);
     return true;
-  } catch (error) {
+  } catch (error) => {
     return false;
   }
 }
@@ -845,7 +845,7 @@ export function logEnvironmentStatus(result: ValidationResult): void {
 /**
  * Gets environment information for display in UI
  */
-export function getEnvironmentInfo() {
+export function getEnvironmentInfo() => {
   const result = validateEnvironment();
 
   return {
@@ -917,7 +917,7 @@ export function isProductionReady(): boolean {
 /**
  * Gets health check status for monitoring
  */
-export function getHealthCheckStatus() {
+export function getHealthCheckStatus() => {
   const result = validateEnvironment();
   const isReady = isProductionReady();
 

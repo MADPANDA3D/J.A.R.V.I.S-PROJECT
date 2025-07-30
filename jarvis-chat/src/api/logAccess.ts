@@ -112,7 +112,7 @@ class LogAccessService {
   private rateLimitBuckets: Map<string, { count: number; resetTime: number }> = new Map();
   private activeStreams: Map<string, WebSocket> = new Map();
 
-  constructor() {
+  constructor() => {
     this.setupDefaultApiKeys();
     this.setupCleanupTimer();
   }
@@ -499,7 +499,7 @@ class LogAccessService {
     logs.sort((a, b) => {
       let aValue: string | number, bValue: string | number;
       
-      switch (query.sortBy) {
+      switch (query.sortBy) => {
         case 'level': {
           const levelOrder = ['debug', 'info', 'warn', 'error', 'critical'];
           aValue = levelOrder.indexOf(a.level);
@@ -640,7 +640,7 @@ class LogAccessService {
       let contentType: string;
       let filename: string;
 
-      switch (request.format) {
+      switch (request.format) => {
         case 'json':
           data = JSON.stringify(searchResult.logs, null, 2);
           contentType = 'application/json';

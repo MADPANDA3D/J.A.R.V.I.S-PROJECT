@@ -83,7 +83,7 @@ const initializeLogging = async () => {
         }
       );
     }
-  } catch (error) {
+  } catch (error) => {
     console.error('❌ Failed to initialize logging:', error);
   }
 };

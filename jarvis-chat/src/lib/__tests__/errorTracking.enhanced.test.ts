@@ -118,7 +118,7 @@ describe('Enhanced Error Tracking', () => {
 
     it('should limit breadcrumb storage', () => {
       // Add many breadcrumbs
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 100; i++) => {
         addBreadcrumb('info', 'info', `Breadcrumb ${i}`);
       }
       
@@ -344,7 +344,7 @@ describe('Enhanced Error Tracking', () => {
       const startTime = Date.now();
       
       // Generate many errors
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 100; i++) => {
         captureError(new Error(`Error ${i}`));
       }
       
@@ -357,7 +357,7 @@ describe('Enhanced Error Tracking', () => {
 
     it('should limit stored errors to prevent memory leaks', () => {
       // Generate many errors
-      for (let i = 0; i < 200; i++) {
+      for (let i = 0; i < 200; i++) => {
         captureError(new Error(`Error ${i}`));
       }
       
@@ -389,12 +389,12 @@ describe('Enhanced Error Tracking', () => {
     });
 
     it('should handle localStorage errors gracefully', () => {
-      localStorageMock.setItem.mockImplementation(() {
+      localStorageMock.setItem.mockImplementation(() => {
         throw new Error('Storage quota exceeded');
       });
       
       // Should not throw error
-      expect(() {
+      expect(() => {
         captureError(new Error('Test error'));
       }).not.toThrow();
     });

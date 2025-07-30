@@ -101,7 +101,7 @@ export interface UseWebhookMonitoringOptions {
   webhookServerUrl?: string;
 }
 
-export const useWebhookMonitoring = (options: UseWebhookMonitoringOptions = {}) {
+export const useWebhookMonitoring = (options: UseWebhookMonitoringOptions = {}) => {
   const {
     refreshInterval = 30000, // 30 seconds default
     autoRefresh = true,
@@ -130,7 +130,7 @@ export const useWebhookMonitoring = (options: UseWebhookMonitoringOptions = {}) 
           // Add timeout
           signal: AbortSignal.timeout(5000)
         });
-      } catch (fetchError) {
+      } catch (fetchError) => {
         // If webhook server is not available, use mock data
         console.warn('Webhook server not available, using mock data:', fetchError);
         const mockMetrics = generateMockMetrics();

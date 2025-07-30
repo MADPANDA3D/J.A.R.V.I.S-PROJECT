@@ -60,7 +60,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
 
   const hasHighlights = highlightedContent || (searchTerms && searchTerms.length > 0);
 
-  const formatTime = (date: Date) {
+  const formatTime = (date: Date) => {
     return new Intl.DateTimeFormat('en-US', {
       hour: 'numeric',
       minute: '2-digit',
@@ -69,7 +69,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   };
 
   const getStatusIcon = () => {
-    switch (message.status) {
+    switch (message.status) => {
       case 'sending':
         return (
           <Clock

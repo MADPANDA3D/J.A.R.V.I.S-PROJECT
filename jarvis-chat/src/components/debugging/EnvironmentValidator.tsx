@@ -27,7 +27,7 @@ export function EnvironmentValidator({
       await new Promise(resolve => setTimeout(resolve, 500));
       const result = validateEnvironment();
       setValidationResult(result);
-    } catch (error) {
+    } catch (error) => {
       console.error('Environment validation failed:', error);
     } finally {
       setIsLoading(false);
@@ -38,8 +38,8 @@ export function EnvironmentValidator({
     runValidation();
   }, []);
 
-  const getSeverityIcon = (severity: 'error' | 'critical' | 'warning' | 'success') {
-    switch (severity) {
+  const getSeverityIcon = (severity: 'error' | 'critical' | 'warning' | 'success') => {
+    switch (severity) => {
       case 'critical':
       case 'error':
         return <AlertCircle className="h-4 w-4 text-red-500" />;
@@ -52,7 +52,7 @@ export function EnvironmentValidator({
     }
   };
 
-  const getSeverityBadge = (severity: 'error' | 'critical' | 'warning' | 'success') {
+  const getSeverityBadge = (severity: 'error' | 'critical' | 'warning' | 'success') => {
     const variants = {
       critical: 'destructive',
       error: 'destructive',
@@ -67,7 +67,7 @@ export function EnvironmentValidator({
     );
   };
 
-  const maskSensitiveValue = (value: string, field: string) {
+  const maskSensitiveValue = (value: string, field: string) => {
     if (!showSensitiveData && !showSecrets) {
       // Mask API keys, secrets, and URLs
       if (field.toLowerCase().includes('key') || 
@@ -84,7 +84,7 @@ export function EnvironmentValidator({
       await navigator.clipboard.writeText(text);
       setCopiedField(field);
       setTimeout(() => setCopiedField(null), 2000);
-    } catch (error) {
+    } catch (error) => {
       console.error('Failed to copy to clipboard:', error);
     }
   };

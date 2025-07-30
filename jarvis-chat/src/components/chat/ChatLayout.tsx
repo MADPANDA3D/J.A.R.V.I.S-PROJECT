@@ -73,7 +73,7 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
         message: 'Message sent successfully',
         priority: 'polite',
       });
-    } catch (error) {
+    } catch (error) => {
       console.error('Failed to send message:', error);
 
       // Announce error to screen readers
@@ -99,7 +99,7 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
       }
       
       return await chatService.searchMessages(userId, filters, options);
-    } catch (error) {
+    } catch (error) => {
       console.error('Search failed:', error);
       screenReader.announce({
         message: 'Search failed. Please try again.',
@@ -122,7 +122,7 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
       }
       
       return await chatService.searchMessagesGroupedBySession(userId, filters, options);
-    } catch (error) {
+    } catch (error) => {
       console.error('Session grouped search failed:', error);
       screenReader.announce({
         message: 'Session grouped search failed. Please try again.',
@@ -132,7 +132,7 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
     }
   };
 
-  const handleSessionSelect = (sessionId: string) {
+  const handleSessionSelect = (sessionId: string) => {
     // Handle session selection logic here
     console.log('Session selected:', sessionId);
     
@@ -149,7 +149,7 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
     setHighlightedMessageId(null);
   };
 
-  const handleSearchResultClick = (messageId: string) {
+  const handleSearchResultClick = (messageId: string) => {
     onMessageClick?.(messageId);
     setHighlightedMessageId(messageId);
     setShowSearch(false);

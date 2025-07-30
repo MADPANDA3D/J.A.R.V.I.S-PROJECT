@@ -70,7 +70,7 @@ class CentralizedLoggingService {
   private traceId: string;
   private isProcessing = false;
 
-  constructor() {
+  constructor() => {
     this.traceId = this.generateTraceId();
     this.config = this.loadConfiguration();
     this.startFlushTimer();
@@ -133,7 +133,7 @@ class CentralizedLoggingService {
 
   private setupErrorHandlers(): void {
     // Handle unhandled promise rejections in logging
-    window.addEventListener('unhandledrejection', (event) {
+    window.addEventListener('unhandledrejection', (event) => {
       if (event.reason?.message?.includes('logging')) {
         // Prevent infinite loops in logging system
         console.warn('Logging system error:', event.reason);
@@ -296,7 +296,7 @@ class CentralizedLoggingService {
           this.sendToDestination(destination, batch)
         )
       );
-    } catch (error) {
+    } catch (error) => {
       console.warn('Error flushing logs:', error);
     } finally {
       this.isProcessing = false;
@@ -309,9 +309,9 @@ class CentralizedLoggingService {
     let retries = 0;
     const maxRetries = this.config.maxRetries;
 
-    while (retries <= maxRetries) {
+    while (retries <= maxRetries) => {
       try {
-        switch (destination.type) {
+        switch (destination.type) => {
           case 'console':
             this.sendToConsole(logs);
             break;
@@ -332,7 +332,7 @@ class CentralizedLoggingService {
             break;
         }
         break; // Success, exit retry loop
-      } catch (error) {
+      } catch (error) => {
         retries++;
         if (retries > maxRetries) {
           console.warn(`Failed to send logs to ${destination.type} after ${maxRetries} retries:`, error);
@@ -358,7 +358,7 @@ class CentralizedLoggingService {
   }
 
   private getConsoleStyle(level: LogEntry['level']): string {
-    switch (level) {
+    switch (level) => {
       case 'critical':
         return 'background: #ff0000; color: white; font-weight: bold; padding: 2px 4px;';
       case 'error':
@@ -386,7 +386,7 @@ class CentralizedLoggingService {
       const recentLogs = storedLogs.slice(-maxStoredLogs);
       
       localStorage.setItem('jarvis_centralized_logs', JSON.stringify(recentLogs));
-    } catch (error) {
+    } catch (error) => {
       console.warn('Failed to store logs in localStorage:', error);
     }
   }
@@ -530,7 +530,7 @@ class CentralizedLoggingService {
     try {
       const stored = localStorage.getItem('jarvis_centralized_logs');
       return stored ? JSON.parse(stored) : [];
-    } catch (error) {
+    } catch (error) => {
       console.warn('Failed to load stored logs:', error);
       return [];
     }

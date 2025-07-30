@@ -6,7 +6,7 @@ const mockEnv: Record<string, string | undefined> = {};
 vi.stubGlobal('import', {
   meta: {
     env: new Proxy(mockEnv, {
-      get(target, prop) {
+      get(target, prop) => {
         return target[prop as string];
       },
     }),

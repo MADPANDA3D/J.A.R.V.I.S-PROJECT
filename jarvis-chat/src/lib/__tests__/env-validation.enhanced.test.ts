@@ -6,7 +6,7 @@ const mockEnv: Record<string, string | undefined> = {};
 vi.stubGlobal('import', {
   meta: {
     env: new Proxy(mockEnv, {
-      get(target, prop) {
+      get(target, prop) => {
         return target[prop as string];
       },
     }),
@@ -402,7 +402,7 @@ describe('Enhanced Environment Validation', () => {
 
   describe('Logging', () => {
     it('should log environment status without errors', () => {
-      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() {});
+      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY =

@@ -76,7 +76,7 @@ describe('useChat', () => {
     ];
 
     mockChatService.loadMessageHistory.mockResolvedValue(mockHistory);
-    mockChatService.subscribeToMessages.mockReturnValue(() {});
+    mockChatService.subscribeToMessages.mockReturnValue(() => {});
 
     const { result } = renderHook(() => useChat());
 
@@ -111,7 +111,7 @@ describe('useChat', () => {
     };
 
     mockChatService.loadMessageHistory.mockResolvedValue([]);
-    mockChatService.subscribeToMessages.mockReturnValue(() {});
+    mockChatService.subscribeToMessages.mockReturnValue(() => {});
     mockChatService.processChatMessage.mockResolvedValue({
       userMsg: mockUserMsg,
       aiMsg: mockAiMsg,
@@ -135,7 +135,7 @@ describe('useChat', () => {
 
   it('should handle send message error', async () => {
     mockChatService.loadMessageHistory.mockResolvedValue([]);
-    mockChatService.subscribeToMessages.mockReturnValue(() {});
+    mockChatService.subscribeToMessages.mockReturnValue(() => {});
     mockChatService.processChatMessage.mockRejectedValue(
       new Error('Network error')
     );
@@ -158,7 +158,7 @@ describe('useChat', () => {
 
   it('should not send empty messages', async () => {
     mockChatService.loadMessageHistory.mockResolvedValue([]);
-    mockChatService.subscribeToMessages.mockReturnValue(() {});
+    mockChatService.subscribeToMessages.mockReturnValue(() => {});
 
     const { result } = renderHook(() => useChat());
 
@@ -172,7 +172,7 @@ describe('useChat', () => {
 
   it('should clear messages', () => {
     mockChatService.loadMessageHistory.mockResolvedValue([]);
-    mockChatService.subscribeToMessages.mockReturnValue(() {});
+    mockChatService.subscribeToMessages.mockReturnValue(() => {});
 
     const { result } = renderHook(() => useChat());
 
@@ -186,7 +186,7 @@ describe('useChat', () => {
 
   it('should clear error', () => {
     mockChatService.loadMessageHistory.mockResolvedValue([]);
-    mockChatService.subscribeToMessages.mockReturnValue(() {});
+    mockChatService.subscribeToMessages.mockReturnValue(() => {});
 
     const { result } = renderHook(() => useChat());
 

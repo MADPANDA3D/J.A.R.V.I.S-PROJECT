@@ -48,14 +48,14 @@ export const BugReportModal: React.FC<BugReportModalProps> = ({
       }
     }
 
-    return () {
+    return () => {
       document.body.style.overflow = '';
     };
   }, [isOpen]);
 
   // Handle escape key
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) {
+    const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
         onClose();
       }
@@ -68,14 +68,14 @@ export const BugReportModal: React.FC<BugReportModalProps> = ({
   }, [isOpen, onClose]);
 
   // Handle backdrop click
-  const handleBackdropClick = (e: React.MouseEvent) {
+  const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
   };
 
   // Handle successful submission
-  const handleSubmitSuccess = (bugId: string, trackingNumber: string) {
+  const handleSubmitSuccess = (bugId: string, trackingNumber: string) => {
     onSubmitSuccess?.(bugId, trackingNumber);
     // Don't auto-close to show success message
   };

@@ -41,7 +41,7 @@ interface SupabaseConnectionTest {
   rls: boolean;
 }
 
-export function AuthenticationDebugger({ className = '' }: AuthenticationDebuggerProps) {
+export function AuthenticationDebugger({ className = '' }: AuthenticationDebuggerProps) => {
   const [authTests, setAuthTests] = useState<AuthTest[]>([]);
   const [isRunning, setIsRunning] = useState(false);
   const [currentUser, setCurrentUser] = useState<Record<string, unknown> | null>(null);
@@ -65,7 +65,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
           setCurrentUser(user);
           addAuthLog(`Current user: ${user?.email || 'None'}`);
         }
-      } catch (error) {
+      } catch (error) => {
         addAuthLog(`Failed to get current user: ${error}`);
       }
     };
@@ -73,7 +73,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
     getCurrentUser();
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       addAuthLog(`Auth event: ${event}, User: ${session?.user?.email || 'None'}`);
       setCurrentUser(session?.user || null);
     });
@@ -81,7 +81,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
     return () => subscription.unsubscribe();
   }, []);
 
-  const addAuthLog = (message: string) {
+  const addAuthLog = (message: string) => {
     const timestamp = new Date().toLocaleTimeString();
     setAuthLogs(prev => [...prev.slice(-19), `[${timestamp}] ${message}`]);
   };
@@ -142,7 +142,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
             details: { error: error.message, code: error.code },
           };
         }
-      } catch (connectionError) {
+      } catch (connectionError) => {
         addAuthLog(`Connection test error: ${connectionError}`);
         return {
           ...test,
@@ -165,7 +165,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
           project: supabaseUrl.split('//')[1]?.split('.')[0]
         },
       };
-    } catch (error) {
+    } catch (error) => {
       addAuthLog(`Config test error: ${error}`);
       return {
         ...test,
@@ -208,7 +208,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
           userExists: !!data.session?.user 
         },
       };
-    } catch (error) {
+    } catch (error) => {
       addAuthLog(`Endpoint test error: ${error}`);
       return {
         ...test,
@@ -262,7 +262,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
         message: `Unexpected RLS behavior: ${unauthError.message}`,
         details: { error: unauthError.message, code: unauthError.code },
       };
-    } catch (error) {
+    } catch (error) => {
       addAuthLog(`RLS test error: ${error}`);
       return {
         ...test,
@@ -322,7 +322,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
         message: 'Authentication flow is functional',
         details: { signUpEndpoint: 'responsive' },
       };
-    } catch (error) {
+    } catch (error) => {
       addAuthLog(`Auth flow test error: ${error}`);
       return {
         ...test,
@@ -346,7 +346,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
       testAuthFlow,
     ];
 
-    for (const testFn of tests) {
+    for (const testFn of tests) => {
       try {
         const result = await testFn();
         result.timestamp = new Date();
@@ -354,7 +354,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
         
         // Add small delay between tests
         await new Promise(resolve => setTimeout(resolve, 500));
-      } catch (error) {
+      } catch (error) => {
         const errorTest: AuthTest = {
           name: testFn.name,
           status: 'error',
@@ -393,13 +393,13 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
         await supabase.auth.signOut();
         addAuthLog('Test session signed out');
       }
-    } catch (error) {
+    } catch (error) => {
       addAuthLog(`Credential test error: ${error}`);
     }
   };
 
-  const getStatusIcon = (status: string) {
-    switch (status) {
+  const getStatusIcon = (status: string) => {
+    switch (status) => {
       case 'success':
         return <CheckCircle className="h-4 w-4 text-green-500" />;
       case 'warning':
@@ -413,7 +413,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
     }
   };
 
-  const getStatusBadge = (status: string) {
+  const getStatusBadge = (status: string) => {
     const variants = {
       success: 'default',
       warning: 'secondary',
@@ -432,7 +432,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-    } catch (error) {
+    } catch (error) => {
       console.error('Failed to copy:', error);
     }
   };

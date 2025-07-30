@@ -43,7 +43,7 @@ export class SearchQueryOptimizer {
   private config: SearchOptimizationConfig;
   private queryCache = new Map<string, { result: unknown; timestamp: number; hits: number }>();
 
-  constructor(config: Partial<SearchOptimizationConfig> = {}) {
+  constructor(config: Partial<SearchOptimizationConfig> = {}) => {
     this.config = { ...defaultConfig, ...config };
   }
 
@@ -261,7 +261,7 @@ export class SearchQueryOptimizer {
       
       // Remove least recently used entries
       const toRemove = Math.floor(this.config.maxCacheSize * 0.2);
-      for (let i = 0; i < toRemove; i++) {
+      for (let i = 0; i < toRemove; i++) => {
         this.queryCache.delete(entries[i][0]);
       }
     }
@@ -279,7 +279,7 @@ export class SearchQueryOptimizer {
   }
 
   // Get cache statistics
-  getCacheStats() {
+  getCacheStats() => {
     const entries = Array.from(this.queryCache.values());
     return {
       size: this.queryCache.size,
@@ -302,7 +302,7 @@ export function createDebouncedSearch<T extends unknown[], R>(
   }> = [];
 
   return (...args: T): Promise<R> => {
-    return new Promise<R>((resolve, reject) {
+    return new Promise<R>((resolve, reject) => {
       pendingResolvers.push({ resolve, reject });
 
       if (timeoutId) {
@@ -316,7 +316,7 @@ export function createDebouncedSearch<T extends unknown[], R>(
         try {
           const result = await searchFunction(...args);
           resolvers.forEach(({ resolve }) => resolve(result));
-        } catch (error) {
+        } catch (error) => {
           resolvers.forEach(({ reject }) => reject(error));
         }
       }, delayMs);
@@ -333,11 +333,11 @@ export class BatchQueryOptimizer {
   }> = [];
   private batchTimeout: NodeJS.Timeout | null = null;
 
-  constructor(private batchDelayMs: number = 50) {}
+  constructor(private batchDelayMs: number = 50) => {}
 
   // Add query to batch
   addQuery(query: OptimizedQuery): Promise<unknown> {
-    return new Promise((resolve, reject) {
+    return new Promise((resolve, reject) => {
       this.pendingQueries.push({ query, resolve, reject });
 
       if (this.batchTimeout) {
@@ -361,7 +361,7 @@ export class BatchQueryOptimizer {
     // Group similar queries for optimization
     const groupedQueries = this.groupSimilarQueries(batch);
 
-    for (const group of groupedQueries) {
+    for (const group of groupedQueries) => {
       try {
         // Execute grouped queries (implementation would depend on actual database client)
         const results = await this.executeQueryGroup(group);
@@ -369,7 +369,7 @@ export class BatchQueryOptimizer {
         group.forEach((item, index) => {
           item.resolve(results[index]);
         });
-      } catch (error) {
+      } catch (error) => {
         group.forEach(item => {
           item.reject(error);
         });

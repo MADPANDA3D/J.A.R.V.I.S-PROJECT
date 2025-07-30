@@ -288,7 +288,7 @@ describe('MonitoringService', () => {
 
     it('should report degraded status with many errors', () => {
       // Generate many error metrics
-      for (let i = 0; i < 15; i++) {
+      for (let i = 0; i < 15; i++) => {
         monitoringService.trackCustomMetric('error.count', 1);
       }
 
@@ -303,7 +303,7 @@ describe('MonitoringService', () => {
       delete (window as typeof window & { DD_RUM?: unknown }).DD_RUM;
       delete (window as typeof window & { Sentry?: unknown }).Sentry;
 
-      expect(() {
+      expect(() => {
         monitoringService.trackCustomMetric('test.metric', 1);
       }).not.toThrow();
     });
@@ -327,7 +327,7 @@ describe('MonitoringService', () => {
       const initialCount = monitoringService.getMetrics().length;
 
       // Add more metrics than the limit
-      for (let i = 0; i < 1100; i++) {
+      for (let i = 0; i < 1100; i++) => {
         monitoringService.trackCustomMetric(`test.metric${i}`, i);
       }
 
@@ -339,7 +339,7 @@ describe('MonitoringService', () => {
       const initialCount = monitoringService.getEvents().length;
 
       // Add more events than the limit
-      for (let i = 0; i < 600; i++) {
+      for (let i = 0; i < 600; i++) => {
         monitoringService.trackBusinessEvent(`test.event${i}`, { value: i });
       }
 

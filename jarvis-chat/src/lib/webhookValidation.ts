@@ -172,7 +172,7 @@ export class WebhookValidator {
     try {
       const validatedData = WebhookPayloadSchema.parse(data);
       return { success: true, data: validatedData };
-    } catch (error) {
+    } catch (error) => {
       if (error instanceof z.ZodError) {
         const validationError: ValidationError = {
           success: false,
@@ -222,7 +222,7 @@ export class WebhookValidator {
     try {
       const validatedData = EnhancedWebhookPayloadSchema.parse(data);
       return { success: true, data: validatedData };
-    } catch (error) {
+    } catch (error) => {
       if (error instanceof z.ZodError) {
         const validationError: ValidationError = {
           success: false,
@@ -271,7 +271,7 @@ export class WebhookValidator {
     try {
       const validatedData = WebhookResponseSchema.parse(data);
       return { success: true, data: validatedData };
-    } catch (error) {
+    } catch (error) => {
       if (error instanceof z.ZodError) {
         const validationError: ValidationError = {
           success: false,
@@ -320,7 +320,7 @@ export class WebhookValidator {
     try {
       const validatedData = HealthCheckResponseSchema.parse(data);
       return { success: true, data: validatedData };
-    } catch (error) {
+    } catch (error) => {
       if (error instanceof z.ZodError) {
         const validationError: ValidationError = {
           success: false,
@@ -403,7 +403,7 @@ export class WebhookValidator {
         invalidFields: [],
         extraFields: [],
       };
-    } catch (error) {
+    } catch (error) => {
       if (error instanceof z.ZodError) {
         const missingRequired: string[] = [];
         const invalidFields: string[] = [];

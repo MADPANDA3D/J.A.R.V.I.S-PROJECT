@@ -39,7 +39,7 @@ export const useChat = () => {
         setIsLoadingHistory(true);
         const history = await chatService.loadMessageHistory(user.id);
         setMessages(history.map(chatMessageToMessage));
-      } catch (err) {
+      } catch (err) => {
         console.error('Failed to load message history:', err);
         // Don't set error for history loading failure, just log it
       } finally {
@@ -108,7 +108,7 @@ export const useChat = () => {
             chatMessageToMessage(aiMsg),
           ];
         });
-      } catch (err) {
+      } catch (err) => {
         console.error('Failed to send message:', err);
 
         // Update temporary message to show error

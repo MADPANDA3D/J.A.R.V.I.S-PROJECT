@@ -63,7 +63,7 @@ class DatabaseLoggingService {
   private slowQueryThreshold = 1000; // 1 second
   private correlationIdGenerator = () => `corr_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-  constructor() {
+  constructor() => {
     this.setupPerformanceMonitoring();
   }
 
@@ -378,7 +378,7 @@ class DatabaseLoggingService {
       // Send to centralized logging service
       const { sendToCentralizedLogging } = await import('./centralizedLogging');
       await sendToCentralizedLogging(type, data);
-    } catch (error) {
+    } catch (error) => {
       // Fail silently to not break database operations
       console.warn('Failed to send to external logging:', error);
     }

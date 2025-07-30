@@ -85,7 +85,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   // Handle keyboard navigation
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) {
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (isOpen && event.key === 'Escape') {
         event.preventDefault();
         onClose?.();

@@ -80,7 +80,7 @@ class APISecurityService {
   private blockedIPs: Set<string> = new Set();
   private suspiciousActivity: Map<string, number> = new Map();
 
-  private constructor() {
+  private constructor() => {
     this.initializeDefaultKeys();
     this.startCleanupTasks();
   }
@@ -172,7 +172,7 @@ class APISecurityService {
         apiKey
       };
 
-    } catch (error) {
+    } catch (error) => {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -235,7 +235,7 @@ class APISecurityService {
         permissions: storedKey.permissions
       };
 
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.error(
         'api-security',
         'system',
@@ -273,7 +273,7 @@ class APISecurityService {
       { name: 'day', limit: limits.requestsPerDay, duration: 24 * 60 * 60 * 1000 }
     ];
 
-    for (const window of windows) {
+    for (const window of windows) => {
       const bucketKey = `${endpoint}:${window.name}`;
       let bucket = keyBuckets.get(bucketKey);
 
@@ -329,7 +329,7 @@ class APISecurityService {
     if (!keyBuckets) return;
 
     const windows = ['minute', 'hour', 'day'];
-    for (const window of windows) {
+    for (const window of windows) => {
       const bucketKey = `${endpoint}:${window}`;
       const bucket = keyBuckets.get(bucketKey);
       if (bucket) {
@@ -397,7 +397,7 @@ class APISecurityService {
 
       return true;
 
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.error(
         'api-security',
         'system',

@@ -43,7 +43,7 @@ export const SettingsPage: React.FC = () => {
       // Simulate save operation
       await new Promise(resolve => setTimeout(resolve, 1000));
       console.log('Profile saved:', { displayName });
-    } catch (error) {
+    } catch (error) => {
       console.error('Failed to save profile:', error);
     } finally {
       setIsLoading(false);
@@ -53,7 +53,7 @@ export const SettingsPage: React.FC = () => {
   const handleSignOut = async () => {
     try {
       await signOut();
-    } catch (error) {
+    } catch (error) => {
       console.error('Sign out error:', error);
     }
   };

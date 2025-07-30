@@ -36,7 +36,7 @@ const bugReportSchema = z.object({
 const attachmentSchema = z.object({
   size: z.number().max(10 * 1024 * 1024, 'File size must be less than 10MB'),
   type: z.string().refine(
-    (type) {
+    (type) => {
       const allowedTypes = [
         'image/jpeg', 'image/png', 'image/gif', 'image/webp',
         'text/plain', 'text/csv', 'application/json',
@@ -48,7 +48,7 @@ const attachmentSchema = z.object({
   )
 });
 
-export const useBugReport = (initialData: Partial<BugReportFormData> = {}) {
+export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
   const [formState, setFormState] = useState<BugReportFormState>({
     data: {
       title: '',
@@ -140,7 +140,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) {
           deviceInfo: collectBrowserInfo()
         }
       };
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.warn(
         'bug-report-hook',
         'system',
@@ -178,7 +178,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) {
     try {
       // Validate main form data
       bugReportSchema.parse(formState.data);
-    } catch (error) {
+    } catch (error) => {
       if (error instanceof z.ZodError) {
         error.errors.forEach(err => {
           const field = err.path[0] as keyof BugReportFormValidation;
@@ -197,7 +197,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) {
       formState.data.attachments.forEach((file) => {
         try {
           attachmentSchema.parse(file);
-        } catch (error) {
+        } catch (error) => {
           if (error instanceof z.ZodError) {
             error.errors.forEach(err => {
               attachmentErrors.push(`${file.name}: ${err.message}`);
@@ -225,7 +225,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) {
   }, [formState.data]);
 
   // Update form data
-  const updateFormData = useCallback((updates: Partial<BugReportFormData>) {
+  const updateFormData = useCallback((updates: Partial<BugReportFormData>) => {
     setFormState(prev => ({
       ...prev,
       data: {
@@ -312,7 +312,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) {
             }));
 
             return result.data;
-          } catch (error) {
+          } catch (error) => {
             setFormState(prev => ({
               ...prev,
               uploadProgress: prev.uploadProgress.map(p => 
@@ -353,7 +353,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) {
         message: 'Bug report submitted successfully'
       };
 
-    } catch (error) {
+    } catch (error) => {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
       
       centralizedLogging.error(
@@ -438,14 +438,14 @@ interface CoreWebVitals {
 }
 
 async function collectCoreWebVitals(): Promise<CoreWebVitals> {
-  return new Promise((resolve) {
+  return new Promise((resolve) => {
     const vitals: CoreWebVitals = {};
     
     // Use Performance Observer if available
     if ('PerformanceObserver' in window) {
       try {
         // Largest Contentful Paint
-        const lcpObserver = new PerformanceObserver((list) {
+        const lcpObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
           const lastEntry = entries[entries.length - 1];
           vitals.lcp = lastEntry.startTime;
@@ -453,7 +453,7 @@ async function collectCoreWebVitals(): Promise<CoreWebVitals> {
         lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
 
         // First Input Delay
-        const fidObserver = new PerformanceObserver((list) {
+        const fidObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
           entries.forEach((entry: PerformanceEventTiming) => {
             vitals.fid = entry.processingStart - entry.startTime;
@@ -462,7 +462,7 @@ async function collectCoreWebVitals(): Promise<CoreWebVitals> {
         fidObserver.observe({ type: 'first-input', buffered: true });
 
         // Cumulative Layout Shift
-        const clsObserver = new PerformanceObserver((list) {
+        const clsObserver = new PerformanceObserver((list) => {
           let clsValue = 0;
           const entries = list.getEntries();
           entries.forEach((entry: any) => {

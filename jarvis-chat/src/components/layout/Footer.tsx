@@ -6,7 +6,7 @@ interface FooterProps {
   showVersion?: boolean;
 }
 
-export function Footer({ className, showVersion = true }: FooterProps) {
+export function Footer({ className, showVersion = true }: FooterProps) => {
   return (
     <footer
       className={cn(

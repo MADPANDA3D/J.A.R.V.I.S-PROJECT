@@ -17,8 +17,8 @@ export const WebhookMonitoringDashboard: React.FC = () => {
     autoRefresh: true
   });
 
-  const getStatusColor = (status: string) {
-    switch (status) {
+  const getStatusColor = (status: string) => {
+    switch (status) => {
       case 'healthy': return 'bg-green-500';
       case 'degraded': return 'bg-yellow-500';
       case 'unhealthy': return 'bg-red-500';
@@ -36,7 +36,7 @@ export const WebhookMonitoringDashboard: React.FC = () => {
           const data = await response.json();
           setHistoricalData(data);
         }
-      } catch (error) {
+      } catch (error) => {
         console.error('Failed to fetch historical data:', error);
       }
     };

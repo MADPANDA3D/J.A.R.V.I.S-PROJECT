@@ -189,7 +189,7 @@ class BugDashboardAPI {
   private cache: Map<string, { data: unknown; timestamp: number; ttl: number }> = new Map();
   private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
-  private constructor() {}
+  private constructor() => {}
 
   static getInstance(): BugDashboardAPI {
     if (!BugDashboardAPI.instance) {
@@ -201,7 +201,7 @@ class BugDashboardAPI {
   /**
    * Get paginated list of bugs with filtering
    */
-  async getBugs(req: Request, res: Response, next: NextFunction) {
+  async getBugs(req: Request, res: Response, next: NextFunction) => {
     const startTime = performance.now();
     const correlationId = this.generateCorrelationId();
 
@@ -300,7 +300,7 @@ class BugDashboardAPI {
   /**
    * Get detailed information about a specific bug
    */
-  async getBugById(req: Request, res: Response, next: NextFunction) {
+  async getBugById(req: Request, res: Response, next: NextFunction) => {
     const startTime = performance.now();
     const correlationId = this.generateCorrelationId();
     const bugId = req.params.id;
@@ -366,7 +366,7 @@ class BugDashboardAPI {
   /**
    * Update bug status
    */
-  async updateBugStatus(req: Request, res: Response, next: NextFunction) {
+  async updateBugStatus(req: Request, res: Response, next: NextFunction) => {
     const startTime = performance.now();
     const correlationId = this.generateCorrelationId();
     const bugId = req.params.id;
@@ -445,7 +445,7 @@ class BugDashboardAPI {
   /**
    * Assign bug to user
    */
-  async assignBug(req: Request, res: Response, next: NextFunction) {
+  async assignBug(req: Request, res: Response, next: NextFunction) => {
     const startTime = performance.now();
     const correlationId = this.generateCorrelationId();
     const bugId = req.params.id;
@@ -519,7 +519,7 @@ class BugDashboardAPI {
   /**
    * Search bugs with advanced query capabilities
    */
-  async searchBugs(req: Request, res: Response, next: NextFunction) {
+  async searchBugs(req: Request, res: Response, next: NextFunction) => {
     const startTime = performance.now();
     const correlationId = this.generateCorrelationId();
 
@@ -609,7 +609,7 @@ class BugDashboardAPI {
   /**
    * Get bug analytics and metrics
    */
-  async getBugAnalytics(req: Request, res: Response, next: NextFunction) {
+  async getBugAnalytics(req: Request, res: Response, next: NextFunction) => {
     const startTime = performance.now();
     const correlationId = this.generateCorrelationId();
 
@@ -745,7 +745,7 @@ class BugDashboardAPI {
     };
   }
 
-  private async queryBugsWithFilters(filters: BugFilters, pagination: PaginationOptions) {
+  private async queryBugsWithFilters(filters: BugFilters, pagination: PaginationOptions) => {
     // Convert filters to database query
     const queryFilters: Record<string, unknown> = {};
 
@@ -849,7 +849,7 @@ class BugDashboardAPI {
     return intersection.size / union.size;
   }
 
-  private async performBugSearch(query: SearchQuery) {
+  private async performBugSearch(query: SearchQuery) => {
     // Enhanced search functionality
     const searchResults = await bugReportOperations.searchBugReports({
       query: query.query,
@@ -930,14 +930,14 @@ class BugDashboardAPI {
     };
   }
 
-  private generateTrends(timeRange: TimeRange) {
+  private generateTrends(timeRange: TimeRange) => {
     // Generate trend data based on time range
     const trends = [];
     const start = new Date(timeRange.start);
     const end = new Date(timeRange.end);
     const days = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
 
-    for (let i = 0; i < days; i++) {
+    for (let i = 0; i < days; i++) => {
       const date = new Date(start.getTime() + i * 24 * 60 * 60 * 1000);
       trends.push({
         date: date.toISOString().split('T')[0],
@@ -950,7 +950,7 @@ class BugDashboardAPI {
     return trends;
   }
 
-  private generateGroupedData(grouping: AnalyticsGrouping) {
+  private generateGroupedData(grouping: AnalyticsGrouping) => {
     // Generate grouped analytics data
     const groupedData: Record<string, {
       count: number;
@@ -959,7 +959,7 @@ class BugDashboardAPI {
     }> = {};
 
     // Mock grouped data based on grouping type
-    switch (grouping.by) {
+    switch (grouping.by) => {
       case 'status':
         Object.values(BugStatus).forEach(status => {
           groupedData[status] = {
@@ -984,7 +984,7 @@ class BugDashboardAPI {
     return groupedData;
   }
 
-  private analyzeErrorTypes() {
+  private analyzeErrorTypes() => {
     return [
       { type: 'JavaScript Error', count: 45, percentage: 35.2 },
       { type: 'API Failure', count: 32, percentage: 25.0 },
@@ -993,7 +993,7 @@ class BugDashboardAPI {
     ];
   }
 
-  private analyzePeakHours() {
+  private analyzePeakHours() => {
     return Array.from({ length: 24 }, (_, hour) => ({
       hour,
       count: Math.floor(Math.random() * 20)
@@ -1005,7 +1005,7 @@ class BugDashboardAPI {
     return `${operation}:${JSON.stringify(params)}`;
   }
 
-  private getFromCache(key: string) {
+  private getFromCache(key: string) => {
     const cached = this.cache.get(key);
     if (cached && Date.now() - cached.timestamp < cached.ttl) {
       return cached.data;
@@ -1014,7 +1014,7 @@ class BugDashboardAPI {
     return null;
   }
 
-  private setCache(key: string, data: unknown, ttl: number = this.CACHE_TTL) {
+  private setCache(key: string, data: unknown, ttl: number = this.CACHE_TTL) => {
     this.cache.set(key, {
       data,
       timestamp: Date.now(),
@@ -1022,7 +1022,7 @@ class BugDashboardAPI {
     });
   }
 
-  private invalidateCache(bugId?: string) {
+  private invalidateCache(bugId?: string) => {
     if (bugId) {
       // Invalidate specific bug-related cache
       for (const [key] of this.cache.entries()) {

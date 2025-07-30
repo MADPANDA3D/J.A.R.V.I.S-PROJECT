@@ -76,7 +76,7 @@ export class ColorContrastValidator {
     s /= 100;
     l /= 100;
 
-    const hue2rgb = (p: number, q: number, t: number) {
+    const hue2rgb = (p: number, q: number, t: number) => {
       if (t < 0) t += 1;
       if (t > 1) t -= 1;
       if (t < 1 / 6) return p + (q - p) * 6 * t;
@@ -335,7 +335,7 @@ export class ColorContrastValidator {
     if (diff !== 0) {
       s = l > 0.5 ? diff / (2 - max - min) : diff / (max + min);
 
-      switch (max) {
+      switch (max) => {
         case r / 255:
           h = (g / 255 - b / 255) / diff + (g < b ? 6 : 0);
           break;
@@ -352,7 +352,7 @@ export class ColorContrastValidator {
     // Generate suggestions with different lightness values
     const lightnessValues = [0.1, 0.2, 0.3, 0.4, 0.6, 0.7, 0.8, 0.9];
 
-    for (const lightness of lightnessValues) {
+    for (const lightness of lightnessValues) => {
       const rgb = this.hslToRgb(h * 360, s * 100, lightness * 100);
       const hexColor = `#${rgb.r.toString(16).padStart(2, '0')}${rgb.g.toString(16).padStart(2, '0')}${rgb.b.toString(16).padStart(2, '0')}`;
 

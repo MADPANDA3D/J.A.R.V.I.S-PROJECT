@@ -236,7 +236,7 @@ class PerformanceMetricsService {
         }
       );
 
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.error(
         'performance-metrics',
         'system',
@@ -369,7 +369,7 @@ class PerformanceMetricsService {
       // Rough estimation (localStorage is typically limited to ~5-10MB)
       const maxStorage = 10 * 1024 * 1024; // 10MB
       return Math.round((totalSize / maxStorage) * 100);
-    } catch (error) {
+    } catch (error) => {
       return 0;
     }
   }
@@ -432,7 +432,7 @@ class PerformanceMetricsService {
         averageSessionDuration: stats.averageSessionDuration,
         bounceRate: this.calculateBounceRate(activeSessions as unknown[])
       };
-    } catch (error) {
+    } catch (error) => {
       // Fallback if activity tracking not available
       return {
         activeUsers: 0,
@@ -457,7 +457,7 @@ class PerformanceMetricsService {
     if (!('PerformanceObserver' in window)) return;
 
     try {
-      this.observer = new PerformanceObserver((list) {
+      this.observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           this.processPerformanceEntry(entry);
         }
@@ -466,7 +466,7 @@ class PerformanceMetricsService {
       this.observer.observe({ 
         entryTypes: ['navigation', 'paint', 'largest-contentful-paint', 'first-input', 'layout-shift']
       });
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.warn(
         'performance-metrics',
         'system',

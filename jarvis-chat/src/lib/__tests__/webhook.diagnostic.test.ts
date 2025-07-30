@@ -41,7 +41,7 @@ describe('Webhook Diagnostics', () => {
 
       const metrics = webhookService.getMetrics();
       console.log(`   Response Time: ${metrics.averageResponseTime}ms`);
-    } catch (error: unknown) {
+    } catch (error: unknown) => {
       console.log('❌ WEBHOOK ERROR DETECTED');
       const errorObj = error as Record<string, unknown>;
       console.log(`   Error Type: ${errorObj.type || 'Unknown'}`);
@@ -74,7 +74,7 @@ describe('Webhook Diagnostics', () => {
         console.log(
           `   Server responds: ${response.status} ${response.statusText}`
         );
-      } catch (netError) {
+      } catch (netError) => {
         console.log(`   Network error: ${netError}`);
       }
     }

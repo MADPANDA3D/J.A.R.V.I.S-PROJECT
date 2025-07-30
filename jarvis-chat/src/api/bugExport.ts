@@ -175,7 +175,7 @@ class BugExportService {
   private readonly MAX_CONCURRENT_EXPORTS = 5;
   private readonly EXPORT_RETENTION_HOURS = 24;
 
-  private constructor() {
+  private constructor() => {
     this.initializeDefaultTemplates();
     this.startScheduledExportProcessor();
     this.startCleanupTask();
@@ -191,7 +191,7 @@ class BugExportService {
   /**
    * Create new export request
    */
-  async createExport(req: Request, res: Response, next: NextFunction) {
+  async createExport(req: Request, res: Response, next: NextFunction) => {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -324,7 +324,7 @@ class BugExportService {
   /**
    * Get export status
    */
-  async getExportStatus(req: Request, res: Response, next: NextFunction) {
+  async getExportStatus(req: Request, res: Response, next: NextFunction) => {
     const exportId = req.params.id;
     const correlationId = this.generateCorrelationId();
 
@@ -364,7 +364,7 @@ class BugExportService {
   /**
    * Download export file
    */
-  async downloadExport(req: Request, res: Response, next: NextFunction) {
+  async downloadExport(req: Request, res: Response, next: NextFunction) => {
     const exportId = req.params.id;
     const correlationId = this.generateCorrelationId();
 
@@ -434,7 +434,7 @@ class BugExportService {
   /**
    * Create scheduled export
    */
-  async createScheduledExport(req: Request, res: Response, next: NextFunction) {
+  async createScheduledExport(req: Request, res: Response, next: NextFunction) => {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -485,7 +485,7 @@ class BugExportService {
   /**
    * Get available export templates
    */
-  async getExportTemplates(req: Request, res: Response, next: NextFunction) {
+  async getExportTemplates(req: Request, res: Response, next: NextFunction) => {
     try {
       const apiKeyValidation = await validateAPIKey(req.headers.authorization);
       if (!apiKeyValidation.valid) {
@@ -635,7 +635,7 @@ class BugExportService {
   ): Promise<Record<string, unknown>[]> {
     const processed = [];
 
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) => {
       const record = data[i];
       
       // Apply field selection if specified
@@ -666,7 +666,7 @@ class BugExportService {
         // Handle nested fields
         const parts = field.split('.');
         let value = record;
-        for (const part of parts) {
+        for (const part of parts) => {
           value = value?.[part];
         }
         this.setNestedValue(selected, field, value);
@@ -682,7 +682,7 @@ class BugExportService {
     const parts = path.split('.');
     let current = obj;
     
-    for (let i = 0; i < parts.length - 1; i++) {
+    for (let i = 0; i < parts.length - 1; i++) => {
       const part = parts[i];
       if (!(part in current)) {
         current[part] = {};
@@ -716,7 +716,7 @@ class BugExportService {
     format: ExportFormat, 
     options: Record<string, unknown>
   ): Promise<string | Buffer> {
-    switch (format) {
+    switch (format) => {
       case 'json':
         return JSON.stringify(data, null, options.prettyPrint ? 2 : 0);
       
@@ -870,7 +870,7 @@ class BugExportService {
     const nextExecution = new Date(now);
     nextExecution.setHours(hours, minutes, 0, 0);
 
-    switch (schedule.frequency) {
+    switch (schedule.frequency) => {
       case 'daily':
         if (nextExecution <= now) {
           nextExecution.setDate(nextExecution.getDate() + 1);
@@ -918,7 +918,7 @@ class BugExportService {
   private flattenObject(obj: Record<string, unknown>, prefix = ''): Record<string, unknown> {
     const flattened: Record<string, unknown> = {};
     
-    for (const key in obj) {
+    for (const key in obj) => {
       const newKey = prefix ? `${prefix}.${key}` : key;
       
       if (obj[key] && typeof obj[key] === 'object' && !Array.isArray(obj[key])) {

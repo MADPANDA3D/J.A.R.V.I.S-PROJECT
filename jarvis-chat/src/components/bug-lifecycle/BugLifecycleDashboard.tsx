@@ -63,17 +63,17 @@ interface MetricCardProps {
   description?: string;
 }
 
-function MetricCard({ title, value, change, changeType = 'neutral', icon, description }: MetricCardProps) {
-  const getChangeColor = (type: typeof changeType) {
-    switch (type) {
+function MetricCard({ title, value, change, changeType = 'neutral', icon, description }: MetricCardProps) => {
+  const getChangeColor = (type: typeof changeType) => {
+    switch (type) => {
       case 'positive': return 'text-green-600';
       case 'negative': return 'text-red-600';
       default: return 'text-gray-600';
     }
   };
 
-  const getChangeIcon = (type: typeof changeType) {
-    switch (type) {
+  const getChangeIcon = (type: typeof changeType) => {
+    switch (type) => {
       case 'positive': return <TrendingUp className="h-3 w-3" />;
       case 'negative': return <TrendingDown className="h-3 w-3" />;
       default: return null;
@@ -108,7 +108,7 @@ function MetricCard({ title, value, change, changeType = 'neutral', icon, descri
   );
 }
 
-export function BugLifecycleDashboard({ dateRange, teamFilter }: DashboardProps) {
+export function BugLifecycleDashboard({ dateRange, teamFilter }: DashboardProps) => {
   const { toast } = useToast();
   const { stats, loading: statsLoading } = useBugLifecycleStats();
   const { bugs, loading: bugsLoading, refreshBugs } = useBugList();
@@ -131,7 +131,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter }: DashboardProps)
       setFeedbackAnalytics(analytics);
 
       await refreshBugs();
-    } catch (loadError) {
+    } catch (loadError) => {
       console.error('Failed to load dashboard data:', loadError);
       toast({
         title: "Error",

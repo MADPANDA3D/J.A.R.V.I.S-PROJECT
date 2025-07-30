@@ -79,7 +79,7 @@ export const FileAttachmentUpload: React.FC<FileAttachmentUploadProps> = ({
     return { valid: validFiles, errors };
   }, [maxFiles, maxSizePerFile, acceptedTypes, selectedFiles]);
 
-  const handleFileSelection = useCallback((files: FileList | null) {
+  const handleFileSelection = useCallback((files: FileList | null) => {
     if (!files) return;
 
     const filesArray = Array.from(files);
@@ -94,7 +94,7 @@ export const FileAttachmentUpload: React.FC<FileAttachmentUploadProps> = ({
     }
   }, [selectedFiles, validateFiles, onFileUpload]);
 
-  const handleDrag = useCallback((e: React.DragEvent) {
+  const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
@@ -105,7 +105,7 @@ export const FileAttachmentUpload: React.FC<FileAttachmentUploadProps> = ({
     }
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) {
+  const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
@@ -114,13 +114,13 @@ export const FileAttachmentUpload: React.FC<FileAttachmentUploadProps> = ({
     handleFileSelection(files);
   }, [handleFileSelection]);
 
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) {
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     handleFileSelection(e.target.files);
     // Reset input value to allow selecting the same file again
     e.target.value = '';
   }, [handleFileSelection]);
 
-  const removeFile = useCallback((index: number) {
+  const removeFile = useCallback((index: number) => {
     const newSelectedFiles = selectedFiles.filter((_, i) => i !== index);
     setSelectedFiles(newSelectedFiles);
     onFileUpload(newSelectedFiles);
@@ -301,7 +301,7 @@ export const FileAttachmentUpload: React.FC<FileAttachmentUploadProps> = ({
               type="button"
               variant="outline"
               size="sm"
-              onClick={() {
+              onClick={() => {
                 setSelectedFiles([]);
                 onFileUpload([]);
                 setValidationErrors([]);

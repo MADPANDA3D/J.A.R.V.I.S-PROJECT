@@ -92,7 +92,7 @@ export const AccessibilityTestPanel: React.FC<AccessibilityTestPanelProps> = ({
       setTimeout(() => {
         document.body.removeChild(announcement);
       }, 1000);
-    } catch (error) {
+    } catch (error) => {
       console.error('Accessibility test failed:', error);
 
       // Announce error
@@ -129,13 +129,13 @@ export const AccessibilityTestPanel: React.FC<AccessibilityTestPanelProps> = ({
     URL.revokeObjectURL(url);
   };
 
-  const getScoreColor = (score: number) {
+  const getScoreColor = (score: number) => {
     if (score >= 90) return 'text-green-600';
     if (score >= 70) return 'text-yellow-600';
     return 'text-red-600';
   };
 
-  const getScoreIcon = (score: number) {
+  const getScoreIcon = (score: number) => {
     if (score >= 90) return <CheckCircle className="w-5 h-5 text-green-600" />;
     if (score >= 70)
       return <AlertTriangle className="w-5 h-5 text-yellow-600" />;

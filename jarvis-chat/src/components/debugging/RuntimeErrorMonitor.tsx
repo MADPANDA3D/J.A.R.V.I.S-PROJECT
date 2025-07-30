@@ -135,7 +135,7 @@ export function RuntimeErrorMonitor({
   };
 
   // Add or update error
-  const addError = useCallback((errorData: Omit<RuntimeError, 'id' | 'count' | 'lastOccurrence'>) {
+  const addError = useCallback((errorData: Omit<RuntimeError, 'id' | 'count' | 'lastOccurrence'>) => {
     setErrors(prevErrors => {
       // Check if this error already exists (same message and source)
       const existingIndex = prevErrors.findIndex(e => 
@@ -177,7 +177,7 @@ export function RuntimeErrorMonitor({
     if (!isMonitoring) return;
 
     // JavaScript errors
-    const handleError = (event: ErrorEvent) {
+    const handleError = (event: ErrorEvent) => {
       const errorData = categorizeError(event);
       addError(errorData);
       
@@ -191,7 +191,7 @@ export function RuntimeErrorMonitor({
     };
 
     // Unhandled promise rejections
-    const handleUnhandledRejection = (event: PromiseRejectionEvent) {
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
       const error = new Error(`Unhandled Promise Rejection: ${event.reason}`);
       const errorData = categorizeError(error);
       errorData.type = 'promise';
@@ -206,7 +206,7 @@ export function RuntimeErrorMonitor({
 
     // Console error monitoring
     const originalConsoleError = console.error;
-    const handleConsoleError = (...args: unknown[]) {
+    const handleConsoleError = (...args: unknown[]) => {
       const message = args.map(arg => 
         typeof arg === 'string' ? arg : JSON.stringify(arg)
       ).join(' ');
@@ -221,7 +221,7 @@ export function RuntimeErrorMonitor({
     };
 
     // Component error boundary integration (for future use)
-    // const handleReactError = (error: Error, errorInfo: { componentStack?: string }) {
+    // const handleReactError = (error: Error, errorInfo: { componentStack?: string }) => {
     //   const errorData = categorizeError(error);
     //   errorData.type = 'component';
     //   errorData.componentStack = errorInfo.componentStack;
@@ -258,8 +258,8 @@ export function RuntimeErrorMonitor({
   }, [errors, typeFilter, severityFilter]);
 
   // Utility functions
-  const getSeverityIcon = (severity: string) {
-    switch (severity) {
+  const getSeverityIcon = (severity: string) => {
+    switch (severity) => {
     }
       case 'critical':
         return <AlertTriangle className="h-4 w-4 text-red-600" />;
@@ -274,7 +274,7 @@ export function RuntimeErrorMonitor({
     }
   };
 
-  const getSeverityBadge = (severity: string) {
+  const getSeverityBadge = (severity: string) => {
     const variants = {
       critical: 'destructive',
       high: 'destructive',
@@ -289,7 +289,7 @@ export function RuntimeErrorMonitor({
     );
   };
 
-  const getTypeBadge = (type: string) {
+  const getTypeBadge = (type: string) => {
     const colors = {
       javascript: 'bg-yellow-100 text-yellow-800',
       react: 'bg-blue-100 text-blue-800',
@@ -309,7 +309,7 @@ export function RuntimeErrorMonitor({
     );
   };
 
-  const formatTimestamp = (timestamp: Date) {
+  const formatTimestamp = (timestamp: Date) => {
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
       day: 'numeric',
@@ -348,7 +348,7 @@ export function RuntimeErrorMonitor({
     setExpandedErrors(new Set());
   };
 
-  const toggleErrorExpansion = (errorId: string) {
+  const toggleErrorExpansion = (errorId: string) => {
     setExpandedErrors(prev => {
       const newSet = new Set(prev);
       if (newSet.has(errorId)) {
@@ -360,7 +360,7 @@ export function RuntimeErrorMonitor({
     });
   };
 
-  const toggleFilter = (filter: Set<string>, setFilter: (filter: Set<string>) => void, value: string) {
+  const toggleFilter = (filter: Set<string>, setFilter: (filter: Set<string>) => void, value: string) => {
     const newFilter = new Set(filter);
     if (newFilter.has(value)) {
       newFilter.delete(value);
@@ -375,7 +375,7 @@ export function RuntimeErrorMonitor({
     try {
       // This will cause an undefined access error
       (window as Record<string, unknown>).nonExistentFunction.call();
-    } catch (error) {
+    } catch (error) => {
       // This error will be caught by our monitoring
     }
   };

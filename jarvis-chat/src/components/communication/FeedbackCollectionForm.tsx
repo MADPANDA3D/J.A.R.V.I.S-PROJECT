@@ -50,7 +50,7 @@ interface StarRatingProps {
   label?: string;
 }
 
-function StarRating({ rating, onRatingChange, readonly = false, label }: StarRatingProps) {
+function StarRating({ rating, onRatingChange, readonly = false, label }: StarRatingProps) => {
   const [hoverRating, setHoverRating] = useState(0);
 
   return (
@@ -149,7 +149,7 @@ export function FeedbackCollectionForm({
       });
       setFormData(initialData);
 
-    } catch (error) {
+    } catch (error) => {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to load feedback form",
@@ -246,7 +246,7 @@ export function FeedbackCollectionForm({
         throw new Error(result.error || 'Submission failed');
       }
       
-    } catch (error) {
+    } catch (error) => {
       toast({
         title: "Submission Error",
         description: error instanceof Error ? error.message : "Failed to submit feedback",
@@ -267,7 +267,7 @@ export function FeedbackCollectionForm({
     }
   };
 
-  const updateFormData = (fieldId: string, value: unknown) {
+  const updateFormData = (fieldId: string, value: unknown) => {
     setFormData(prev => ({
       ...prev,
       [fieldId]: value
@@ -283,7 +283,7 @@ export function FeedbackCollectionForm({
     }
   };
 
-  const renderField = (field: FeedbackFormTemplate['fields'][0]) {
+  const renderField = (field: FeedbackFormTemplate['fields'][0]) => {
     const value = formData[field.id];
     const error = validationErrors[field.id];
     const isVisible = !field.conditional || 
@@ -291,7 +291,7 @@ export function FeedbackCollectionForm({
 
     if (!isVisible) return null;
 
-    switch (field.type) {
+    switch (field.type) => {
       case 'text':
         return (
           <div key={field.id} className="space-y-2">
@@ -395,8 +395,8 @@ export function FeedbackCollectionForm({
     }
   };
 
-  const getFeedbackTypeIcon = (type: FeedbackType) {
-    switch (type) {
+  const getFeedbackTypeIcon = (type: FeedbackType) => {
+    switch (type) => {
     }
       case 'resolution_verification':
         return <CheckCircle className="h-5 w-5 text-green-600" />;
@@ -409,8 +409,8 @@ export function FeedbackCollectionForm({
     }
   };
 
-  const getFeedbackTypeColor = (type: FeedbackType) {
-    switch (type) {
+  const getFeedbackTypeColor = (type: FeedbackType) => {
+    switch (type) => {
     }
       case 'resolution_verification':
         return 'bg-green-100 text-green-800';
@@ -550,9 +550,9 @@ interface FeedbackPreviewProps {
   showMetadata?: boolean;
 }
 
-export function FeedbackPreview({ feedback, showMetadata = false }: FeedbackPreviewProps) {
-  const getStatusIcon = (status: BugFeedback['status']) {
-    switch (status) {
+export function FeedbackPreview({ feedback, showMetadata = false }: FeedbackPreviewProps) => {
+  const getStatusIcon = (status: BugFeedback['status']) => {
+    switch (status) => {
     }
       case 'submitted':
         return <CheckCircle className="h-4 w-4 text-green-600" />;
@@ -567,8 +567,8 @@ export function FeedbackPreview({ feedback, showMetadata = false }: FeedbackPrev
     }
   };
 
-  const getStatusColor = (status: BugFeedback['status']) {
-    switch (status) {
+  const getStatusColor = (status: BugFeedback['status']) => {
+    switch (status) => {
     }
       case 'submitted':
         return 'bg-green-100 text-green-800';
@@ -633,19 +633,19 @@ export function FeedbackPreview({ feedback, showMetadata = false }: FeedbackPrev
             {feedback.satisfactionRating && (
               <div>
                 <Label className="text-sm font-medium">Overall Satisfaction:</Label>
-                <StarRating rating={feedback.satisfactionRating} onRatingChange={() {}} readonly />
+                <StarRating rating={feedback.satisfactionRating} onRatingChange={() => {}} readonly />
               </div>
             )}
             {feedback.resolutionQuality && (
               <div>
                 <Label className="text-sm font-medium">Resolution Quality:</Label>
-                <StarRating rating={feedback.resolutionQuality} onRatingChange={() {}} readonly />
+                <StarRating rating={feedback.resolutionQuality} onRatingChange={() => {}} readonly />
               </div>
             )}
             {feedback.responseTime && (
               <div>
                 <Label className="text-sm font-medium">Response Time:</Label>
-                <StarRating rating={feedback.responseTime} onRatingChange={() {}} readonly />
+                <StarRating rating={feedback.responseTime} onRatingChange={() => {}} readonly />
               </div>
             )}
             {feedback.improvementSuggestions && (

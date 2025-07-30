@@ -193,7 +193,7 @@ class ExternalIntegrationService {
   private readonly MAX_CONCURRENT_DELIVERIES = 10;
   private readonly DELIVERY_TIMEOUT = 30000; // 30 seconds
 
-  private constructor() {
+  private constructor() => {
     this.initializeDefaultIntegrations();
     this.startDeliveryProcessor();
     this.startHealthChecks();
@@ -209,7 +209,7 @@ class ExternalIntegrationService {
   /**
    * Create webhook configuration
    */
-  async createWebhook(req: Request, res: Response, next: NextFunction) {
+  async createWebhook(req: Request, res: Response, next: NextFunction) => {
     const startTime = performance.now();
     const correlationId = this.generateCorrelationId();
 
@@ -325,7 +325,7 @@ class ExternalIntegrationService {
   /**
    * Claude Code AI analysis endpoint
    */
-  async analyzeWithClaudeCode(req: Request, res: Response, next: NextFunction) {
+  async analyzeWithClaudeCode(req: Request, res: Response, next: NextFunction) => {
     const startTime = performance.now();
     const correlationId = this.generateCorrelationId();
 
@@ -365,7 +365,7 @@ class ExternalIntegrationService {
 
       // Perform AI analysis based on type
       let analysisResult;
-      switch (analysisRequest.analysisType) {
+      switch (analysisRequest.analysisType) => {
         case 'pattern':
           analysisResult = await this.analyzeErrorPatterns(bugContext, analysisRequest.context);
           break;
@@ -419,7 +419,7 @@ class ExternalIntegrationService {
   /**
    * Sentry integration endpoint
    */
-  async integrateWithSentry(req: Request, res: Response, next: NextFunction) {
+  async integrateWithSentry(req: Request, res: Response, next: NextFunction) => {
     const startTime = performance.now();
     const correlationId = this.generateCorrelationId();
 
@@ -516,7 +516,7 @@ class ExternalIntegrationService {
   /**
    * DataDog integration endpoint
    */
-  async integrateWithDataDog(req: Request, res: Response, next: NextFunction) {
+  async integrateWithDataDog(req: Request, res: Response, next: NextFunction) => {
     const startTime = performance.now();
     const correlationId = this.generateCorrelationId();
 
@@ -622,7 +622,7 @@ class ExternalIntegrationService {
   /**
    * Get integration status
    */
-  async getIntegrationStatus(req: Request, res: Response, next: NextFunction) {
+  async getIntegrationStatus(req: Request, res: Response, next: NextFunction) => {
     try {
       const apiKeyValidation = await validateAPIKey(req.headers.authorization);
       if (!apiKeyValidation.valid) {
@@ -651,7 +651,7 @@ class ExternalIntegrationService {
   /**
    * List all integrations
    */
-  async listIntegrations(req: Request, res: Response, next: NextFunction) {
+  async listIntegrations(req: Request, res: Response, next: NextFunction) => {
     try {
       const apiKeyValidation = await validateAPIKey(req.headers.authorization);
       if (!apiKeyValidation.valid) {
@@ -680,7 +680,7 @@ class ExternalIntegrationService {
 
   // Private helper methods
 
-  private async gatherBugContext(request: ClaudeCodeAnalysisRequest) {
+  private async gatherBugContext(request: ClaudeCodeAnalysisRequest) => {
     const { bugId, context } = request;
 
     // Get basic bug data
@@ -773,7 +773,7 @@ class ExternalIntegrationService {
     };
   }
 
-  private async suggestResolutions() {
+  private async suggestResolutions() => {
     // Mock resolution suggestions
     return {
       suggestedActions: [
@@ -791,7 +791,7 @@ class ExternalIntegrationService {
     };
   }
 
-  private async classifyBugSeverity() {
+  private async classifyBugSeverity() => {
     // Mock severity classification
     return {
       suggestedSeverity: 'high',
@@ -801,7 +801,7 @@ class ExternalIntegrationService {
     };
   }
 
-  private async detectDuplicates() {
+  private async detectDuplicates() => {
     // Mock duplicate detection
     return {
       isDuplicate: false,
@@ -811,7 +811,7 @@ class ExternalIntegrationService {
     };
   }
 
-  private async analyzeUserImpact() {
+  private async analyzeUserImpact() => {
     // Mock user impact analysis
     return {
       affectedUserCount: 50,
@@ -991,7 +991,7 @@ class ExternalIntegrationService {
       );
 
     // Deliver to each matching webhook
-    for (const webhook of matchingWebhooks) {
+    for (const webhook of matchingWebhooks) => {
       try {
         await this.sendWebhookPayload(webhook, payload);
         
@@ -1047,7 +1047,7 @@ class ExternalIntegrationService {
   private async performAllHealthChecks(): Promise<void> {
     const integrations = Array.from(this.integrationStatus.keys());
     
-    for (const integrationId of integrations) {
+    for (const integrationId of integrations) => {
       await this.performHealthCheck(integrationId);
     }
   }

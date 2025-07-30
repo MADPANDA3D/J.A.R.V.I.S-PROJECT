@@ -85,7 +85,7 @@ export function useTools(): UseToolsReturn {
         //   .select('*')
         //   .eq('user_id', user.id)
         //   .single();
-      } catch (err) {
+      } catch (err) => {
         console.error('Error loading tool preferences:', err);
         setError('Failed to load tool preferences');
         initializeDefaultSelections();
@@ -135,7 +135,7 @@ export function useTools(): UseToolsReturn {
         // });
 
         console.log('Tool usage recorded:', { toolId, toolName, sessionId });
-      } catch (err) {
+      } catch (err) => {
         console.error('Error recording tool usage:', err);
       }
     },
@@ -143,7 +143,7 @@ export function useTools(): UseToolsReturn {
   );
 
   const toggleTool = useCallback(
-    (toolId: string) {
+    (toolId: string) => {
       const tool = AVAILABLE_TOOLS.find(t => t.id === toolId);
       if (!tool) return;
 
@@ -181,7 +181,7 @@ export function useTools(): UseToolsReturn {
     [recordToolUsage]
   );
 
-  const updatePreferences = useCallback((prefs: Partial<ToolPreferences>) {
+  const updatePreferences = useCallback((prefs: Partial<ToolPreferences>) => {
     setPreferences(prev => ({ ...prev, ...prefs }));
   }, []);
 
@@ -190,7 +190,7 @@ export function useTools(): UseToolsReturn {
   }, [selectedTools]);
 
   const isToolSelected = useCallback(
-    (toolId: string) {
+    (toolId: string) => {
       const tool = selectedTools.find(t => t.tool_id === toolId);
       return tool?.enabled || false;
     },

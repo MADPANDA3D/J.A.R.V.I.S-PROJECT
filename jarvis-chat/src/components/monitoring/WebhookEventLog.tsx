@@ -40,7 +40,7 @@ export const WebhookEventLog: React.FC = () => {
       'webhook-test-client/1.0'
     ];
 
-    return Array.from({ length: 50 }, (_, i) {
+    return Array.from({ length: 50 }, (_, i) => {
       const eventType = eventTypes[Math.floor(Math.random() * eventTypes.length)];
       const status = statuses[Math.floor(Math.random() * statuses.length)];
       const timestamp = new Date(Date.now() - i * 60000 * Math.random() * 30).toISOString();
@@ -97,7 +97,7 @@ export const WebhookEventLog: React.FC = () => {
     }
 
     // Apply sort order
-    filtered = filtered.sort((a, b) {
+    filtered = filtered.sort((a, b) => {
       const timeA = new Date(a.timestamp).getTime();
       const timeB = new Date(b.timestamp).getTime();
       return sortOrder === 'desc' ? timeB - timeA : timeA - timeB;
@@ -106,8 +106,8 @@ export const WebhookEventLog: React.FC = () => {
     setFilteredEvents(filtered);
   }, [events, searchTerm, statusFilter, eventTypeFilter, sortOrder]);
 
-  const getStatusColor = (status: string) {
-    switch (status) {
+  const getStatusColor = (status: string) => {
+    switch (status) => {
     }
       case 'success': return 'bg-green-100 text-green-800';
       case 'error': return 'bg-red-100 text-red-800';
@@ -116,8 +116,8 @@ export const WebhookEventLog: React.FC = () => {
     }
   };
 
-  const getStatusIcon = (status: string) {
-    switch (status) {
+  const getStatusIcon = (status: string) => {
+    switch (status) => {
     }
       case 'success':
         return (
@@ -142,7 +142,7 @@ export const WebhookEventLog: React.FC = () => {
     }
   };
 
-  const formatTimestamp = (timestamp: string) {
+  const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp);
     return {
       date: date.toLocaleDateString(),

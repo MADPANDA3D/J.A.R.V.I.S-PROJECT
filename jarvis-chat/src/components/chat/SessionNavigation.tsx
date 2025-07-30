@@ -72,14 +72,14 @@ export function SessionNavigation({
   const currentOrderOption = orderOptions.find(option => option.value === sessionOrder);
   const activeSession = sessions.find(s => s.id === activeSessionId);
 
-  const formatSessionTitle = (session: ConversationSession) {
+  const formatSessionTitle = (session: ConversationSession) => {
     if (session.title.length > 30) {
       return session.title.substring(0, 30) + '...';
     }
     return session.title;
   };
 
-  const formatDate = (date: Date) {
+  const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
       day: 'numeric',
@@ -230,7 +230,7 @@ export function SessionNavigation({
           {sessions.map(session => (
             <button
               key={session.id}
-              onClick={() {
+              onClick={() => {
                 onSessionSelect(session.id);
                 setShowQuickSelect(false);
               }}

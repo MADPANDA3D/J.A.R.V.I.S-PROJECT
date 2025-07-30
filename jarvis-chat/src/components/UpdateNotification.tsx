@@ -41,7 +41,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
           setWs(websocket);
         };
         
-        websocket.onmessage = (event) {
+        websocket.onmessage = (event) => {
           try {
             const data = JSON.parse(event.data) as UpdateNotification;
             console.log('📢 Update notification received:', data);
@@ -64,7 +64,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
                 setTimeout(() => setNotification(null), 300);
               }, 5000);
             }
-          } catch (error) {
+          } catch (error) => {
             console.error('❌ Failed to parse update notification:', error);
           }
         };
@@ -79,12 +79,12 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
           setTimeout(connectWebSocket, 5000);
         };
         
-        websocket.onerror = (error) {
+        websocket.onerror = (error) => {
           console.error('❌ WebSocket error:', error);
           setConnectionStatus('disconnected');
         };
         
-      } catch (error) {
+      } catch (error) => {
         console.error('❌ Failed to create WebSocket connection:', error);
         setConnectionStatus('disconnected');
         
@@ -96,7 +96,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
     connectWebSocket();
 
     // Cleanup on unmount
-    return () {
+    return () => {
       if (currentWebSocket) {
         currentWebSocket.close();
         currentWebSocket = null;
@@ -104,8 +104,8 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
     };
   }, [websocketUrl]);
 
-  const getNotificationIcon = (type: string) {
-    switch (type) {
+  const getNotificationIcon = (type: string) => {
+    switch (type) => {
       case 'warning':
         return <AlertTriangle className="h-4 w-4" />;
       case 'success':
@@ -117,8 +117,8 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
     }
   };
 
-  const getNotificationVariant = (type: string) {
-    switch (type) {
+  const getNotificationVariant = (type: string) => {
+    switch (type) => {
       case 'warning':
         return 'destructive';
       case 'success':

@@ -268,7 +268,7 @@ describe('BugAssignmentSystem', () => {
       const recommendations = await bugAssignmentSystem.getAssignmentRecommendations(mockBugReport);
 
       if (recommendations.length > 1) {
-        for (let i = 1; i < recommendations.length; i++) {
+        for (let i = 1; i < recommendations.length; i++) => {
           expect(recommendations[i - 1].confidence).toBeGreaterThanOrEqual(
             recommendations[i].confidence
           );

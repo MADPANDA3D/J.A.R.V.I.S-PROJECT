@@ -160,7 +160,7 @@ export function MessageSearch({
           const executionTime = performance.now() - searchStartTime;
           addToHistory(searchQuery, searchResponse.total, executionTime, 'regular');
         }
-      } catch (error) {
+      } catch (error) => {
         console.error('Search failed:', error);
         if (!isLoadingMoreResults) {
           setResults([]);
@@ -222,7 +222,7 @@ export function MessageSearch({
           const executionTime = performance.now() - searchStartTime;
           addToHistory(searchQuery, sessionResponse.totalMessages, executionTime, 'session-grouped');
         }
-      } catch (error) {
+      } catch (error) => {
         console.error('Session grouped search failed:', error);
         if (!isLoadingMoreSessions) {
           setSessionGroups([]);
@@ -241,7 +241,7 @@ export function MessageSearch({
     [filters, onSessionGroupedSearch, sessionGroups.length, sessionOrder, addToHistory]
   );
 
-  const handleQueryChange = useCallback((value: string) {
+  const handleQueryChange = useCallback((value: string) => {
     setCurrentQuery(value);
   }, [setCurrentQuery]);
 
@@ -254,7 +254,7 @@ export function MessageSearch({
       try {
         const sessions = await chatService.getConversationSessions(userId);
         setConversationSessions(sessions);
-      } catch (error) {
+      } catch (error) => {
         console.error('Failed to load conversation sessions:', error);
       } finally {
         setLoadingSessions(false);
@@ -288,7 +288,7 @@ export function MessageSearch({
   }, [currentQuery, hasMoreResults, isLoadingMore, handleSearch]);
 
   // Session-specific handlers
-  const handleToggleSessionExpanded = useCallback((sessionId: string) {
+  const handleToggleSessionExpanded = useCallback((sessionId: string) => {
     setExpandedSessions(prev => {
       const newSet = new Set(prev);
       if (newSet.has(sessionId)) {
@@ -300,12 +300,12 @@ export function MessageSearch({
     });
   }, []);
 
-  const handleSessionSelect = useCallback((sessionId: string) {
+  const handleSessionSelect = useCallback((sessionId: string) => {
     setActiveSessionId(sessionId);
     onSessionSelect?.(sessionId);
   }, [onSessionSelect]);
 
-  const handleSessionOrderChange = useCallback((order: 'chronological' | 'relevance' | 'updated') {
+  const handleSessionOrderChange = useCallback((order: 'chronological' | 'relevance' | 'updated') => {
     setSessionOrder(order);
     // Re-trigger search with new order
     if (currentQuery.trim()) {
@@ -359,7 +359,7 @@ export function MessageSearch({
     }, 100);
   };
 
-  const toggleMessageType = (type: 'user' | 'assistant') {
+  const toggleMessageType = (type: 'user' | 'assistant') => {
     const newMessageTypes = filters.messageTypes.includes(type)
       ? filters.messageTypes.filter(t => t !== type)
       : [...filters.messageTypes, type];
@@ -367,12 +367,12 @@ export function MessageSearch({
     updateFilters({ messageTypes: newMessageTypes });
   };
 
-  const handleResultClick = (result: SearchResult) {
+  const handleResultClick = (result: SearchResult) => {
     onResultClick(result.messageId);
     setShowResults(false);
   };
 
-  const formatTimestamp = (timestamp: Date) {
+  const formatTimestamp = (timestamp: Date) => {
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
       day: 'numeric',
@@ -547,7 +547,7 @@ export function MessageSearch({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={(e) {
+                    onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                       clearHistory();
@@ -571,7 +571,7 @@ export function MessageSearch({
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={(e) {
+                        onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
                           removeFromHistory(historyItem.id);

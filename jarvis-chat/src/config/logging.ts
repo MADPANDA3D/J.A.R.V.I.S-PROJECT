@@ -271,7 +271,7 @@ export const testLoggingConfiguration = async (): Promise<{
     error?: string;
   }> = [];
 
-  for (const destination of config.destinations) {
+  for (const destination of config.destinations) => {
     if (!destination.enabled) {
       results.push({
         destination: destination.type,
@@ -283,7 +283,7 @@ export const testLoggingConfiguration = async (): Promise<{
     const startTime = performance.now();
     
     try {
-      switch (destination.type) {
+      switch (destination.type) => {
         case 'console':
           // Console always works
           console.log('🧪 Testing console logging destination');

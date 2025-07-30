@@ -136,7 +136,7 @@ class BugAssignmentSystem {
   private roundRobinIndex: number = 0;
   private escalationTimers: Map<string, NodeJS.Timeout> = new Map();
 
-  private constructor() {
+  private constructor() => {
     this.initializeTeamMembers();
     this.initializeAssignmentRules();
     this.initializeEscalationRules();
@@ -273,7 +273,7 @@ class BugAssignmentSystem {
         assignment
       };
 
-    } catch (error) {
+    } catch (error) => {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -341,7 +341,7 @@ class BugAssignmentSystem {
 
       return result.success ? bestRecommendation.userId : null;
 
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.error(
         'assignment-system',
         'system',
@@ -365,7 +365,7 @@ class BugAssignmentSystem {
 
     const recommendations: AssignmentRecommendation[] = [];
 
-    for (const member of availableMembers) {
+    for (const member of availableMembers) => {
       const skillMatch = this.calculateSkillMatch(member, bugReport);
       const workloadImpact = this.calculateWorkloadImpact(member);
       const reasons: string[] = [];
@@ -498,7 +498,7 @@ class BugAssignmentSystem {
         newPriority
       };
 
-    } catch (error) {
+    } catch (error) => {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -732,7 +732,7 @@ class BugAssignmentSystem {
       .filter(rule => rule.enabled)
       .sort((a, b) => a.priority - b.priority);
 
-    for (const rule of sortedRules) {
+    for (const rule of sortedRules) => {
       if (this.evaluateRuleConditions(rule.conditions, bugReport)) {
         if (rule.action.assignTo && rule.action.assignTo !== 'auto' && rule.action.assignTo !== 'round_robin') {
           rule.lastUsed = new Date().toISOString();
@@ -748,7 +748,7 @@ class BugAssignmentSystem {
     return conditions.every(condition => {
       const fieldValue = bugReport[condition.field];
       
-      switch (condition.operator) {
+      switch (condition.operator) => {
         case 'equals':
           return fieldValue === condition.value;
         case 'contains':
@@ -838,8 +838,8 @@ class BugAssignmentSystem {
 
   private async handleEscalation(bugId: string, rule: EscalationRule): Promise<void> {
     try {
-      for (const action of rule.actions) {
-        switch (action.type) {
+      for (const action of rule.actions) => {
+        switch (action.type) => {
           case 'increase_priority':
             await this.escalateBugPriority(bugId, `Auto-escalation: ${rule.name}`);
             break;
@@ -850,7 +850,7 @@ class BugAssignmentSystem {
           }
         }
       }
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.error(
         'assignment-system',
         'system',

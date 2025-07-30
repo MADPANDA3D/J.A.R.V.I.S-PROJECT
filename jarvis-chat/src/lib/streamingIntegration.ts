@@ -25,7 +25,7 @@ class StreamingIntegrationService {
   private readonly BUFFER_SIZE = 100;
   private readonly BUFFER_FLUSH_INTERVAL = 2000; // 2 seconds
 
-  private constructor() {
+  private constructor() => {
     this.startBufferFlush();
   }
 
@@ -39,7 +39,7 @@ class StreamingIntegrationService {
   /**
    * Handle bug creation event
    */
-  async onBugCreated(bug: BugDetailResponse, context: StreamingEventContext) {
+  async onBugCreated(bug: BugDetailResponse, context: StreamingEventContext) => {
     const correlationId = context.correlationId || this.generateCorrelationId();
 
     centralizedLogging.info(
@@ -438,7 +438,7 @@ class StreamingIntegrationService {
   /**
    * Get streaming statistics
    */
-  getStreamingStats() {
+  getStreamingStats() => {
     const bugStreamingStats = bugStreamingService.getStreamingStats();
     const webhookStats = webhookDeliveryService.getDeliveryStats();
 
@@ -455,7 +455,7 @@ class StreamingIntegrationService {
 
   // Private helper methods
 
-  private bufferEvent(event: BugUpdateEvent) {
+  private bufferEvent(event: BugUpdateEvent) => {
     this.eventBuffer.push(event);
 
     // Flush buffer if it's full
@@ -464,7 +464,7 @@ class StreamingIntegrationService {
     }
   }
 
-  private flushEventBuffer() {
+  private flushEventBuffer() => {
     if (this.eventBuffer.length === 0) return;
 
     const events = this.eventBuffer.splice(0, this.BUFFER_SIZE);
@@ -482,14 +482,14 @@ class StreamingIntegrationService {
     });
   }
 
-  private startBufferFlush() {
+  private startBufferFlush() => {
     // Flush buffer periodically
     setInterval(() => {
       this.flushEventBuffer();
     }, this.BUFFER_FLUSH_INTERVAL);
   }
 
-  private async queueWebhookDelivery(payload: WebhookPayload) {
+  private async queueWebhookDelivery(payload: WebhookPayload) => {
     try {
       // In a real implementation, this would get webhook configurations
       // and queue delivery to matching webhooks
@@ -499,7 +499,7 @@ class StreamingIntegrationService {
         'Webhook payload queued for delivery',
         { eventType: payload.eventType, bugId: payload.bugId }
       );
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.error(
         'streaming-integration',
         'system',

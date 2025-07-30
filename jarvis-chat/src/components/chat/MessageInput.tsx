@@ -27,7 +27,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   const { getSelectedToolIds } = useTools();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) {
+  const handleKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSend();

@@ -34,7 +34,7 @@ export const usePWAInstall = () => {
 
   // Handle the beforeinstallprompt event
   useEffect(() => {
-    const handleBeforeInstallPrompt = (e: Event) {
+    const handleBeforeInstallPrompt = (e: Event) => {
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
 
@@ -67,7 +67,7 @@ export const usePWAInstall = () => {
     // Check initial install status
     checkInstallStatus();
 
-    return () {
+    return () => {
       window.removeEventListener(
         'beforeinstallprompt',
         handleBeforeInstallPrompt

@@ -34,7 +34,7 @@ export class MockN8nServer {
     processingTime: number;
   }> = [];
 
-  constructor(config: Partial<MockServerConfig> = {}) {
+  constructor(config: Partial<MockServerConfig> = {}) => {
     this.config = {
       baseLatency: 100,
       latencyVariation: 50,
@@ -77,7 +77,7 @@ export class MockN8nServer {
       const response = await this.processDefaultRequest(payload);
       this.recordRequest(payload, response, Date.now() - startTime);
       return response;
-    } catch (error) {
+    } catch (error) => {
       const processingTime = Date.now() - startTime;
       this.recordRequest(payload, error as Error, processingTime);
       throw error;
@@ -142,7 +142,7 @@ export class MockN8nServer {
     const results: Array<{ success: boolean; responseTime: number }> = [];
 
     // Process payloads in chunks
-    for (let i = 0; i < payloads.length; i += concurrency) {
+    for (let i = 0; i < payloads.length; i += concurrency) => {
       const chunk = payloads.slice(i, i + concurrency);
 
       const promises = chunk.map(async payload => {
@@ -150,7 +150,7 @@ export class MockN8nServer {
         try {
           await this.processWebhook(payload);
           return { success: true, responseTime: Date.now() - startTime };
-        } catch (error) {
+        } catch (error) => {
           return { success: false, responseTime: Date.now() - startTime };
         }
       });

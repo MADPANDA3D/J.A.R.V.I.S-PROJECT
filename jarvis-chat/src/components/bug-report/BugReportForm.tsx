@@ -142,7 +142,7 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
   onCancel,
   initialData = {},
   className = ''
-}) {
+}) => {
   const {
     formState,
     submitBugReport,
@@ -175,13 +175,13 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
       try {
         const draftData = JSON.parse(draft);
         updateFormData(draftData);
-      } catch (error) {
+      } catch (error) => {
         console.warn('Failed to load bug report draft:', error);
       }
     }
   }, []);
 
-  const handleBugTypeSelect = useCallback((typeConfig: BugTypeConfig) {
+  const handleBugTypeSelect = useCallback((typeConfig: BugTypeConfig) => {
     setSelectedBugType(typeConfig);
     updateFormData({
       bugType: typeConfig.type,
@@ -217,7 +217,7 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
       } else {
         setSubmitError(result.message || 'Failed to submit bug report');
       }
-    } catch (error) {
+    } catch (error) => {
       setSubmitError(error instanceof Error ? error.message : 'An unexpected error occurred');
     } finally {
       setIsSubmitting(false);
@@ -260,7 +260,7 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
           </p>
           <div className="flex gap-3 justify-center">
             <Button
-              onClick={() {
+              onClick={() => {
                 setSubmitSuccess(null);
                 resetForm();
                 setCurrentStep('type');

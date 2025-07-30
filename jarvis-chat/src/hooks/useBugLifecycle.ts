@@ -249,7 +249,7 @@ export function useBugLifecycle(
         'current_user' // In a real app, this would be the current user ID
       );
       return result;
-    } catch (error) {
+    } catch (error) => {
       setState(prev => ({
         ...prev,
         error: error instanceof Error ? error.message : 'Failed to mark notification as read'
@@ -333,7 +333,7 @@ export function useBugList(filters?: {
 
       setBugs(result.data || []);
       setTotalCount(result.count || 0);
-    } catch (err) {
+    } catch (err) => {
       setError(err instanceof Error ? err.message : 'Failed to load bugs');
     } finally {
       setLoading(false);
@@ -354,7 +354,7 @@ export function useBugList(filters?: {
 }
 
 // Hook for lifecycle statistics
-export function useBugLifecycleStats() {
+export function useBugLifecycleStats() => {
   const [stats, setStats] = useState<{
     statusDistribution: Record<BugStatus, number>;
     averageResolutionTime: number;

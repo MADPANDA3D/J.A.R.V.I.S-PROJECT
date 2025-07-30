@@ -15,7 +15,7 @@ const STATIC_CACHE_FILES = [
 const sw = self as unknown as ServiceWorkerGlobalScope;
 
 // Install event - cache app shell
-sw.addEventListener('install', (event: ExtendableEvent) {
+sw.addEventListener('install', (event: ExtendableEvent) => {
   console.log('[SW] Install event');
 
   event.waitUntil(
@@ -33,7 +33,7 @@ sw.addEventListener('install', (event: ExtendableEvent) {
 });
 
 // Activate event - clean up old caches
-sw.addEventListener('activate', (event: ExtendableEvent) {
+sw.addEventListener('activate', (event: ExtendableEvent) => {
   console.log('[SW] Activate event');
 
   event.waitUntil(
@@ -60,7 +60,7 @@ sw.addEventListener('activate', (event: ExtendableEvent) {
 });
 
 // Fetch event - serve from cache, fallback to network
-sw.addEventListener('fetch', (event: FetchEvent) {
+sw.addEventListener('fetch', (event: FetchEvent) => {
   const { request } = event;
   const url = new URL(request.url);
 
@@ -130,7 +130,7 @@ sw.addEventListener('fetch', (event: FetchEvent) {
 });
 
 // Handle service worker updates
-sw.addEventListener('message', (event: ExtendableMessageEvent) {
+sw.addEventListener('message', (event: ExtendableMessageEvent) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     sw.skipWaiting();
   }

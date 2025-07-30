@@ -18,7 +18,7 @@ import type {
 class BugReportingService {
   private static instance: BugReportingService;
   
-  private constructor() {}
+  private constructor() => {}
 
   static getInstance(): BugReportingService {
     if (!BugReportingService.instance) {
@@ -88,7 +88,7 @@ class BugReportingService {
 
       return result;
 
-    } catch (error) {
+    } catch (error) => {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -143,7 +143,7 @@ class BugReportingService {
         userSession,
         componentStack
       };
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.warn(
         'bug-reporting',
         'system',
@@ -204,7 +204,7 @@ class BugReportingService {
           timestamp: alert.timestamp
         }))
       };
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.warn(
         'bug-reporting',
         'system',
@@ -283,7 +283,7 @@ class BugReportingService {
         message: 'Bug report created successfully'
       };
 
-    } catch (error) {
+    } catch (error) => {
       throw new Error(`Database storage failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
@@ -311,7 +311,7 @@ class BugReportingService {
           correlatedErrors: recentErrors.length 
         }
       );
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.warn(
         'bug-reporting',
         'system',
@@ -332,7 +332,7 @@ class BugReportingService {
         `Bug reporting event: ${event}`,
         data
       );
-    } catch (error) {
+    } catch (error) => {
       // Silently fail - metrics are not critical
     }
   }
@@ -389,7 +389,7 @@ class BugReportingService {
 
   private extractComponentStack(errors: unknown[]): string | undefined {
     // Look for React component stacks in recent errors
-    for (const error of errors) {
+    for (const error of errors) => {
       if (error.metadata?.componentStack) {
         return error.metadata.componentStack;
       }

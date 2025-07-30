@@ -120,7 +120,7 @@ export class WebhookService {
   private responseTimes: number[] = [];
   private readonly maxResponseTimeSamples = 100;
 
-  constructor(config: Partial<WebhookServiceConfig> = {}) {
+  constructor(config: Partial<WebhookServiceConfig> = {}) => {
     this.config = {
       webhookUrl: import.meta.env.VITE_N8N_WEBHOOK_URL || '',
       timeout: parseInt(import.meta.env.WEBHOOK_TIMEOUT || '15000'),
@@ -203,7 +203,7 @@ export class WebhookService {
             this.recordSuccess(Date.now() - startTime);
 
             return response;
-          } catch (error) {
+          } catch (error) => {
             lastError =
               error instanceof WebhookError ? error : this.classifyError(error);
 
@@ -292,7 +292,7 @@ export class WebhookService {
               errorMessage = `n8n Webhook Error: ${errorData.message}. ${errorData.hint || ''}`;
             }
           }
-        } catch (error) {
+        } catch (error) => {
           // If we can't parse the error response, use the original message
         }
 
@@ -319,7 +319,7 @@ export class WebhookService {
       let data;
       try {
         data = JSON.parse(responseText);
-      } catch (error) {
+      } catch (error) => {
         throw new WebhookError(
           `Webhook returned invalid JSON: ${responseText.substring(0, 100)}${responseText.length > 100 ? '...' : ''}`,
           WebhookErrorType.VALIDATION_ERROR,
@@ -348,7 +348,7 @@ export class WebhookService {
       }
 
       return data;
-    } catch (error) {
+    } catch (error) => {
       clearTimeout(timeoutId);
 
       if (error.name === 'AbortError') {
@@ -401,7 +401,7 @@ export class WebhookService {
         status: responseTime < 1000 ? 'healthy' : 'degraded',
         responseTime,
       };
-    } catch (error) {
+    } catch (error) => {
       return {
         status: 'unhealthy',
         error: error instanceof Error ? error.message : 'Unknown error',

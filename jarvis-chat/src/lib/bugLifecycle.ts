@@ -145,7 +145,7 @@ class BugLifecycleService {
   private statusChangeHistory: Map<string, StatusChange[]> = new Map();
   private automaticTransitionTimers: Map<string, NodeJS.Timeout> = new Map();
 
-  private constructor() {
+  private constructor() => {
     this.initializeAutomaticTransitions();
   }
 
@@ -268,7 +268,7 @@ class BugLifecycleService {
         statusChange
       };
 
-    } catch (error) {
+    } catch (error) => {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -311,7 +311,7 @@ class BugLifecycleService {
       }
     );
 
-    for (const bugId of bulkUpdate.bugIds) {
+    for (const bugId of bulkUpdate.bugIds) => {
       result.totalProcessed++;
 
       try {
@@ -332,7 +332,7 @@ class BugLifecycleService {
             error: statusResult.error || 'Unknown error'
           });
         }
-      } catch (error) {
+      } catch (error) => {
         result.failed.push({
           bugId,
           error: error instanceof Error ? error.message : 'Unknown error'
@@ -402,7 +402,7 @@ class BugLifecycleService {
     // Check required fields for new status
     const newState = BUG_LIFECYCLE_RULES[newStatus];
     if (newState.requiredFields && bugReport) {
-      for (const field of newState.requiredFields) {
+      for (const field of newState.requiredFields) => {
         if (!bugReport[field] || bugReport[field] === null) {
           validation.isValid = false;
           validation.errors.push(`Required field '${field}' is missing for status '${newStatus}'`);
@@ -458,7 +458,7 @@ class BugLifecycleService {
         count: result.count || 0,
         error: result.error
       };
-    } catch (error) {
+    } catch (error) => {
       return {
         data: [],
         count: 0,
@@ -583,7 +583,7 @@ class BugLifecycleService {
           { bugId, condition: transition.condition, newStatus: transition.targetStatus }
         );
       }
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.error(
         'bug-lifecycle',
         'system',
@@ -614,7 +614,7 @@ class BugLifecycleService {
     void statusChange;
     try {
       // Side effects based on new status
-      switch (newStatus) {
+      switch (newStatus) => {
         case BugStatus.TRIAGED:
           // Auto-assign if no assignee
           if (!bugReport.assigned_to) {
@@ -650,7 +650,7 @@ class BugLifecycleService {
           }
           break;
       }
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.warn(
         'bug-lifecycle',
         'system',

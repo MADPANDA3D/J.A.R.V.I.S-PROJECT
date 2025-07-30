@@ -147,7 +147,7 @@ describe('External Integration Service', () => {
         }
       ];
 
-      for (const config of invalidConfigs) {
+      for (const config of invalidConfigs) => {
         const response = await request(app)
           .post('/api/integrations/webhooks')
           .set('Authorization', `Bearer ${adminApiKey}`)
@@ -177,7 +177,7 @@ describe('External Integration Service', () => {
         }
       ];
 
-      for (const auth of authTypes) {
+      for (const auth of authTypes) => {
         const response = await request(app)
           .post('/api/integrations/webhooks')
           .set('Authorization', `Bearer ${adminApiKey}`)
@@ -419,7 +419,7 @@ describe('External Integration Service', () => {
         }
       ];
 
-      for (const config of invalidConfigs) {
+      for (const config of invalidConfigs) => {
         const response = await request(app)
           .post('/api/integrations/sentry')
           .set('Authorization', `Bearer ${adminApiKey}`)
@@ -491,7 +491,7 @@ describe('External Integration Service', () => {
         }
       ];
 
-      for (const config of invalidConfigs) {
+      for (const config of invalidConfigs) => {
         const response = await request(app)
           .post('/api/integrations/datadog')
           .set('Authorization', `Bearer ${adminApiKey}`)
@@ -505,7 +505,7 @@ describe('External Integration Service', () => {
     it('should support different DataDog sites', async () => {
       const sites = ['datadoghq.com', 'datadoghq.eu', 'us3.datadoghq.com'];
 
-      for (const site of sites) {
+      for (const site of sites) => {
         const response = await request(app)
           .post('/api/integrations/datadog')
           .set('Authorization', `Bearer ${adminApiKey}`)

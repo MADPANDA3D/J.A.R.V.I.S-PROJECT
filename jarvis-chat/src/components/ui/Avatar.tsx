@@ -14,7 +14,7 @@ const sizeClasses = {
   lg: 'w-24 h-24',
 };
 
-export function Avatar({ src, alt, size = 'md', className }: AvatarProps) {
+export function Avatar({ src, alt, size = 'md', className }: AvatarProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 

@@ -133,7 +133,7 @@ class BugStreamingService {
   private readonly MAX_CONNECTIONS = 1000;
   private readonly MAX_SUBSCRIPTIONS_PER_CONNECTION = 50;
 
-  private constructor() {}
+  private constructor() => {}
 
   static getInstance(): BugStreamingService {
     if (!BugStreamingService.instance) {
@@ -145,7 +145,7 @@ class BugStreamingService {
   /**
    * Initialize WebSocket server
    */
-  initialize(server: unknown, path: string = '/api/stream') {
+  initialize(server: unknown, path: string = '/api/stream') => {
     this.wss = new WebSocketServer({ 
       server, 
       path,
@@ -170,7 +170,7 @@ class BugStreamingService {
   /**
    * Handle new WebSocket connection
    */
-  private async handleConnection(ws: WebSocket, request: IncomingMessage) {
+  private async handleConnection(ws: WebSocket, request: IncomingMessage) => {
     const connectionId = this.generateConnectionId();
     const url = new URL(request.url || '', `http://${request.headers.host}`);
     const authToken = url.searchParams.get('token') || request.headers.authorization;
@@ -253,7 +253,7 @@ class BugStreamingService {
   /**
    * Authenticate WebSocket connection
    */
-  private async authenticateConnection(connection: WebSocketConnection, authToken: string) {
+  private async authenticateConnection(connection: WebSocketConnection, authToken: string) => {
     try {
       const validation = await validateAPIKey(authToken);
       
@@ -285,7 +285,7 @@ class BugStreamingService {
   /**
    * Handle incoming WebSocket message
    */
-  private async handleMessage(connectionId: string, data: Buffer) {
+  private async handleMessage(connectionId: string, data: Buffer) => {
     const connection = this.connections.get(connectionId);
     if (!connection) return;
 
@@ -300,7 +300,7 @@ class BugStreamingService {
         { connectionId, action: message.action, type: message.type }
       );
 
-      switch (message.action) {
+      switch (message.action) => {
         case 'authenticate':
           if (message.authToken) {
             await this.authenticateConnection(connection, message.authToken);
@@ -358,7 +358,7 @@ class BugStreamingService {
   /**
    * Handle subscription request
    */
-  private async handleSubscription(connection: WebSocketConnection, message: SubscriptionRequest) {
+  private async handleSubscription(connection: WebSocketConnection, message: SubscriptionRequest) => {
     // Check authentication for sensitive streams
     const sensitiveStreams: StreamType[] = ['analytics', 'error_patterns', 'user_actions'];
     if (sensitiveStreams.includes(message.type!) && !connection.isAuthenticated) {
@@ -434,7 +434,7 @@ class BugStreamingService {
   /**
    * Handle unsubscription request
    */
-  private async handleUnsubscription(connection: WebSocketConnection, message: SubscriptionRequest) {
+  private async handleUnsubscription(connection: WebSocketConnection, message: SubscriptionRequest) => {
     const subscriptionId = message.subscriptionId;
     if (!subscriptionId) {
       this.sendMessage(connection, {
@@ -480,7 +480,7 @@ class BugStreamingService {
   /**
    * Handle connection disconnection
    */
-  private handleDisconnection(connectionId: string, code: number, reason: string) {
+  private handleDisconnection(connectionId: string, code: number, reason: string) => {
     const connection = this.connections.get(connectionId);
     if (!connection) return;
 
@@ -507,7 +507,7 @@ class BugStreamingService {
   /**
    * Handle connection error
    */
-  private handleConnectionError(connectionId: string, error: Error) {
+  private handleConnectionError(connectionId: string, error: Error) => {
     const connection = this.connections.get(connectionId);
     
     centralizedLogging.error(
@@ -531,7 +531,7 @@ class BugStreamingService {
   /**
    * Send message to WebSocket connection
    */
-  private sendMessage(connection: WebSocketConnection, message: StreamMessage) {
+  private sendMessage(connection: WebSocketConnection, message: StreamMessage) => {
     if (connection.ws.readyState === WebSocket.OPEN) {
       try {
         connection.ws.send(JSON.stringify(message));
@@ -553,7 +553,7 @@ class BugStreamingService {
   /**
    * Broadcast bug update event to subscribers
    */
-  broadcastBugUpdate(event: BugUpdateEvent) {
+  broadcastBugUpdate(event: BugUpdateEvent) => {
     this.eventQueue.push(event);
     
     centralizedLogging.debug(
@@ -567,7 +567,7 @@ class BugStreamingService {
   /**
    * Broadcast analytics update event
    */
-  broadcastAnalyticsUpdate(event: AnalyticsUpdateEvent) {
+  broadcastAnalyticsUpdate(event: AnalyticsUpdateEvent) => {
     this.analyticsQueue.push(event);
     
     centralizedLogging.debug(
@@ -581,7 +581,7 @@ class BugStreamingService {
   /**
    * Get streaming statistics
    */
-  getStreamingStats() {
+  getStreamingStats() => {
     const connections = Array.from(this.connections.values());
     const totalSubscriptions = connections.reduce((sum, conn) => sum + conn.subscriptions.size, 0);
     
@@ -598,7 +598,7 @@ class BugStreamingService {
 
   // Private helper methods
 
-  private startEventProcessor() {
+  private startEventProcessor() => {
     // Process events every 1 second
     setInterval(() => {
       this.processEventQueue();
@@ -606,33 +606,33 @@ class BugStreamingService {
     }, 1000);
   }
 
-  private startHeartbeat() {
+  private startHeartbeat() => {
     this.heartbeatInterval = setInterval(() => {
       this.sendHeartbeats();
     }, this.HEARTBEAT_INTERVAL);
   }
 
-  private processEventQueue() {
+  private processEventQueue() => {
     if (this.eventQueue.length === 0) return;
 
     const events = this.eventQueue.splice(0, 100); // Process up to 100 events at once
     
-    for (const event of events) {
+    for (const event of events) => {
       this.deliverEventToSubscribers(event);
     }
   }
 
-  private processAnalyticsQueue() {
+  private processAnalyticsQueue() => {
     if (this.analyticsQueue.length === 0) return;
 
     const events = this.analyticsQueue.splice(0, 50); // Process up to 50 analytics events at once
     
-    for (const event of events) {
+    for (const event of events) => {
       this.deliverAnalyticsToSubscribers(event);
     }
   }
 
-  private deliverEventToSubscribers(event: BugUpdateEvent) {
+  private deliverEventToSubscribers(event: BugUpdateEvent) => {
     for (const connection of this.connections.values()) {
       for (const subscription of connection.subscriptions.values()) {
         if (this.eventMatchesSubscription(event, subscription)) {
@@ -653,7 +653,7 @@ class BugStreamingService {
     }
   }
 
-  private deliverAnalyticsToSubscribers(event: AnalyticsUpdateEvent) {
+  private deliverAnalyticsToSubscribers(event: AnalyticsUpdateEvent) => {
     for (const connection of this.connections.values()) {
       for (const subscription of connection.subscriptions.values()) {
         if (subscription.type === 'analytics') {
@@ -705,8 +705,8 @@ class BugStreamingService {
     return true;
   }
 
-  private formatEventForSubscription(event: BugUpdateEvent, subscription: StreamSubscription) {
-    switch (subscription.format) {
+  private formatEventForSubscription(event: BugUpdateEvent, subscription: StreamSubscription) => {
+    switch (subscription.format) => {
       case 'compact':
         return {
           eventId: event.eventId,
@@ -736,8 +736,8 @@ class BugStreamingService {
     }
   }
 
-  private formatAnalyticsForSubscription(event: AnalyticsUpdateEvent, subscription: StreamSubscription) {
-    switch (subscription.format) {
+  private formatAnalyticsForSubscription(event: AnalyticsUpdateEvent, subscription: StreamSubscription) => {
+    switch (subscription.format) => {
       case 'compact':
         return {
           eventId: event.eventId,
@@ -758,7 +758,7 @@ class BugStreamingService {
     }
   }
 
-  private sendHeartbeats() {
+  private sendHeartbeats() => {
     const now = Date.now();
     const staleThreshold = now - this.HEARTBEAT_INTERVAL * 2; // 2x heartbeat interval
 
@@ -820,7 +820,7 @@ class BugStreamingService {
   /**
    * Cleanup and shutdown
    */
-  shutdown() {
+  shutdown() => {
     if (this.heartbeatInterval) {
       clearInterval(this.heartbeatInterval);
     }

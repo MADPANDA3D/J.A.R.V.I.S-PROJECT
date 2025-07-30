@@ -210,12 +210,12 @@ describe('Session Tracking', () => {
     });
 
     it('should handle localStorage errors gracefully', () => {
-      localStorageMock.setItem.mockImplementation(() {
+      localStorageMock.setItem.mockImplementation(() => {
         throw new Error('Storage quota exceeded');
       });
 
       // Should not throw error
-      expect(() {
+      expect(() => {
         setSessionUser('test-user');
       }).not.toThrow();
     });
@@ -234,7 +234,7 @@ describe('Session Tracking', () => {
       const startTime = Date.now();
       
       // Simulate rapid actions
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 100; i++) => {
         logSessionAuthEvent('token_refresh', true);
       }
       
@@ -252,7 +252,7 @@ describe('Session Tracking', () => {
       const initialPageViews = initialSession?.pageViews.length || 0;
       
       // Simulate many page views
-      for (let i = 0; i < 200; i++) {
+      for (let i = 0; i < 200; i++) => {
         // Page views would be added by navigation tracking in real usage
       }
       

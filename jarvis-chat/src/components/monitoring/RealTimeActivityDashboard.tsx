@@ -79,7 +79,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
       setIsLoading(true);
       await refreshData();
       setupWebSocket();
-    } catch (error) {
+    } catch (error) => {
       console.error('Failed to initialize dashboard:', error);
     } finally {
       setIsLoading(false);
@@ -112,7 +112,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
         activityStats,
         heatmap
       });
-    } catch (error) {
+    } catch (error) => {
       console.error('Failed to refresh dashboard data:', error);
     }
   };
@@ -129,7 +129,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
         console.log('Connected to real-time monitoring WebSocket');
       };
 
-      websocketRef.current.onmessage = (event) {
+      websocketRef.current.onmessage = (event) => {
         handleWebSocketMessage(event.data);
       };
 
@@ -143,20 +143,20 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
         }, 5000);
       };
 
-      websocketRef.current.onerror = (error) {
+      websocketRef.current.onerror = (error) => {
         console.error('WebSocket error:', error);
         setIsConnected(false);
       };
-    } catch (error) {
+    } catch (error) => {
       console.error('Failed to setup WebSocket:', error);
     }
   };
 
-  const handleWebSocketMessage = (data: string) {
+  const handleWebSocketMessage = (data: string) => {
     try {
       const message = JSON.parse(data);
       
-      switch (message.type) {
+      switch (message.type) => {
     }
         case 'activity_event':
           // Handle real-time activity updates
@@ -173,12 +173,12 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
         default:
           console.debug('Unknown WebSocket message type:', message.type);
       }
-    } catch (error) {
+    } catch (error) => {
       console.warn('Failed to parse WebSocket message:', error);
     }
   };
 
-  const updateActivityData = (event: any) {
+  const updateActivityData = (event: any) => {
     // Update activity statistics in real-time
     setData(prev => ({
       ...prev,
@@ -189,14 +189,14 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     }));
   };
 
-  const updatePerformanceData = (metrics: PerformanceMetrics) {
+  const updatePerformanceData = (metrics: PerformanceMetrics) => {
     setData(prev => ({
       ...prev,
       performance: metrics
     }));
   };
 
-  const addAlert = (alert: PerformanceAlert) {
+  const addAlert = (alert: PerformanceAlert) => {
     setData(prev => ({
       ...prev,
       alerts: [alert, ...prev.alerts].slice(0, 10) // Keep latest 10 alerts
@@ -237,7 +237,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
   };
 
   const getAlertSeverityColor = (severity: string): string => {
-    switch (severity) {
+    switch (severity) => {
     }
       case 'critical': return 'text-red-800 bg-red-100 border-red-200';
       case 'warning': return 'text-yellow-800 bg-yellow-100 border-yellow-200';

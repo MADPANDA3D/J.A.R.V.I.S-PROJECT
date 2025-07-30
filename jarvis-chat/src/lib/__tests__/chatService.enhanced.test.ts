@@ -8,7 +8,7 @@ import { chatService } from '../chatService';
 import * as webhookServiceModule from '../webhookService';
 
 // Mock the webhook service
-vi.mock('../webhookService', () {
+vi.mock('../webhookService', () => {
   const mockWebhookService = {
     sendMessage: vi.fn(),
     healthCheck: vi.fn(),

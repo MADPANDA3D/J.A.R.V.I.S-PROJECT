@@ -87,7 +87,7 @@ export function SystemHealthMonitor({
     try {
       if (service.type === 'websocket') {
         // WebSocket health check
-        return new Promise((resolve) {
+        return new Promise((resolve) => {
           const ws = new WebSocket(service.url);
           const timeout = setTimeout(() => {
             ws.close();
@@ -162,7 +162,7 @@ export function SystemHealthMonitor({
           try {
             const healthData = await response.json();
             details = { ...details, ...healthData };
-          } catch (error) {
+          } catch (error) => {
             // Ignore JSON parsing errors
           }
         }
@@ -176,7 +176,7 @@ export function SystemHealthMonitor({
           url: service.url,
         };
       }
-    } catch (error) {
+    } catch (error) => {
       const responseTime = performance.now() - startTime;
       
       return {
@@ -252,7 +252,7 @@ export function SystemHealthMonitor({
         requestCount: healthResults.length,
       });
 
-    } catch (error) {
+    } catch (error) => {
       console.error('Health check failed:', error);
     } finally {
       setIsLoading(false);
@@ -267,8 +267,8 @@ export function SystemHealthMonitor({
     return () => clearInterval(interval);
   }, [runHealthChecks, refreshInterval]);
 
-  const getStatusIcon = (status: string) {
-    switch (status) {
+  const getStatusIcon = (status: string) => {
+    switch (status) => {
     }
       case 'healthy':
         return <CheckCircle className="h-4 w-4 text-green-500" />;
@@ -281,7 +281,7 @@ export function SystemHealthMonitor({
     }
   };
 
-  const getStatusBadge = (status: string) {
+  const getStatusBadge = (status: string) => {
     const variants = {
       healthy: 'default',
       warning: 'secondary',
@@ -296,9 +296,9 @@ export function SystemHealthMonitor({
     );
   };
 
-  const getTrendIcon = (service: string) {
+  const getTrendIcon = (service: string) => {
     const trend = trends[service];
-    switch (trend) {
+    switch (trend) => {
       case 'up':
         return <TrendingUp className="h-3 w-3 text-green-500" />;
       case 'down':
@@ -308,13 +308,13 @@ export function SystemHealthMonitor({
     }
   };
 
-  const formatResponseTime = (ms?: number) {
+  const formatResponseTime = (ms?: number) => {
     if (!ms) return 'N/A';
     if (ms < 1000) return `${Math.round(ms)}ms`;
     return `${(ms / 1000).toFixed(1)}s`;
   };
 
-  const formatUptime = (seconds: number) {
+  const formatUptime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     if (hours > 0) return `${hours}h ${minutes}m`;

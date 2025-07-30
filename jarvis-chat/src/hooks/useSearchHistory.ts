@@ -146,7 +146,7 @@ export function useSearchHistory(
 
     // Sort by score and relevance, limit to top 8
     return suggestions
-      .sort((a, b) {
+      .sort((a, b) => {
         if (a.score !== b.score) return b.score - a.score;
         // Secondary sort by recency for same scores
         const aTime = a.metadata?.lastUsed?.getTime() || 0;
@@ -219,7 +219,7 @@ export function useSearchHistory(
   }, [searchPatterns]);
 
   // Get search trends for specified period
-  const getTrends = useCallback((period: 'daily' | 'weekly' | 'monthly', limit = 10) {
+  const getTrends = useCallback((period: 'daily' | 'weekly' | 'monthly', limit = 10) => {
     const trends = historyState.searchTrends[period];
     return Object.entries(trends)
       .sort(([, a], [, b]) => b - a)
@@ -264,16 +264,16 @@ export function useSearchHistory(
 
     // Analytics
     getTotalSearches: () => searchHistory.length,
-    getAverageResults: () {
+    getAverageResults: () => {
       if (searchHistory.length === 0) return 0;
       return searchHistory.reduce((sum, item) => sum + item.resultCount, 0) / searchHistory.length;
     },
-    getSuccessRate: () {
+    getSuccessRate: () => {
       if (searchHistory.length === 0) return 0;
       const successfulSearches = searchHistory.filter(item => item.resultCount > 0).length;
       return (successfulSearches / searchHistory.length) * 100;
     },
-    getMostProductiveTime: () {
+    getMostProductiveTime: () => {
       if (searchHistory.length === 0) return null;
       
       const hourCounts: Record<number, number> = {};
@@ -310,8 +310,8 @@ function levenshteinDistance(str1: string, str2: string): number {
   for (let i = 0; i <= str1.length; i++) matrix[0][i] = i;
   for (let j = 0; j <= str2.length; j++) matrix[j][0] = j;
   
-  for (let j = 1; j <= str2.length; j++) {
-    for (let i = 1; i <= str1.length; i++) {
+  for (let j = 1; j <= str2.length; j++) => {
+    for (let i = 1; i <= str1.length; i++) => {
       const indicator = str1[i - 1] === str2[j - 1] ? 0 : 1;
       matrix[j][i] = Math.min(
         matrix[j][i - 1] + 1,

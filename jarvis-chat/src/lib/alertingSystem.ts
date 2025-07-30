@@ -179,7 +179,7 @@ class AlertingSystemService {
   private escalationTimer?: NodeJS.Timeout;
   private maintenanceWindows: Map<string, MaintenanceWindow> = new Map();
 
-  constructor() {
+  constructor() => {
     this.config = this.loadConfiguration();
     
     if (this.config.enabled) {
@@ -419,7 +419,7 @@ class AlertingSystemService {
 
       try {
         await this.evaluateRule(rule);
-      } catch (error) {
+      } catch (error) => {
         centralizedLogging.error(
           'alerting-system',
           'system',
@@ -472,7 +472,7 @@ class AlertingSystemService {
 
       // Apply aggregation
       let aggregatedValue: number;
-      switch (condition.aggregation) {
+      switch (condition.aggregation) => {
         case 'avg':
           aggregatedValue = values.reduce((sum, val) => sum + val, 0) / values.length;
           break;
@@ -497,7 +497,7 @@ class AlertingSystemService {
         ? parseFloat(condition.threshold) 
         : condition.threshold;
 
-      switch (condition.operator) {
+      switch (condition.operator) => {
         case 'gt': return aggregatedValue > threshold;
         case 'gte': return aggregatedValue >= threshold;
         case 'lt': return aggregatedValue < threshold;
@@ -510,7 +510,7 @@ class AlertingSystemService {
         default:
           return false;
       }
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.warn(
         'alerting-system',
         'system',
@@ -525,7 +525,7 @@ class AlertingSystemService {
     const parts = metricPath.split('.');
     let value = metrics;
     
-    for (const part of parts) {
+    for (const part of parts) => {
       value = value?.[part];
     }
     
@@ -653,12 +653,12 @@ class AlertingSystemService {
   }
 
   private async sendNotifications(alert: AlertInstance, channels: NotificationChannel[]): Promise<void> {
-    for (const channel of channels) {
+    for (const channel of channels) => {
       if (!channel.enabled) continue;
 
       try {
         await this.sendNotification(alert, channel);
-      } catch (error) {
+      } catch (error) => {
         centralizedLogging.error(
           'alerting-system',
           'system',
@@ -670,7 +670,7 @@ class AlertingSystemService {
         if (channel.failover) {
           try {
             await this.sendNotification(alert, channel.failover);
-          } catch (failoverError) {
+          } catch (failoverError) => {
             centralizedLogging.error(
               'alerting-system',
               'system',
@@ -698,7 +698,7 @@ class AlertingSystemService {
     alert.notificationsSent.push(attempt);
 
     try {
-      switch (channel.type) {
+      switch (channel.type) => {
         case 'email':
           await this.sendEmailNotification(alert, channel.configuration.email!);
           break;
@@ -730,7 +730,7 @@ class AlertingSystemService {
         { alertId: alert.alertId, channelId: channel.channelId, attemptId }
       );
 
-    } catch (error) {
+    } catch (error) => {
       attempt.status = 'failed';
       attempt.error = error instanceof Error ? error.message : 'Unknown error';
       throw error;
@@ -923,7 +923,7 @@ class AlertingSystemService {
   }
 
   private getSeverityColor(severity: AlertSeverity): string {
-    switch (severity) {
+    switch (severity) => {
       case 'emergency': return '#8B0000'; // Dark red
       case 'critical': return '#DC143C'; // Crimson
       case 'warning': return '#FFA500'; // Orange
@@ -933,11 +933,11 @@ class AlertingSystemService {
   }
 
   private renderTemplate(template: string, context: Record<string, unknown>): string {
-    return template.replace(/\{\{([^}]+)\}\}/g, (match, key) {
+    return template.replace(/\{\{([^}]+)\}\}/g, (match, key) => {
       const keys = key.trim().split('.');
       let value = context;
       
-      for (const k of keys) {
+      for (const k of keys) => {
         value = value?.[k];
       }
       

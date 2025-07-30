@@ -30,7 +30,7 @@ class BugSubmissionProcessor {
   private submissionQueue: Map<string, BugReportData> = new Map();
   private processingSubmissions: Set<string> = new Set();
 
-  private constructor() {
+  private constructor() => {
     this.config = this.loadConfiguration();
   }
 
@@ -167,7 +167,7 @@ class BugSubmissionProcessor {
         message: 'Bug report submitted successfully'
       };
 
-    } catch (error) {
+    } catch (error) => {
       // Clean up
       this.submissionQueue.delete(submissionId);
       this.processingSubmissions.delete(submissionId);
@@ -291,7 +291,7 @@ class BugSubmissionProcessor {
       }
 
       return { isDuplicate: false };
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.warn(
         'bug-submission-processor',
         'system',
@@ -375,7 +375,7 @@ class BugSubmissionProcessor {
         trackingNumber,
         message: 'Bug report created successfully'
       };
-    } catch (error) {
+    } catch (error) => {
       throw new Error(`Database submission failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
@@ -389,7 +389,7 @@ class BugSubmissionProcessor {
   ): Promise<AttachmentUploadResult[]> {
     const results: AttachmentUploadResult[] = [];
 
-    for (const file of attachments) {
+    for (const file of attachments) => {
       try {
         // Virus scan if enabled
         if (this.config.virusScanEnabled) {
@@ -429,7 +429,7 @@ class BugSubmissionProcessor {
             mimeType: file.type
           });
         }
-      } catch (error) {
+      } catch (error) => {
         results.push({
           success: false,
           filename: file.name,
@@ -459,7 +459,7 @@ class BugSubmissionProcessor {
           severity: bugData.severity
         }
       );
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.warn(
         'bug-submission-processor',
         'system',
@@ -487,7 +487,7 @@ class BugSubmissionProcessor {
       } else {
         // Track failed submissions
       }
-    } catch (error) {
+    } catch (error) => {
       // Silently fail - metrics are not critical
     }
   }

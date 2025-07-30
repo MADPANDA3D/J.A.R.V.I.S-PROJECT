@@ -12,7 +12,7 @@ const mockEnv: Record<string, string | undefined> = {};
 vi.stubGlobal('import', {
   meta: {
     env: new Proxy(mockEnv, {
-      get(target, prop) {
+      get(target, prop) => {
         return target[prop as string];
       },
     }),
@@ -285,7 +285,7 @@ describe('Secrets Management System', () => {
       const manager = new SecretsManager();
 
       // Simulate many accesses
-      for (let i = 0; i < 1200; i++) {
+      for (let i = 0; i < 1200; i++) => {
         manager.logAccess('TEST_SECRET', 'read');
       }
 
@@ -433,7 +433,7 @@ describe('Secrets Management System', () => {
 
   describe('Logging', () => {
     it('should log secrets status without revealing values', () => {
-      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() {});
+      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY = 'test-key';

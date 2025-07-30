@@ -77,7 +77,7 @@ class ExternalIntegrationService {
         webhook,
         integrationStatus: 'active'
       });
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.error('Failed to create webhook', { error });
       res.status(500).json({ error: 'Internal server error' });
     }
@@ -107,7 +107,7 @@ class ExternalIntegrationService {
       };
 
       res.status(200).json({ analysis });
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.error('Failed to analyze with Claude Code', { error });
       res.status(500).json({ error: 'Internal server error' });
     }
@@ -136,7 +136,7 @@ class ExternalIntegrationService {
       this.integrations.set(integrationId, integration);
 
       res.status(201).json({ integration });
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.error('Failed to integrate with Sentry', { error });
       res.status(500).json({ error: 'Internal server error' });
     }
@@ -165,7 +165,7 @@ class ExternalIntegrationService {
       this.integrations.set(integrationId, integration);
 
       res.status(201).json({ integration });
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.error('Failed to integrate with DataDog', { error });
       res.status(500).json({ error: 'Internal server error' });
     }
@@ -186,7 +186,7 @@ class ExternalIntegrationService {
         status: integration.status,
         lastActivity: new Date().toISOString()
       });
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.error('Failed to get integration status', { error });
       res.status(500).json({ error: 'Internal server error' });
     }
@@ -200,7 +200,7 @@ class ExternalIntegrationService {
         integrations,
         total: integrations.length
       });
-    } catch (error) {
+    } catch (error) => {
       centralizedLogging.error('Failed to list integrations', { error });
       res.status(500).json({ error: 'Internal server error' });
     }

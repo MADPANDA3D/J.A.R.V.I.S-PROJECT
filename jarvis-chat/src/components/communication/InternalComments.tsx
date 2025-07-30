@@ -129,7 +129,7 @@ function CommentEditor({
       } else {
         throw new Error(result.error || 'Failed to add comment');
       }
-    } catch (error) {
+    } catch (error) => {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to add comment",
@@ -140,16 +140,16 @@ function CommentEditor({
     }
   };
 
-  const handleFileAttachment = (e: React.ChangeEvent<HTMLInputElement>) {
+  const handleFileAttachment = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     setAttachments(prev => [...prev, ...files]);
   };
 
-  const removeAttachment = (index: number) {
+  const removeAttachment = (index: number) => {
     setAttachments(prev => prev.filter((_, i) => i !== index));
   };
 
-  const insertMention = (username: string) {
+  const insertMention = (username: string) => {
     const textarea = textareaRef.current;
     if (textarea) {
       const start = textarea.selectionStart;
@@ -343,8 +343,8 @@ function CommentItem({
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
 
-  const getCommentTypeIcon = (type: CommentType) {
-    switch (type) {
+  const getCommentTypeIcon = (type: CommentType) => {
+    switch (type) => {
     }
       case 'note': return <MessageSquare className="h-4 w-4 text-blue-600" />;
       case 'status_change': return <CheckCircle className="h-4 w-4 text-green-600" />;
@@ -355,8 +355,8 @@ function CommentItem({
     }
   };
 
-  const getVisibilityIcon = (visibility: CommentVisibility) {
-    switch (visibility) {
+  const getVisibilityIcon = (visibility: CommentVisibility) => {
+    switch (visibility) => {
     }
       case 'internal': return <Eye className="h-3 w-3 text-red-500" />;
       case 'team_only': return <Users className="h-3 w-3 text-yellow-500" />;
@@ -364,7 +364,7 @@ function CommentItem({
     }
   };
 
-  const formatContent = (content: string) {
+  const formatContent = (content: string) => {
     // Simple formatting for mentions
     return content.replace(/@(\w+)/g, '<span class="text-blue-600 font-medium">@$1</span>');
   };
@@ -375,7 +375,7 @@ function CommentItem({
       if (onReaction) {
         onReaction(comment, emoji);
       }
-    } catch (error) {
+    } catch (error) => {
       toast({
         title: "Error",
         description: "Failed to add reaction",
@@ -404,7 +404,7 @@ function CommentItem({
       } else {
         throw new Error(result.error);
       }
-    } catch (error) {
+    } catch (error) => {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to edit comment",
@@ -432,7 +432,7 @@ function CommentItem({
       } else {
         throw new Error(result.error);
       }
-    } catch (error) {
+    } catch (error) => {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to delete comment",
@@ -598,7 +598,7 @@ function CommentItem({
             authorId={currentUserId}
             parentCommentId={comment.id}
             placeholder="Reply to this comment..."
-            onSubmit={(newComment) {
+            onSubmit={(newComment) => {
               setShowReplyEditor(false);
               if (onReply) {
                 onReply(newComment);
@@ -678,7 +678,7 @@ export function InternalComments({
         : loadedComments.filter(c => !c.isPrivate);
       
       setComments(filteredComments);
-    } catch (error) {
+    } catch (error) => {
       toast({
         title: "Error",
         description: "Failed to load comments",
@@ -689,20 +689,20 @@ export function InternalComments({
     }
   };
 
-  const handleCommentAdded = (newComment: InternalComment) {
+  const handleCommentAdded = (newComment: InternalComment) => {
     setComments(prev => [...prev, newComment]);
     if (onCommentAdded) {
       onCommentAdded(newComment);
     }
   };
 
-  const handleCommentUpdated = (updatedComment: InternalComment) {
+  const handleCommentUpdated = (updatedComment: InternalComment) => {
     setComments(prev =>
       prev.map(c => c.id === updatedComment.id ? updatedComment : c)
     );
   };
 
-  const handleCommentDeleted = (deletedComment: InternalComment) {
+  const handleCommentDeleted = (deletedComment: InternalComment) => {
     setComments(prev =>
       prev.map(c => c.id === deletedComment.id ? { ...c, isDeleted: true } : c)
     );
