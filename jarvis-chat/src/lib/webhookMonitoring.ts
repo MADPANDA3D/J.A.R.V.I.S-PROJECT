@@ -397,7 +397,7 @@ class WebhookMonitoringService {
         this.alertSubscribers.forEach(subscriber => {
           try {
             subscriber(alertEvent);
-          } catch {
+          } catch (error) {
             console.error('Error notifying alert subscriber:', error);
           }
         });

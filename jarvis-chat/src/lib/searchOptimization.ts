@@ -316,7 +316,7 @@ export function createDebouncedSearch<T extends unknown[], R>(
         try {
           const result = await searchFunction(...args);
           resolvers.forEach(({ resolve }) => resolve(result));
-        } catch {
+        } catch (error) {
           resolvers.forEach(({ reject }) => reject(error));
         }
       }, delayMs);
@@ -369,7 +369,7 @@ export class BatchQueryOptimizer {
         group.forEach((item, index) => {
           item.resolve(results[index]);
         });
-      } catch {
+      } catch (error) {
         group.forEach(item => {
           item.reject(error);
         });

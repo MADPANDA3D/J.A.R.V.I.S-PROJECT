@@ -550,7 +550,7 @@ class DistributedTracingService {
     if (baggageHeader) {
       try {
         baggage = JSON.parse(baggageHeader);
-      } catch {
+      } catch (error) {
         // Invalid baggage format
       }
     }
@@ -688,7 +688,7 @@ class DistributedTracingService {
       } else {
         console.warn('Failed to export spans:', response.statusText);
       }
-    } catch {
+    } catch (error) {
       console.warn('Error exporting spans:', error);
     }
   }
@@ -789,7 +789,7 @@ export const withTracing = async <T>(
     const result = await operation(context);
     distributedTracing.finishSpan(context, 'completed');
     return result;
-  } catch {
+  } catch (error) {
     distributedTracing.finishSpan(context, 'error', error as Error);
     throw error;
   }

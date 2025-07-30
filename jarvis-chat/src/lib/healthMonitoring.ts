@@ -274,7 +274,7 @@ class HealthMonitoringService {
           dependencies: [],
           metadata: monitoringHealth.metrics,
         };
-      } catch {
+      } catch (error) {
         return {
           name: 'monitoring',
           status: 'down',
@@ -346,7 +346,7 @@ class HealthMonitoringService {
         Array.from(this.dependencies.entries()).map(async ([name, checker]) => {
           try {
             return await checker();
-          } catch {
+          } catch (error) {
             return {
               name,
               status: 'down' as const,
@@ -379,7 +379,7 @@ class HealthMonitoringService {
 
       // Check overall system health
       this.checkSystemThresholds();
-    } catch {
+    } catch (error) {
       captureError(
         error instanceof Error ? error : new Error('Health monitoring failed'),
         {
@@ -455,7 +455,7 @@ class HealthMonitoringService {
           }
         );
       }
-    } catch {
+    } catch (error) {
       captureWarning('Failed to check system thresholds', { error });
     }
   }
@@ -577,7 +577,7 @@ class HealthMonitoringService {
         message: alert.message,
         metadata: alert.metadata,
       });
-    } catch {
+    } catch (error) {
       captureWarning('Failed to send critical alert', {
         alert_id: alert.id,
         error: error instanceof Error ? error.message : 'Unknown error',

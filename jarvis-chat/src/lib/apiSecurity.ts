@@ -172,7 +172,7 @@ class APISecurityService {
         apiKey
       };
 
-    } catch {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -235,7 +235,7 @@ class APISecurityService {
         permissions: storedKey.permissions
       };
 
-    } catch {
+    } catch (error) {
       centralizedLogging.error(
         'api-security',
         'system',
@@ -397,7 +397,7 @@ class APISecurityService {
 
       return true;
 
-    } catch {
+    } catch (error) {
       centralizedLogging.error(
         'api-security',
         'system',

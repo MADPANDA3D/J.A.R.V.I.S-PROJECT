@@ -568,7 +568,7 @@ class SessionTracker {
       };
       
       localStorage.setItem('jarvis_sessions', JSON.stringify(data));
-    } catch {
+    } catch (error) {
       console.warn('Failed to persist sessions:', error);
     }
   }
@@ -600,7 +600,7 @@ class SessionTracker {
           }
         }
       }
-    } catch {
+    } catch (error) {
       console.warn('Failed to load persisted sessions:', error);
     }
   }

@@ -69,7 +69,7 @@ const createLoggedSupabaseClient = (url: string, key: string, options: Record<st
                 rowCount = responseData.data.length;
               }
             }
-          } catch {
+          } catch (error) {
             // Response body couldn't be parsed as JSON
           }
           
@@ -97,7 +97,7 @@ const createLoggedSupabaseClient = (url: string, key: string, options: Record<st
           
           return response;
           
-        } catch {
+        } catch (error) {
           const endTime = performance.now();
           const executionTime = endTime - startTime;
           
@@ -175,7 +175,7 @@ function parseSupabaseRequest(url: string, method: string): {
     }
     
     return { operation: 'unknown', table: 'unknown' };
-  } catch {
+  } catch (error) {
     return { operation: 'unknown', table: 'unknown' };
   }
 }
@@ -185,7 +185,7 @@ async function getCurrentUserId(client: SupabaseClient): Promise<string | undefi
   try {
     const { data } = await client.auth.getUser();
     return data.user?.id;
-  } catch {
+  } catch (error) {
     return undefined;
   }
 }

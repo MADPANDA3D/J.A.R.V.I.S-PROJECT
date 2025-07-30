@@ -492,7 +492,7 @@ export class AccessibilityPreferencesManager {
     if (stored) {
       try {
         this.preferences = { ...this.preferences, ...JSON.parse(stored) };
-      } catch {
+      } catch (error) {
         console.warn('Failed to load accessibility preferences:', error);
       }
     }

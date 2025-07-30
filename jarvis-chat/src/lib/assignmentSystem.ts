@@ -273,7 +273,7 @@ class BugAssignmentSystem {
         assignment
       };
 
-    } catch {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -341,7 +341,7 @@ class BugAssignmentSystem {
 
       return result.success ? bestRecommendation.userId : null;
 
-    } catch {
+    } catch (error) {
       centralizedLogging.error(
         'assignment-system',
         'system',
@@ -498,7 +498,7 @@ class BugAssignmentSystem {
         newPriority
       };
 
-    } catch {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -850,7 +850,7 @@ class BugAssignmentSystem {
           }
         }
       }
-    } catch {
+    } catch (error) {
       centralizedLogging.error(
         'assignment-system',
         'system',

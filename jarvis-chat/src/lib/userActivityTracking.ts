@@ -206,7 +206,7 @@ class UserActivityTrackingService {
         this.handleWebSocketMessage(event.data);
       };
 
-    } catch {
+    } catch (error) {
       centralizedLogging.error(
         'activity-tracking',
         'system',
@@ -245,7 +245,7 @@ class UserActivityTrackingService {
     if (this.websocket.isConnected && this.websocket.connection) {
       try {
         this.websocket.connection.send(JSON.stringify(data));
-      } catch {
+      } catch (error) {
         centralizedLogging.warn(
           'activity-tracking',
           'system',
@@ -277,7 +277,7 @@ class UserActivityTrackingService {
             { messageType: message.type }
           );
       }
-    } catch {
+    } catch (error) {
       centralizedLogging.warn(
         'activity-tracking',
         'system',
@@ -367,7 +367,7 @@ class UserActivityTrackingService {
       });
 
       observer.observe({ entryTypes: ['navigation', 'paint', 'measure'] });
-    } catch {
+    } catch (error) {
       centralizedLogging.warn(
         'activity-tracking',
         'system',

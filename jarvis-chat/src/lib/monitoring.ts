@@ -196,7 +196,7 @@ class MonitoringService implements APMService {
         userAgent: navigator.userAgent,
         url: window.location.href,
       });
-    } catch {
+    } catch (error) {
       captureError(
         error instanceof Error
           ? error
@@ -252,7 +252,7 @@ class MonitoringService implements APMService {
 
         clsObserver.observe({ entryTypes: ['layout-shift'] });
       }
-    } catch {
+    } catch (error) {
       captureWarning('Failed to initialize Core Web Vitals monitoring', {
         error,
       });
@@ -303,7 +303,7 @@ class MonitoringService implements APMService {
 
         paintObserver.observe({ entryTypes: ['paint'] });
       }
-    } catch {
+    } catch (error) {
       captureWarning('Failed to initialize performance monitoring', { error });
     }
   }
@@ -333,7 +333,7 @@ class MonitoringService implements APMService {
           }
         );
       });
-    } catch {
+    } catch (error) {
       captureWarning('Failed to initialize error tracking enhancements', {
         error,
       });
@@ -356,7 +356,7 @@ class MonitoringService implements APMService {
 
         resourceObserver.observe({ entryTypes: ['resource'] });
       }
-    } catch {
+    } catch (error) {
       captureWarning('Failed to initialize resource monitoring', { error });
     }
   }
@@ -685,7 +685,7 @@ class MonitoringService implements APMService {
             checkComplete();
           });
           lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
-        } catch {
+        } catch (error) {
           vitals.lcp = 0;
         }
       }
@@ -754,7 +754,7 @@ class MonitoringService implements APMService {
       // Send to all services concurrently
       await Promise.allSettled(promises);
       
-    } catch {
+    } catch (error) {
       // Log but don't throw - monitoring failures shouldn't break the app
       console.warn('External APM integration failed:', error);
     }
@@ -769,7 +769,7 @@ class MonitoringService implements APMService {
           window.DD_RUM.addAction(type, data);
         }
       }
-    } catch {
+    } catch (error) {
       console.warn('DataDog integration failed:', error);
     }
   }
@@ -792,7 +792,7 @@ class MonitoringService implements APMService {
           });
         }
       }
-    } catch {
+    } catch (error) {
       console.warn('Sentry integration failed:', error);
     }
   }
@@ -810,7 +810,7 @@ class MonitoringService implements APMService {
           LogRocket.track(type, data);
         }
       }
-    } catch {
+    } catch (error) {
       console.warn('LogRocket integration failed:', error);
     }
   }
@@ -852,7 +852,7 @@ class MonitoringService implements APMService {
       if (!response.ok) {
         console.warn(`Webhook failed with status: ${response.status}`);
       }
-    } catch {
+    } catch (error) {
       console.warn('Custom webhook integration failed:', error);
     }
   }
@@ -1193,7 +1193,7 @@ export const withMonitoring = <T extends (...args: unknown[]) => unknown>(
   name: string,
   operation: string = 'function'
 ): T => {
-  return ((...args: unknown[]) {
+  return ((...args: unknown[]) => {
     const transaction = startTransaction(name, operation);
     try {
       const result = fn(...args);
@@ -1217,7 +1217,7 @@ export const withMonitoring = <T extends (...args: unknown[]) => unknown>(
         transaction.finish();
         return result;
       }
-    } catch {
+    } catch (error) {
       transaction.setStatus('error');
       transaction.setMetadata({
         error: error instanceof Error ? error.message : String(error),

@@ -351,7 +351,7 @@ class InternalCommunicationService {
         commentId: comment.id
       };
 
-    } catch {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -438,7 +438,7 @@ class InternalCommunicationService {
 
       return { success: true };
 
-    } catch {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -518,7 +518,7 @@ class InternalCommunicationService {
 
       return { success: true };
 
-    } catch {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -573,7 +573,7 @@ class InternalCommunicationService {
 
       return { success: true };
 
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error'
@@ -788,7 +788,7 @@ class InternalCommunicationService {
         sessionId
       };
 
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error'

@@ -167,7 +167,7 @@ class BugSubmissionProcessor {
         message: 'Bug report submitted successfully'
       };
 
-    } catch {
+    } catch (error) {
       // Clean up
       this.submissionQueue.delete(submissionId);
       this.processingSubmissions.delete(submissionId);
@@ -291,7 +291,7 @@ class BugSubmissionProcessor {
       }
 
       return { isDuplicate: false };
-    } catch {
+    } catch (error) {
       centralizedLogging.warn(
         'bug-submission-processor',
         'system',
@@ -375,7 +375,7 @@ class BugSubmissionProcessor {
         trackingNumber,
         message: 'Bug report created successfully'
       };
-    } catch {
+    } catch (error) {
       throw new Error(`Database submission failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
@@ -429,7 +429,7 @@ class BugSubmissionProcessor {
             mimeType: file.type
           });
         }
-      } catch {
+      } catch (error) {
         results.push({
           success: false,
           filename: file.name,
@@ -459,7 +459,7 @@ class BugSubmissionProcessor {
           severity: bugData.severity
         }
       );
-    } catch {
+    } catch (error) {
       centralizedLogging.warn(
         'bug-submission-processor',
         'system',
@@ -487,7 +487,7 @@ class BugSubmissionProcessor {
       } else {
         // Track failed submissions
       }
-    } catch {
+    } catch (error) {
       // Silently fail - metrics are not critical
     }
   }

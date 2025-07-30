@@ -378,7 +378,7 @@ class DatabaseLoggingService {
       // Send to centralized logging service
       const { sendToCentralizedLogging } = await import('./centralizedLogging');
       await sendToCentralizedLogging(type, data);
-    } catch {
+    } catch (error) {
       // Fail silently to not break database operations
       console.warn('Failed to send to external logging:', error);
     }

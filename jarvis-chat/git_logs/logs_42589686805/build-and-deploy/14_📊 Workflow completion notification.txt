@@ -1,0 +1,22 @@
+﻿2025-07-30T03:18:56.7294390Z ##[group]Run if [ "failure" = "success" ]; then
+2025-07-30T03:18:56.7294757Z [36;1mif [ "failure" = "success" ]; then[0m
+2025-07-30T03:18:56.7295052Z [36;1m  echo "✅ WORKFLOW COMPLETED SUCCESSFULLY"[0m
+2025-07-30T03:18:56.7295429Z [36;1m  echo "🚀 VPS deployment will be triggered automatically via webhook"[0m
+2025-07-30T03:18:56.7295763Z [36;1melse[0m
+2025-07-30T03:18:56.7295941Z [36;1m  echo "❌ WORKFLOW FAILED"[0m
+2025-07-30T03:18:56.7296196Z [36;1m  echo "🛑 No deployment will be triggered"[0m
+2025-07-30T03:18:56.7296442Z [36;1mfi[0m
+2025-07-30T03:18:56.7296618Z [36;1m[0m
+2025-07-30T03:18:56.7296775Z [36;1mecho ""[0m
+2025-07-30T03:18:56.7296960Z [36;1mecho "📋 Final Status: failure"[0m
+2025-07-30T03:18:56.7297271Z [36;1mecho "🕐 Completed at: $(date -u +%Y-%m-%dT%H:%M:%SZ)"[0m
+2025-07-30T03:18:56.7324826Z shell: /usr/bin/bash -e {0}
+2025-07-30T03:18:56.7325039Z env:
+2025-07-30T03:18:56.7325202Z   NODE_VERSION: 20
+2025-07-30T03:18:56.7325397Z   WORKING_DIRECTORY: jarvis-chat
+2025-07-30T03:18:56.7325649Z ##[endgroup]
+2025-07-30T03:18:56.7373093Z ❌ WORKFLOW FAILED
+2025-07-30T03:18:56.7373447Z 🛑 No deployment will be triggered
+2025-07-30T03:18:56.7373631Z 
+2025-07-30T03:18:56.7373768Z 📋 Final Status: failure
+2025-07-30T03:18:56.7385722Z 🕐 Completed at: 2025-07-30T03:18:56Z

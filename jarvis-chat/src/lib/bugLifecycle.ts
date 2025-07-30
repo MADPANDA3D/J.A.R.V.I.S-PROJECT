@@ -268,7 +268,7 @@ class BugLifecycleService {
         statusChange
       };
 
-    } catch {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -332,7 +332,7 @@ class BugLifecycleService {
             error: statusResult.error || 'Unknown error'
           });
         }
-      } catch {
+      } catch (error) {
         result.failed.push({
           bugId,
           error: error instanceof Error ? error.message : 'Unknown error'
@@ -458,7 +458,7 @@ class BugLifecycleService {
         count: result.count || 0,
         error: result.error
       };
-    } catch {
+    } catch (error) {
       return {
         data: [],
         count: 0,
@@ -583,7 +583,7 @@ class BugLifecycleService {
           { bugId, condition: transition.condition, newStatus: transition.targetStatus }
         );
       }
-    } catch {
+    } catch (error) {
       centralizedLogging.error(
         'bug-lifecycle',
         'system',
@@ -650,7 +650,7 @@ class BugLifecycleService {
           }
           break;
       }
-    } catch {
+    } catch (error) {
       centralizedLogging.warn(
         'bug-lifecycle',
         'system',

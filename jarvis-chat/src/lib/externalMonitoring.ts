@@ -127,7 +127,7 @@ class ExternalMonitoringService {
           await this.initializeService(service, config);
           this.initialized.set(service, true);
           console.log(`✅ External monitoring service initialized: ${service}`);
-        } catch {
+        } catch (error) {
           console.warn(`⚠️ Failed to initialize monitoring service ${service}:`, error);
           this.initialized.set(service, false);
         }
@@ -193,7 +193,7 @@ class ExternalMonitoringService {
 
       // Store Sentry reference for later use
       (window as any).__SENTRY__ = Sentry;
-    } catch {
+    } catch (error) {
       console.warn('Sentry initialization failed:', error);
       throw error;
     }
@@ -216,7 +216,7 @@ class ExternalMonitoringService {
 
       // Store LogRocket reference
       (window as any).__LOGROCKET__ = LogRocket;
-    } catch {
+    } catch (error) {
       console.warn('LogRocket initialization failed:', error);
       throw error;
     }
@@ -243,7 +243,7 @@ class ExternalMonitoringService {
 
       // Store DataDog reference
       (window as any).__DATADOG_RUM__ = datadogRum;
-    } catch {
+    } catch (error) {
       console.warn('DataDog RUM initialization failed:', error);
       throw error;
     }
@@ -274,7 +274,7 @@ class ExternalMonitoringService {
       if (!response.ok) {
         throw new Error(`Custom endpoint health check failed: ${response.status}`);
       }
-    } catch {
+    } catch (error) {
       console.warn('Custom monitoring endpoint test failed:', error);
       // Don't throw here as the endpoint might not support health checks
     }
@@ -345,7 +345,7 @@ class ExternalMonitoringService {
           await this.sendErrorToCustom(errorReport);
           break;
       }
-    } catch {
+    } catch (error) {
       console.warn(`Failed to send error to ${service}:`, error);
     }
   }
@@ -480,7 +480,7 @@ class ExternalMonitoringService {
           break;
         // Other services handle sessions automatically through their SDKs
       }
-    } catch {
+    } catch (error) {
       console.warn(`Failed to send session to ${service}:`, error);
     }
   }
@@ -519,7 +519,7 @@ class ExternalMonitoringService {
           break;
         // LogRocket and DataDog handle breadcrumbs automatically
       }
-    } catch {
+    } catch (error) {
       console.warn(`Failed to send breadcrumb to ${service}:`, error);
     }
   }
@@ -597,7 +597,7 @@ class ExternalMonitoringService {
           break;
         }
       }
-    } catch {
+    } catch (error) {
       console.warn(`Failed to set user in ${service}:`, error);
     }
   }
@@ -667,7 +667,7 @@ class ExternalMonitoringService {
       try {
         await this.testServiceConnectivity(service);
         results[service] = true;
-      } catch {
+      } catch (error) {
         results[service] = false;
         console.warn(`Service ${service} connectivity test failed:`, error);
       }

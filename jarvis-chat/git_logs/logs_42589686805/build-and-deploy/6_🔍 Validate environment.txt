@@ -1,0 +1,32 @@
+﻿2025-07-30T03:18:54.2226409Z ##[group]Run echo "🔍 Validating project configuration..."
+2025-07-30T03:18:54.2227587Z [36;1mecho "🔍 Validating project configuration..."[0m
+2025-07-30T03:18:54.2227861Z [36;1m[0m
+2025-07-30T03:18:54.2228119Z [36;1m# Check package.json exists and has required scripts[0m
+2025-07-30T03:18:54.2228443Z [36;1mif [ ! -f "package.json" ]; then[0m
+2025-07-30T03:18:54.2228706Z [36;1m  echo "❌ package.json not found"[0m
+2025-07-30T03:18:54.2228941Z [36;1m  exit 1[0m
+2025-07-30T03:18:54.2229105Z [36;1mfi[0m
+2025-07-30T03:18:54.2229255Z [36;1m[0m
+2025-07-30T03:18:54.2229489Z [36;1m# Verify required scripts exist[0m
+2025-07-30T03:18:54.2229830Z [36;1mif ! npm run --silent 2>/dev/null | grep -q "test\|build\|lint"; then[0m
+2025-07-30T03:18:54.2230215Z [36;1m  echo "⚠️ Some required scripts may be missing"[0m
+2025-07-30T03:18:54.2230482Z [36;1mfi[0m
+2025-07-30T03:18:54.2230630Z [36;1m[0m
+2025-07-30T03:18:54.2230796Z [36;1m# Check critical files exist[0m
+2025-07-30T03:18:54.2231049Z [36;1mif [ ! -f "vite.config.ts" ]; then[0m
+2025-07-30T03:18:54.2231660Z [36;1m  echo "⚠️ vite.config.ts not found - build may fail"[0m
+2025-07-30T03:18:54.2232189Z [36;1mfi[0m
+2025-07-30T03:18:54.2232350Z [36;1m[0m
+2025-07-30T03:18:54.2232522Z [36;1mif [ ! -f "tsconfig.json" ]; then[0m
+2025-07-30T03:18:54.2232866Z [36;1m  echo "⚠️ tsconfig.json not found - TypeScript compilation may fail"[0m
+2025-07-30T03:18:54.2233184Z [36;1mfi[0m
+2025-07-30T03:18:54.2233340Z [36;1m[0m
+2025-07-30T03:18:54.2233529Z [36;1mecho "✅ Environment validation completed"[0m
+2025-07-30T03:18:54.2262293Z shell: /usr/bin/bash -e {0}
+2025-07-30T03:18:54.2262519Z env:
+2025-07-30T03:18:54.2262679Z   NODE_VERSION: 20
+2025-07-30T03:18:54.2262881Z   WORKING_DIRECTORY: jarvis-chat
+2025-07-30T03:18:54.2263097Z ##[endgroup]
+2025-07-30T03:18:54.2314297Z 🔍 Validating project configuration...
+2025-07-30T03:18:54.3384780Z ⚠️ Some required scripts may be missing
+2025-07-30T03:18:54.3385499Z ✅ Environment validation completed

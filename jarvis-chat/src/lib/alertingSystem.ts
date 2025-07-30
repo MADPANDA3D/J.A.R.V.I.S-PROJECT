@@ -419,7 +419,7 @@ class AlertingSystemService {
 
       try {
         await this.evaluateRule(rule);
-      } catch {
+      } catch (error) {
         centralizedLogging.error(
           'alerting-system',
           'system',
@@ -510,7 +510,7 @@ class AlertingSystemService {
         default:
           return false;
       }
-    } catch {
+    } catch (error) {
       centralizedLogging.warn(
         'alerting-system',
         'system',
@@ -658,7 +658,7 @@ class AlertingSystemService {
 
       try {
         await this.sendNotification(alert, channel);
-      } catch {
+      } catch (error) {
         centralizedLogging.error(
           'alerting-system',
           'system',
@@ -730,7 +730,7 @@ class AlertingSystemService {
         { alertId: alert.alertId, channelId: channel.channelId, attemptId }
       );
 
-    } catch {
+    } catch (error) {
       attempt.status = 'failed';
       attempt.error = error instanceof Error ? error.message : 'Unknown error';
       throw error;

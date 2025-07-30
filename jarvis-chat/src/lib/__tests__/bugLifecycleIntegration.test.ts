@@ -68,6 +68,87 @@ describe('Bug Lifecycle Integration Tests', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    
+    // Initialize assignment system with test team members
+    bugAssignmentSystem.updateTeamMember('user_1', {
+      id: 'user_1',
+      name: 'Test User 1',
+      email: 'user1@test.com',
+      role: 'developer',
+      availability: 'available',
+      specializationAreas: ['functionality', 'frontend'],
+      workloadCapacity: 5,
+      currentWorkload: 2,
+      averageResolutionTime: 24,
+      performanceRating: 4,
+      timezone: 'UTC',
+      workingHours: {
+        start: '09:00',
+        end: '17:00',
+        daysOfWeek: [1, 2, 3, 4, 5]
+      },
+      lastActivity: new Date().toISOString()
+    });
+    
+    bugAssignmentSystem.updateTeamMember('user_2', {
+      id: 'user_2',
+      name: 'Test User 2',
+      email: 'user2@test.com',
+      role: 'senior_dev',
+      availability: 'available',
+      specializationAreas: ['backend', 'performance'],
+      workloadCapacity: 8,
+      currentWorkload: 6,
+      averageResolutionTime: 18,
+      performanceRating: 5,
+      timezone: 'UTC',
+      workingHours: {
+        start: '09:00',
+        end: '17:00',
+        daysOfWeek: [1, 2, 3, 4, 5]
+      },
+      lastActivity: new Date().toISOString()
+    });
+    
+    bugAssignmentSystem.updateTeamMember('user_3', {
+      id: 'user_3',
+      name: 'Test User 3',
+      email: 'user3@test.com',
+      role: 'developer',
+      availability: 'available',
+      specializationAreas: ['functionality', 'testing'],
+      workloadCapacity: 6,
+      currentWorkload: 1,
+      averageResolutionTime: 20,
+      performanceRating: 4,
+      timezone: 'UTC',
+      workingHours: {
+        start: '09:00',
+        end: '17:00',
+        daysOfWeek: [1, 2, 3, 4, 5]
+      },
+      lastActivity: new Date().toISOString()
+    });
+    
+    bugAssignmentSystem.updateTeamMember('senior_dev_1', {
+      id: 'senior_dev_1',
+      name: 'Senior Dev 1',
+      email: 'seniordev1@test.com',
+      role: 'senior_dev',
+      availability: 'available',
+      specializationAreas: ['critical', 'architecture'],
+      workloadCapacity: 10,
+      currentWorkload: 3,
+      averageResolutionTime: 12,
+      performanceRating: 5,
+      timezone: 'UTC',
+      workingHours: {
+        start: '09:00',
+        end: '17:00',
+        daysOfWeek: [1, 2, 3, 4, 5]
+      },
+      lastActivity: new Date().toISOString()
+    });
   });
 
   afterEach(() => {
@@ -80,8 +161,9 @@ describe('Bug Lifecycle Integration Tests', () => {
       // const userId = 'user_1'; // For future use
       const assignerId = 'admin_user';
 
-      // Step 1: Bug starts as OPEN
-      expect(mockBugReport.status).toBe('open');
+      // Step 1: Verify bug starts as OPEN by checking the mocked data
+      const { data: bugReport } = await import('../supabase').then(m => m.bugReportOperations.getBugReportById(bugId));
+      expect(bugReport?.status).toBe('open');
 
       // Step 2: Auto-assign the bug
       const assignedTo = await bugAssignmentSystem.autoAssignBug(bugId, assignerId);
@@ -93,7 +175,20 @@ describe('Bug Lifecycle Integration Tests', () => {
       expect(assignmentHistory).toHaveLength(1);
       expect(assignmentHistory[0].toUserId).toBe(assignedTo);
 
-      // Step 3: Change status to TRIAGED
+      // Step 3: Change status to TRIAGED (need to assign first for validation)
+      if (assignedTo) {
+        // Update the mock to include assigned_to
+        const { bugReportOperations } = await import('../supabase');
+        vi.mocked(bugReportOperations.getBugReportById).mockResolvedValueOnce({
+          data: {
+            ...mockBugReport,
+            assigned_to: assignedTo,
+            status: 'open'
+          },
+          error: null
+        });
+      }
+      
       const triageResult = await bugLifecycleService.changeStatus(
         bugId,
         BugStatus.TRIAGED,
@@ -102,7 +197,20 @@ describe('Bug Lifecycle Integration Tests', () => {
       );
       expect(triageResult.success).toBe(true);
 
-      // Step 4: Move to IN_PROGRESS
+      // Step 4: Move to IN_PROGRESS (update mock again)
+      if (assignedTo) {
+        const { bugReportOperations } = await import('../supabase');
+        vi.mocked(bugReportOperations.getBugReportById).mockResolvedValueOnce({
+          data: {
+            ...mockBugReport,
+            assigned_to: assignedTo,
+            status: 'triaged',
+            priority: 'medium'
+          },
+          error: null
+        });
+      }
+      
       const inProgressResult = await bugLifecycleService.changeStatus(
         bugId,
         BugStatus.IN_PROGRESS,
@@ -121,6 +229,19 @@ describe('Bug Lifecycle Integration Tests', () => {
       expect(commentResult.success).toBe(true);
 
       // Step 6: Move to PENDING_VERIFICATION
+      if (assignedTo) {
+        const { bugReportOperations } = await import('../supabase');
+        vi.mocked(bugReportOperations.getBugReportById).mockResolvedValueOnce({
+          data: {
+            ...mockBugReport,
+            assigned_to: assignedTo,
+            status: 'in_progress',
+            priority: 'medium'
+          },
+          error: null
+        });
+      }
+      
       const pendingResult = await bugLifecycleService.changeStatus(
         bugId,
         BugStatus.PENDING_VERIFICATION,
@@ -155,6 +276,19 @@ describe('Bug Lifecycle Integration Tests', () => {
       }
 
       // Step 9: Move to RESOLVED
+      if (assignedTo) {
+        const { bugReportOperations } = await import('../supabase');
+        vi.mocked(bugReportOperations.getBugReportById).mockResolvedValueOnce({
+          data: {
+            ...mockBugReport,
+            assigned_to: assignedTo,
+            status: 'pending_verification',
+            priority: 'medium'
+          },
+          error: null
+        });
+      }
+      
       const resolvedResult = await bugLifecycleService.changeStatus(
         bugId,
         BugStatus.RESOLVED,
@@ -191,6 +325,17 @@ describe('Bug Lifecycle Integration Tests', () => {
       }
 
       // Step 12: Final status change to CLOSED
+      const { bugReportOperations } = await import('../supabase');
+      vi.mocked(bugReportOperations.getBugReportById).mockResolvedValueOnce({
+        data: {
+          ...mockBugReport,
+          assigned_to: assignedTo,
+          status: 'resolved',
+          priority: 'medium'
+        },
+        error: null
+      });
+      
       const closedResult = await bugLifecycleService.changeStatus(
         bugId,
         BugStatus.CLOSED,
@@ -557,8 +702,20 @@ describe('Bug Lifecycle Integration Tests', () => {
     it('handles service failures gracefully', async () => {
       const bugId = 'error-test-bug';
 
-      // Mock a database error
+      // Mock successful getBugReportById with proper assigned_to field
       const { bugReportOperations } = await import('../supabase');
+      vi.mocked(bugReportOperations.getBugReportById).mockResolvedValueOnce({
+        data: {
+          ...mockBugReport,
+          id: bugId,
+          assigned_to: 'user1',
+          status: 'triaged',
+          priority: 'medium',
+        },
+        error: null
+      });
+
+      // Mock a database error on update
       vi.mocked(bugReportOperations.updateBugReport).mockRejectedValueOnce(
         new Error('Database connection failed')
       );
@@ -588,6 +745,17 @@ describe('Bug Lifecycle Integration Tests', () => {
     it('validates state transitions correctly', async () => {
       const bugId = 'validation-test-bug';
 
+      // Mock bug in OPEN status for invalid transition test
+      const { bugReportOperations } = await import('../supabase');
+      vi.mocked(bugReportOperations.getBugReportById).mockResolvedValueOnce({
+        data: {
+          ...mockBugReport,
+          id: bugId,
+          status: 'open'
+        },
+        error: null
+      });
+
       // Try invalid transition (OPEN -> RESOLVED, skipping intermediate states)
       const invalidResult = await bugLifecycleService.changeStatus(
         bugId,
@@ -598,7 +766,17 @@ describe('Bug Lifecycle Integration Tests', () => {
       expect(invalidResult.success).toBe(false);
       expect(invalidResult.error).toContain('Status transition validation failed');
 
-      // Valid transition should work
+      // Mock bug in OPEN status for valid transition test
+      vi.mocked(bugReportOperations.getBugReportById).mockResolvedValueOnce({
+        data: {
+          ...mockBugReport,
+          id: bugId,
+          status: 'open'
+        },
+        error: null
+      });
+
+      // Valid transition should work (OPEN -> TRIAGED is allowed)
       const validResult = await bugLifecycleService.changeStatus(
         bugId,
         BugStatus.TRIAGED,

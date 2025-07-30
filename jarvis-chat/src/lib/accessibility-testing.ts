@@ -68,7 +68,7 @@ export class AccessibilityTester {
       });
 
       console.log('Axe-core loaded successfully');
-    } catch {
+    } catch (error) {
       console.error('Failed to load axe-core:', error);
       throw error;
     }
@@ -127,7 +127,7 @@ export class AccessibilityTester {
       }
 
       return processedResult;
-    } catch {
+    } catch (error) {
       console.error('Accessibility audit failed:', error);
       throw error;
     }
@@ -368,7 +368,7 @@ export class AccessibilityTester {
             `Found ${result.violations.length} accessibility violations`
           );
         }
-      } catch {
+      } catch (error) {
         console.error('Periodic accessibility test failed:', error);
       }
 
@@ -424,7 +424,7 @@ export class AccessibilityTester {
           results.passes
         ),
       };
-    } catch {
+    } catch (error) {
       console.error('Component accessibility audit failed:', error);
       throw error;
     }

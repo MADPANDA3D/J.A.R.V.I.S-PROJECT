@@ -1,0 +1,76 @@
+﻿2025-07-30T03:18:43.6823382Z ##[group]Run actions/checkout@v4
+2025-07-30T03:18:43.6824199Z with:
+2025-07-30T03:18:43.6824570Z   fetch-depth: 0
+2025-07-30T03:18:43.6825010Z   repository: MADPANDA3D/J.A.R.V.I.S-PROJECT
+2025-07-30T03:18:43.6825804Z   token: ***
+2025-07-30T03:18:43.6826177Z   ssh-strict: true
+2025-07-30T03:18:43.6826553Z   ssh-user: git
+2025-07-30T03:18:43.6826979Z   persist-credentials: true
+2025-07-30T03:18:43.6827409Z   clean: true
+2025-07-30T03:18:43.6827788Z   sparse-checkout-cone-mode: true
+2025-07-30T03:18:43.6828245Z   fetch-tags: false
+2025-07-30T03:18:43.6828636Z   show-progress: true
+2025-07-30T03:18:43.6829019Z   lfs: false
+2025-07-30T03:18:43.6829426Z   submodules: false
+2025-07-30T03:18:43.6829815Z   set-safe-directory: true
+2025-07-30T03:18:43.6830450Z env:
+2025-07-30T03:18:43.6830804Z   NODE_VERSION: 20
+2025-07-30T03:18:43.6831210Z   WORKING_DIRECTORY: jarvis-chat
+2025-07-30T03:18:43.6831647Z ##[endgroup]
+2025-07-30T03:18:43.7949143Z Syncing repository: MADPANDA3D/J.A.R.V.I.S-PROJECT
+2025-07-30T03:18:43.7951165Z ##[group]Getting Git version info
+2025-07-30T03:18:43.7952234Z Working directory is '/home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT'
+2025-07-30T03:18:43.7953308Z [command]/usr/bin/git version
+2025-07-30T03:18:43.8016006Z git version 2.50.1
+2025-07-30T03:18:43.8042482Z ##[endgroup]
+2025-07-30T03:18:43.8063600Z Temporarily overriding HOME='/home/runner/work/_temp/5eb60580-35e0-4909-8ded-8e8711cf1488' before making global git config changes
+2025-07-30T03:18:43.8064971Z Adding repository directory to the temporary git global config as a safe directory
+2025-07-30T03:18:43.8069011Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT
+2025-07-30T03:18:43.8103639Z Deleting the contents of '/home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT'
+2025-07-30T03:18:43.8107132Z ##[group]Initializing the repository
+2025-07-30T03:18:43.8111338Z [command]/usr/bin/git init /home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT
+2025-07-30T03:18:43.8173592Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-07-30T03:18:43.8175281Z hint: is subject to change. To configure the initial branch name to use in all
+2025-07-30T03:18:43.8176814Z hint: of your new repositories, which will suppress this warning, call:
+2025-07-30T03:18:43.8177917Z hint:
+2025-07-30T03:18:43.8178676Z hint: 	git config --global init.defaultBranch <name>
+2025-07-30T03:18:43.8179538Z hint:
+2025-07-30T03:18:43.8180083Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-07-30T03:18:43.8180951Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-07-30T03:18:43.8181638Z hint:
+2025-07-30T03:18:43.8182349Z hint: 	git branch -m <name>
+2025-07-30T03:18:43.8182784Z hint:
+2025-07-30T03:18:43.8183379Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-07-30T03:18:43.8184889Z Initialized empty Git repository in /home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/.git/
+2025-07-30T03:18:43.8189178Z [command]/usr/bin/git remote add origin https://github.com/MADPANDA3D/J.A.R.V.I.S-PROJECT
+2025-07-30T03:18:43.8221565Z ##[endgroup]
+2025-07-30T03:18:43.8222516Z ##[group]Disabling automatic garbage collection
+2025-07-30T03:18:43.8225721Z [command]/usr/bin/git config --local gc.auto 0
+2025-07-30T03:18:43.8253221Z ##[endgroup]
+2025-07-30T03:18:43.8253893Z ##[group]Setting up auth
+2025-07-30T03:18:43.8260051Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-07-30T03:18:43.8288414Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-07-30T03:18:43.8576887Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-07-30T03:18:43.8604900Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-07-30T03:18:43.8820696Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-07-30T03:18:43.8857071Z ##[endgroup]
+2025-07-30T03:18:43.8857787Z ##[group]Fetching the repository
+2025-07-30T03:18:43.8865753Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2025-07-30T03:18:44.5327550Z From https://github.com/MADPANDA3D/J.A.R.V.I.S-PROJECT
+2025-07-30T03:18:44.5329503Z  * [new branch]      main       -> origin/main
+2025-07-30T03:18:44.5362679Z [command]/usr/bin/git branch --list --remote origin/main
+2025-07-30T03:18:44.5385806Z   origin/main
+2025-07-30T03:18:44.5397414Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+2025-07-30T03:18:44.5418035Z 6f510ab0011391ca86c3c2003cda6251fa0fa296
+2025-07-30T03:18:44.5424882Z ##[endgroup]
+2025-07-30T03:18:44.5426264Z ##[group]Determining the checkout info
+2025-07-30T03:18:44.5427715Z ##[endgroup]
+2025-07-30T03:18:44.5431138Z [command]/usr/bin/git sparse-checkout disable
+2025-07-30T03:18:44.5472697Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-07-30T03:18:44.5500069Z ##[group]Checking out the ref
+2025-07-30T03:18:44.5504889Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2025-07-30T03:18:44.6130033Z Switched to a new branch 'main'
+2025-07-30T03:18:44.6132860Z branch 'main' set up to track 'origin/main'.
+2025-07-30T03:18:44.6143941Z ##[endgroup]
+2025-07-30T03:18:44.6179018Z [command]/usr/bin/git log -1 --format=%H
+2025-07-30T03:18:44.6200543Z 6f510ab0011391ca86c3c2003cda6251fa0fa296

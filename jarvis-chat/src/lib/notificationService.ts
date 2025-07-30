@@ -222,7 +222,7 @@ class NotificationService {
 
       return deliveryResults;
 
-    } catch {
+    } catch (error) {
       centralizedLogging.error(
         'notification-service',
         'system',
@@ -297,7 +297,7 @@ class NotificationService {
 
       return deliveryResults;
 
-    } catch {
+    } catch (error) {
       centralizedLogging.error(
         'notification-service',
         'system',
@@ -394,7 +394,7 @@ class NotificationService {
 
       return deliveryResults;
 
-    } catch {
+    } catch (error) {
       centralizedLogging.error(
         'notification-service',
         'system',
@@ -448,7 +448,7 @@ class NotificationService {
         const results = await this.deliverNotification(notification, preferences);
         allResults.push(...results);
 
-      } catch {
+      } catch (error) {
         centralizedLogging.warn(
           'notification-service',
           'system',
@@ -562,7 +562,7 @@ class NotificationService {
         results.push(deliveryResult);
         this.deliveryHistory.push(deliveryResult);
 
-      } catch {
+      } catch (error) {
         const deliveryResult: NotificationDeliveryResult = {
           notificationId: notification.id,
           channel,
@@ -790,7 +790,7 @@ class NotificationService {
           'Email notification sent',
           { emailId: email.id, to: email.to, subject: email.subject }
         );
-      } catch {
+      } catch (error) {
         email.error = error instanceof Error ? error.message : 'Unknown error';
         
         centralizedLogging.error(

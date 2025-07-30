@@ -162,7 +162,7 @@ export class ExternalAPIClient {
             timeout: healthCheck.timeout
           });
           return response.status === healthCheck.expectedStatus;
-        } catch {
+        } catch (error) {
           return false;
         }
       }
@@ -267,7 +267,7 @@ export class ExternalAPIClient {
         timing
       };
 
-    } catch {
+    } catch (error) {
       // const endTime = performance.now(); // For future timing use
       
       if (error instanceof DOMException && error.name === 'TimeoutError') {
@@ -401,7 +401,7 @@ export class ExternalAPIClient {
         healthy,
         responseTime
       };
-    } catch {
+    } catch (error) {
       return {
         healthy: false,
         error: error instanceof Error ? error.message : 'Unknown error'

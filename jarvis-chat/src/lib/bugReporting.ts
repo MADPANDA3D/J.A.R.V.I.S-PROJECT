@@ -88,7 +88,7 @@ class BugReportingService {
 
       return result;
 
-    } catch {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -143,7 +143,7 @@ class BugReportingService {
         userSession,
         componentStack
       };
-    } catch {
+    } catch (error) {
       centralizedLogging.warn(
         'bug-reporting',
         'system',
@@ -204,7 +204,7 @@ class BugReportingService {
           timestamp: alert.timestamp
         }))
       };
-    } catch {
+    } catch (error) {
       centralizedLogging.warn(
         'bug-reporting',
         'system',
@@ -283,7 +283,7 @@ class BugReportingService {
         message: 'Bug report created successfully'
       };
 
-    } catch {
+    } catch (error) {
       throw new Error(`Database storage failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
@@ -311,7 +311,7 @@ class BugReportingService {
           correlatedErrors: recentErrors.length 
         }
       );
-    } catch {
+    } catch (error) {
       centralizedLogging.warn(
         'bug-reporting',
         'system',
@@ -332,7 +332,7 @@ class BugReportingService {
         `Bug reporting event: ${event}`,
         data
       );
-    } catch {
+    } catch (error) {
       // Silently fail - metrics are not critical
     }
   }

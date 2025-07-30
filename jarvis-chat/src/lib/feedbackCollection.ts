@@ -261,7 +261,7 @@ class FeedbackCollectionService {
         requestId: request.id
       };
 
-    } catch {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -363,7 +363,7 @@ class FeedbackCollectionService {
 
       return { success: true };
 
-    } catch {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -690,7 +690,7 @@ class FeedbackCollectionService {
           await this.processAdditionalInfo(feedback);
           break;
       }
-    } catch {
+    } catch (error) {
       centralizedLogging.warn(
         'feedback-collection',
         'system',
@@ -821,7 +821,7 @@ class FeedbackCollectionService {
         'Feedback reminder sent',
         { feedbackId, reminderNumber }
       );
-    } catch {
+    } catch (error) {
       centralizedLogging.error(
         'feedback-collection',
         'system',

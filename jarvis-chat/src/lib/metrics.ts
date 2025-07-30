@@ -634,7 +634,7 @@ class MetricsService {
           connection.downlink || 0
         );
       }
-    } catch {
+    } catch (error) {
       monitoringService.captureException(
         error instanceof Error
           ? error
@@ -668,7 +668,7 @@ class MetricsService {
           }
         );
       }
-    } catch {
+    } catch (error) {
       this.trackKPI('system.health_check_status', 0, 'status', 'technical');
     }
   }
@@ -700,7 +700,7 @@ class MetricsService {
           'business'
         );
       }
-    } catch {
+    } catch (error) {
       monitoringService.captureException(
         error instanceof Error
           ? error

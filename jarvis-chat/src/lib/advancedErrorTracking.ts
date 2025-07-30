@@ -164,7 +164,7 @@ class AdvancedErrorTracker {
         try {
           const response = await fetch('/api/health');
           return response.ok;
-        } catch {
+        } catch (error) {
           // Enable offline mode
           this.enableOfflineMode();
           return false;
@@ -186,7 +186,7 @@ class AdvancedErrorTracker {
             m.supabase.from('messages').select('id').limit(1).single()
           );
           return !error || error.code === 'PGRST116';
-        } catch {
+        } catch (error) {
           return false;
         }
       },
@@ -205,7 +205,7 @@ class AdvancedErrorTracker {
             m.supabase.auth.refreshSession()
           );
           return !error;
-        } catch {
+        } catch (error) {
           return false;
         }
       },
@@ -564,7 +564,7 @@ class AdvancedErrorTracker {
             );
           }
         }
-      } catch {
+      } catch (error) {
         recovery.retryCount++;
         captureError(
           error instanceof Error
@@ -712,7 +712,7 @@ class AdvancedErrorTracker {
           metadata: alert.metadata,
         });
       }
-    } catch {
+    } catch (error) {
       captureWarning('Failed to send error alert', {
         alert_id: alert.id,
         error: error instanceof Error ? error.message : 'Unknown error',

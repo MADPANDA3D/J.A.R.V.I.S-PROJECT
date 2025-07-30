@@ -1,0 +1,1024 @@
+﻿2025-07-30T03:18:42.9969482Z Current runner version: '2.326.0'
+2025-07-30T03:18:42.9992328Z ##[group]Runner Image Provisioner
+2025-07-30T03:18:42.9993186Z Hosted Compute Agent
+2025-07-30T03:18:42.9993812Z Version: 20250711.363
+2025-07-30T03:18:42.9994360Z Commit: 6785254374ce925a23743850c1cb91912ce5c14c
+2025-07-30T03:18:42.9995027Z Build Date: 2025-07-11T20:04:25Z
+2025-07-30T03:18:42.9995612Z ##[endgroup]
+2025-07-30T03:18:42.9996182Z ##[group]Operating System
+2025-07-30T03:18:42.9996701Z Ubuntu
+2025-07-30T03:18:42.9997213Z 24.04.2
+2025-07-30T03:18:42.9997651Z LTS
+2025-07-30T03:18:42.9998097Z ##[endgroup]
+2025-07-30T03:18:42.9998610Z ##[group]Runner Image
+2025-07-30T03:18:42.9999143Z Image: ubuntu-24.04
+2025-07-30T03:18:42.9999647Z Version: 20250720.1.0
+2025-07-30T03:18:43.0000582Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250720.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-07-30T03:18:43.0002492Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250720.1
+2025-07-30T03:18:43.0003494Z ##[endgroup]
+2025-07-30T03:18:43.0004580Z ##[group]GITHUB_TOKEN Permissions
+2025-07-30T03:18:43.0006339Z Contents: read
+2025-07-30T03:18:43.0006945Z Metadata: read
+2025-07-30T03:18:43.0007531Z Packages: read
+2025-07-30T03:18:43.0007984Z ##[endgroup]
+2025-07-30T03:18:43.0010011Z Secret source: Actions
+2025-07-30T03:18:43.0010696Z Prepare workflow directory
+2025-07-30T03:18:43.0407187Z Prepare all required actions
+2025-07-30T03:18:43.0444201Z Getting action download info
+2025-07-30T03:18:43.3591158Z ##[group]Download immutable action package 'actions/checkout@v4'
+2025-07-30T03:18:43.3592398Z Version: 4.2.2
+2025-07-30T03:18:43.3593345Z Digest: sha256:ccb2698953eaebd21c7bf6268a94f9c26518a7e38e27e0b83c1fe1ad049819b1
+2025-07-30T03:18:43.3594899Z Source commit SHA: 11bd71901bbe5b1630ceea73d27597364c9af683
+2025-07-30T03:18:43.3595631Z ##[endgroup]
+2025-07-30T03:18:43.4425736Z ##[group]Download immutable action package 'actions/setup-node@v4'
+2025-07-30T03:18:43.4426616Z Version: 4.4.0
+2025-07-30T03:18:43.4427400Z Digest: sha256:9427cefe82346e992fb5b949e3569b39d537ae41aa3086483b14eceebfc16bc1
+2025-07-30T03:18:43.4428285Z Source commit SHA: 49933ea5288caeca8642d1e84afbd3f7d6820020
+2025-07-30T03:18:43.4429018Z ##[endgroup]
+2025-07-30T03:18:43.6133968Z Complete job name: build-and-deploy
+2025-07-30T03:18:43.6823407Z ##[group]Run actions/checkout@v4
+2025-07-30T03:18:43.6824206Z with:
+2025-07-30T03:18:43.6824581Z   fetch-depth: 0
+2025-07-30T03:18:43.6825013Z   repository: MADPANDA3D/J.A.R.V.I.S-PROJECT
+2025-07-30T03:18:43.6825808Z   token: ***
+2025-07-30T03:18:43.6826180Z   ssh-strict: true
+2025-07-30T03:18:43.6826556Z   ssh-user: git
+2025-07-30T03:18:43.6826982Z   persist-credentials: true
+2025-07-30T03:18:43.6827411Z   clean: true
+2025-07-30T03:18:43.6827792Z   sparse-checkout-cone-mode: true
+2025-07-30T03:18:43.6828247Z   fetch-tags: false
+2025-07-30T03:18:43.6828639Z   show-progress: true
+2025-07-30T03:18:43.6829022Z   lfs: false
+2025-07-30T03:18:43.6829429Z   submodules: false
+2025-07-30T03:18:43.6829818Z   set-safe-directory: true
+2025-07-30T03:18:43.6830457Z env:
+2025-07-30T03:18:43.6830807Z   NODE_VERSION: 20
+2025-07-30T03:18:43.6831213Z   WORKING_DIRECTORY: jarvis-chat
+2025-07-30T03:18:43.6831650Z ##[endgroup]
+2025-07-30T03:18:43.7949262Z Syncing repository: MADPANDA3D/J.A.R.V.I.S-PROJECT
+2025-07-30T03:18:43.7951182Z ##[group]Getting Git version info
+2025-07-30T03:18:43.7952241Z Working directory is '/home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT'
+2025-07-30T03:18:43.7953312Z [command]/usr/bin/git version
+2025-07-30T03:18:43.8016025Z git version 2.50.1
+2025-07-30T03:18:43.8042499Z ##[endgroup]
+2025-07-30T03:18:43.8063624Z Temporarily overriding HOME='/home/runner/work/_temp/5eb60580-35e0-4909-8ded-8e8711cf1488' before making global git config changes
+2025-07-30T03:18:43.8064976Z Adding repository directory to the temporary git global config as a safe directory
+2025-07-30T03:18:43.8069027Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT
+2025-07-30T03:18:43.8103665Z Deleting the contents of '/home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT'
+2025-07-30T03:18:43.8107149Z ##[group]Initializing the repository
+2025-07-30T03:18:43.8111374Z [command]/usr/bin/git init /home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT
+2025-07-30T03:18:43.8173615Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-07-30T03:18:43.8175302Z hint: is subject to change. To configure the initial branch name to use in all
+2025-07-30T03:18:43.8176830Z hint: of your new repositories, which will suppress this warning, call:
+2025-07-30T03:18:43.8177923Z hint:
+2025-07-30T03:18:43.8178682Z hint: 	git config --global init.defaultBranch <name>
+2025-07-30T03:18:43.8179545Z hint:
+2025-07-30T03:18:43.8180087Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-07-30T03:18:43.8180955Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-07-30T03:18:43.8181642Z hint:
+2025-07-30T03:18:43.8182354Z hint: 	git branch -m <name>
+2025-07-30T03:18:43.8182787Z hint:
+2025-07-30T03:18:43.8183385Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-07-30T03:18:43.8184904Z Initialized empty Git repository in /home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/.git/
+2025-07-30T03:18:43.8189192Z [command]/usr/bin/git remote add origin https://github.com/MADPANDA3D/J.A.R.V.I.S-PROJECT
+2025-07-30T03:18:43.8221584Z ##[endgroup]
+2025-07-30T03:18:43.8222522Z ##[group]Disabling automatic garbage collection
+2025-07-30T03:18:43.8225733Z [command]/usr/bin/git config --local gc.auto 0
+2025-07-30T03:18:43.8253241Z ##[endgroup]
+2025-07-30T03:18:43.8253897Z ##[group]Setting up auth
+2025-07-30T03:18:43.8260078Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-07-30T03:18:43.8288437Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-07-30T03:18:43.8576919Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-07-30T03:18:43.8605175Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-07-30T03:18:43.8820724Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-07-30T03:18:43.8857096Z ##[endgroup]
+2025-07-30T03:18:43.8857792Z ##[group]Fetching the repository
+2025-07-30T03:18:43.8865771Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2025-07-30T03:18:44.5327639Z From https://github.com/MADPANDA3D/J.A.R.V.I.S-PROJECT
+2025-07-30T03:18:44.5329521Z  * [new branch]      main       -> origin/main
+2025-07-30T03:18:44.5362712Z [command]/usr/bin/git branch --list --remote origin/main
+2025-07-30T03:18:44.5385847Z   origin/main
+2025-07-30T03:18:44.5397445Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+2025-07-30T03:18:44.5418068Z 6f510ab0011391ca86c3c2003cda6251fa0fa296
+2025-07-30T03:18:44.5424939Z ##[endgroup]
+2025-07-30T03:18:44.5426301Z ##[group]Determining the checkout info
+2025-07-30T03:18:44.5427725Z ##[endgroup]
+2025-07-30T03:18:44.5431168Z [command]/usr/bin/git sparse-checkout disable
+2025-07-30T03:18:44.5472727Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-07-30T03:18:44.5500093Z ##[group]Checking out the ref
+2025-07-30T03:18:44.5504916Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2025-07-30T03:18:44.6130107Z Switched to a new branch 'main'
+2025-07-30T03:18:44.6132902Z branch 'main' set up to track 'origin/main'.
+2025-07-30T03:18:44.6143965Z ##[endgroup]
+2025-07-30T03:18:44.6179048Z [command]/usr/bin/git log -1 --format=%H
+2025-07-30T03:18:44.6200576Z 6f510ab0011391ca86c3c2003cda6251fa0fa296
+2025-07-30T03:18:44.6478805Z ##[group]Run actions/setup-node@v4
+2025-07-30T03:18:44.6479940Z with:
+2025-07-30T03:18:44.6480774Z   node-version: 20
+2025-07-30T03:18:44.6481659Z   cache: npm
+2025-07-30T03:18:44.6482891Z   cache-dependency-path: jarvis-chat/package-lock.json
+2025-07-30T03:18:44.6484152Z   always-auth: false
+2025-07-30T03:18:44.6485036Z   check-latest: false
+2025-07-30T03:18:44.6486219Z   token: ***
+2025-07-30T03:18:44.6487008Z env:
+2025-07-30T03:18:44.6487759Z   NODE_VERSION: 20
+2025-07-30T03:18:44.6488646Z   WORKING_DIRECTORY: jarvis-chat
+2025-07-30T03:18:44.6489634Z ##[endgroup]
+2025-07-30T03:18:44.8231321Z Found in cache @ /opt/hostedtoolcache/node/20.19.4/x64
+2025-07-30T03:18:44.8238790Z ##[group]Environment details
+2025-07-30T03:18:45.1314190Z node: v20.19.4
+2025-07-30T03:18:45.1314557Z npm: 10.8.2
+2025-07-30T03:18:45.1314814Z yarn: 1.22.22
+2025-07-30T03:18:45.1315801Z ##[endgroup]
+2025-07-30T03:18:45.1338044Z [command]/opt/hostedtoolcache/node/20.19.4/x64/bin/npm config get cache
+2025-07-30T03:18:45.2454534Z /home/runner/.npm
+2025-07-30T03:18:45.4449218Z npm cache is not found
+2025-07-30T03:18:45.4612633Z ##[group]Run echo "🔍 Build Environment Information:"
+2025-07-30T03:18:45.4613100Z [36;1mecho "🔍 Build Environment Information:"[0m
+2025-07-30T03:18:45.4613447Z [36;1mecho "Node.js version: $(node --version)"[0m
+2025-07-30T03:18:45.4613750Z [36;1mecho "NPM version: $(npm --version)"[0m
+2025-07-30T03:18:45.4614039Z [36;1mecho "Working directory: jarvis-chat"[0m
+2025-07-30T03:18:45.4614305Z [36;1mecho "Branch: main"[0m
+2025-07-30T03:18:45.4614612Z [36;1mecho "Commit SHA: 6f510ab0011391ca86c3c2003cda6251fa0fa296"[0m
+2025-07-30T03:18:45.4615006Z [36;1mecho "Repository: MADPANDA3D/J.A.R.V.I.S-PROJECT"[0m
+2025-07-30T03:18:45.4615329Z [36;1mecho "Workflow: Deploy to VPS"[0m
+2025-07-30T03:18:45.4615580Z [36;1mecho "Run ID: 16612605463"[0m
+2025-07-30T03:18:45.4653635Z shell: /usr/bin/bash -e {0}
+2025-07-30T03:18:45.4653886Z env:
+2025-07-30T03:18:45.4654091Z   NODE_VERSION: 20
+2025-07-30T03:18:45.4654297Z   WORKING_DIRECTORY: jarvis-chat
+2025-07-30T03:18:45.4654573Z ##[endgroup]
+2025-07-30T03:18:45.4729410Z 🔍 Build Environment Information:
+2025-07-30T03:18:45.4764179Z Node.js version: v20.19.4
+2025-07-30T03:18:45.5625552Z NPM version: 10.8.2
+2025-07-30T03:18:45.5626149Z Working directory: jarvis-chat
+2025-07-30T03:18:45.5626593Z Branch: main
+2025-07-30T03:18:45.5627185Z Commit SHA: 6f510ab0011391ca86c3c2003cda6251fa0fa296
+2025-07-30T03:18:45.5627921Z Repository: MADPANDA3D/J.A.R.V.I.S-PROJECT
+2025-07-30T03:18:45.5628436Z Workflow: Deploy to VPS
+2025-07-30T03:18:45.5628751Z Run ID: 16612605463
+2025-07-30T03:18:45.5662971Z ##[group]Run echo "📦 Installing dependencies with npm ci..."
+2025-07-30T03:18:45.5663433Z [36;1mecho "📦 Installing dependencies with npm ci..."[0m
+2025-07-30T03:18:45.5663745Z [36;1m[0m
+2025-07-30T03:18:45.5663954Z [36;1m# Clean install to fix lockfile issues[0m
+2025-07-30T03:18:45.5664293Z [36;1mif [ -f "package-lock.json" ]; then[0m
+2025-07-30T03:18:45.5664683Z [36;1m  echo "🔄 Using existing package-lock.json"[0m
+2025-07-30T03:18:45.5665036Z [36;1m  npm ci --production=false --no-audit --prefer-offline[0m
+2025-07-30T03:18:45.5665338Z [36;1melse[0m
+2025-07-30T03:18:45.5665594Z [36;1m  echo "⚠️ No package-lock.json found, generating new one"[0m
+2025-07-30T03:18:45.5665961Z [36;1m  npm install --production=false --no-audit[0m
+2025-07-30T03:18:45.5666224Z [36;1mfi[0m
+2025-07-30T03:18:45.5666381Z [36;1m[0m
+2025-07-30T03:18:45.5666590Z [36;1mecho "✅ Dependencies installed successfully"[0m
+2025-07-30T03:18:45.5695865Z shell: /usr/bin/bash -e {0}
+2025-07-30T03:18:45.5696154Z env:
+2025-07-30T03:18:45.5696326Z   NODE_VERSION: 20
+2025-07-30T03:18:45.5696535Z   WORKING_DIRECTORY: jarvis-chat
+2025-07-30T03:18:45.5696763Z ##[endgroup]
+2025-07-30T03:18:45.5813130Z 📦 Installing dependencies with npm ci...
+2025-07-30T03:18:45.5813812Z 🔄 Using existing package-lock.json
+2025-07-30T03:18:45.6619423Z npm warn config production Use `--omit=dev` instead.
+2025-07-30T03:18:46.2617534Z npm warn reify invalid or damaged lockfile detected
+2025-07-30T03:18:46.2618378Z npm warn reify please re-try this operation once it completes
+2025-07-30T03:18:46.2619174Z npm warn reify so that the damage can be corrected, or perform
+2025-07-30T03:18:46.2620002Z npm warn reify a fresh install with no lockfile if the problem persists.
+2025-07-30T03:18:46.2632400Z npm warn reify invalid or damaged lockfile detected
+2025-07-30T03:18:46.2633223Z npm warn reify please re-try this operation once it completes
+2025-07-30T03:18:46.2634062Z npm warn reify so that the damage can be corrected, or perform
+2025-07-30T03:18:46.2635023Z npm warn reify a fresh install with no lockfile if the problem persists.
+2025-07-30T03:18:46.2636638Z npm warn reify invalid or damaged lockfile detected
+2025-07-30T03:18:46.2637534Z npm warn reify please re-try this operation once it completes
+2025-07-30T03:18:46.2638380Z npm warn reify so that the damage can be corrected, or perform
+2025-07-30T03:18:46.2639306Z npm warn reify a fresh install with no lockfile if the problem persists.
+2025-07-30T03:18:46.2640383Z npm warn reify invalid or damaged lockfile detected
+2025-07-30T03:18:46.2641949Z npm warn reify please re-try this operation once it completes
+2025-07-30T03:18:46.2643744Z npm warn reify so that the damage can be corrected, or perform
+2025-07-30T03:18:46.2644985Z npm warn reify a fresh install with no lockfile if the problem persists.
+2025-07-30T03:18:54.1423308Z 
+2025-07-30T03:18:54.1423820Z > jarvis-chat@0.0.0 prepare
+2025-07-30T03:18:54.1424101Z > husky
+2025-07-30T03:18:54.1424211Z 
+2025-07-30T03:18:54.1894916Z .git can't be found
+2025-07-30T03:18:54.1895370Z added 580 packages in 9s
+2025-07-30T03:18:54.1895634Z 
+2025-07-30T03:18:54.1895897Z 115 packages are looking for funding
+2025-07-30T03:18:54.1896358Z   run `npm fund` for details
+2025-07-30T03:18:54.2193398Z ✅ Dependencies installed successfully
+2025-07-30T03:18:54.2226422Z ##[group]Run echo "🔍 Validating project configuration..."
+2025-07-30T03:18:54.2227592Z [36;1mecho "🔍 Validating project configuration..."[0m
+2025-07-30T03:18:54.2227864Z [36;1m[0m
+2025-07-30T03:18:54.2228122Z [36;1m# Check package.json exists and has required scripts[0m
+2025-07-30T03:18:54.2228445Z [36;1mif [ ! -f "package.json" ]; then[0m
+2025-07-30T03:18:54.2228708Z [36;1m  echo "❌ package.json not found"[0m
+2025-07-30T03:18:54.2228943Z [36;1m  exit 1[0m
+2025-07-30T03:18:54.2229107Z [36;1mfi[0m
+2025-07-30T03:18:54.2229257Z [36;1m[0m
+2025-07-30T03:18:54.2229491Z [36;1m# Verify required scripts exist[0m
+2025-07-30T03:18:54.2229833Z [36;1mif ! npm run --silent 2>/dev/null | grep -q "test\|build\|lint"; then[0m
+2025-07-30T03:18:54.2230219Z [36;1m  echo "⚠️ Some required scripts may be missing"[0m
+2025-07-30T03:18:54.2230484Z [36;1mfi[0m
+2025-07-30T03:18:54.2230631Z [36;1m[0m
+2025-07-30T03:18:54.2230799Z [36;1m# Check critical files exist[0m
+2025-07-30T03:18:54.2231088Z [36;1mif [ ! -f "vite.config.ts" ]; then[0m
+2025-07-30T03:18:54.2231664Z [36;1m  echo "⚠️ vite.config.ts not found - build may fail"[0m
+2025-07-30T03:18:54.2232193Z [36;1mfi[0m
+2025-07-30T03:18:54.2232352Z [36;1m[0m
+2025-07-30T03:18:54.2232524Z [36;1mif [ ! -f "tsconfig.json" ]; then[0m
+2025-07-30T03:18:54.2232869Z [36;1m  echo "⚠️ tsconfig.json not found - TypeScript compilation may fail"[0m
+2025-07-30T03:18:54.2233186Z [36;1mfi[0m
+2025-07-30T03:18:54.2233342Z [36;1m[0m
+2025-07-30T03:18:54.2233532Z [36;1mecho "✅ Environment validation completed"[0m
+2025-07-30T03:18:54.2262298Z shell: /usr/bin/bash -e {0}
+2025-07-30T03:18:54.2262522Z env:
+2025-07-30T03:18:54.2262681Z   NODE_VERSION: 20
+2025-07-30T03:18:54.2262884Z   WORKING_DIRECTORY: jarvis-chat
+2025-07-30T03:18:54.2263099Z ##[endgroup]
+2025-07-30T03:18:54.2314311Z 🔍 Validating project configuration...
+2025-07-30T03:18:54.3384822Z ⚠️ Some required scripts may be missing
+2025-07-30T03:18:54.3385546Z ✅ Environment validation completed
+2025-07-30T03:18:54.3412501Z ##[group]Run echo "🧪 Running test suite..."
+2025-07-30T03:18:54.3413033Z [36;1mecho "🧪 Running test suite..."[0m
+2025-07-30T03:18:54.3413267Z [36;1m[0m
+2025-07-30T03:18:54.3413497Z [36;1m# Set Node.js memory limit to prevent OOM errors[0m
+2025-07-30T03:18:54.3413843Z [36;1mexport NODE_OPTIONS="--max-old-space-size=4096"[0m
+2025-07-30T03:18:54.3414113Z [36;1m[0m
+2025-07-30T03:18:54.3414367Z [36;1m# Run tests with proper error handling and memory optimization[0m
+2025-07-30T03:18:54.3414693Z [36;1mif npm run test:ci; then[0m
+2025-07-30T03:18:54.3414957Z [36;1m  echo "✅ All tests passed successfully"[0m
+2025-07-30T03:18:54.3415211Z [36;1melse[0m
+2025-07-30T03:18:54.3415389Z [36;1m  echo "❌ Tests failed"[0m
+2025-07-30T03:18:54.3415592Z [36;1m  [0m
+2025-07-30T03:18:54.3415782Z [36;1m  # Check if force deploy is enabled[0m
+2025-07-30T03:18:54.3416029Z [36;1m  if [ "" = "true" ]; then[0m
+2025-07-30T03:18:54.3416390Z [36;1m    echo "⚠️ Force deploy enabled - continuing despite test failures"[0m
+2025-07-30T03:18:54.3416701Z [36;1m  else[0m
+2025-07-30T03:18:54.3416945Z [36;1m    echo "🛑 Deployment cancelled due to test failures"[0m
+2025-07-30T03:18:54.3417220Z [36;1m    exit 1[0m
+2025-07-30T03:18:54.3417392Z [36;1m  fi[0m
+2025-07-30T03:18:54.3417548Z [36;1mfi[0m
+2025-07-30T03:18:54.3446922Z shell: /usr/bin/bash -e {0}
+2025-07-30T03:18:54.3447149Z env:
+2025-07-30T03:18:54.3447313Z   NODE_VERSION: 20
+2025-07-30T03:18:54.3447502Z   WORKING_DIRECTORY: jarvis-chat
+2025-07-30T03:18:54.3447721Z ##[endgroup]
+2025-07-30T03:18:54.3496074Z 🧪 Running test suite...
+2025-07-30T03:18:54.4681939Z 
+2025-07-30T03:18:54.4682532Z > jarvis-chat@0.0.0 test:ci
+2025-07-30T03:18:54.4683675Z > NODE_OPTIONS='--max-old-space-size=4096' vitest run --pool=forks --poolOptions.forks.singleFork=true --reporter=verbose --bail=10
+2025-07-30T03:18:54.4684309Z 
+2025-07-30T03:18:54.7987888Z 
+2025-07-30T03:18:54.7990426Z [1m[46m RUN [49m[22m [36mv3.2.4 [39m[90m/home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat[39m
+2025-07-30T03:18:54.7991206Z 
+2025-07-30T03:18:55.9168383Z  [31m×[39m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mComplete Bug Lifecycle Workflow[2m > [22mprocesses complete bug lifecycle from open to closed[32m 12[2mms[22m[39m
+2025-07-30T03:18:55.9169797Z [31m   → expected false to be true // Object.is equality[39m
+2025-07-30T03:18:55.9171039Z  [31m×[39m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mComplete Bug Lifecycle Workflow[2m > [22mhandles escalation workflow correctly[32m 1[2mms[22m[39m
+2025-07-30T03:18:55.9172532Z [31m   → expected false to be true // Object.is equality[39m
+2025-07-30T03:18:55.9173796Z  [31m×[39m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mNotification Integration[2m > [22msends notifications throughout bug lifecycle[32m 3[2mms[22m[39m
+2025-07-30T03:18:55.9174991Z [31m   → expected "sendBugStatusUpdate" to be called at least once[39m
+2025-07-30T03:18:55.9176977Z  [32m✓[39m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mNotification Integration[2m > [22mrespects user notification preferences[32m 1[2mms[22m[39m
+2025-07-30T03:18:55.9178863Z  [31m×[39m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mCommunication and Collaboration[2m > [22mhandles threaded discussions correctly[32m 3[2mms[22m[39m
+2025-07-30T03:18:55.9179990Z [31m   → expected [] to have a length of 1 but got +0[39m
+2025-07-30T03:18:55.9181304Z  [32m✓[39m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mCommunication and Collaboration[2m > [22mtracks audit trail for all activities[32m 1[2mms[22m[39m
+2025-07-30T03:18:55.9183563Z  [31m×[39m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mFeedback Integration[2m > [22mprocesses feedback lifecycle correctly[32m 1[2mms[22m[39m
+2025-07-30T03:18:55.9184963Z [31m   → expected false to be true // Object.is equality[39m
+2025-07-30T03:18:55.9186318Z  [32m✓[39m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mPerformance and Scalability[2m > [22mhandles concurrent operations efficiently[32m 1[2mms[22m[39m
+2025-07-30T03:18:55.9188006Z  [32m✓[39m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mPerformance and Scalability[2m > [22mmaintains data consistency under load[32m 1[2mms[22m[39m
+2025-07-30T03:18:55.9190839Z  [31m×[39m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mError Handling and Recovery[2m > [22mhandles service failures gracefully[32m 3[2mms[22m[39m
+2025-07-30T03:18:55.9193175Z [31m   → expected 'Status transition validation failed: …' to contain 'Database connection failed'[39m
+2025-07-30T03:18:55.9195437Z  [31m×[39m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mError Handling and Recovery[2m > [22mvalidates state transitions correctly[32m 1[2mms[22m[39m
+2025-07-30T03:18:55.9197206Z [31m   → expected false to be true // Object.is equality[39m
+2025-07-30T03:18:55.9199227Z  [31m×[39m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mIntegration with Monitoring[2m > [22mtracks all lifecycle events for monitoring[32m 3[2mms[22m[39m
+2025-07-30T03:18:55.9201311Z [31m   → expected "spy" to be called with arguments: [ 'bug_assigned', Any<Object> ][90m
+2025-07-30T03:18:55.9202080Z 
+2025-07-30T03:18:55.9202230Z Received: 
+2025-07-30T03:18:55.9202403Z 
+2025-07-30T03:18:55.9202647Z [1m  1st spy call:
+2025-07-30T03:18:55.9202858Z 
+2025-07-30T03:18:55.9203079Z [22m[2m  [[22m
+2025-07-30T03:18:55.9203532Z [32m-   "bug_assigned",[90m
+2025-07-30T03:18:55.9204047Z [32m-   Any<Object>,[90m
+2025-07-30T03:18:55.9204642Z [31m+   "internal_comment_added",[90m
+2025-07-30T03:18:55.9205158Z [31m+   {[90m
+2025-07-30T03:18:55.9205669Z [31m+     "attachmentCount": 0,[90m
+2025-07-30T03:18:55.9206291Z [31m+     "authorId": "user1",[90m
+2025-07-30T03:18:55.9207055Z [31m+     "bugId": "monitoring-test-bug",[90m
+2025-07-30T03:18:55.9207904Z [31m+     "commentId": "comment_1753845535906_kkb2jpbbw",[90m
+2025-07-30T03:18:55.9208659Z [31m+     "commentType": "note",[90m
+2025-07-30T03:18:55.9209294Z [31m+     "mentionCount": 0,[90m
+2025-07-30T03:18:55.9209947Z [31m+     "visibility": "internal",[90m
+2025-07-30T03:18:55.9210471Z [31m+   },[90m
+2025-07-30T03:18:55.9210848Z [2m  ][22m
+2025-07-30T03:18:55.9211030Z 
+2025-07-30T03:18:55.9211267Z [1m  2nd spy call:
+2025-07-30T03:18:55.9211476Z 
+2025-07-30T03:18:55.9211688Z [22m[2m  [[22m
+2025-07-30T03:18:55.9212362Z [32m-   "bug_assigned",[90m
+2025-07-30T03:18:55.9212897Z [32m-   Any<Object>,[90m
+2025-07-30T03:18:55.9213460Z [31m+   "notification_sent",[90m
+2025-07-30T03:18:55.9213934Z [31m+   {[90m
+2025-07-30T03:18:55.9214486Z [31m+     "bugId": "monitoring-test-bug",[90m
+2025-07-30T03:18:55.9215086Z [31m+     "channels": [[90m
+2025-07-30T03:18:55.9215609Z [31m+       "in_app",[90m
+2025-07-30T03:18:55.9216093Z [31m+       "email",[90m
+2025-07-30T03:18:55.9216553Z [31m+     ],[90m
+2025-07-30T03:18:55.9217068Z [31m+     "deliveryCount": 2,[90m
+2025-07-30T03:18:55.9217730Z [31m+     "requestType": "verification",[90m
+2025-07-30T03:18:55.9218437Z [31m+     "type": "feedback_request",[90m
+2025-07-30T03:18:55.9219088Z [31m+     "userId": "reporter",[90m
+2025-07-30T03:18:55.9219584Z [31m+   },[90m
+2025-07-30T03:18:55.9219967Z [2m  ][22m
+2025-07-30T03:18:55.9220147Z 
+2025-07-30T03:18:55.9220363Z [1m  3rd spy call:
+2025-07-30T03:18:55.9220574Z 
+2025-07-30T03:18:55.9220786Z [22m[2m  [[22m
+2025-07-30T03:18:55.9221498Z [32m-   "bug_assigned",[90m
+2025-07-30T03:18:55.9222461Z [32m-   Any<Object>,[90m
+2025-07-30T03:18:55.9223040Z [31m+   "feedback_requested",[90m
+2025-07-30T03:18:55.9223529Z [31m+   {[90m
+2025-07-30T03:18:55.9224103Z [31m+     "bugId": "monitoring-test-bug",[90m
+2025-07-30T03:18:55.9224922Z [31m+     "feedbackType": "resolution_verification",[90m
+2025-07-30T03:18:55.9225652Z [31m+     "priority": "normal",[90m
+2025-07-30T03:18:55.9226433Z [31m+     "requestId": "request_1753845535906_appfovu8c",[90m
+2025-07-30T03:18:55.9227157Z [31m+     "userId": "reporter",[90m
+2025-07-30T03:18:55.9227664Z [31m+   },[90m
+2025-07-30T03:18:55.9228071Z [2m  ][22m
+2025-07-30T03:18:55.9228451Z [31m[90m
+2025-07-30T03:18:55.9228552Z 
+2025-07-30T03:18:55.9228689Z Number of calls: [1m3[22m
+2025-07-30T03:18:55.9228919Z [31m[39m
+2025-07-30T03:18:55.9229941Z  [31m×[39m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mWorkflow Optimization[2m > [22moptimizes assignment recommendations based on workload[32m 1[2mms[22m[39m
+2025-07-30T03:18:55.9230932Z [31m   → expected 'user_1' to be 'user_3' // Object.is equality[39m
+2025-07-30T03:18:55.9232314Z  [31m×[39m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mWorkflow Optimization[2m > [22mprovides workload balancing recommendations[32m 1[2mms[22m[39m
+2025-07-30T03:18:55.9233382Z [31m   → expected false to be true // Object.is equality[39m
+2025-07-30T03:18:56.0162272Z  [32m✓[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mManual Assignment[2m > [22massigns bug to team member successfully[32m 1[2mms[22m[39m
+2025-07-30T03:18:56.0164855Z  [31m×[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mManual Assignment[2m > [22mhandles assignment to non-existent user[32m 2[2mms[22m[39m
+2025-07-30T03:18:56.0166585Z [31m   → expected 'Unknown error' to contain 'Assignee not found'[39m
+2025-07-30T03:18:56.0168280Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mManual Assignment[2m > [22mhandles database update failures
+2025-07-30T03:18:56.0170378Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mManual Assignment[2m > [22mtracks assignment history
+2025-07-30T03:18:56.0172759Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mManual Assignment[2m > [22mhandles reassignment correctly
+2025-07-30T03:18:56.0174822Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mAuto Assignment[2m > [22mauto-assigns bug successfully
+2025-07-30T03:18:56.0177013Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mAuto Assignment[2m > [22mreturns null when no suitable assignee found
+2025-07-30T03:18:56.0179097Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mAuto Assignment[2m > [22mconsiders workload when auto-assigning
+2025-07-30T03:18:56.0181362Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mAssignment Recommendations[2m > [22mgenerates assignment recommendations
+2025-07-30T03:18:56.0183303Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mAssignment Recommendations[2m > [22msorts recommendations by confidence
+2025-07-30T03:18:56.0184799Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mAssignment Recommendations[2m > [22mconsiders skill matching in recommendations
+2025-07-30T03:18:56.0187028Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mPriority Escalation[2m > [22mescalates bug priority successfully
+2025-07-30T03:18:56.0188832Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mPriority Escalation[2m > [22mprevents escalation beyond maximum priority
+2025-07-30T03:18:56.0191340Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mPriority Escalation[2m > [22msends escalation alerts to managers
+2025-07-30T03:18:56.0193789Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mWorkload Management[2m > [22mcalculates workload metrics correctly
+2025-07-30T03:18:56.0195921Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mWorkload Management[2m > [22midentifies workload imbalances
+2025-07-30T03:18:56.0198025Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mWorkload Management[2m > [22mupdates team member information
+2025-07-30T03:18:56.0200215Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mWorkload Management[2m > [22mhandles update of non-existent team member
+2025-07-30T03:18:56.0202591Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mAssignment Rules[2m > [22mapplies assignment rules correctly
+2025-07-30T03:18:56.0203843Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mAssignment Rules[2m > [22mfalls back to recommendations when no rules match
+2025-07-30T03:18:56.0204980Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mError Handling[2m > [22mhandles bug fetch errors gracefully
+2025-07-30T03:18:56.0206097Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mError Handling[2m > [22mhandles notification failures gracefully
+2025-07-30T03:18:56.0207488Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mPerformance[2m > [22mhandles concurrent assignments without conflicts
+2025-07-30T03:18:56.0209129Z  [90m·[39m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mPerformance[2m > [22mmaintains reasonable performance with large workload
+2025-07-30T03:18:56.1222907Z  [90m·[39m src/lib/__tests__/environment-integration.test.ts[2m > [22mEnvironment & Secrets Integration[2m > [22mComplete Development Environment[2m > [22mshould validate complete development setup
+2025-07-30T03:18:56.1225750Z  [90m·[39m src/lib/__tests__/environment-integration.test.ts[2m > [22mEnvironment & Secrets Integration[2m > [22mComplete Development Environment[2m > [22mshould allow insecure configurations in development
+2025-07-30T03:18:56.1228083Z  [90m·[39m src/lib/__tests__/environment-integration.test.ts[2m > [22mEnvironment & Secrets Integration[2m > [22mComplete Staging Environment[2m > [22mshould validate complete staging setup
+2025-07-30T03:18:56.1230271Z  [90m·[39m src/lib/__tests__/environment-integration.test.ts[2m > [22mEnvironment & Secrets Integration[2m > [22mComplete Staging Environment[2m > [22mshould enforce HTTPS in staging
+2025-07-30T03:18:56.1232844Z  [90m·[39m src/lib/__tests__/environment-integration.test.ts[2m > [22mEnvironment & Secrets Integration[2m > [22mComplete Production Environment[2m > [22mshould validate complete production setup
+2025-07-30T03:18:56.1235526Z  [90m·[39m src/lib/__tests__/environment-integration.test.ts[2m > [22mEnvironment & Secrets Integration[2m > [22mComplete Production Environment[2m > [22mshould reject insecure production configurations
+2025-07-30T03:18:56.1238295Z  [90m·[39m src/lib/__tests__/environment-integration.test.ts[2m > [22mEnvironment & Secrets Integration[2m > [22mComplete Production Environment[2m > [22mshould require HTTPS for all external services in production
+2025-07-30T03:18:56.1240084Z  [90m·[39m src/lib/__tests__/environment-integration.test.ts[2m > [22mEnvironment & Secrets Integration[2m > [22mHealth Check Integration[2m > [22mshould provide comprehensive health status
+2025-07-30T03:18:56.1241659Z  [90m·[39m src/lib/__tests__/environment-integration.test.ts[2m > [22mEnvironment & Secrets Integration[2m > [22mHealth Check Integration[2m > [22mshould detect configuration problems in health checks
+2025-07-30T03:18:56.1244201Z  [90m·[39m src/lib/__tests__/environment-integration.test.ts[2m > [22mEnvironment & Secrets Integration[2m > [22mProduction Readiness Assessment[2m > [22mshould correctly assess production readiness
+2025-07-30T03:18:56.1245833Z  [90m·[39m src/lib/__tests__/environment-integration.test.ts[2m > [22mEnvironment & Secrets Integration[2m > [22mProduction Readiness Assessment[2m > [22mshould reject non-production-ready configuration
+2025-07-30T03:18:56.1247385Z  [90m·[39m src/lib/__tests__/environment-integration.test.ts[2m > [22mEnvironment & Secrets Integration[2m > [22mCross-System Dependencies[2m > [22mshould validate database and webhook integration
+2025-07-30T03:18:56.1249635Z  [90m·[39m src/lib/__tests__/environment-integration.test.ts[2m > [22mEnvironment & Secrets Integration[2m > [22mCross-System Dependencies[2m > [22mshould validate monitoring integration
+2025-07-30T03:18:56.1251008Z  [90m·[39m src/lib/__tests__/environment-integration.test.ts[2m > [22mEnvironment & Secrets Integration[2m > [22mError Correlation[2m > [22mshould correlate related errors across systems
+2025-07-30T03:18:56.1252536Z  [90m·[39m src/lib/__tests__/environment-integration.test.ts[2m > [22mEnvironment & Secrets Integration[2m > [22mComplete System Validation[2m > [22mshould validate entire system health
+2025-07-30T03:18:56.2010892Z  [90m·[39m src/lib/__tests__/webhookService.basic.test.ts[2m > [22mWebhookService - Basic Tests[2m > [22mMessage Sending Success Scenarios[2m > [22mshould send message successfully with valid payload
+2025-07-30T03:18:56.2013552Z  [90m·[39m src/lib/__tests__/webhookService.basic.test.ts[2m > [22mWebhookService - Basic Tests[2m > [22mMessage Sending Success Scenarios[2m > [22mshould include request metadata in payload
+2025-07-30T03:18:56.2015806Z  [90m·[39m src/lib/__tests__/webhookService.basic.test.ts[2m > [22mWebhookService - Basic Tests[2m > [22mError Handling[2m > [22mshould throw validation error for missing webhook URL
+2025-07-30T03:18:56.2018059Z  [90m·[39m src/lib/__tests__/webhookService.basic.test.ts[2m > [22mWebhookService - Basic Tests[2m > [22mError Handling[2m > [22mshould handle HTTP error responses
+2025-07-30T03:18:56.2019357Z  [90m·[39m src/lib/__tests__/webhookService.basic.test.ts[2m > [22mWebhookService - Basic Tests[2m > [22mError Handling[2m > [22mshould handle network errors
+2025-07-30T03:18:56.2020553Z  [90m·[39m src/lib/__tests__/webhookService.basic.test.ts[2m > [22mWebhookService - Basic Tests[2m > [22mError Handling[2m > [22mshould handle malformed response format
+2025-07-30T03:18:56.2022072Z  [90m·[39m src/lib/__tests__/webhookService.basic.test.ts[2m > [22mWebhookService - Basic Tests[2m > [22mBasic Retry Logic[2m > [22mshould retry on retryable errors and eventually succeed
+2025-07-30T03:18:56.2023344Z  [90m·[39m src/lib/__tests__/webhookService.basic.test.ts[2m > [22mWebhookService - Basic Tests[2m > [22mBasic Retry Logic[2m > [22mshould not retry on non-retryable errors
+2025-07-30T03:18:56.2024588Z  [90m·[39m src/lib/__tests__/webhookService.basic.test.ts[2m > [22mWebhookService - Basic Tests[2m > [22mWebhook Payload Validation[2m > [22mshould validate required payload fields
+2025-07-30T03:18:56.2025949Z  [90m·[39m src/lib/__tests__/webhookService.basic.test.ts[2m > [22mWebhookService - Basic Tests[2m > [22mWebhook Payload Validation[2m > [22mshould include optional payload fields when provided
+2025-07-30T03:18:56.2027235Z  [90m·[39m src/lib/__tests__/webhookService.basic.test.ts[2m > [22mWebhookService - Basic Tests[2m > [22mPerformance and Metrics[2m > [22mshould track request metrics on success
+2025-07-30T03:18:56.2028673Z  [90m·[39m src/lib/__tests__/webhookService.basic.test.ts[2m > [22mWebhookService - Basic Tests[2m > [22mPerformance and Metrics[2m > [22mshould track error metrics on failures
+2025-07-30T03:18:56.2029977Z  [90m·[39m src/lib/__tests__/webhookService.basic.test.ts[2m > [22mWebhookService - Basic Tests[2m > [22mHealth Check[2m > [22mshould perform health check successfully
+2025-07-30T03:18:56.2031099Z  [90m·[39m src/lib/__tests__/webhookService.basic.test.ts[2m > [22mWebhookService - Basic Tests[2m > [22mHealth Check[2m > [22mshould return unhealthy status on errors
+2025-07-30T03:18:56.2032599Z  [90m·[39m src/lib/__tests__/webhookService.basic.test.ts[2m > [22mWebhookService - Basic Tests[2m > [22mConfiguration and Security[2m > [22mshould include standard headers in all requests
+2025-07-30T03:18:56.2033872Z  [90m·[39m src/lib/__tests__/webhookService.basic.test.ts[2m > [22mWebhookService - Basic Tests[2m > [22mConfiguration and Security[2m > [22mshould generate unique request IDs
+2025-07-30T03:18:56.2035138Z  [90m·[39m src/lib/__tests__/webhookService.basic.test.ts[2m > [22mWebhookService - Basic Tests[2m > [22mConfiguration and Security[2m > [22mshould provide circuit breaker configuration methods
+2025-07-30T03:18:56.2037088Z  [90m·[39m src/lib/__tests__/webhookService.basic.test.ts[2m > [22mWebhookService - Basic Tests[2m > [22mConfiguration and Security[2m > [22mshould allow manual circuit breaker reset
+2025-07-30T03:18:56.4764422Z  [90m·[39m src/hooks/__tests__/useTools.test.ts[2m > [22museTools[2m > [22minitialization[2m > [22mshould initialize with default tools when user is not logged in
+2025-07-30T03:18:56.4766388Z  [90m·[39m src/hooks/__tests__/useTools.test.ts[2m > [22museTools[2m > [22minitialization[2m > [22mshould load saved preferences from localStorage when user is logged in
+2025-07-30T03:18:56.4768197Z  [90m·[39m src/hooks/__tests__/useTools.test.ts[2m > [22museTools[2m > [22mtool selection[2m > [22mshould toggle tool selection correctly
+2025-07-30T03:18:56.4769812Z  [90m·[39m src/hooks/__tests__/useTools.test.ts[2m > [22museTools[2m > [22mtool selection[2m > [22mshould save selections to localStorage when changed
+2025-07-30T03:18:56.4771383Z  [90m·[39m src/hooks/__tests__/useTools.test.ts[2m > [22museTools[2m > [22mgetSelectedToolIds[2m > [22mshould return only enabled tool IDs
+2025-07-30T03:18:56.4773217Z  [90m·[39m src/hooks/__tests__/useTools.test.ts[2m > [22museTools[2m > [22mpreferences management[2m > [22mshould update preferences correctly
+2025-07-30T03:18:56.4774849Z  [90m·[39m src/hooks/__tests__/useTools.test.ts[2m > [22museTools[2m > [22mresetToDefaults[2m > [22mshould reset to default selections and preferences
+2025-07-30T03:18:56.4776461Z  [90m·[39m src/hooks/__tests__/useTools.test.ts[2m > [22museTools[2m > [22merror handling[2m > [22mshould handle localStorage errors gracefully
+2025-07-30T03:18:56.4778007Z  [90m·[39m src/hooks/__tests__/useTools.test.ts[2m > [22museTools[2m > [22manalytics[2m > [22mshould generate session ID when recording usage
+2025-07-30T03:18:56.4779637Z  [90m·[39m src/hooks/__tests__/useTools.test.ts[2m > [22museTools[2m > [22manalytics[2m > [22mshould not record usage when analytics is disabled
+2025-07-30T03:18:56.5732509Z 
+2025-07-30T03:18:56.5734291Z [31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Suites 33 [49m[22m[31m⎯⎯⎯⎯⎯⎯[39m
+2025-07-30T03:18:56.5735381Z 
+2025-07-30T03:18:56.5740033Z [41m[1m FAIL [22m[49m scripts/__tests__/webhook-server.test.js[2m [ scripts/__tests__/webhook-server.test.js ][22m
+2025-07-30T03:18:56.5741362Z [41m[1m FAIL [22m[49m src/test/setup.test.ts[2m [ src/test/setup.test.ts ][22m
+2025-07-30T03:18:56.5742883Z [41m[1m FAIL [22m[49m src/hooks/__tests__/useChat.test.ts[2m [ src/hooks/__tests__/useChat.test.ts ][22m
+2025-07-30T03:18:56.5744371Z [41m[1m FAIL [22m[49m src/hooks/__tests__/usePWAInstall.test.ts[2m [ src/hooks/__tests__/usePWAInstall.test.ts ][22m
+2025-07-30T03:18:56.5746348Z [41m[1m FAIL [22m[49m src/lib/__tests__/bugReporting.test.ts[2m [ src/lib/__tests__/bugReporting.test.ts ][22m
+2025-07-30T03:18:56.5747796Z [41m[1m FAIL [22m[49m src/lib/__tests__/chatService.production.test.ts[2m [ src/lib/__tests__/chatService.production.test.ts ][22m
+2025-07-30T03:18:56.5748723Z [41m[1m FAIL [22m[49m src/lib/__tests__/env-validation.test.ts[2m [ src/lib/__tests__/env-validation.test.ts ][22m
+2025-07-30T03:18:56.5749579Z [41m[1m FAIL [22m[49m src/lib/__tests__/sessionTracking.test.ts[2m [ src/lib/__tests__/sessionTracking.test.ts ][22m
+2025-07-30T03:18:56.5750475Z [41m[1m FAIL [22m[49m src/lib/__tests__/webhook.diagnostic.test.ts[2m [ src/lib/__tests__/webhook.diagnostic.test.ts ][22m
+2025-07-30T03:18:56.5751394Z [41m[1m FAIL [22m[49m src/lib/__tests__/webhook.integration.test.ts[2m [ src/lib/__tests__/webhook.integration.test.ts ][22m
+2025-07-30T03:18:56.5752910Z [41m[1m FAIL [22m[49m src/lib/__tests__/webhook.live.test.ts[2m [ src/lib/__tests__/webhook.live.test.ts ][22m
+2025-07-30T03:18:56.5754563Z [41m[1m FAIL [22m[49m src/components/auth/__tests__/AuthLayout.test.tsx[2m [ src/components/auth/__tests__/AuthLayout.test.tsx ][22m
+2025-07-30T03:18:56.5756379Z [41m[1m FAIL [22m[49m src/components/auth/__tests__/ProtectedRoute.test.tsx[2m [ src/components/auth/__tests__/ProtectedRoute.test.tsx ][22m
+2025-07-30T03:18:56.5758404Z [41m[1m FAIL [22m[49m src/components/bug-report/__tests__/BugReportForm.test.tsx[2m [ src/components/bug-report/__tests__/BugReportForm.test.tsx ][22m
+2025-07-30T03:18:56.5760616Z [41m[1m FAIL [22m[49m src/components/chat/__tests__/MessageSearch.test.tsx[2m [ src/components/chat/__tests__/MessageSearch.test.tsx ][22m
+2025-07-30T03:18:56.5762893Z [41m[1m FAIL [22m[49m src/components/chat/__tests__/ToolsSelector.test.tsx[2m [ src/components/chat/__tests__/ToolsSelector.test.tsx ][22m
+2025-07-30T03:18:56.5764897Z [41m[1m FAIL [22m[49m src/components/layout/__tests__/Footer.test.tsx[2m [ src/components/layout/__tests__/Footer.test.tsx ][22m
+2025-07-30T03:18:56.5766730Z [41m[1m FAIL [22m[49m src/components/pwa/__tests__/InstallPrompt.test.tsx[2m [ src/components/pwa/__tests__/InstallPrompt.test.tsx ][22m
+2025-07-30T03:18:56.5768552Z [41m[1m FAIL [22m[49m src/components/pwa/__tests__/PWAStatus.test.tsx[2m [ src/components/pwa/__tests__/PWAStatus.test.tsx ][22m
+2025-07-30T03:18:56.5770233Z [41m[1m FAIL [22m[49m src/components/ui/__tests__/Avatar.test.tsx[2m [ src/components/ui/__tests__/Avatar.test.tsx ][22m
+2025-07-30T03:18:56.5773437Z [31m[1mTypeError[22m: Cannot assign to read only property 'localStorage' of object '#<Object>'[39m
+2025-07-30T03:18:56.5822735Z [36m [2m❯[22m src/test/setup.ts:[2m79:17[22m[39m
+2025-07-30T03:18:56.5823753Z     [90m 77| [39m  clear[33m:[39m vi[33m.[39m[34mfn[39m()[33m,[39m
+2025-07-30T03:18:56.5824569Z     [90m 78| [39m}[33m;[39m
+2025-07-30T03:18:56.5825611Z     [90m 79| [39m(global [35mas[39m any)[33m.[39mlocalStorage [33m=[39m localStorageMock[33m;[39m
+2025-07-30T03:18:56.5826713Z     [90m   | [39m                [31m^[39m
+2025-07-30T03:18:56.5827401Z     [90m 80| [39m
+2025-07-30T03:18:56.5828073Z     [90m 81| [39m[90m// Mock sessionStorage[39m
+2025-07-30T03:18:56.5828560Z 
+2025-07-30T03:18:56.5829100Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/44]⎯[22m[39m
+2025-07-30T03:18:56.5829577Z 
+2025-07-30T03:18:56.5830667Z [41m[1m FAIL [22m[49m src/__tests__/bugReportIntegration.test.ts[2m [ src/__tests__/bugReportIntegration.test.ts ][22m
+2025-07-30T03:18:56.5832173Z [31m[1mError[22m: Transform failed with 1 error:
+2025-07-30T03:18:56.5833764Z /home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/lib/monitoring.ts:1196:18: ERROR: Unexpected ":"[39m
+2025-07-30T03:18:56.5834966Z   Plugin: [35mvite:esbuild[39m
+2025-07-30T03:18:56.5836220Z   File: [36m/home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/lib/monitoring.ts[39m:1196:18
+2025-07-30T03:18:56.5837219Z [33m  
+2025-07-30T03:18:56.5837957Z   [33mUnexpected ":"[33m
+2025-07-30T03:18:56.5838777Z   1194|    operation: string = 'function'
+2025-07-30T03:18:56.5839348Z   1195|  ): T => {
+2025-07-30T03:18:56.5839881Z   1196|    return ((...args: unknown[]) {
+2025-07-30T03:18:56.5840445Z      |                    ^
+2025-07-30T03:18:56.5841152Z   1197|      const transaction = startTransaction(name, operation);
+2025-07-30T03:18:56.5842018Z   1198|      try {
+2025-07-30T03:18:56.5842629Z   [39m
+2025-07-30T03:18:56.5843852Z [90m [2m❯[22m failureErrorWithLog node_modules/vite/node_modules/esbuild/lib/main.js:[2m1467:15[22m[39m
+2025-07-30T03:18:56.5845333Z [90m [2m❯[22m node_modules/vite/node_modules/esbuild/lib/main.js:[2m736:50[22m[39m
+2025-07-30T03:18:56.5846938Z [90m [2m❯[22m responseCallbacks.<computed> node_modules/vite/node_modules/esbuild/lib/main.js:[2m603:9[22m[39m
+2025-07-30T03:18:56.5848586Z [90m [2m❯[22m handleIncomingPacket node_modules/vite/node_modules/esbuild/lib/main.js:[2m658:12[22m[39m
+2025-07-30T03:18:56.5850286Z [90m [2m❯[22m Socket.readFromStdout node_modules/vite/node_modules/esbuild/lib/main.js:[2m581:7[22m[39m
+2025-07-30T03:18:56.5851117Z 
+2025-07-30T03:18:56.5851610Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/44]⎯[22m[39m
+2025-07-30T03:18:56.5852234Z 
+2025-07-30T03:18:56.5853208Z [41m[1m FAIL [22m[49m src/api/__tests__/bugDashboard.test.ts[2m [ src/api/__tests__/bugDashboard.test.ts ][22m
+2025-07-30T03:18:56.5877571Z [31m[1mError[22m: Failed to resolve import "supertest" from "src/api/__tests__/bugDashboard.test.ts". Does the file exist?[39m
+2025-07-30T03:18:56.5878874Z   Plugin: [35mvite:import-analysis[39m
+2025-07-30T03:18:56.5880232Z   File: [36m/home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/api/__tests__/bugDashboard.test.ts[39m:7:0
+2025-07-30T03:18:56.5881669Z [33m  4  |  vi.mock("../../lib/centralizedLogging");
+2025-07-30T03:18:56.5882706Z   5  |  vi.mock("../../lib/monitoring");
+2025-07-30T03:18:56.5883463Z   6  |  const __vi_import_0__ = await import("supertest");
+2025-07-30T03:18:56.5884253Z      |                                       ^
+2025-07-30T03:18:56.5885064Z   7  |  const __vi_import_1__ = await import("express");
+2025-07-30T03:18:56.5886190Z   8  |  const __vi_import_2__ = await import("../bugDashboard");[39m
+2025-07-30T03:18:56.5887936Z [90m [2m❯[22m TransformPluginContext._formatLog node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m31460:43[22m[39m
+2025-07-30T03:18:56.5889953Z [90m [2m❯[22m TransformPluginContext.error node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m31457:14[22m[39m
+2025-07-30T03:18:56.5892009Z [90m [2m❯[22m normalizeUrl node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m29999:18[22m[39m
+2025-07-30T03:18:56.5893700Z [90m [2m❯[22m node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m30057:32[22m[39m
+2025-07-30T03:18:56.5895527Z [90m [2m❯[22m TransformPluginContext.transform node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m30025:4[22m[39m
+2025-07-30T03:18:56.5897677Z [90m [2m❯[22m EnvironmentPluginContainer.transform node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m31274:14[22m[39m
+2025-07-30T03:18:56.5899652Z [90m [2m❯[22m loadAndTransform node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m26451:26[22m[39m
+2025-07-30T03:18:56.5900598Z 
+2025-07-30T03:18:56.5901241Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/44]⎯[22m[39m
+2025-07-30T03:18:56.5902021Z 
+2025-07-30T03:18:56.5903063Z [41m[1m FAIL [22m[49m src/api/__tests__/bugExport.test.ts[2m [ src/api/__tests__/bugExport.test.ts ][22m
+2025-07-30T03:18:56.5904923Z [31m[1mError[22m: Failed to resolve import "supertest" from "src/api/__tests__/bugExport.test.ts". Does the file exist?[39m
+2025-07-30T03:18:56.5906220Z   Plugin: [35mvite:import-analysis[39m
+2025-07-30T03:18:56.5907675Z   File: [36m/home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/api/__tests__/bugExport.test.ts[39m:7:0
+2025-07-30T03:18:56.5909009Z [33m  5  |  vi.mock("../../lib/internalCommunication");
+2025-07-30T03:18:56.5911940Z   6  |  vi.mock("../../lib/feedbackCollection");
+2025-07-30T03:18:56.5912862Z   7  |  const __vi_import_0__ = await import("supertest");
+2025-07-30T03:18:56.5913437Z      |                                       ^
+2025-07-30T03:18:56.5914008Z   8  |  const __vi_import_1__ = await import("express");
+2025-07-30T03:18:56.5914763Z   9  |  const __vi_import_2__ = await import("fs");[39m
+2025-07-30T03:18:56.5916157Z [90m [2m❯[22m TransformPluginContext._formatLog node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m31460:43[22m[39m
+2025-07-30T03:18:56.5917920Z [90m [2m❯[22m TransformPluginContext.error node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m31457:14[22m[39m
+2025-07-30T03:18:56.5919465Z [90m [2m❯[22m normalizeUrl node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m29999:18[22m[39m
+2025-07-30T03:18:56.5920809Z [90m [2m❯[22m node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m30057:32[22m[39m
+2025-07-30T03:18:56.5922686Z [90m [2m❯[22m TransformPluginContext.transform node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m30025:4[22m[39m
+2025-07-30T03:18:56.5924598Z [90m [2m❯[22m EnvironmentPluginContainer.transform node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m31274:14[22m[39m
+2025-07-30T03:18:56.5926293Z [90m [2m❯[22m loadAndTransform node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m26451:26[22m[39m
+2025-07-30T03:18:56.5926954Z 
+2025-07-30T03:18:56.5927369Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/44]⎯[22m[39m
+2025-07-30T03:18:56.5927696Z 
+2025-07-30T03:18:56.5928811Z [41m[1m FAIL [22m[49m src/services/__tests__/externalIntegration.test.ts[2m [ src/services/__tests__/externalIntegration.test.ts ][22m
+2025-07-30T03:18:56.5930792Z [31m[1mError[22m: Failed to resolve import "supertest" from "src/services/__tests__/externalIntegration.test.ts". Does the file exist?[39m
+2025-07-30T03:18:56.5932133Z   Plugin: [35mvite:import-analysis[39m
+2025-07-30T03:18:56.5933505Z   File: [36m/home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/services/__tests__/externalIntegration.test.ts[39m:7:0
+2025-07-30T03:18:56.5934749Z [33m  4  |  vi.mock("../../lib/bugLifecycle");
+2025-07-30T03:18:56.5935207Z   5  |  vi.mock("axios");
+2025-07-30T03:18:56.5935694Z   6  |  const __vi_import_0__ = await import("supertest");
+2025-07-30T03:18:56.5936256Z      |                                       ^
+2025-07-30T03:18:56.5936811Z   7  |  const __vi_import_1__ = await import("express");
+2025-07-30T03:18:56.5937661Z   8  |  const __vi_import_2__ = await import("../externalIntegration");[39m
+2025-07-30T03:18:56.5939146Z [90m [2m❯[22m TransformPluginContext._formatLog node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m31460:43[22m[39m
+2025-07-30T03:18:56.5940873Z [90m [2m❯[22m TransformPluginContext.error node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m31457:14[22m[39m
+2025-07-30T03:18:56.5942755Z [90m [2m❯[22m normalizeUrl node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m29999:18[22m[39m
+2025-07-30T03:18:56.5944129Z [90m [2m❯[22m node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m30057:32[22m[39m
+2025-07-30T03:18:56.5945736Z [90m [2m❯[22m TransformPluginContext.transform node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m30025:4[22m[39m
+2025-07-30T03:18:56.5947591Z [90m [2m❯[22m EnvironmentPluginContainer.transform node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m31274:14[22m[39m
+2025-07-30T03:18:56.5949298Z [90m [2m❯[22m loadAndTransform node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:[2m26451:26[22m[39m
+2025-07-30T03:18:56.5949970Z 
+2025-07-30T03:18:56.5950379Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/44]⎯[22m[39m
+2025-07-30T03:18:56.5950704Z 
+2025-07-30T03:18:56.5951944Z [41m[1m FAIL [22m[49m src/lib/__tests__/chatService.enhanced.test.ts[2m [ src/lib/__tests__/chatService.enhanced.test.ts ][22m
+2025-07-30T03:18:56.5953112Z [31m[1mError[22m: Transform failed with 1 error:
+2025-07-30T03:18:56.5955159Z /home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/lib/__tests__/chatService.enhanced.test.ts:11:32: ERROR: Expected "=>" but found "{"[39m
+2025-07-30T03:18:56.5956649Z   Plugin: [35mvite:esbuild[39m
+2025-07-30T03:18:56.5957964Z   File: [36m/home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/lib/__tests__/chatService.enhanced.test.ts[39m:11:32
+2025-07-30T03:18:56.5959018Z [33m  
+2025-07-30T03:18:56.5959461Z   [33mExpected "=>" but found "{"[33m
+2025-07-30T03:18:56.5959889Z   9  |  
+2025-07-30T03:18:56.5960239Z   10 |  // Mock the webhook service
+2025-07-30T03:18:56.5960721Z   11 |  vi.mock('../webhookService', () {
+2025-07-30T03:18:56.5961208Z      |                                  ^
+2025-07-30T03:18:56.5961676Z   12 |    const mockWebhookService = {
+2025-07-30T03:18:56.5962380Z   13 |      sendMessage: vi.fn(),
+2025-07-30T03:18:56.5962843Z   [39m
+2025-07-30T03:18:56.5963891Z [90m [2m❯[22m failureErrorWithLog node_modules/vite/node_modules/esbuild/lib/main.js:[2m1467:15[22m[39m
+2025-07-30T03:18:56.5965264Z [90m [2m❯[22m node_modules/vite/node_modules/esbuild/lib/main.js:[2m736:50[22m[39m
+2025-07-30T03:18:56.5966795Z [90m [2m❯[22m responseCallbacks.<computed> node_modules/vite/node_modules/esbuild/lib/main.js:[2m603:9[22m[39m
+2025-07-30T03:18:56.5968437Z [90m [2m❯[22m handleIncomingPacket node_modules/vite/node_modules/esbuild/lib/main.js:[2m658:12[22m[39m
+2025-07-30T03:18:56.5970013Z [90m [2m❯[22m Socket.readFromStdout node_modules/vite/node_modules/esbuild/lib/main.js:[2m581:7[22m[39m
+2025-07-30T03:18:56.5970687Z 
+2025-07-30T03:18:56.5971139Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/44]⎯[22m[39m
+2025-07-30T03:18:56.5971472Z 
+2025-07-30T03:18:56.5972655Z [41m[1m FAIL [22m[49m src/lib/__tests__/config-templates.test.ts[2m [ src/lib/__tests__/config-templates.test.ts ][22m
+2025-07-30T03:18:56.5973783Z [31m[1mError[22m: Transform failed with 1 error:
+2025-07-30T03:18:56.5975498Z /home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/lib/__tests__/config-templates.test.ts:10:16: ERROR: Expected "=>" but found "{"[39m
+2025-07-30T03:18:56.5976741Z   Plugin: [35mvite:esbuild[39m
+2025-07-30T03:18:56.5977985Z   File: [36m/home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/lib/__tests__/config-templates.test.ts[39m:10:16
+2025-07-30T03:18:56.5979027Z [33m  
+2025-07-30T03:18:56.5979471Z   [33mExpected "=>" but found "{"[33m
+2025-07-30T03:18:56.5980030Z   8  |    describe('Environment Template Files', () => {
+2025-07-30T03:18:56.5980691Z   9  |      it('should have .env.template for development', () => {
+2025-07-30T03:18:56.5981225Z   10 |        expect(() {
+2025-07-30T03:18:56.5981571Z      |                  ^
+2025-07-30T03:18:56.5982220Z   11 |          const template = readFileSync(
+2025-07-30T03:18:56.5982796Z   12 |            join(templatesDir, '.env.template'),
+2025-07-30T03:18:56.5983311Z   [39m
+2025-07-30T03:18:56.5984348Z [90m [2m❯[22m failureErrorWithLog node_modules/vite/node_modules/esbuild/lib/main.js:[2m1467:15[22m[39m
+2025-07-30T03:18:56.5985748Z [90m [2m❯[22m node_modules/vite/node_modules/esbuild/lib/main.js:[2m736:50[22m[39m
+2025-07-30T03:18:56.5987252Z [90m [2m❯[22m responseCallbacks.<computed> node_modules/vite/node_modules/esbuild/lib/main.js:[2m603:9[22m[39m
+2025-07-30T03:18:56.5988835Z [90m [2m❯[22m handleIncomingPacket node_modules/vite/node_modules/esbuild/lib/main.js:[2m658:12[22m[39m
+2025-07-30T03:18:56.5990361Z [90m [2m❯[22m Socket.readFromStdout node_modules/vite/node_modules/esbuild/lib/main.js:[2m581:7[22m[39m
+2025-07-30T03:18:56.5991013Z 
+2025-07-30T03:18:56.5991418Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/44]⎯[22m[39m
+2025-07-30T03:18:56.5991931Z 
+2025-07-30T03:18:56.5993023Z [41m[1m FAIL [22m[49m src/lib/__tests__/env-validation.enhanced.test.ts[2m [ src/lib/__tests__/env-validation.enhanced.test.ts ][22m
+2025-07-30T03:18:56.5994262Z [31m[1mError[22m: Transform failed with 1 error:
+2025-07-30T03:18:56.5996230Z /home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/lib/__tests__/env-validation.enhanced.test.ts:405:72: ERROR: Expected "=>" but found "{"[39m
+2025-07-30T03:18:56.5997706Z   Plugin: [35mvite:esbuild[39m
+2025-07-30T03:18:56.5998966Z   File: [36m/home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/lib/__tests__/env-validation.enhanced.test.ts[39m:405:72
+2025-07-30T03:18:56.5999939Z [33m  
+2025-07-30T03:18:56.6000352Z   [33mExpected "=>" but found "{"[33m
+2025-07-30T03:18:56.6000833Z   403|    describe('Logging', () => {
+2025-07-30T03:18:56.6001429Z   404|      it('should log environment status without errors', () => {
+2025-07-30T03:18:56.6002474Z   405|        const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() {});
+2025-07-30T03:18:56.6003237Z      |                                                                          ^
+2025-07-30T03:18:56.6003693Z   406|  
+2025-07-30T03:18:56.6004216Z   407|        mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
+2025-07-30T03:18:56.6004819Z   [39m
+2025-07-30T03:18:56.6005870Z [90m [2m❯[22m failureErrorWithLog node_modules/vite/node_modules/esbuild/lib/main.js:[2m1467:15[22m[39m
+2025-07-30T03:18:56.6007203Z [90m [2m❯[22m node_modules/vite/node_modules/esbuild/lib/main.js:[2m736:50[22m[39m
+2025-07-30T03:18:56.6008619Z [90m [2m❯[22m responseCallbacks.<computed> node_modules/vite/node_modules/esbuild/lib/main.js:[2m603:9[22m[39m
+2025-07-30T03:18:56.6010186Z [90m [2m❯[22m handleIncomingPacket node_modules/vite/node_modules/esbuild/lib/main.js:[2m658:12[22m[39m
+2025-07-30T03:18:56.6011964Z [90m [2m❯[22m Socket.readFromStdout node_modules/vite/node_modules/esbuild/lib/main.js:[2m581:7[22m[39m
+2025-07-30T03:18:56.6012664Z 
+2025-07-30T03:18:56.6013125Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/44]⎯[22m[39m
+2025-07-30T03:18:56.6013456Z 
+2025-07-30T03:18:56.6014513Z [41m[1m FAIL [22m[49m src/lib/__tests__/errorTracking.enhanced.test.ts[2m [ src/lib/__tests__/errorTracking.enhanced.test.ts ][22m
+2025-07-30T03:18:56.6015753Z [31m[1mError[22m: Transform failed with 1 error:
+2025-07-30T03:18:56.6017551Z /home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/lib/__tests__/errorTracking.enhanced.test.ts:392:53: ERROR: Expected "=>" but found "{"[39m
+2025-07-30T03:18:56.6018907Z   Plugin: [35mvite:esbuild[39m
+2025-07-30T03:18:56.6020236Z   File: [36m/home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/lib/__tests__/errorTracking.enhanced.test.ts[39m:392:53
+2025-07-30T03:18:56.6021253Z [33m  
+2025-07-30T03:18:56.6021681Z   [33mExpected "=>" but found "{"[33m
+2025-07-30T03:18:56.6022308Z   390|  
+2025-07-30T03:18:56.6022805Z   391|      it('should handle localStorage errors gracefully', () => {
+2025-07-30T03:18:56.6023581Z   392|        localStorageMock.setItem.mockImplementation(() {
+2025-07-30T03:18:56.6024202Z      |                                                       ^
+2025-07-30T03:18:56.6024778Z   393|          throw new Error('Storage quota exceeded');
+2025-07-30T03:18:56.6025257Z   394|        });
+2025-07-30T03:18:56.6025616Z   [39m
+2025-07-30T03:18:56.6026650Z [90m [2m❯[22m failureErrorWithLog node_modules/vite/node_modules/esbuild/lib/main.js:[2m1467:15[22m[39m
+2025-07-30T03:18:56.6027981Z [90m [2m❯[22m node_modules/vite/node_modules/esbuild/lib/main.js:[2m736:50[22m[39m
+2025-07-30T03:18:56.6029435Z [90m [2m❯[22m responseCallbacks.<computed> node_modules/vite/node_modules/esbuild/lib/main.js:[2m603:9[22m[39m
+2025-07-30T03:18:56.6031008Z [90m [2m❯[22m handleIncomingPacket node_modules/vite/node_modules/esbuild/lib/main.js:[2m658:12[22m[39m
+2025-07-30T03:18:56.6032793Z [90m [2m❯[22m Socket.readFromStdout node_modules/vite/node_modules/esbuild/lib/main.js:[2m581:7[22m[39m
+2025-07-30T03:18:56.6033479Z 
+2025-07-30T03:18:56.6033965Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/44]⎯[22m[39m
+2025-07-30T03:18:56.6034300Z 
+2025-07-30T03:18:56.6035179Z [41m[1m FAIL [22m[49m src/lib/__tests__/monitoring.test.ts[2m [ src/lib/__tests__/monitoring.test.ts ][22m
+2025-07-30T03:18:56.6036478Z [31m[1mError[22m: Transform failed with 1 error:
+2025-07-30T03:18:56.6038181Z /home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/lib/__tests__/monitoring.test.ts:306:16: ERROR: Expected "=>" but found "{"[39m
+2025-07-30T03:18:56.6039697Z   Plugin: [35mvite:esbuild[39m
+2025-07-30T03:18:56.6040946Z   File: [36m/home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/lib/__tests__/monitoring.test.ts[39m:306:16
+2025-07-30T03:18:56.6042221Z [33m  
+2025-07-30T03:18:56.6042719Z   [33mExpected "=>" but found "{"[33m
+2025-07-30T03:18:56.6043369Z   304|        delete (window as typeof window & { Sentry?: unknown }).Sentry;
+2025-07-30T03:18:56.6043932Z   305|  
+2025-07-30T03:18:56.6044221Z   306|        expect(() {
+2025-07-30T03:18:56.6044555Z      |                  ^
+2025-07-30T03:18:56.6045115Z   307|          monitoringService.trackCustomMetric('test.metric', 1);
+2025-07-30T03:18:56.6045717Z   308|        }).not.toThrow();
+2025-07-30T03:18:56.6046100Z   [39m
+2025-07-30T03:18:56.6047109Z [90m [2m❯[22m failureErrorWithLog node_modules/vite/node_modules/esbuild/lib/main.js:[2m1467:15[22m[39m
+2025-07-30T03:18:56.6048398Z [90m [2m❯[22m node_modules/vite/node_modules/esbuild/lib/main.js:[2m736:50[22m[39m
+2025-07-30T03:18:56.6049789Z [90m [2m❯[22m responseCallbacks.<computed> node_modules/vite/node_modules/esbuild/lib/main.js:[2m603:9[22m[39m
+2025-07-30T03:18:56.6051289Z [90m [2m❯[22m handleIncomingPacket node_modules/vite/node_modules/esbuild/lib/main.js:[2m658:12[22m[39m
+2025-07-30T03:18:56.6052965Z [90m [2m❯[22m Socket.readFromStdout node_modules/vite/node_modules/esbuild/lib/main.js:[2m581:7[22m[39m
+2025-07-30T03:18:56.6053604Z 
+2025-07-30T03:18:56.6053979Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/44]⎯[22m[39m
+2025-07-30T03:18:56.6054291Z 
+2025-07-30T03:18:56.6055253Z [41m[1m FAIL [22m[49m src/lib/__tests__/secrets-management.test.ts[2m [ src/lib/__tests__/secrets-management.test.ts ][22m
+2025-07-30T03:18:56.6056342Z [31m[1mError[22m: Transform failed with 1 error:
+2025-07-30T03:18:56.6058000Z /home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/lib/__tests__/secrets-management.test.ts:436:72: ERROR: Expected "=>" but found "{"[39m
+2025-07-30T03:18:56.6059231Z   Plugin: [35mvite:esbuild[39m
+2025-07-30T03:18:56.6060468Z   File: [36m/home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/lib/__tests__/secrets-management.test.ts[39m:436:72
+2025-07-30T03:18:56.6061429Z [33m  
+2025-07-30T03:18:56.6062029Z   [33mExpected "=>" but found "{"[33m
+2025-07-30T03:18:56.6062513Z   434|    describe('Logging', () => {
+2025-07-30T03:18:56.6063137Z   435|      it('should log secrets status without revealing values', () => {
+2025-07-30T03:18:56.6063989Z   436|        const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() {});
+2025-07-30T03:18:56.6064746Z      |                                                                          ^
+2025-07-30T03:18:56.6065198Z   437|  
+2025-07-30T03:18:56.6065710Z   438|        mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
+2025-07-30T03:18:56.6066296Z   [39m
+2025-07-30T03:18:56.6067315Z [90m [2m❯[22m failureErrorWithLog node_modules/vite/node_modules/esbuild/lib/main.js:[2m1467:15[22m[39m
+2025-07-30T03:18:56.6068619Z [90m [2m❯[22m node_modules/vite/node_modules/esbuild/lib/main.js:[2m736:50[22m[39m
+2025-07-30T03:18:56.6070026Z [90m [2m❯[22m responseCallbacks.<computed> node_modules/vite/node_modules/esbuild/lib/main.js:[2m603:9[22m[39m
+2025-07-30T03:18:56.6071572Z [90m [2m❯[22m handleIncomingPacket node_modules/vite/node_modules/esbuild/lib/main.js:[2m658:12[22m[39m
+2025-07-30T03:18:56.6073267Z [90m [2m❯[22m Socket.readFromStdout node_modules/vite/node_modules/esbuild/lib/main.js:[2m581:7[22m[39m
+2025-07-30T03:18:56.6073923Z 
+2025-07-30T03:18:56.6074333Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/44]⎯[22m[39m
+2025-07-30T03:18:56.6074675Z 
+2025-07-30T03:18:56.6075967Z [41m[1m FAIL [22m[49m src/lib/__tests__/webhookMonitoring.test.ts[2m [ src/lib/__tests__/webhookMonitoring.test.ts ][22m
+2025-07-30T03:18:56.6077278Z [31m[1mError[22m: Transform failed with 1 error:
+2025-07-30T03:18:56.6079012Z /home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/lib/__tests__/webhookMonitoring.test.ts:321:65: ERROR: Expected "=>" but found "{"[39m
+2025-07-30T03:18:56.6080291Z   Plugin: [35mvite:esbuild[39m
+2025-07-30T03:18:56.6081557Z   File: [36m/home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/lib/__tests__/webhookMonitoring.test.ts[39m:321:65
+2025-07-30T03:18:56.6082769Z [33m  
+2025-07-30T03:18:56.6083228Z   [33mExpected "=>" but found "{"[33m
+2025-07-30T03:18:56.6083680Z   319|  
+2025-07-30T03:18:56.6084193Z   320|      it('should limit recent alerts in dashboard data', () => {
+2025-07-30T03:18:56.6085137Z   321|        const unsubscribe = monitoringService.subscribeToAlerts(() {});
+2025-07-30T03:18:56.6085907Z      |                                                                   ^
+2025-07-30T03:18:56.6086387Z   322|  
+2025-07-30T03:18:56.6086765Z   323|        // Generate multiple alerts
+2025-07-30T03:18:56.6087278Z   [39m
+2025-07-30T03:18:56.6088341Z [90m [2m❯[22m failureErrorWithLog node_modules/vite/node_modules/esbuild/lib/main.js:[2m1467:15[22m[39m
+2025-07-30T03:18:56.6089696Z [90m [2m❯[22m node_modules/vite/node_modules/esbuild/lib/main.js:[2m736:50[22m[39m
+2025-07-30T03:18:56.6091142Z [90m [2m❯[22m responseCallbacks.<computed> node_modules/vite/node_modules/esbuild/lib/main.js:[2m603:9[22m[39m
+2025-07-30T03:18:56.6092947Z [90m [2m❯[22m handleIncomingPacket node_modules/vite/node_modules/esbuild/lib/main.js:[2m658:12[22m[39m
+2025-07-30T03:18:56.6094523Z [90m [2m❯[22m Socket.readFromStdout node_modules/vite/node_modules/esbuild/lib/main.js:[2m581:7[22m[39m
+2025-07-30T03:18:56.6095192Z 
+2025-07-30T03:18:56.6095620Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/44]⎯[22m[39m
+2025-07-30T03:18:56.6096052Z 
+2025-07-30T03:18:56.6097012Z [41m[1m FAIL [22m[49m src/lib/__tests__/webhookService.test.ts[2m [ src/lib/__tests__/webhookService.test.ts ][22m
+2025-07-30T03:18:56.6098156Z [31m[1mError[22m: Transform failed with 1 error:
+2025-07-30T03:18:56.6099861Z /home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/lib/__tests__/webhookService.test.ts:373:75: ERROR: Expected ")" but found "{"[39m
+2025-07-30T03:18:56.6101078Z   Plugin: [35mvite:esbuild[39m
+2025-07-30T03:18:56.6102512Z   File: [36m/home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/lib/__tests__/webhookService.test.ts[39m:373:75
+2025-07-30T03:18:56.6103452Z [33m  
+2025-07-30T03:18:56.6103856Z   [33mExpected ")" but found "{"[33m
+2025-07-30T03:18:56.6104245Z   371|      });
+2025-07-30T03:18:56.6104514Z   372|  
+2025-07-30T03:18:56.6105044Z   373|      it('should not retry on 4xx client errors (except 408, 429)', async () {
+2025-07-30T03:18:56.6105725Z      |                                                                             ^
+2025-07-30T03:18:56.6106268Z   374|        mockFetch.mockResolvedValueOnce({
+2025-07-30T03:18:56.6106709Z   375|          ok: false,
+2025-07-30T03:18:56.6107080Z   [39m
+2025-07-30T03:18:56.6108056Z [90m [2m❯[22m failureErrorWithLog node_modules/vite/node_modules/esbuild/lib/main.js:[2m1467:15[22m[39m
+2025-07-30T03:18:56.6109362Z [90m [2m❯[22m node_modules/vite/node_modules/esbuild/lib/main.js:[2m736:50[22m[39m
+2025-07-30T03:18:56.6110775Z [90m [2m❯[22m responseCallbacks.<computed> node_modules/vite/node_modules/esbuild/lib/main.js:[2m603:9[22m[39m
+2025-07-30T03:18:56.6112477Z [90m [2m❯[22m handleIncomingPacket node_modules/vite/node_modules/esbuild/lib/main.js:[2m658:12[22m[39m
+2025-07-30T03:18:56.6113945Z [90m [2m❯[22m Socket.readFromStdout node_modules/vite/node_modules/esbuild/lib/main.js:[2m581:7[22m[39m
+2025-07-30T03:18:56.6114582Z 
+2025-07-30T03:18:56.6114972Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/44]⎯[22m[39m
+2025-07-30T03:18:56.6115278Z 
+2025-07-30T03:18:56.6116443Z [41m[1m FAIL [22m[49m src/lib/__tests__/webhookValidation.test.ts[2m [ src/lib/__tests__/webhookValidation.test.ts ][22m
+2025-07-30T03:18:56.6117660Z [31m[1mError[22m: Transform failed with 1 error:
+2025-07-30T03:18:56.6119338Z /home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/lib/__tests__/webhookValidation.test.ts:565:16: ERROR: Expected "=>" but found "{"[39m
+2025-07-30T03:18:56.6120545Z   Plugin: [35mvite:esbuild[39m
+2025-07-30T03:18:56.6121946Z   File: [36m/home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat/src/lib/__tests__/webhookValidation.test.ts[39m:565:16
+2025-07-30T03:18:56.6122916Z [33m  
+2025-07-30T03:18:56.6123313Z   [33mExpected "=>" but found "{"[33m
+2025-07-30T03:18:56.6123717Z   563|  
+2025-07-30T03:18:56.6124227Z   564|      it('should throw error for invalid payload construction', () => {
+2025-07-30T03:18:56.6124807Z   565|        expect(() {
+2025-07-30T03:18:56.6125140Z      |                  ^
+2025-07-30T03:18:56.6125621Z   566|          WebhookValidator.createValidatedPayload(
+2025-07-30T03:18:56.6126195Z   567|            '', // Empty message not allowed
+2025-07-30T03:18:56.6126685Z   [39m
+2025-07-30T03:18:56.6127718Z [90m [2m❯[22m failureErrorWithLog node_modules/vite/node_modules/esbuild/lib/main.js:[2m1467:15[22m[39m
+2025-07-30T03:18:56.6129055Z [90m [2m❯[22m node_modules/vite/node_modules/esbuild/lib/main.js:[2m736:50[22m[39m
+2025-07-30T03:18:56.6130488Z [90m [2m❯[22m responseCallbacks.<computed> node_modules/vite/node_modules/esbuild/lib/main.js:[2m603:9[22m[39m
+2025-07-30T03:18:56.6132201Z [90m [2m❯[22m handleIncomingPacket node_modules/vite/node_modules/esbuild/lib/main.js:[2m658:12[22m[39m
+2025-07-30T03:18:56.6133799Z [90m [2m❯[22m Socket.readFromStdout node_modules/vite/node_modules/esbuild/lib/main.js:[2m581:7[22m[39m
+2025-07-30T03:18:56.6134466Z 
+2025-07-30T03:18:56.6134868Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/44]⎯[22m[39m
+2025-07-30T03:18:56.6135198Z 
+2025-07-30T03:18:56.6135207Z 
+2025-07-30T03:18:56.6135753Z [31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 11 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+2025-07-30T03:18:56.6136180Z 
+2025-07-30T03:18:56.6137683Z [41m[1m FAIL [22m[49m src/lib/__tests__/assignmentSystem.test.ts[2m > [22mBugAssignmentSystem[2m > [22mManual Assignment[2m > [22mhandles assignment to non-existent user
+2025-07-30T03:18:56.6139430Z [31m[1mAssertionError[22m: expected 'Unknown error' to contain 'Assignee not found'[39m
+2025-07-30T03:18:56.6140033Z 
+2025-07-30T03:18:56.6140414Z Expected: [32m"Assignee not found"[39m
+2025-07-30T03:18:56.6141084Z Received: [31m"Unknown error"[39m
+2025-07-30T03:18:56.6141395Z 
+2025-07-30T03:18:56.6142352Z [36m [2m❯[22m src/lib/__tests__/assignmentSystem.test.ts:[2m127:28[22m[39m
+2025-07-30T03:18:56.6152558Z     [90m125| [39m
+2025-07-30T03:18:56.6153553Z     [90m126| [39m      [34mexpect[39m(result[33m.[39msuccess)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+2025-07-30T03:18:56.6155171Z     [90m127| [39m      [34mexpect[39m(result[33m.[39merror)[33m.[39m[34mtoContain[39m([32m'Assignee not found'[39m)[33m;[39m
+2025-07-30T03:18:56.6156535Z     [90m   | [39m                           [31m^[39m
+2025-07-30T03:18:56.6157151Z     [90m128| [39m    })[33m;[39m
+2025-07-30T03:18:56.6157622Z     [90m129| [39m
+2025-07-30T03:18:56.6157834Z 
+2025-07-30T03:18:56.6158255Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/44]⎯[22m[39m
+2025-07-30T03:18:56.6158595Z 
+2025-07-30T03:18:56.6160340Z [41m[1m FAIL [22m[49m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mComplete Bug Lifecycle Workflow[2m > [22mprocesses complete bug lifecycle from open to closed
+2025-07-30T03:18:56.6162476Z [31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+2025-07-30T03:18:56.6163034Z 
+2025-07-30T03:18:56.6163280Z [32m- Expected[39m
+2025-07-30T03:18:56.6163699Z [31m+ Received[39m
+2025-07-30T03:18:56.6163901Z 
+2025-07-30T03:18:56.6164070Z [32m- true[39m
+2025-07-30T03:18:56.6164427Z [31m+ false[39m
+2025-07-30T03:18:56.6164857Z 
+2025-07-30T03:18:56.6165593Z [36m [2m❯[22m src/lib/__tests__/bugLifecycleIntegration.test.ts:[2m103:36[22m[39m
+2025-07-30T03:18:56.6166562Z     [90m101| [39m        [32m'Triaged after review'[39m
+2025-07-30T03:18:56.6167225Z     [90m102| [39m      )[33m;[39m
+2025-07-30T03:18:56.6168175Z     [90m103| [39m      [34mexpect[39m(triageResult[33m.[39msuccess)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+2025-07-30T03:18:56.6169022Z     [90m   | [39m                                   [31m^[39m
+2025-07-30T03:18:56.6169468Z     [90m104| [39m
+2025-07-30T03:18:56.6169978Z     [90m105| [39m      [90m// Step 4: Move to IN_PROGRESS[39m
+2025-07-30T03:18:56.6170304Z 
+2025-07-30T03:18:56.6170648Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/44]⎯[22m[39m
+2025-07-30T03:18:56.6170941Z 
+2025-07-30T03:18:56.6172660Z [41m[1m FAIL [22m[49m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mComplete Bug Lifecycle Workflow[2m > [22mhandles escalation workflow correctly
+2025-07-30T03:18:56.6174341Z [31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+2025-07-30T03:18:56.6174843Z 
+2025-07-30T03:18:56.6175050Z [32m- Expected[39m
+2025-07-30T03:18:56.6175413Z [31m+ Received[39m
+2025-07-30T03:18:56.6175583Z 
+2025-07-30T03:18:56.6175734Z [32m- true[39m
+2025-07-30T03:18:56.6176063Z [31m+ false[39m
+2025-07-30T03:18:56.6176248Z 
+2025-07-30T03:18:56.6176890Z [36m [2m❯[22m src/lib/__tests__/bugLifecycleIntegration.test.ts:[2m226:40[22m[39m
+2025-07-30T03:18:56.6177834Z     [90m224| [39m        [32m'Critical issue affecting multiple users'[39m
+2025-07-30T03:18:56.6178468Z     [90m225| [39m      )[33m;[39m
+2025-07-30T03:18:56.6179510Z     [90m226| [39m      [34mexpect[39m(escalationResult[33m.[39msuccess)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+2025-07-30T03:18:56.6180502Z     [90m   | [39m                                       [31m^[39m
+2025-07-30T03:18:56.6204726Z     [90m227| [39m      [34mexpect[39m(escalationResult[33m.[39mnewPriority)[33m.[39m[34mtoBe[39m([33mBugPriority[39m[33m.[39m[33mHIGH[39m)[33m;[39m
+2025-07-30T03:18:56.6205872Z     [90m228| [39m
+2025-07-30T03:18:56.6206071Z 
+2025-07-30T03:18:56.6206466Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/44]⎯[22m[39m
+2025-07-30T03:18:56.6206787Z 
+2025-07-30T03:18:56.6208430Z [41m[1m FAIL [22m[49m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mNotification Integration[2m > [22msends notifications throughout bug lifecycle
+2025-07-30T03:18:56.6210291Z [31m[1mAssertionError[22m: expected "sendBugStatusUpdate" to be called at least once[39m
+2025-07-30T03:18:56.6211532Z [36m [2m❯[22m src/lib/__tests__/bugLifecycleIntegration.test.ts:[2m300:38[22m[39m
+2025-07-30T03:18:56.6212451Z     [90m298| [39m
+2025-07-30T03:18:56.6213127Z     [90m299| [39m      [90m// Verify all notification types were triggered[39m
+2025-07-30T03:18:56.6214529Z     [90m300| [39m      [34mexpect[39m(sendBugStatusUpdateSpy)[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+2025-07-30T03:18:56.6215641Z     [90m   | [39m                                     [31m^[39m
+2025-07-30T03:18:56.6216769Z     [90m301| [39m      [34mexpect[39m(sendAssignmentNotificationSpy)[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+2025-07-30T03:18:56.6218174Z     [90m302| [39m      [34mexpect[39m(sendFeedbackRequestSpy)[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+2025-07-30T03:18:56.6218793Z 
+2025-07-30T03:18:56.6219179Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/44]⎯[22m[39m
+2025-07-30T03:18:56.6219490Z 
+2025-07-30T03:18:56.6221106Z [41m[1m FAIL [22m[49m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mCommunication and Collaboration[2m > [22mhandles threaded discussions correctly
+2025-07-30T03:18:56.6238089Z [31m[1mAssertionError[22m: expected [] to have a length of 1 but got +0[39m
+2025-07-30T03:18:56.6238576Z 
+2025-07-30T03:18:56.6238808Z [32m- Expected[39m
+2025-07-30T03:18:56.6283647Z [31m+ Received[39m
+2025-07-30T03:18:56.6283817Z 
+2025-07-30T03:18:56.6283922Z [32m- 1[39m
+2025-07-30T03:18:56.6284128Z [31m+ 0[39m
+2025-07-30T03:18:56.6284233Z 
+2025-07-30T03:18:56.6284638Z [36m [2m❯[22m src/lib/__tests__/bugLifecycleIntegration.test.ts:[2m383:40[22m[39m
+2025-07-30T03:18:56.6285184Z     [90m381| [39m      [90m// Verify mentions were processed[39m
+2025-07-30T03:18:56.6285418Z 
+2025-07-30T03:18:56.6285773Z     [90m382| [39m      const mentionComment = allComments.find(c => c.content.includes(…
+2025-07-30T03:18:56.6286529Z     [90m383| [39m      [34mexpect[39m(mentionComment[33m?.[39mmentions)[33m.[39m[34mtoHaveLength[39m([34m1[39m)[33m;[39m
+2025-07-30T03:18:56.6287294Z [2m Test Files [22m [1m[31m35 failed[39m[22m[2m | [22m[33m3 skipped[39m[90m (38)[39m
+2025-07-30T03:18:56.6334883Z [2m      Tests [22m [1m[31m11 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (81)[39m
+2025-07-30T03:18:56.6335735Z     [90m   | [39m                                       [31m^[39m
+2025-07-30T03:18:56.6337096Z     [90m384| [39m      [34mexpect[39m(mentionComment[33m?.[39mmentions[[34m0[39m][33m.[39mtargetId)[33m.[39m[34mtoBe[39m([32m'user_2'[39m)[33m;[39m
+2025-07-30T03:18:56.6338097Z     [90m385| [39m    })[33m;[39m
+2025-07-30T03:18:56.6341981Z 
+2025-07-30T03:18:56.6342439Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/44]⎯[22m[39m
+2025-07-30T03:18:56.6342763Z 
+2025-07-30T03:18:56.6343903Z [41m[1m FAIL [22m[49m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mFeedback Integration[2m > [22mprocesses feedback lifecycle correctly
+2025-07-30T03:18:56.6344912Z [31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+2025-07-30T03:18:56.6345208Z 
+2025-07-30T03:18:56.6345322Z [32m- Expected[39m
+2025-07-30T03:18:56.6345555Z [31m+ Received[39m
+2025-07-30T03:18:56.6345671Z 
+2025-07-30T03:18:56.6345785Z [32m- true[39m
+2025-07-30T03:18:56.6345999Z [31m+ false[39m
+2025-07-30T03:18:56.6346127Z 
+2025-07-30T03:18:56.6346515Z [36m [2m❯[22m src/lib/__tests__/bugLifecycleIntegration.test.ts:[2m435:42[22m[39m
+2025-07-30T03:18:56.6347053Z     [90m433| [39m        [32m'Please verify the fix works for you'[39m
+2025-07-30T03:18:56.6347425Z     [90m434| [39m      )[33m;[39m
+2025-07-30T03:18:56.6348037Z     [90m435| [39m      [34mexpect[39m(verificationResult[33m.[39msuccess)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+2025-07-30T03:18:56.6348622Z     [90m   | [39m                                         [31m^[39m
+2025-07-30T03:18:56.6348919Z     [90m436| [39m
+2025-07-30T03:18:56.6349225Z     [90m437| [39m      [90m// Get pending feedback[39m
+2025-07-30T03:18:56.6349428Z 
+2025-07-30T03:18:56.6349646Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/44]⎯[22m[39m
+2025-07-30T03:18:56.6349833Z 
+2025-07-30T03:18:56.6350890Z [41m[1m FAIL [22m[49m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mError Handling and Recovery[2m > [22mhandles service failures gracefully
+2025-07-30T03:18:56.6352453Z [31m[1mAssertionError[22m: expected 'Status transition validation failed: …' to contain 'Database connection failed'[39m
+2025-07-30T03:18:56.6352884Z 
+2025-07-30T03:18:56.6353106Z Expected: [32m"Database connection failed"[39m
+2025-07-30T03:18:56.6353838Z Received: [31m"Status transition validation failed: Required field 'assigned_to' is missing for status 'in_progress'"[39m
+2025-07-30T03:18:56.6354269Z 
+2025-07-30T03:18:56.6354638Z [36m [2m❯[22m src/lib/__tests__/bugLifecycleIntegration.test.ts:[2m574:28[22m[39m
+2025-07-30T03:18:56.6355029Z     [90m572| [39m
+2025-07-30T03:18:56.6355522Z     [90m573| [39m      [34mexpect[39m(result[33m.[39msuccess)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+2025-07-30T03:18:56.6356351Z     [90m574| [39m      [34mexpect[39m(result[33m.[39merror)[33m.[39m[34mtoContain[39m([32m'Database connection failed'[39m)[33m;[39m
+2025-07-30T03:18:56.6356929Z     [90m   | [39m                           [31m^[39m
+2025-07-30T03:18:56.6357199Z     [90m575| [39m
+2025-07-30T03:18:56.6357539Z     [90m576| [39m      [90m// Restore mock for subsequent operations[39m
+2025-07-30T03:18:56.6357770Z 
+2025-07-30T03:18:56.6357979Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/44]⎯[22m[39m
+2025-07-30T03:18:56.6358153Z 
+2025-07-30T03:18:56.6358997Z [41m[1m FAIL [22m[49m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mError Handling and Recovery[2m > [22mvalidates state transitions correctly
+2025-07-30T03:18:56.6359932Z [31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+2025-07-30T03:18:56.6360218Z 
+2025-07-30T03:18:56.6360333Z [32m- Expected[39m
+2025-07-30T03:18:56.6360550Z [31m+ Received[39m
+2025-07-30T03:18:56.6360669Z 
+2025-07-30T03:18:56.6360758Z [32m- true[39m
+2025-07-30T03:18:56.6360968Z [31m+ false[39m
+2025-07-30T03:18:56.6361075Z 
+2025-07-30T03:18:56.6361447Z [36m [2m❯[22m src/lib/__tests__/bugLifecycleIntegration.test.ts:[2m607:35[22m[39m
+2025-07-30T03:18:56.6362139Z     [90m605| [39m        [32m'user1'[39m
+2025-07-30T03:18:56.6362474Z     [90m606| [39m      )[33m;[39m
+2025-07-30T03:18:56.6363033Z     [90m607| [39m      [34mexpect[39m(validResult[33m.[39msuccess)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+2025-07-30T03:18:56.6363563Z     [90m   | [39m                                  [31m^[39m
+2025-07-30T03:18:56.6363907Z     [90m608| [39m    })[33m;[39m
+2025-07-30T03:18:56.6364184Z     [90m609| [39m  })[33m;[39m
+2025-07-30T03:18:56.6364331Z 
+2025-07-30T03:18:56.6364536Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/44]⎯[22m[39m
+2025-07-30T03:18:56.6364713Z 
+2025-07-30T03:18:56.6365605Z [41m[1m FAIL [22m[49m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mIntegration with Monitoring[2m > [22mtracks all lifecycle events for monitoring
+2025-07-30T03:18:56.6366676Z [31m[1mAssertionError[22m: expected "spy" to be called with arguments: [ 'bug_assigned', Any<Object> ][90m
+2025-07-30T03:18:56.6367046Z 
+2025-07-30T03:18:56.6367114Z Received: 
+2025-07-30T03:18:56.6367208Z 
+2025-07-30T03:18:56.6367323Z [1m  1st spy call:
+2025-07-30T03:18:56.6367430Z 
+2025-07-30T03:18:56.6367528Z [22m[2m  [[22m
+2025-07-30T03:18:56.6367756Z [32m-   "bug_assigned",[90m
+2025-07-30T03:18:56.6368012Z [32m-   Any<Object>,[90m
+2025-07-30T03:18:56.6368304Z [31m+   "internal_comment_added",[90m
+2025-07-30T03:18:56.6368559Z [31m+   {[90m
+2025-07-30T03:18:56.6368813Z [31m+     "attachmentCount": 0,[90m
+2025-07-30T03:18:56.6369119Z [31m+     "authorId": "user1",[90m
+2025-07-30T03:18:56.6369456Z [31m+     "bugId": "monitoring-test-bug",[90m
+2025-07-30T03:18:56.6369876Z [31m+     "commentId": "comment_1753845535906_kkb2jpbbw",[90m
+2025-07-30T03:18:56.6370247Z [31m+     "commentType": "note",[90m
+2025-07-30T03:18:56.6370701Z [31m+     "mentionCount": 0,[90m
+2025-07-30T03:18:56.6371124Z [31m+     "visibility": "internal",[90m
+2025-07-30T03:18:56.6371387Z [31m+   },[90m
+2025-07-30T03:18:56.6371570Z [2m  ][22m
+2025-07-30T03:18:56.6371672Z 
+2025-07-30T03:18:56.6372100Z [1m  2nd spy call:
+2025-07-30T03:18:56.6372229Z 
+2025-07-30T03:18:56.6372355Z [22m[2m  [[22m
+2025-07-30T03:18:56.6372585Z [32m-   "bug_assigned",[90m
+2025-07-30T03:18:56.6372846Z [32m-   Any<Object>,[90m
+2025-07-30T03:18:56.6373117Z [31m+   "notification_sent",[90m
+2025-07-30T03:18:56.6373351Z [31m+   {[90m
+2025-07-30T03:18:56.6373633Z [31m+     "bugId": "monitoring-test-bug",[90m
+2025-07-30T03:18:56.6373933Z [31m+     "channels": [[90m
+2025-07-30T03:18:56.6374182Z [31m+       "in_app",[90m
+2025-07-30T03:18:56.6374430Z [31m+       "email",[90m
+2025-07-30T03:18:56.6374651Z [31m+     ],[90m
+2025-07-30T03:18:56.6374907Z [31m+     "deliveryCount": 2,[90m
+2025-07-30T03:18:56.6375231Z [31m+     "requestType": "verification",[90m
+2025-07-30T03:18:56.6375597Z [31m+     "type": "feedback_request",[90m
+2025-07-30T03:18:56.6375939Z [31m+     "userId": "reporter",[90m
+2025-07-30T03:18:56.6376180Z [31m+   },[90m
+2025-07-30T03:18:56.6376366Z [2m  ][22m
+2025-07-30T03:18:56.6376463Z 
+2025-07-30T03:18:56.6376567Z [1m  3rd spy call:
+2025-07-30T03:18:56.6376682Z 
+2025-07-30T03:18:56.6376781Z [22m[2m  [[22m
+2025-07-30T03:18:56.6377016Z [32m-   "bug_assigned",[90m
+2025-07-30T03:18:56.6377261Z [32m-   Any<Object>,[90m
+2025-07-30T03:18:56.6377540Z [31m+   "feedback_requested",[90m
+2025-07-30T03:18:56.6377776Z [31m+   {[90m
+2025-07-30T03:18:56.6378054Z [31m+     "bugId": "monitoring-test-bug",[90m
+2025-07-30T03:18:56.6378462Z [31m+     "feedbackType": "resolution_verification",[90m
+2025-07-30T03:18:56.6378826Z [31m+     "priority": "normal",[90m
+2025-07-30T03:18:56.6379225Z [31m+     "requestId": "request_1753845535906_appfovu8c",[90m
+2025-07-30T03:18:56.6379595Z [31m+     "userId": "reporter",[90m
+2025-07-30T03:18:56.6379834Z [31m+   },[90m
+2025-07-30T03:18:56.6380025Z [2m  ][22m
+2025-07-30T03:18:56.6380211Z [31m[90m
+2025-07-30T03:18:56.6380304Z 
+2025-07-30T03:18:56.6380432Z Number of calls: [1m3[22m
+2025-07-30T03:18:56.6380653Z [31m[39m
+2025-07-30T03:18:56.6381105Z [36m [2m❯[22m src/lib/__tests__/bugLifecycleIntegration.test.ts:[2m626:35[22m[39m
+2025-07-30T03:18:56.6381498Z     [90m624| [39m
+2025-07-30T03:18:56.6382057Z     [90m625| [39m      [90m// Verify tracking events were called[39m
+2025-07-30T03:18:56.6382623Z     [90m626| [39m      expect(trackBugReportEvent).toHaveBeenCalledWith('bug_assigned',…
+2025-07-30T03:18:56.6383107Z     [90m   | [39m                                  [31m^[39m
+2025-07-30T03:18:56.6383607Z     [90m627| [39m      expect(trackBugReportEvent).toHaveBeenCalledWith('bug_status_cha…
+2025-07-30T03:18:56.6384203Z     [90m628| [39m      expect(trackBugReportEvent).toHaveBeenCalledWith('internal_comme…
+2025-07-30T03:18:56.6384498Z 
+2025-07-30T03:18:56.6384720Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/44]⎯[22m[39m
+2025-07-30T03:18:56.6384902Z 
+2025-07-30T03:18:56.6385841Z [41m[1m FAIL [22m[49m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mWorkflow Optimization[2m > [22moptimizes assignment recommendations based on workload
+2025-07-30T03:18:56.6386846Z [31m[1mAssertionError[22m: expected 'user_1' to be 'user_3' // Object.is equality[39m
+2025-07-30T03:18:56.6387155Z 
+2025-07-30T03:18:56.6387313Z Expected: [32m"user_[7m3[27m"[39m
+2025-07-30T03:18:56.6387638Z Received: [31m"user_[7m1[27m"[39m
+2025-07-30T03:18:56.6387793Z 
+2025-07-30T03:18:56.6388153Z [36m [2m❯[22m src/lib/__tests__/bugLifecycleIntegration.test.ts:[2m647:40[22m[39m
+2025-07-30T03:18:56.6388721Z     [90m645| [39m      [90m// Should prefer user with lower workload (user_3)[39m
+2025-07-30T03:18:56.6389347Z     [90m646| [39m      [35mconst[39m topRecommendation [33m=[39m recommendations[[34m0[39m][33m;[39m
+2025-07-30T03:18:56.6390257Z     [90m647| [39m      [34mexpect[39m(topRecommendation[33m.[39muserId)[33m.[39m[34mtoBe[39m([32m'user_3'[39m)[33m;[39m
+2025-07-30T03:18:56.6390940Z     [90m   | [39m                                       [31m^[39m
+2025-07-30T03:18:56.6391626Z     [90m648| [39m      [34mexpect[39m(topRecommendation[33m.[39mworkloadImpact)[33m.[39m[34mtoBeLessThan[39m([34m0.5[39m)[33m;[39m
+2025-07-30T03:18:56.6392423Z     [90m649| [39m    })[33m;[39m
+2025-07-30T03:18:56.6392582Z 
+2025-07-30T03:18:56.6392789Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/44]⎯[22m[39m
+2025-07-30T03:18:56.6392970Z 
+2025-07-30T03:18:56.6393826Z [41m[1m FAIL [22m[49m src/lib/__tests__/bugLifecycleIntegration.test.ts[2m > [22mBug Lifecycle Integration Tests[2m > [22mWorkflow Optimization[2m > [22mprovides workload balancing recommendations
+2025-07-30T03:18:56.6394780Z [31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+2025-07-30T03:18:56.6395064Z 
+2025-07-30T03:18:56.6395184Z [32m- Expected[39m
+2025-07-30T03:18:56.6395409Z [31m+ Received[39m
+2025-07-30T03:18:56.6395526Z 
+2025-07-30T03:18:56.6395620Z [32m- true[39m
+2025-07-30T03:18:56.6395817Z [31m+ false[39m
+2025-07-30T03:18:56.6395926Z 
+2025-07-30T03:18:56.6396279Z [36m [2m❯[22m src/lib/__tests__/bugLifecycleIntegration.test.ts:[2m660:38[22m[39m
+2025-07-30T03:18:56.6396869Z     [90m658| [39m      [90m// Should recommend assigning work to under-utilized user[39m
+2025-07-30T03:18:56.6397455Z     [90m659| [39m      const hasUser1Recommendation = balanceRecommendations.some(rec =…
+2025-07-30T03:18:56.6398146Z     [90m660| [39m      [34mexpect[39m(hasUser1Recommendation)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+2025-07-30T03:18:56.6398719Z     [90m   | [39m                                     [31m^[39m
+2025-07-30T03:18:56.6399032Z     [90m661| [39m    })[33m;[39m
+2025-07-30T03:18:56.6399302Z     [90m662| [39m  })[33m;[39m
+2025-07-30T03:18:56.6399445Z 
+2025-07-30T03:18:56.6399658Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/44]⎯[22m[39m
+2025-07-30T03:18:56.6399833Z 
+2025-07-30T03:18:56.6399999Z [2m   Start at [22m 03:18:54
+2025-07-30T03:18:56.6400653Z [2m   Duration [22m 1.77s[2m (transform 568ms, setup 147ms, collect 467ms, tests 40ms, environment 413ms, prepare 163ms)[22m
+2025-07-30T03:18:56.6401038Z 
+2025-07-30T03:18:56.7221274Z ❌ Tests failed
+2025-07-30T03:18:56.7222086Z 🛑 Deployment cancelled due to test failures
+2025-07-30T03:18:56.7234694Z ##[error]Process completed with exit code 1.
+2025-07-30T03:18:56.7294400Z ##[group]Run if [ "failure" = "success" ]; then
+2025-07-30T03:18:56.7294760Z [36;1mif [ "failure" = "success" ]; then[0m
+2025-07-30T03:18:56.7295055Z [36;1m  echo "✅ WORKFLOW COMPLETED SUCCESSFULLY"[0m
+2025-07-30T03:18:56.7295433Z [36;1m  echo "🚀 VPS deployment will be triggered automatically via webhook"[0m
+2025-07-30T03:18:56.7295765Z [36;1melse[0m
+2025-07-30T03:18:56.7295944Z [36;1m  echo "❌ WORKFLOW FAILED"[0m
+2025-07-30T03:18:56.7296199Z [36;1m  echo "🛑 No deployment will be triggered"[0m
+2025-07-30T03:18:56.7296444Z [36;1mfi[0m
+2025-07-30T03:18:56.7296620Z [36;1m[0m
+2025-07-30T03:18:56.7296777Z [36;1mecho ""[0m
+2025-07-30T03:18:56.7296963Z [36;1mecho "📋 Final Status: failure"[0m
+2025-07-30T03:18:56.7297274Z [36;1mecho "🕐 Completed at: $(date -u +%Y-%m-%dT%H:%M:%SZ)"[0m
+2025-07-30T03:18:56.7324830Z shell: /usr/bin/bash -e {0}
+2025-07-30T03:18:56.7325042Z env:
+2025-07-30T03:18:56.7325205Z   NODE_VERSION: 20
+2025-07-30T03:18:56.7325438Z   WORKING_DIRECTORY: jarvis-chat
+2025-07-30T03:18:56.7325652Z ##[endgroup]
+2025-07-30T03:18:56.7373105Z ❌ WORKFLOW FAILED
+2025-07-30T03:18:56.7373450Z 🛑 No deployment will be triggered
+2025-07-30T03:18:56.7373635Z 
+2025-07-30T03:18:56.7373778Z 📋 Final Status: failure
+2025-07-30T03:18:56.7385730Z 🕐 Completed at: 2025-07-30T03:18:56Z
+2025-07-30T03:18:56.7457447Z Post job cleanup.
+2025-07-30T03:18:56.8386307Z [command]/usr/bin/git version
+2025-07-30T03:18:56.8421531Z git version 2.50.1
+2025-07-30T03:18:56.8466037Z Temporarily overriding HOME='/home/runner/work/_temp/1749d2f5-568b-4038-8959-358cccfc9508' before making global git config changes
+2025-07-30T03:18:56.8467803Z Adding repository directory to the temporary git global config as a safe directory
+2025-07-30T03:18:56.8472865Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT
+2025-07-30T03:18:56.8508452Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-07-30T03:18:56.8540998Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-07-30T03:18:56.8760974Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-07-30T03:18:56.8781919Z http.https://github.com/.extraheader
+2025-07-30T03:18:56.8794244Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-07-30T03:18:56.8824963Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-07-30T03:18:56.9145663Z Cleaning up orphan processes

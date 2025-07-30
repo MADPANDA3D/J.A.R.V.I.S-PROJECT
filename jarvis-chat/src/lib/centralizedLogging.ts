@@ -296,7 +296,7 @@ class CentralizedLoggingService {
           this.sendToDestination(destination, batch)
         )
       );
-    } catch {
+    } catch (error) {
       console.warn('Error flushing logs:', error);
     } finally {
       this.isProcessing = false;
@@ -332,7 +332,7 @@ class CentralizedLoggingService {
             break;
         }
         break; // Success, exit retry loop
-      } catch {
+      } catch (error) {
         retries++;
         if (retries > maxRetries) {
           console.warn(`Failed to send logs to ${destination.type} after ${maxRetries} retries:`, error);
@@ -386,7 +386,7 @@ class CentralizedLoggingService {
       const recentLogs = storedLogs.slice(-maxStoredLogs);
       
       localStorage.setItem('jarvis_centralized_logs', JSON.stringify(recentLogs));
-    } catch {
+    } catch (error) {
       console.warn('Failed to store logs in localStorage:', error);
     }
   }
@@ -530,7 +530,7 @@ class CentralizedLoggingService {
     try {
       const stored = localStorage.getItem('jarvis_centralized_logs');
       return stored ? JSON.parse(stored) : [];
-    } catch {
+    } catch (error) {
       console.warn('Failed to load stored logs:', error);
       return [];
     }

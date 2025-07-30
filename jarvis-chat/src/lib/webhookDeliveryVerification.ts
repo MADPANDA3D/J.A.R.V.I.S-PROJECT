@@ -157,7 +157,7 @@ export class WebhookDeliveryVerificationService {
 
       this.completeVerification(verificationId, allVerified);
 
-    } catch {
+    } catch (error) {
       result.error = error instanceof Error ? error.message : 'Unknown verification error';
       result.verificationTime = Date.now() - startTime;
       this.completeVerification(verificationId, false);
@@ -206,7 +206,7 @@ export class WebhookDeliveryVerificationService {
         };
       }
 
-    } catch {
+    } catch (error) {
       this.log(`[VERIFICATION] Payload delivery check failed: ${error}`);
       
       // Fallback: Check webhook server health and assume delivery if healthy
@@ -289,7 +289,7 @@ export class WebhookDeliveryVerificationService {
               verificationTime: elapsed
             });
           }
-        } catch {
+        } catch (error) {
           this.log(`[VERIFICATION] Deployment check error: ${error}`);
         }
       }, this.config.deploymentCheckInterval);
@@ -324,7 +324,7 @@ export class WebhookDeliveryVerificationService {
       }
 
       return { status: 'unknown' };
-    } catch {
+    } catch (error) {
       this.log(`[VERIFICATION] Deployment status check failed: ${error}`);
       return { status: 'unknown' };
     }

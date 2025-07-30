@@ -1,0 +1,47 @@
+﻿2025-07-30T03:18:45.5662954Z ##[group]Run echo "📦 Installing dependencies with npm ci..."
+2025-07-30T03:18:45.5663427Z [36;1mecho "📦 Installing dependencies with npm ci..."[0m
+2025-07-30T03:18:45.5663741Z [36;1m[0m
+2025-07-30T03:18:45.5663943Z [36;1m# Clean install to fix lockfile issues[0m
+2025-07-30T03:18:45.5664290Z [36;1mif [ -f "package-lock.json" ]; then[0m
+2025-07-30T03:18:45.5664678Z [36;1m  echo "🔄 Using existing package-lock.json"[0m
+2025-07-30T03:18:45.5665032Z [36;1m  npm ci --production=false --no-audit --prefer-offline[0m
+2025-07-30T03:18:45.5665334Z [36;1melse[0m
+2025-07-30T03:18:45.5665589Z [36;1m  echo "⚠️ No package-lock.json found, generating new one"[0m
+2025-07-30T03:18:45.5665957Z [36;1m  npm install --production=false --no-audit[0m
+2025-07-30T03:18:45.5666215Z [36;1mfi[0m
+2025-07-30T03:18:45.5666378Z [36;1m[0m
+2025-07-30T03:18:45.5666586Z [36;1mecho "✅ Dependencies installed successfully"[0m
+2025-07-30T03:18:45.5695855Z shell: /usr/bin/bash -e {0}
+2025-07-30T03:18:45.5696097Z env:
+2025-07-30T03:18:45.5696322Z   NODE_VERSION: 20
+2025-07-30T03:18:45.5696531Z   WORKING_DIRECTORY: jarvis-chat
+2025-07-30T03:18:45.5696759Z ##[endgroup]
+2025-07-30T03:18:45.5813108Z 📦 Installing dependencies with npm ci...
+2025-07-30T03:18:45.5813805Z 🔄 Using existing package-lock.json
+2025-07-30T03:18:45.6619382Z npm warn config production Use `--omit=dev` instead.
+2025-07-30T03:18:46.2617492Z npm warn reify invalid or damaged lockfile detected
+2025-07-30T03:18:46.2618372Z npm warn reify please re-try this operation once it completes
+2025-07-30T03:18:46.2619169Z npm warn reify so that the damage can be corrected, or perform
+2025-07-30T03:18:46.2619995Z npm warn reify a fresh install with no lockfile if the problem persists.
+2025-07-30T03:18:46.2632382Z npm warn reify invalid or damaged lockfile detected
+2025-07-30T03:18:46.2633216Z npm warn reify please re-try this operation once it completes
+2025-07-30T03:18:46.2634053Z npm warn reify so that the damage can be corrected, or perform
+2025-07-30T03:18:46.2634970Z npm warn reify a fresh install with no lockfile if the problem persists.
+2025-07-30T03:18:46.2636625Z npm warn reify invalid or damaged lockfile detected
+2025-07-30T03:18:46.2637525Z npm warn reify please re-try this operation once it completes
+2025-07-30T03:18:46.2638368Z npm warn reify so that the damage can be corrected, or perform
+2025-07-30T03:18:46.2639297Z npm warn reify a fresh install with no lockfile if the problem persists.
+2025-07-30T03:18:46.2640367Z npm warn reify invalid or damaged lockfile detected
+2025-07-30T03:18:46.2641933Z npm warn reify please re-try this operation once it completes
+2025-07-30T03:18:46.2643734Z npm warn reify so that the damage can be corrected, or perform
+2025-07-30T03:18:46.2644975Z npm warn reify a fresh install with no lockfile if the problem persists.
+2025-07-30T03:18:54.1423270Z 
+2025-07-30T03:18:54.1423816Z > jarvis-chat@0.0.0 prepare
+2025-07-30T03:18:54.1424098Z > husky
+2025-07-30T03:18:54.1424208Z 
+2025-07-30T03:18:54.1894850Z .git can't be found
+2025-07-30T03:18:54.1895365Z added 580 packages in 9s
+2025-07-30T03:18:54.1895629Z 
+2025-07-30T03:18:54.1895893Z 115 packages are looking for funding
+2025-07-30T03:18:54.1896354Z   run `npm fund` for details
+2025-07-30T03:18:54.2193361Z ✅ Dependencies installed successfully

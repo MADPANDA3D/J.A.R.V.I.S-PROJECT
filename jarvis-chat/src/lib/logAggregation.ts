@@ -296,7 +296,7 @@ class LogAggregationService {
 
       // Send logs to external systems if configured
       this.sendToExternalSystems(recentLogs);
-    } catch {
+    } catch (error) {
       captureError(
         error instanceof Error ? error : new Error('Log processing failed'),
         {
@@ -434,7 +434,7 @@ class LogAggregationService {
           metadata: alert.metadata,
         });
       }
-    } catch {
+    } catch (error) {
       captureWarning('Failed to send log alert', {
         alert_id: alert.id,
         error: error instanceof Error ? error.message : 'Unknown error',
@@ -475,7 +475,7 @@ class LogAggregationService {
           (a, b) => a.timestamp - b.timestamp
         );
       }
-    } catch {
+    } catch (error) {
       captureWarning('Failed to enforce log retention policies', { error });
     }
   }
@@ -495,7 +495,7 @@ class LogAggregationService {
 
       // Business insights
       this.analyzeBusinessMetrics(recentLogs);
-    } catch {
+    } catch (error) {
       captureWarning('Failed to perform log analysis', { error });
     }
   }
@@ -624,7 +624,7 @@ class LogAggregationService {
           }),
         });
       }
-    } catch {
+    } catch (error) {
       // Silently fail external log shipping
     }
   }

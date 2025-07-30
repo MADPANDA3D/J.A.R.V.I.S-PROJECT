@@ -1,0 +1,24 @@
+﻿2025-07-30T03:18:45.4612611Z ##[group]Run echo "🔍 Build Environment Information:"
+2025-07-30T03:18:45.4613091Z [36;1mecho "🔍 Build Environment Information:"[0m
+2025-07-30T03:18:45.4613443Z [36;1mecho "Node.js version: $(node --version)"[0m
+2025-07-30T03:18:45.4613746Z [36;1mecho "NPM version: $(npm --version)"[0m
+2025-07-30T03:18:45.4614036Z [36;1mecho "Working directory: jarvis-chat"[0m
+2025-07-30T03:18:45.4614295Z [36;1mecho "Branch: main"[0m
+2025-07-30T03:18:45.4614608Z [36;1mecho "Commit SHA: 6f510ab0011391ca86c3c2003cda6251fa0fa296"[0m
+2025-07-30T03:18:45.4614997Z [36;1mecho "Repository: MADPANDA3D/J.A.R.V.I.S-PROJECT"[0m
+2025-07-30T03:18:45.4615325Z [36;1mecho "Workflow: Deploy to VPS"[0m
+2025-07-30T03:18:45.4615577Z [36;1mecho "Run ID: 16612605463"[0m
+2025-07-30T03:18:45.4653619Z shell: /usr/bin/bash -e {0}
+2025-07-30T03:18:45.4653882Z env:
+2025-07-30T03:18:45.4654087Z   NODE_VERSION: 20
+2025-07-30T03:18:45.4654293Z   WORKING_DIRECTORY: jarvis-chat
+2025-07-30T03:18:45.4654526Z ##[endgroup]
+2025-07-30T03:18:45.4729390Z 🔍 Build Environment Information:
+2025-07-30T03:18:45.4764162Z Node.js version: v20.19.4
+2025-07-30T03:18:45.5625488Z NPM version: 10.8.2
+2025-07-30T03:18:45.5626142Z Working directory: jarvis-chat
+2025-07-30T03:18:45.5626587Z Branch: main
+2025-07-30T03:18:45.5627166Z Commit SHA: 6f510ab0011391ca86c3c2003cda6251fa0fa296
+2025-07-30T03:18:45.5627912Z Repository: MADPANDA3D/J.A.R.V.I.S-PROJECT
+2025-07-30T03:18:45.5628428Z Workflow: Deploy to VPS
+2025-07-30T03:18:45.5628746Z Run ID: 16612605463

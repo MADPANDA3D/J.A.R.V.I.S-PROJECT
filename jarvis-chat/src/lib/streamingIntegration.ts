@@ -499,7 +499,7 @@ class StreamingIntegrationService {
         'Webhook payload queued for delivery',
         { eventType: payload.eventType, bugId: payload.bugId }
       );
-    } catch {
+    } catch (error) {
       centralizedLogging.error(
         'streaming-integration',
         'system',

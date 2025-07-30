@@ -322,7 +322,7 @@ class ServiceMonitoringService {
 
         return result;
 
-      } catch {
+      } catch (error) {
         const responseTime = performance.now() - startTime;
         lastError = error instanceof Error ? error : new Error(String(error));
 
@@ -605,7 +605,7 @@ class ServiceMonitoringService {
             { dependencyId: dependency.dependencyId }
           );
         }
-      } catch {
+      } catch (error) {
         centralizedLogging.error(
           'service-monitoring',
           'system',
