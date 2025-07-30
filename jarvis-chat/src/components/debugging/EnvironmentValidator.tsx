@@ -20,7 +20,7 @@ export function EnvironmentValidator({
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
   // Run validation on mount and when requested
-  const runValidation = async () {
+  const runValidation = async () => {
     setIsLoading(true);
     try {
       // Add a small delay to show loading state
@@ -34,7 +34,7 @@ export function EnvironmentValidator({
     }
   };
 
-  useEffect(() {
+  useEffect(() => {
     runValidation();
   }, []);
 
@@ -79,7 +79,7 @@ export function EnvironmentValidator({
     return value;
   };
 
-  const copyToClipboard = async (text: string, field: string) {
+  const copyToClipboard = async (text: string, field: string) => {
     try {
       await navigator.clipboard.writeText(text);
       setCopiedField(field);

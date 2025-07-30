@@ -90,7 +90,7 @@ export function MessageSearch({
   const [hasMoreSessions, setHasMoreSessions] = useState(false);
   const [isLoadingMoreSessions, setIsLoadingMoreSessions] = useState(false);
 
-  const activeFiltersCount = useMemo(() {
+  const activeFiltersCount = useMemo(() => {
     let count = 0;
     if (filters.dateRange && (filters.dateRange.from || filters.dateRange.to)) count++;
     if (filters.messageTypes.length < 2) count++;
@@ -100,7 +100,7 @@ export function MessageSearch({
   }, [filters]);
 
   const handleSearch = useCallback(
-    async (searchQuery: string, loadMore = false) {
+    async (searchQuery: string, loadMore = false) => {
       if (!searchQuery.trim()) {
         setResults([]);
         setSessionGroups([]);
@@ -126,7 +126,7 @@ export function MessageSearch({
   );
 
   const handleRegularSearch = useCallback(
-    async (searchQuery: string, loadMore = false) {
+    async (searchQuery: string, loadMore = false) => {
       const isLoadingMoreResults = loadMore && results.length > 0;
       const searchStartTime = performance.now();
       
@@ -179,7 +179,7 @@ export function MessageSearch({
   );
 
   const handleSessionGroupedSearch = useCallback(
-    async (searchQuery: string, loadMore = false) {
+    async (searchQuery: string, loadMore = false) => {
       if (!onSessionGroupedSearch) return;
 
       const isLoadingMoreSessions = loadMore && sessionGroups.length > 0;
@@ -246,10 +246,10 @@ export function MessageSearch({
   }, [setCurrentQuery]);
 
   // Load conversation sessions
-  useEffect(() {
+  useEffect(() => {
     if (!userId) return;
 
-    const loadSessions = async () {
+    const loadSessions = async () => {
       setLoadingSessions(true);
       try {
         const sessions = await chatService.getConversationSessions(userId);
@@ -265,8 +265,8 @@ export function MessageSearch({
   }, [userId]);
 
   // Debounced search effect
-  useEffect(() {
-    const timeoutId = setTimeout(() {
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
       if (currentQuery) {
         handleSearch(currentQuery);
       } else {
@@ -281,7 +281,7 @@ export function MessageSearch({
     return () => clearTimeout(timeoutId);
   }, [currentQuery, handleSearch, onClearSearch]);
 
-  const handleLoadMore = useCallback(() {
+  const handleLoadMore = useCallback(() => {
     if (currentQuery && hasMoreResults && !isLoadingMore) {
       handleSearch(currentQuery, true);
     }
@@ -313,21 +313,21 @@ export function MessageSearch({
     }
   }, [currentQuery, handleSearch]);
 
-  const handleLoadMoreSessions = useCallback(() {
+  const handleLoadMoreSessions = useCallback(() => {
     if (currentQuery.trim() && hasMoreSessions && !isLoadingMoreSessions) {
       handleSearch(currentQuery, true);
     }
   }, [currentQuery, hasMoreSessions, isLoadingMoreSessions, handleSearch]);
 
-  const handleExpandAllSessions = useCallback(() {
+  const handleExpandAllSessions = useCallback(() => {
     setExpandedSessions(new Set(sessionGroups.map(sg => sg.session.id)));
   }, [sessionGroups]);
 
-  const handleCollapseAllSessions = useCallback(() {
+  const handleCollapseAllSessions = useCallback(() => {
     setExpandedSessions(new Set());
   }, []);
 
-  const handleLoadMoreInSession = useCallback(async (sessionId: string) {
+  const handleLoadMoreInSession = useCallback(async (sessionId: string) => {
     // This would require additional API support to load more messages within a specific session
     console.log('Load more messages in session:', sessionId);
     // Implementation would depend on additional backend support
@@ -347,7 +347,7 @@ export function MessageSearch({
     onClearSearch();
     
     // Announce to screen readers
-    setTimeout(() {
+    setTimeout(() => {
       const message = 'Search cleared';
       const announcement = document.createElement('div');
       announcement.setAttribute('aria-live', 'polite');

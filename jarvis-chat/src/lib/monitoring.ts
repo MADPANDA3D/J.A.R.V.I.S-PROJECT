@@ -242,7 +242,7 @@ class MonitoringService implements APMService {
         // Cumulative Layout Shift (CLS)
         let clsValue = 0;
         const clsObserver = new PerformanceObserver(entryList => {
-          entryList.getEntries().forEach((entry: PerformanceEntry & { hadRecentInput?: boolean; value?: number }) {
+          entryList.getEntries().forEach((entry: PerformanceEntry & { hadRecentInput?: boolean; value?: number }) => {
             if (!entry.hadRecentInput) {
               clsValue += entry.value || 0;
             }
@@ -264,7 +264,7 @@ class MonitoringService implements APMService {
       // Monitor navigation timing
       if ('performance' in window && performance.timing) {
         window.addEventListener('load', () {
-          setTimeout(() {
+          setTimeout(() => {
             const timing = performance.timing;
             const pageLoadTime = timing.loadEventEnd - timing.navigationStart;
             const domContentLoaded =
@@ -344,7 +344,7 @@ class MonitoringService implements APMService {
     try {
       if ('PerformanceObserver' in window) {
         const resourceObserver = new PerformanceObserver(entryList => {
-          entryList.getEntries().forEach((entry: PerformanceResourceTiming) {
+          entryList.getEntries().forEach((entry: PerformanceResourceTiming) => {
             this.trackCustomMetric('resource.load_time', entry.duration, {
               name: entry.name,
               type: entry.initiatorType,
@@ -953,17 +953,17 @@ class MonitoringService implements APMService {
 
   private startRealTimeMonitoring(): void {
     // Check alert rules every 30 seconds
-    setInterval(() {
+    setInterval(() => {
       this.checkAlertRules();
     }, 30000);
 
     // Monitor memory usage every minute
-    setInterval(() {
+    setInterval(() => {
       this.trackMemoryUsage();
     }, 60000);
 
     // Clean up old data every 5 minutes
-    setInterval(() {
+    setInterval(() => {
       this.cleanupOldData();
     }, 300000);
   }

@@ -54,9 +54,9 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
   const [authLogs, setAuthLogs] = useState<string[]>([]);
 
   // Initialize auth state monitoring
-  useEffect(() {
+  useEffect(() => {
     // Get current auth state
-    const getCurrentUser = async () {
+    const getCurrentUser = async () => {
       try {
         const { data: { user }, error } = await supabase.auth.getUser();
         if (error) {
@@ -334,7 +334,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
   };
 
   // Run all authentication tests
-  const runAuthTests = async () {
+  const runAuthTests = async () => {
     setIsRunning(true);
     setAuthTests([]);
     addAuthLog('Starting authentication diagnostics...');
@@ -371,7 +371,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
   };
 
   // Test specific credentials
-  const testCredentialsAuth = async () {
+  const testCredentialsAuth = async () => {
     if (!testCredentials.email || !testCredentials.password) {
       addAuthLog('Test credentials are required');
       return;
@@ -429,7 +429,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
     );
   };
 
-  const copyToClipboard = async (text: string) {
+  const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
     } catch (error) {

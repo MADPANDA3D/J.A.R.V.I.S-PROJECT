@@ -24,7 +24,7 @@ const createLoggedSupabaseClient = (url: string, key: string, options: Record<st
     ...options,
     global: {
       ...options.global,
-      fetch: async (input: RequestInfo | URL, init?: RequestInit) {
+      fetch: async (input: RequestInfo | URL, init?: RequestInit) => {
         const startTime = performance.now();
         const correlationId = generateCorrelationId();
         const sessionId = getSessionId();

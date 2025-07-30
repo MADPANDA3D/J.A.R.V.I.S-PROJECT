@@ -52,7 +52,7 @@ export function useBugLifecycle(
   });
 
   // Refresh bug report data
-  const refreshBugReport = useCallback(async () {
+  const refreshBugReport = useCallback(async () => {
     if (!bugId) return;
 
     try {
@@ -259,17 +259,17 @@ export function useBugLifecycle(
   }, []);
 
   // Initial load
-  useEffect(() {
+  useEffect(() => {
     if (bugId) {
       refreshBugReport();
     }
   }, [bugId, refreshBugReport]);
 
   // Auto-refresh functionality
-  useEffect(() {
+  useEffect(() => {
     if (!autoRefresh || !bugId) return;
 
-    const interval = setInterval(() {
+    const interval = setInterval(() => {
       refreshBugReport();
     }, refreshInterval);
 
@@ -277,9 +277,9 @@ export function useBugLifecycle(
   }, [autoRefresh, refreshInterval, bugId, refreshBugReport]);
 
   // Clear error after a delay
-  useEffect(() {
+  useEffect(() => {
     if (state.error) {
-      const timeout = setTimeout(() {
+      const timeout = setTimeout(() => {
         setState(prev => ({ ...prev, error: null }));
       }, 5000);
 
@@ -312,7 +312,7 @@ export function useBugList(filters?: {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const loadBugs = useCallback(async () {
+  const loadBugs = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -340,7 +340,7 @@ export function useBugList(filters?: {
     }
   }, [filters]);
 
-  useEffect(() {
+  useEffect(() => {
     loadBugs();
   }, [loadBugs]);
 
@@ -363,7 +363,7 @@ export function useBugLifecycleStats() {
   } | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() {
+  useEffect(() => {
     const loadStats = () {
       try {
         const statistics = bugLifecycleService.getLifecycleStatistics();

@@ -89,7 +89,7 @@ export function SystemHealthMonitor({
         // WebSocket health check
         return new Promise((resolve) {
           const ws = new WebSocket(service.url);
-          const timeout = setTimeout(() {
+          const timeout = setTimeout(() => {
             ws.close();
             resolve({
               service: service.name,
@@ -194,7 +194,7 @@ export function SystemHealthMonitor({
   }, []);
 
   // Run all health checks
-  const runHealthChecks = useCallback(async () {
+  const runHealthChecks = useCallback(async () => {
     setIsLoading(true);
     
     try {
@@ -202,7 +202,7 @@ export function SystemHealthMonitor({
         monitoredServices.map(service => checkServiceHealth(service))
       );
 
-      const healthResults = results.map((result, index) {
+      const healthResults = results.map((result, index) => {
         if (result.status === 'fulfilled') {
           return result.value;
         } else {
@@ -260,7 +260,7 @@ export function SystemHealthMonitor({
   }, [healthChecks, checkServiceHealth, monitoredServices]);
 
   // Auto-refresh health checks
-  useEffect(() {
+  useEffect(() => {
     runHealthChecks();
     
     const interval = setInterval(runHealthChecks, refreshInterval);

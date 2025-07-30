@@ -91,14 +91,14 @@ vi.mock('../supabase', () => ({
   },
 }));
 
-describe('ChatService - Enhanced Integration', () {
+describe('ChatService - Enhanced Integration', () => {
   const mockWebhookService = webhookServiceModule.webhookService as typeof webhookServiceModule.webhookService & {
     sendMessage: ReturnType<typeof vi.fn>;
     healthCheck: ReturnType<typeof vi.fn>;
     getMetrics: ReturnType<typeof vi.fn>;
   };
 
-  beforeEach(() {
+  beforeEach(() => {
     vi.clearAllMocks();
 
     // Reset webhook service mocks
@@ -107,8 +107,8 @@ describe('ChatService - Enhanced Integration', () {
     mockWebhookService.getMetrics.mockClear();
   });
 
-  describe('Enhanced sendMessageToAI', () {
-    it('should use webhook service with proper payload structure', async () {
+  describe('Enhanced sendMessageToAI', () => {
+    it('should use webhook service with proper payload structure', async () => {
       const mockResponse = {
         response: 'AI response from webhook service',
         success: true,
@@ -134,7 +134,7 @@ describe('ChatService - Enhanced Integration', () {
       });
     });
 
-    it('should handle webhook service errors gracefully', async () {
+    it('should handle webhook service errors gracefully', async () => {
       const webhookError = new webhookServiceModule.WebhookError(
         'Network connection failed',
         'network_error',
@@ -149,7 +149,7 @@ describe('ChatService - Enhanced Integration', () {
       ).rejects.toThrow('Failed to get AI response. Please try again.');
     });
 
-    it('should use fallback response when circuit breaker is open', async () {
+    it('should use fallback response when circuit breaker is open', async () => {
       const circuitBreakerError = new webhookServiceModule.WebhookError(
         'Circuit breaker is open - webhook temporarily unavailable',
         'circuit_breaker_open',
@@ -167,7 +167,7 @@ describe('ChatService - Enhanced Integration', () {
       expect(result.length).toBeGreaterThan(0);
     });
 
-    it('should use fallback response when webhook URL not configured', async () {
+    it('should use fallback response when webhook URL not configured', async () => {
       const configError = new webhookServiceModule.WebhookError(
         'Webhook URL not configured',
         'validation_error',
@@ -185,7 +185,7 @@ describe('ChatService - Enhanced Integration', () {
       expect(result.length).toBeGreaterThan(0);
     });
 
-    it('should include conversation ID in webhook payload when provided', async () {
+    it('should include conversation ID in webhook payload when provided', async () => {
       const mockResponse = {
         response: 'Response with conversation context',
         success: true,
@@ -209,7 +209,7 @@ describe('ChatService - Enhanced Integration', () {
       );
     });
 
-    it('should handle missing conversation ID gracefully', async () {
+    it('should handle missing conversation ID gracefully', async () => {
       const mockResponse = {
         response: 'Response without conversation context',
         success: true,
@@ -230,8 +230,8 @@ describe('ChatService - Enhanced Integration', () {
     });
   });
 
-  describe('Webhook Status Monitoring', () {
-    it('should return webhook health status and metrics', async () {
+  describe('Webhook Status Monitoring', () => {
+    it('should return webhook health status and metrics', async () => {
       const mockHealthStatus = {
         status: 'healthy' as const,
         responseTime: 150,
@@ -273,7 +273,7 @@ describe('ChatService - Enhanced Integration', () {
       });
     });
 
-    it('should handle health check errors gracefully', async () {
+    it('should handle health check errors gracefully', async () => {
       const mockMetrics = {
         totalRequests: 10,
         successfulRequests: 8,
@@ -298,7 +298,7 @@ describe('ChatService - Enhanced Integration', () {
       expect(mockWebhookService.getMetrics).toHaveBeenCalled();
     });
 
-    it('should detect when webhook is not configured', async () {
+    it('should detect when webhook is not configured', async () => {
       const mockHealthStatus = {
         status: 'unhealthy' as const,
         error: 'Webhook URL not configured',
@@ -326,8 +326,8 @@ describe('ChatService - Enhanced Integration', () {
     });
   });
 
-  describe('Integration with Existing Features', () {
-    it('should maintain backward compatibility with existing methods', () {
+  describe('Integration with Existing Features', () => {
+    it('should maintain backward compatibility with existing methods', () => {
       // Verify that existing methods still exist
       expect(typeof chatService.saveMessage).toBe('function');
       expect(typeof chatService.loadMessageHistory).toBe('function');
@@ -335,7 +335,7 @@ describe('ChatService - Enhanced Integration', () {
       expect(typeof chatService.processChatMessage).toBe('function');
     });
 
-    it('should pass conversation ID to enhanced webhook service', async () {
+    it('should pass conversation ID to enhanced webhook service', async () => {
       const mockResponse = {
         response: 'AI response with conversation context',
         success: true,

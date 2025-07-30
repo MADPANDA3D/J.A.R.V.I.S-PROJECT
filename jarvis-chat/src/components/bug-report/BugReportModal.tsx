@@ -26,13 +26,13 @@ export const BugReportModal: React.FC<BugReportModalProps> = ({
   const previouslyFocusedElement = useRef<HTMLElement | null>(null);
 
   // Handle focus management
-  useEffect(() {
+  useEffect(() => {
     if (isOpen) {
       // Store the previously focused element
       previouslyFocusedElement.current = document.activeElement as HTMLElement;
       
       // Focus the modal
-      setTimeout(() {
+      setTimeout(() => {
         modalRef.current?.focus();
       }, 100);
 
@@ -54,7 +54,7 @@ export const BugReportModal: React.FC<BugReportModalProps> = ({
   }, [isOpen]);
 
   // Handle escape key
-  useEffect(() {
+  useEffect(() => {
     const handleEscape = (e: KeyboardEvent) {
       if (e.key === 'Escape' && isOpen) {
         onClose();

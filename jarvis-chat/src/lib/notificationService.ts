@@ -769,7 +769,7 @@ class NotificationService {
   }
 
   private startEmailProcessor(): void {
-    this.processingInterval = setInterval(() {
+    this.processingInterval = setInterval(() => {
       this.processEmailQueue();
     }, 30000); // Process every 30 seconds
   }
@@ -865,7 +865,7 @@ class NotificationService {
   private renderTemplate(template: string, variables: Record<string, unknown>): string {
     let rendered = template;
     
-    Object.entries(variables).forEach(([key, value]) {
+    Object.entries(variables).forEach(([key, value]) => {
       const regex = new RegExp(`{{${key}}}`, 'g');
       rendered = rendered.replace(regex, String(value || ''));
     });

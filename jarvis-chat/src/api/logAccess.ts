@@ -784,7 +784,7 @@ class LogAccessService {
       
       if (includeMetadata && log.metadata) {
         xml += '    <metadata>\n';
-        Object.entries(log.metadata).forEach(([key, value]) {
+        Object.entries(log.metadata).forEach(([key, value]) => {
           xml += `      <${key}><![CDATA[${JSON.stringify(value)}]]></${key}>\n`;
         });
         xml += '    </metadata>\n';
@@ -815,7 +815,7 @@ class LogAccessService {
     let lastHeartbeat = Date.now();
 
     // Setup heartbeat
-    const heartbeatTimer = setInterval(() {
+    const heartbeatTimer = setInterval(() => {
       if (websocket.readyState === WebSocket.OPEN) {
         websocket.send(JSON.stringify({
           type: 'heartbeat',
@@ -849,7 +849,7 @@ class LogAccessService {
     const streamTimer = setInterval(streamLogs, 1000); // Send every second
 
     // Listen for new logs (simplified - in real implementation, this would be event-driven)
-    const logListener = setInterval(() {
+    const logListener = setInterval(() => {
       try {
         // Get recent logs that match the query
         const recentLogs = this.executeLogSearch({
@@ -1006,7 +1006,7 @@ class LogAccessService {
 
   // Cleanup
   private setupCleanupTimer(): void {
-    setInterval(() {
+    setInterval(() => {
       this.cleanupOldData();
     }, 60 * 60 * 1000); // Every hour
   }
@@ -1042,11 +1042,11 @@ class LogAccessService {
 export const logAccessService = new LogAccessService();
 
 // Express-style middleware functions (for reference - would be implemented in actual API routes)
-export const authenticateApiKeyMiddleware = async (apiKey: string) {
+export const authenticateApiKeyMiddleware = async (apiKey: string) => {
   return await logAccessService.authenticateApiKey(apiKey);
 };
 
-export const checkRateLimitMiddleware = async (apiKey: ApiKey, ipAddress: string) {
+export const checkRateLimitMiddleware = async (apiKey: ApiKey, ipAddress: string) => {
   return await logAccessService.checkRateLimit(apiKey, ipAddress);
 };
 

@@ -48,7 +48,7 @@ export function useSearchHistory(
   });
 
   // Analyze search patterns from history
-  const searchPatterns = useMemo(() {
+  const searchPatterns = useMemo(() => {
     const patterns = new Map<string, SearchPattern>();
 
     searchHistory.forEach(item => {
@@ -101,7 +101,7 @@ export function useSearchHistory(
     });
 
     // Add popular query matches
-    popularQueries.forEach((popularQuery, index) {
+    popularQueries.forEach((popularQuery, index) => {
       if (popularQuery.includes(query)) {
         const score = Math.max(0.8 - (index * 0.05), 0.3); // Score based on popularity rank
         suggestions.push({
@@ -157,7 +157,7 @@ export function useSearchHistory(
   }, [searchHistory, popularQueries, searchPatterns]);
 
   // Generate search trends analytics
-  const generateSearchTrends = useCallback(() {
+  const generateSearchTrends = useCallback(() => {
     const daily: Record<string, number> = {};
     const weekly: Record<string, number> = {};
     const monthly: Record<string, number> = {};
@@ -185,7 +185,7 @@ export function useSearchHistory(
   }, [searchHistory]);
 
   // Update state when dependencies change
-  useEffect(() {
+  useEffect(() => {
     setHistoryState(prev => ({
       ...prev,
       frequentQueries: searchPatterns,
@@ -194,7 +194,7 @@ export function useSearchHistory(
   }, [searchPatterns, generateSearchTrends]);
 
   // Save/load suggestions from localStorage
-  useEffect(() {
+  useEffect(() => {
     if (!userId) return;
 
     try {

@@ -35,7 +35,7 @@ export function useTools(): UseToolsReturn {
   const [error, setError] = useState<string | null>(null);
 
   // Initialize default selections
-  const initializeDefaultSelections = useCallback(() {
+  const initializeDefaultSelections = useCallback(() => {
     const defaultSelections: ToolSelection[] = AVAILABLE_TOOLS.filter(
       tool => tool.default_enabled
     ).map(tool => ({
@@ -49,8 +49,8 @@ export function useTools(): UseToolsReturn {
   }, []);
 
   // Load user preferences and tool selections from localStorage
-  useEffect(() {
-    const loadUserPreferences = async () {
+  useEffect(() => {
+    const loadUserPreferences = async () => {
       if (!user?.id) {
         initializeDefaultSelections();
         setLoading(false);
@@ -98,7 +98,7 @@ export function useTools(): UseToolsReturn {
   }, [user?.id, initializeDefaultSelections]);
 
   // Save preferences to localStorage when they change
-  useEffect(() {
+  useEffect(() => {
     if (!user?.id || loading) return;
 
     localStorage.setItem(
@@ -113,7 +113,7 @@ export function useTools(): UseToolsReturn {
 
   // Record tool usage analytics
   const recordToolUsage = useCallback(
-    async (toolId: string, toolName: string) {
+    async (toolId: string, toolName: string) => {
       if (!user?.id || !preferences.analytics_enabled) return;
 
       try {
@@ -185,7 +185,7 @@ export function useTools(): UseToolsReturn {
     setPreferences(prev => ({ ...prev, ...prefs }));
   }, []);
 
-  const getSelectedToolIds = useCallback(() {
+  const getSelectedToolIds = useCallback(() => {
     return selectedTools.filter(tool => tool.enabled).map(tool => tool.tool_id);
   }, [selectedTools]);
 
@@ -197,7 +197,7 @@ export function useTools(): UseToolsReturn {
     [selectedTools]
   );
 
-  const resetToDefaults = useCallback(() {
+  const resetToDefaults = useCallback(() => {
     initializeDefaultSelections();
     setPreferences(DEFAULT_PREFERENCES);
   }, [initializeDefaultSelections]);

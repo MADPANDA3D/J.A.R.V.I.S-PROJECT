@@ -12,22 +12,22 @@ import {
   WebhookMonitoringMetrics,
 } from '../webhookMonitoring';
 
-describe('WebhookMonitoringService', () {
+describe('WebhookMonitoringService', () => {
   let monitoringService: WebhookMonitoringService;
   let alertCallback: ReturnType<typeof vi.fn>;
 
-  beforeEach(() {
+  beforeEach(() => {
     monitoringService = new WebhookMonitoringService();
     alertCallback = vi.fn();
   });
 
-  afterEach(() {
+  afterEach(() => {
     vi.clearAllMocks();
     monitoringService.clearHistory();
   });
 
-  describe('Performance Metrics Collection', () {
-    it('should record successful requests correctly', () {
+  describe('Performance Metrics Collection', () => {
+    it('should record successful requests correctly', () => {
       monitoringService.recordRequest(150, true);
       monitoringService.recordRequest(200, true);
       monitoringService.recordRequest(120, true);
@@ -41,7 +41,7 @@ describe('WebhookMonitoringService', () {
       expect(metrics.averageResponseTime).toBeCloseTo(156.67, 1);
     });
 
-    it('should record failed requests correctly', () {
+    it('should record failed requests correctly', () => {
       monitoringService.recordRequest(100, true);
       monitoringService.recordRequest(150, false, 500, 'Server error');
       monitoringService.recordRequest(200, false, 429, 'Rate limited');
@@ -54,7 +54,7 @@ describe('WebhookMonitoringService', () {
       expect(metrics.errorRate).toBeCloseTo(66.67, 1);
     });
 
-    it('should calculate percentiles correctly', () {
+    it('should calculate percentiles correctly', () => {
       // Record a range of response times for percentile calculation
       const responseTimes = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500];
 
@@ -71,7 +71,7 @@ describe('WebhookMonitoringService', () {
       expect(metrics.averageResponseTime).toBe(275); // (50+500)/2 * 10 / 10
     });
 
-    it('should track requests per minute and hour', () {
+    it('should track requests per minute and hour', () => {
       // const now = new Date();
 
       // Mock requests in the last minute
@@ -84,7 +84,7 @@ describe('WebhookMonitoringService', () {
       expect(metrics.requestsPerHour).toBe(5);
     });
 
-    it('should determine health status based on metrics', () {
+    it('should determine health status based on metrics', () => {
       // Healthy scenario
       monitoringService.recordRequest(100, true);
       let metrics = monitoringService.getCurrentMetrics();
@@ -105,7 +105,7 @@ describe('WebhookMonitoringService', () {
       expect(metrics.healthStatus).toBe('unhealthy');
     });
 
-    it('should handle empty metrics gracefully', () {
+    it('should handle empty metrics gracefully', () => {
       const metrics = monitoringService.getCurrentMetrics();
 
       expect(metrics.totalRequests).toBe(0);
@@ -116,7 +116,7 @@ describe('WebhookMonitoringService', () {
       expect(metrics.healthStatus).toBe('healthy');
     });
 
-    it('should maintain performance history size limit', () {
+    it('should maintain performance history size limit', () => {
       // Record more than the max history size (1000)
       for (let i = 0; i < 1200; i++) {
         monitoringService.recordRequest(100 + i, true);
@@ -129,8 +129,8 @@ describe('WebhookMonitoringService', () {
     });
   });
 
-  describe('Alert System', () {
-    it('should initialize with default alert rules', () {
+  describe('Alert System', () => {
+    it('should initialize with default alert rules', () => {
       const alertRules = monitoringService['alertRules'];
 
       expect(alertRules.length).toBeGreaterThan(0);
@@ -143,7 +143,7 @@ describe('WebhookMonitoringService', () {
       );
     });
 
-    it('should trigger high error rate alert', () {
+    it('should trigger high error rate alert', () => {
       const unsubscribe = monitoringService.subscribeToAlerts(alertCallback);
 
       // Generate high error rate (>10%)
@@ -159,7 +159,7 @@ describe('WebhookMonitoringService', () {
       unsubscribe();
     });
 
-    it('should trigger slow response time alert', () {
+    it('should trigger slow response time alert', () => {
       const unsubscribe = monitoringService.subscribeToAlerts(alertCallback);
 
       // Generate slow response times
@@ -175,7 +175,7 @@ describe('WebhookMonitoringService', () {
       unsubscribe();
     });
 
-    it('should respect alert cooldown periods', () {
+    it('should respect alert cooldown periods', () => {
       const unsubscribe = monitoringService.subscribeToAlerts(alertCallback);
 
       // Generate high error rate to trigger alert
@@ -195,7 +195,7 @@ describe('WebhookMonitoringService', () {
       unsubscribe();
     });
 
-    it('should allow custom alert rules', () {
+    it('should allow custom alert rules', () => {
       const customRule: Omit<AlertRule, 'id'> = {
         name: 'Custom High Volume Alert',
         condition: metrics => metrics.requestsPerMinute > 50,
@@ -219,7 +219,7 @@ describe('WebhookMonitoringService', () {
       unsubscribe();
     });
 
-    it('should allow alert resolution', () {
+    it('should allow alert resolution', () => {
       const unsubscribe = monitoringService.subscribeToAlerts(alertCallback);
 
       // Trigger an alert
@@ -241,7 +241,7 @@ describe('WebhookMonitoringService', () {
       unsubscribe();
     });
 
-    it('should generate descriptive alert messages', () {
+    it('should generate descriptive alert messages', () => {
       const unsubscribe = monitoringService.subscribeToAlerts(alertCallback);
 
       // Generate circuit breaker scenario
@@ -276,8 +276,8 @@ describe('WebhookMonitoringService', () {
     });
   });
 
-  describe('Dashboard Data', () {
-    it('should generate comprehensive dashboard data', () {
+  describe('Dashboard Data', () => {
+    it('should generate comprehensive dashboard data', () => {
       // Record some test data
       monitoringService.recordRequest(100, true);
       monitoringService.recordRequest(200, false, 500, 'Server error');
@@ -297,7 +297,7 @@ describe('WebhookMonitoringService', () {
       expect(dashboardData.requestHistory[0]).toHaveProperty('responseTime');
     });
 
-    it('should include performance trends in dashboard data', () {
+    it('should include performance trends in dashboard data', () => {
       // Record requests spread over time intervals
       for (let i = 0; i < 20; i++) {
         monitoringService.recordRequest(100 + i * 10, i % 4 !== 0); // 75% success rate
@@ -317,7 +317,7 @@ describe('WebhookMonitoringService', () {
       }
     });
 
-    it('should limit recent alerts in dashboard data', () {
+    it('should limit recent alerts in dashboard data', () => {
       const unsubscribe = monitoringService.subscribeToAlerts(() {});
 
       // Generate multiple alerts
@@ -341,8 +341,8 @@ describe('WebhookMonitoringService', () {
     });
   });
 
-  describe('Alert Subscription Management', () {
-    it('should allow multiple subscribers', () {
+  describe('Alert Subscription Management', () => {
+    it('should allow multiple subscribers', () => {
       const callback1 = vi.fn();
       const callback2 = vi.fn();
 
@@ -361,7 +361,7 @@ describe('WebhookMonitoringService', () {
       unsubscribe2();
     });
 
-    it('should handle subscriber errors gracefully', () {
+    it('should handle subscriber errors gracefully', () => {
       const errorCallback = vi.fn().mockImplementation(() {
         throw new Error('Subscriber error');
       });
@@ -388,7 +388,7 @@ describe('WebhookMonitoringService', () {
       consoleSpy.mockRestore();
     });
 
-    it('should properly unsubscribe callbacks', () {
+    it('should properly unsubscribe callbacks', () => {
       const callback = vi.fn();
       const unsubscribe = monitoringService.subscribeToAlerts(callback);
 
@@ -417,8 +417,8 @@ describe('WebhookMonitoringService', () {
     });
   });
 
-  describe('Circuit Breaker Integration', () {
-    it('should infer circuit breaker state from error patterns', () {
+  describe('Circuit Breaker Integration', () => {
+    it('should infer circuit breaker state from error patterns', () => {
       // Simulate pattern that would indicate open circuit breaker
       for (let i = 0; i < 10; i++) {
         monitoringService.recordRequest(100, false); // All failures
@@ -430,7 +430,7 @@ describe('WebhookMonitoringService', () {
       expect(metrics.circuitBreakerState).toBe('open');
     });
 
-    it('should detect half-open circuit breaker state', () {
+    it('should detect half-open circuit breaker state', () => {
       // Simulate mixed success/failure pattern indicating half-open state
       monitoringService.recordRequest(100, false);
       monitoringService.recordRequest(100, false);
@@ -444,7 +444,7 @@ describe('WebhookMonitoringService', () {
       expect(['half-open', 'open']).toContain(metrics.circuitBreakerState);
     });
 
-    it('should show closed circuit breaker for healthy patterns', () {
+    it('should show closed circuit breaker for healthy patterns', () => {
       // Simulate healthy request pattern
       for (let i = 0; i < 10; i++) {
         monitoringService.recordRequest(100, true);
@@ -455,8 +455,8 @@ describe('WebhookMonitoringService', () {
     });
   });
 
-  describe('Data Cleanup and Management', () {
-    it('should clear history and alerts properly', () {
+  describe('Data Cleanup and Management', () => {
+    it('should clear history and alerts properly', () => {
       // Generate some data
       monitoringService.recordRequest(100, true);
       monitoringService.recordRequest(100, false);
@@ -483,19 +483,19 @@ describe('WebhookMonitoringService', () {
       unsubscribe();
     });
 
-    it('should handle concurrent request recording safely', () {
+    it('should handle concurrent request recording safely', () => {
       // Simulate concurrent request recording
       const promises = [];
 
       for (let i = 0; i < 100; i++) {
         promises.push(
-          Promise.resolve().then(() {
+          Promise.resolve().then(() => {
             monitoringService.recordRequest(100 + i, i % 10 !== 0);
           })
         );
       }
 
-      return Promise.all(promises).then(() {
+      return Promise.all(promises).then(() => {
         const metrics = monitoringService.getCurrentMetrics();
         expect(metrics.totalRequests).toBe(100);
         expect(metrics.successfulRequests).toBe(90); // 90% success rate
@@ -504,8 +504,8 @@ describe('WebhookMonitoringService', () {
     });
   });
 
-  describe('Singleton Instance', () {
-    it('should provide working singleton instance', () {
+  describe('Singleton Instance', () => {
+    it('should provide working singleton instance', () => {
       expect(webhookMonitoringService).toBeInstanceOf(WebhookMonitoringService);
 
       webhookMonitoringService.recordRequest(100, true);
@@ -516,7 +516,7 @@ describe('WebhookMonitoringService', () {
       webhookMonitoringService.clearHistory();
     });
 
-    it('should maintain state across singleton access', () {
+    it('should maintain state across singleton access', () => {
       webhookMonitoringService.recordRequest(150, true);
 
       // Access singleton again

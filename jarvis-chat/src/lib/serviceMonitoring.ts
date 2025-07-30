@@ -573,7 +573,7 @@ class ServiceMonitoringService {
   private startHealthCheckTimer(): void {
     if (!this.config.enabled) return;
 
-    this.healthCheckTimer = setInterval(() {
+    this.healthCheckTimer = setInterval(() => {
       this.performHealthChecks();
     }, this.config.healthCheckInterval);
   }
@@ -618,7 +618,7 @@ class ServiceMonitoringService {
 
   private setupCleanupTimer(): void {
     // Clean up old data every hour
-    setInterval(() {
+    setInterval(() => {
       this.cleanupOldData();
     }, 60 * 60 * 1000);
   }
@@ -737,7 +737,7 @@ class ServiceMonitoringService {
     const slowCalls = calls.filter(call => call.responseTime > this.config.alerting.responseTimeThreshold).length;
 
     // Top errors
-    const errorCounts = calls.filter(call => !call.success && call.error).reduce((acc, call) {
+    const errorCounts = calls.filter(call => !call.success && call.error).reduce((acc, call) => {
       const error = call.error!;
       acc[error] = (acc[error] || 0) + 1;
       return acc;
@@ -749,7 +749,7 @@ class ServiceMonitoringService {
       .slice(0, 10);
 
     // Response time distribution
-    const responseTimeDistribution = calls.reduce((acc, call) {
+    const responseTimeDistribution = calls.reduce((acc, call) => {
       const bucket = call.responseTime < 100 ? '<100ms' :
                     call.responseTime < 500 ? '100-500ms' :
                     call.responseTime < 1000 ? '500ms-1s' :

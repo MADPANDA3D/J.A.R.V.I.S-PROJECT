@@ -817,7 +817,7 @@ class BugAssignmentSystem {
 
       rule.conditions.forEach(condition => {
         if (condition.type === 'time_since_assignment') {
-          const timer = setTimeout(() {
+          const timer = setTimeout(() => {
             this.handleEscalation(bugId, rule);
           }, condition.threshold * 60 * 1000); // Convert minutes to milliseconds
 

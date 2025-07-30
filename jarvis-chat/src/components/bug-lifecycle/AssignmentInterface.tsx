@@ -64,11 +64,11 @@ export function AssignmentInterface({
   const [roleFilter, setRoleFilter] = useState<string>('all');
   const [availabilityFilter, setAvailabilityFilter] = useState<string>('all');
 
-  useEffect(() {
+  useEffect(() => {
     loadData();
   }, [bugId, loadData]);
 
-  const loadData = useCallback(async () {
+  const loadData = useCallback(async () => {
     try {
       // Load recommendations
       if (bugReport) {
@@ -93,7 +93,7 @@ export function AssignmentInterface({
     }
   }, [bugReport, toast]);
 
-  const handleAssignment = async () {
+  const handleAssignment = async () => {
     if (!selectedAssignee) {
       toast({
         title: "Error",
@@ -142,7 +142,7 @@ export function AssignmentInterface({
     }
   };
 
-  const handleAutoAssignment = async () {
+  const handleAutoAssignment = async () => {
     setIsAssigning(true);
     try {
       const assignedTo = await bugAssignmentSystem.autoAssignBug(bugId);
@@ -337,7 +337,7 @@ export function AssignmentInterface({
         <CardContent>
           <ScrollArea className="h-64">
             <div className="space-y-3">
-              {workloadMetrics.map((metrics) {
+              {workloadMetrics.map((metrics) => {
                 const member = teamMembers.find(m => m.id === metrics.userId);
                 if (!member) return null;
 
@@ -447,7 +447,7 @@ export function AssignmentInterface({
             {/* Team Members List */}
             <ScrollArea className="h-64 border rounded-md p-2">
               <div className="space-y-2">
-                {filteredTeamMembers.map((member) {
+                {filteredTeamMembers.map((member) => {
                   const metrics = workloadMetrics.find(m => m.userId === member.id);
                   const isSelected = selectedAssignee === member.id;
 
@@ -552,7 +552,7 @@ export function AssignmentInterface({
           <TabsContent value="recommendations" className="mt-4 space-y-4">
             {recommendations.length > 0 ? (
               <div className="space-y-3">
-                {recommendations.map((rec) {
+                {recommendations.map((rec) => {
                   const isSelected = selectedAssignee === rec.userId;
                   
                   return (

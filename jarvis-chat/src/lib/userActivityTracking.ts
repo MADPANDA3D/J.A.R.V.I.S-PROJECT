@@ -230,7 +230,7 @@ class UserActivityTrackingService {
     this.websocket.reconnectAttempts++;
     const delay = this.websocket.reconnectDelay * Math.pow(2, this.websocket.reconnectAttempts - 1);
 
-    setTimeout(() {
+    setTimeout(() => {
       centralizedLogging.info(
         'activity-tracking',
         'system',
@@ -535,7 +535,7 @@ class UserActivityTrackingService {
         const obj = value as Record<string, unknown>;
         const sanitizedObj: Record<string, unknown> = {};
         
-        Object.entries(obj).forEach(([key, val]) {
+        Object.entries(obj).forEach(([key, val]) => {
           const lowerKey = key.toLowerCase();
           if (sensitiveKeys.some(sensitive => lowerKey.includes(sensitive))) {
             sanitizedObj[key] = '[REDACTED]';
@@ -550,7 +550,7 @@ class UserActivityTrackingService {
       return value;
     };
 
-    Object.entries(sanitized).forEach(([key, value]) {
+    Object.entries(sanitized).forEach(([key, value]) => {
       const lowerKey = key.toLowerCase();
       if (sensitiveKeys.some(sensitive => lowerKey.includes(sensitive))) {
         sanitized[key] = '[REDACTED]';
@@ -658,7 +658,7 @@ class UserActivityTrackingService {
   }
 
   private startFlushTimer(): void {
-    this.flushTimer = setInterval(() {
+    this.flushTimer = setInterval(() => {
       this.flushActivities();
     }, this.config.flushInterval);
   }
@@ -688,7 +688,7 @@ class UserActivityTrackingService {
   }
 
   private startHeartbeat(): void {
-    this.heartbeatTimer = setInterval(() {
+    this.heartbeatTimer = setInterval(() => {
       if (this.websocket.isConnected) {
         this.sendWebSocketMessage({
           type: 'heartbeat',
@@ -702,7 +702,7 @@ class UserActivityTrackingService {
 
   private setupCleanupTimer(): void {
     // Clean up inactive sessions every 5 minutes
-    setInterval(() {
+    setInterval(() => {
       this.cleanupInactiveSessions();
     }, 5 * 60 * 1000);
   }
@@ -804,12 +804,12 @@ class UserActivityTrackingService {
       new Date(a.timestamp).getTime() > cutoff
     );
 
-    const eventTypeCounts = recentActivities.reduce((acc, activity) {
+    const eventTypeCounts = recentActivities.reduce((acc, activity) => {
       acc[activity.eventType] = (acc[activity.eventType] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
-    const pageCounts = recentActivities.reduce((acc, activity) {
+    const pageCounts = recentActivities.reduce((acc, activity) => {
       acc[activity.url] = (acc[activity.url] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);

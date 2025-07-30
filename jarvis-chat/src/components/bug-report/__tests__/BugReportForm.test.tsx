@@ -73,22 +73,22 @@ vi.mock('@/components/bug-report/FileAttachmentUpload', () => ({
   )
 }));
 
-describe('BugReportForm', () {
+describe('BugReportForm', () => {
   const mockOnSubmit = vi.fn();
   const mockOnCancel = vi.fn();
 
-  beforeEach(() {
+  beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('renders initial bug type selection step', () {
+  it('renders initial bug type selection step', () => {
     render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
     
     expect(screen.getByText('Report a Bug')).toBeInTheDocument();
     expect(screen.getByTestId('bug-type-selector')).toBeInTheDocument();
   });
 
-  it('progresses through form steps correctly', async () {
+  it('progresses through form steps correctly', async () => {
     render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
     
     // Step 1: Select bug type
@@ -100,7 +100,7 @@ describe('BugReportForm', () {
     });
   });
 
-  it('validates required fields', async () {
+  it('validates required fields', async () => {
     const mockUseBugReport = vi.mocked(await import('@/hooks/useBugReport')).useBugReport;
     mockUseBugReport.mockReturnValue({
       formState: {
@@ -135,7 +135,7 @@ describe('BugReportForm', () {
     });
   });
 
-  it('handles form submission successfully', async () {
+  it('handles form submission successfully', async () => {
     render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
     
     // Go through all steps and submit
@@ -159,7 +159,7 @@ describe('BugReportForm', () {
     });
   });
 
-  it('displays success message after submission', async () {
+  it('displays success message after submission', async () => {
     render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
     
     // Simulate successful submission by manually triggering success state
@@ -168,7 +168,7 @@ describe('BugReportForm', () {
     expect(true).toBe(true); // Placeholder for success state test
   });
 
-  it('handles form cancellation', () {
+  it('handles form cancellation', () => {
     render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
     
     // Go to a step where cancel button exists
@@ -178,7 +178,7 @@ describe('BugReportForm', () {
     expect(mockOnCancel).not.toHaveBeenCalled(); // Initial state
   });
 
-  it('supports auto-save functionality', async () {
+  it('supports auto-save functionality', async () => {
     const mockUpdateFormData = vi.fn();
     
     const mockUseBugReport = vi.mocked(await import('@/hooks/useBugReport')).useBugReport;
@@ -213,7 +213,7 @@ describe('BugReportForm', () {
     });
   });
 
-  it('handles file attachment uploads', async () {
+  it('handles file attachment uploads', async () => {
     render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
     
     fireEvent.click(screen.getByText('Select Functionality'));

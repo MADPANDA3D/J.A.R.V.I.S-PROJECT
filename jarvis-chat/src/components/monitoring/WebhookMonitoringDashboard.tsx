@@ -28,8 +28,8 @@ export const WebhookMonitoringDashboard: React.FC = () {
 
 
   // Effect to fetch historical data when tab is active or time range changes
-  useEffect(() {
-    const fetchHistoricalData = async () {
+  useEffect(() => {
+    const fetchHistoricalData = async () => {
       try {
         const response = await fetch(`/webhook/analytics/historical?timeRange=${timeRange}&format=detailed`);
         if (response.ok) {

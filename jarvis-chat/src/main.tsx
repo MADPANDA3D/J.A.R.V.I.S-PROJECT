@@ -44,7 +44,7 @@ if ('serviceWorker' in navigator) {
 }
 
 // Initialize centralized logging
-const initializeLogging = async () {
+const initializeLogging = async () => {
   try {
     const loggingConfig = getLoggingConfig();
     const validation = validateLoggingConfig(loggingConfig);

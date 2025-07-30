@@ -401,7 +401,7 @@ class AlertingSystemService {
   }
 
   private startEvaluation(): void {
-    this.evaluationTimer = setInterval(() {
+    this.evaluationTimer = setInterval(() => {
       this.evaluateRules();
     }, this.config.evaluationInterval);
 
@@ -647,7 +647,7 @@ class AlertingSystemService {
 
   private getHighestSeverity(severities: AlertSeverity[]): AlertSeverity {
     const severityOrder: AlertSeverity[] = ['info', 'warning', 'critical', 'emergency'];
-    return severities.reduce((highest, current) {
+    return severities.reduce((highest, current) => {
       return severityOrder.indexOf(current) > severityOrder.indexOf(highest) ? current : highest;
     });
   }
@@ -974,7 +974,7 @@ class AlertingSystemService {
   }
 
   private startEscalationProcessor(): void {
-    this.escalationTimer = setInterval(() {
+    this.escalationTimer = setInterval(() => {
       this.processEscalations();
     }, 60000); // Check every minute
   }
@@ -1092,7 +1092,7 @@ class AlertingSystemService {
 
   private setupCleanupTimer(): void {
     // Clean up old data every hour
-    setInterval(() {
+    setInterval(() => {
       this.cleanupOldData();
     }, 60 * 60 * 1000);
   }

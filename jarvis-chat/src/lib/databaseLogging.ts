@@ -69,7 +69,7 @@ class DatabaseLoggingService {
 
   private setupPerformanceMonitoring(): void {
     // Clean up old logs every 5 minutes
-    setInterval(() {
+    setInterval(() => {
       this.cleanupOldLogs();
     }, 5 * 60 * 1000);
   }
@@ -338,7 +338,7 @@ class DatabaseLoggingService {
     const errorRate = totalQueries > 0 ? (errorQueries / totalQueries) * 100 : 0;
 
     // Calculate top slow tables
-    const tablePerformance = recentLogs.reduce((acc, log) {
+    const tablePerformance = recentLogs.reduce((acc, log) => {
       if (!acc[log.table]) {
         acc[log.table] = { totalTime: 0, count: 0 };
       }
@@ -357,7 +357,7 @@ class DatabaseLoggingService {
       .slice(0, 10);
 
     // Calculate query distribution
-    const queryDistribution = recentLogs.reduce((acc, log) {
+    const queryDistribution = recentLogs.reduce((acc, log) => {
       acc[log.operation] = (acc[log.operation] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);

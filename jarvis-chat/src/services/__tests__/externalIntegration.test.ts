@@ -29,11 +29,11 @@ app.post('/api/integrations/datadog', externalIntegrationService.integrateWithDa
 app.get('/api/integrations/:id/status', externalIntegrationService.getIntegrationStatus.bind(externalIntegrationService));
 app.get('/api/integrations', externalIntegrationService.listIntegrations.bind(externalIntegrationService));
 
-describe('External Integration Service', () {
+describe('External Integration Service', () => {
   let validApiKey: string;
   let adminApiKey: string;
 
-  beforeAll(async () {
+  beforeAll(async () => {
     // Create test API keys
     const userKey = await apiSecurityService.createAPIKey('test-user', 'Test User Key', {
       read: true,
@@ -65,12 +65,12 @@ describe('External Integration Service', () {
     adminApiKey = adminKey.apiKey!.key;
   });
 
-  beforeEach(() {
+  beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('POST /api/integrations/webhooks', () {
-    it('should create webhook configuration with admin permissions', async () {
+  describe('POST /api/integrations/webhooks', () => {
+    it('should create webhook configuration with admin permissions', async () => {
       const webhookConfig = {
         name: 'Test Webhook',
         url: 'https://example.com/webhook',
@@ -109,7 +109,7 @@ describe('External Integration Service', () {
       expect(response.body.webhook.isActive).toBe(true);
     });
 
-    it('should return 401 for missing admin permissions', async () {
+    it('should return 401 for missing admin permissions', async () => {
       const response = await request(app)
         .post('/api/integrations/webhooks')
         .set('Authorization', `Bearer ${validApiKey}`)
@@ -123,7 +123,7 @@ describe('External Integration Service', () {
       expect(response.body).toHaveProperty('error', 'Admin permission required');
     });
 
-    it('should validate webhook configuration', async () {
+    it('should validate webhook configuration', async () => {
       const invalidConfigs = [
         {
           // Missing name
@@ -158,7 +158,7 @@ describe('External Integration Service', () {
       }
     });
 
-    it('should support different authentication types', async () {
+    it('should support different authentication types', async () => {
       const authTypes = [
         {
           type: 'none'
@@ -193,7 +193,7 @@ describe('External Integration Service', () {
       }
     });
 
-    it('should support event filtering', async () {
+    it('should support event filtering', async () => {
       const response = await request(app)
         .post('/api/integrations/webhooks')
         .set('Authorization', `Bearer ${adminApiKey}`)
@@ -219,8 +219,8 @@ describe('External Integration Service', () {
     });
   });
 
-  describe('POST /api/integrations/claude-code/analyze/:bugId', () {
-    beforeEach(() {
+  describe('POST /api/integrations/claude-code/analyze/:bugId', () => {
+    beforeEach(() => {
       // Mock bug data
       vi.mocked(bugReportOperations.getBugReportById).mockResolvedValue({
         data: {
@@ -236,7 +236,7 @@ describe('External Integration Service', () {
       });
     });
 
-    it('should perform pattern analysis', async () {
+    it('should perform pattern analysis', async () => {
       const response = await request(app)
         .post('/api/integrations/claude-code/analyze/bug-123')
         .set('Authorization', `Bearer ${validApiKey}`)
@@ -266,7 +266,7 @@ describe('External Integration Service', () {
       expect(Array.isArray(result.recommendations)).toBe(true);
     });
 
-    it('should perform resolution analysis', async () {
+    it('should perform resolution analysis', async () => {
       const response = await request(app)
         .post('/api/integrations/claude-code/analyze/bug-123')
         .set('Authorization', `Bearer ${validApiKey}`)
@@ -280,7 +280,7 @@ describe('External Integration Service', () {
       expect(response.body.result).toHaveProperty('confidence');
     });
 
-    it('should perform severity classification', async () {
+    it('should perform severity classification', async () => {
       const response = await request(app)
         .post('/api/integrations/claude-code/analyze/bug-123')
         .set('Authorization', `Bearer ${validApiKey}`)
@@ -295,7 +295,7 @@ describe('External Integration Service', () {
       expect(response.body.result).toHaveProperty('reasoning');
     });
 
-    it('should perform duplicate detection', async () {
+    it('should perform duplicate detection', async () => {
       const response = await request(app)
         .post('/api/integrations/claude-code/analyze/bug-123')
         .set('Authorization', `Bearer ${validApiKey}`)
@@ -310,7 +310,7 @@ describe('External Integration Service', () {
       expect(response.body.result).toHaveProperty('potentialDuplicates');
     });
 
-    it('should perform user impact analysis', async () {
+    it('should perform user impact analysis', async () => {
       const response = await request(app)
         .post('/api/integrations/claude-code/analyze/bug-123')
         .set('Authorization', `Bearer ${validApiKey}`)
@@ -325,7 +325,7 @@ describe('External Integration Service', () {
       expect(response.body.result).toHaveProperty('urgencyScore');
     });
 
-    it('should return 400 for invalid analysis type', async () {
+    it('should return 400 for invalid analysis type', async () => {
       const response = await request(app)
         .post('/api/integrations/claude-code/analyze/bug-123')
         .set('Authorization', `Bearer ${validApiKey}`)
@@ -337,7 +337,7 @@ describe('External Integration Service', () {
       expect(response.body).toHaveProperty('error', 'Invalid analysis type');
     });
 
-    it('should return 404 for non-existent bug', async () {
+    it('should return 404 for non-existent bug', async () => {
       vi.mocked(bugReportOperations.getBugReportById).mockResolvedValue({
         data: null,
         error: null
@@ -353,7 +353,7 @@ describe('External Integration Service', () {
       expect(response.status).toBe(500);
     });
 
-    it('should support analysis context options', async () {
+    it('should support analysis context options', async () => {
       const response = await request(app)
         .post('/api/integrations/claude-code/analyze/bug-123')
         .set('Authorization', `Bearer ${validApiKey}`)
@@ -375,8 +375,8 @@ describe('External Integration Service', () {
     });
   });
 
-  describe('POST /api/integrations/sentry', () {
-    it('should setup Sentry integration with admin permissions', async () {
+  describe('POST /api/integrations/sentry', () => {
+    it('should setup Sentry integration with admin permissions', async () => {
       const response = await request(app)
         .post('/api/integrations/sentry')
         .set('Authorization', `Bearer ${adminApiKey}`)
@@ -394,7 +394,7 @@ describe('External Integration Service', () {
       expect(response.body).toHaveProperty('autoForwardEnabled', true);
     });
 
-    it('should return 401 for missing admin permissions', async () {
+    it('should return 401 for missing admin permissions', async () => {
       const response = await request(app)
         .post('/api/integrations/sentry')
         .set('Authorization', `Bearer ${validApiKey}`)
@@ -407,7 +407,7 @@ describe('External Integration Service', () {
       expect(response.body).toHaveProperty('error', 'Admin permission required');
     });
 
-    it('should validate Sentry configuration', async () {
+    it('should validate Sentry configuration', async () => {
       const invalidConfigs = [
         {
           // Missing DSN
@@ -430,7 +430,7 @@ describe('External Integration Service', () {
       }
     });
 
-    it('should handle connection test failures', async () {
+    it('should handle connection test failures', async () => {
       // This would be mocked to simulate connection failure in real tests
       const response = await request(app)
         .post('/api/integrations/sentry')
@@ -445,8 +445,8 @@ describe('External Integration Service', () {
     });
   });
 
-  describe('POST /api/integrations/datadog', () {
-    it('should setup DataDog integration with admin permissions', async () {
+  describe('POST /api/integrations/datadog', () => {
+    it('should setup DataDog integration with admin permissions', async () => {
       const response = await request(app)
         .post('/api/integrations/datadog')
         .set('Authorization', `Bearer ${adminApiKey}`)
@@ -466,7 +466,7 @@ describe('External Integration Service', () {
       expect(response.body).toHaveProperty('autoForwardEnabled', true);
     });
 
-    it('should return 401 for missing admin permissions', async () {
+    it('should return 401 for missing admin permissions', async () => {
       const response = await request(app)
         .post('/api/integrations/datadog')
         .set('Authorization', `Bearer ${validApiKey}`)
@@ -479,7 +479,7 @@ describe('External Integration Service', () {
       expect(response.body).toHaveProperty('error', 'Admin permission required');
     });
 
-    it('should validate DataDog configuration', async () {
+    it('should validate DataDog configuration', async () => {
       const invalidConfigs = [
         {
           // Missing API key
@@ -502,7 +502,7 @@ describe('External Integration Service', () {
       }
     });
 
-    it('should support different DataDog sites', async () {
+    it('should support different DataDog sites', async () => {
       const sites = ['datadoghq.com', 'datadoghq.eu', 'us3.datadoghq.com'];
 
       for (const site of sites) {
@@ -521,8 +521,8 @@ describe('External Integration Service', () {
     });
   });
 
-  describe('GET /api/integrations/:id/status', () {
-    it('should return integration status', async () {
+  describe('GET /api/integrations/:id/status', () => {
+    it('should return integration status', async () => {
       // First create an integration
       const createResponse = await request(app)
         .post('/api/integrations/webhooks')
@@ -550,7 +550,7 @@ describe('External Integration Service', () {
       expect(statusResponse.body).toHaveProperty('healthCheck');
     });
 
-    it('should return 404 for non-existent integration', async () {
+    it('should return 404 for non-existent integration', async () => {
       const response = await request(app)
         .get('/api/integrations/non-existent/status')
         .set('Authorization', `Bearer ${validApiKey}`);
@@ -560,8 +560,8 @@ describe('External Integration Service', () {
     });
   });
 
-  describe('GET /api/integrations', () {
-    it('should list all integrations with summary', async () {
+  describe('GET /api/integrations', () => {
+    it('should list all integrations with summary', async () => {
       // Create a few integrations first
       await request(app)
         .post('/api/integrations/webhooks')
@@ -600,8 +600,8 @@ describe('External Integration Service', () {
     });
   });
 
-  describe('Webhook Delivery Service', () {
-    it('should format bug data for Sentry correctly', () {
+  describe('Webhook Delivery Service', () => {
+    it('should format bug data for Sentry correctly', () => {
       const mockBug = {
         id: 'bug-123',
         title: 'Authentication Error',
@@ -636,7 +636,7 @@ describe('External Integration Service', () {
       expect(sentryData.contexts.user).toHaveProperty('id', 'user-123');
     });
 
-    it('should format bug data for DataDog correctly', () {
+    it('should format bug data for DataDog correctly', () => {
       const mockBug = {
         id: 'bug-123',
         title: 'Performance Issue',
@@ -664,7 +664,7 @@ describe('External Integration Service', () {
       expect(dataDogData.tags).toContain('assigned_to:frontend-team');
     });
 
-    it('should format bug data for Slack correctly', () {
+    it('should format bug data for Slack correctly', () => {
       const mockBug = {
         id: 'bug-123',
         title: 'UI Bug',
@@ -700,7 +700,7 @@ describe('External Integration Service', () {
       expect(assignedField?.value).toBe('ui-team');
     });
 
-    it('should get delivery statistics', () {
+    it('should get delivery statistics', () => {
       const stats = webhookDeliveryService.getDeliveryStats();
 
       expect(stats).toHaveProperty('totalDeliveries');
@@ -721,8 +721,8 @@ describe('External Integration Service', () {
     });
   });
 
-  describe('Error Handling', () {
-    it('should handle malformed webhook configurations', async () {
+  describe('Error Handling', () => {
+    it('should handle malformed webhook configurations', async () => {
       const response = await request(app)
         .post('/api/integrations/webhooks')
         .set('Authorization', `Bearer ${adminApiKey}`)
@@ -731,7 +731,7 @@ describe('External Integration Service', () {
       expect(response.status).toBe(400);
     });
 
-    it('should handle service unavailability gracefully', async () {
+    it('should handle service unavailability gracefully', async () => {
       // Mock a service error
       vi.mocked(bugReportOperations.getBugReportById).mockRejectedValue(
         new Error('Service unavailable')
@@ -748,7 +748,7 @@ describe('External Integration Service', () {
     });
   });
 
-  afterAll(async () {
+  afterAll(async () => {
     // Cleanup test data
   });
 });

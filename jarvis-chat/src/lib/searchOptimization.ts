@@ -309,7 +309,7 @@ export function createDebouncedSearch<T extends unknown[], R>(
         clearTimeout(timeoutId);
       }
 
-      timeoutId = setTimeout(async () {
+      timeoutId = setTimeout(async () => {
         const resolvers = [...pendingResolvers];
         pendingResolvers = [];
 
@@ -344,7 +344,7 @@ export class BatchQueryOptimizer {
         clearTimeout(this.batchTimeout);
       }
 
-      this.batchTimeout = setTimeout(() {
+      this.batchTimeout = setTimeout(() => {
         this.executeBatch();
       }, this.batchDelayMs);
     });
@@ -366,7 +366,7 @@ export class BatchQueryOptimizer {
         // Execute grouped queries (implementation would depend on actual database client)
         const results = await this.executeQueryGroup(group);
         
-        group.forEach((item, index) {
+        group.forEach((item, index) => {
           item.resolve(results[index]);
         });
       } catch (error) {

@@ -1,8 +1,8 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { Avatar } from '../Avatar';
 
-describe('Avatar', () {
-  it('renders image when provided valid src', async () {
+describe('Avatar', () => {
+  it('renders image when provided valid src', async () => {
     render(<Avatar src="https://example.com/image.jpg" alt="Test Avatar" />);
     
     const img = screen.getByRole('img');
@@ -10,7 +10,7 @@ describe('Avatar', () {
     expect(img).toHaveAttribute('alt', 'Test Avatar');
   });
 
-  it('shows loading state initially', () {
+  it('shows loading state initially', () => {
     render(<Avatar src="https://example.com/image.jpg" alt="Test Avatar" />);
     
     // Loading placeholder should be present
@@ -18,7 +18,7 @@ describe('Avatar', () {
     expect(loadingDiv).toBeInTheDocument();
   });
 
-  it('shows initials fallback on error', async () {
+  it('shows initials fallback on error', async () => {
     render(<Avatar src="invalid-url" alt="John Doe" />);
     
     // Simulate image error
@@ -30,7 +30,7 @@ describe('Avatar', () {
     });
   });
 
-  it('applies correct size classes', () {
+  it('applies correct size classes', () => {
     const { rerender } = render(<Avatar src="test.jpg" alt="Test" size="sm" />);
     expect(document.querySelector('.w-12')).toBeInTheDocument();
 
@@ -38,7 +38,7 @@ describe('Avatar', () {
     expect(document.querySelector('.w-24')).toBeInTheDocument();
   });
 
-  it('handles custom className', () {
+  it('handles custom className', () => {
     render(<Avatar src="test.jpg" alt="Test" className="custom-class" />);
     expect(document.querySelector('.custom-class')).toBeInTheDocument();
   });

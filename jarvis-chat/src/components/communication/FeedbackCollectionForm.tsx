@@ -107,11 +107,11 @@ export function FeedbackCollectionForm({
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() {
+  useEffect(() => {
     loadFeedbackData();
   }, [feedbackId]);
 
-  const loadFeedbackData = async () {
+  const loadFeedbackData = async () => {
     try {
       setIsLoading(true);
       
@@ -208,7 +208,7 @@ export function FeedbackCollectionForm({
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!validateForm()) {
@@ -225,7 +225,7 @@ export function FeedbackCollectionForm({
       // Convert form data to feedback format
       const feedbackData: Partial<BugFeedback> = {};
       
-      Object.entries(formData).forEach(([key, value]) {
+      Object.entries(formData).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== '') {
           (feedbackData as any)[key] = value;
         }

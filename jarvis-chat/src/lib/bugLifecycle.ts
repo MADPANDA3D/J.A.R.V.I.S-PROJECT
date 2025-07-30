@@ -542,7 +542,7 @@ class BugLifecycleService {
 
     state.automaticTransitions.forEach(transition => {
       if (transition.delay && transition.delay > 0) {
-        const timer = setTimeout(() {
+        const timer = setTimeout(() => {
           this.handleAutomaticTransition(bugId, transition);
         }, transition.delay);
 

@@ -22,7 +22,7 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ onMenuClick, className }) {
   const { user, signOut, loading } = useAuth();
 
-  const handleSignOut = async () {
+  const handleSignOut = async () => {
     try {
       screenReader.announce({
         message: 'Signing out...',

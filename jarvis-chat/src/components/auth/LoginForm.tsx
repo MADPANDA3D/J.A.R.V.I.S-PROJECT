@@ -39,7 +39,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     },
   });
 
-  const onSubmit = async (data: LoginFormData) {
+  const onSubmit = async (data: LoginFormData) => {
     try {
       setError(null);
       await signIn(data.email, data.password);

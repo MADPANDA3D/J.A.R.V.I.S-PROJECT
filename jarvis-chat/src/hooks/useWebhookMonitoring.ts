@@ -115,7 +115,7 @@ export const useWebhookMonitoring = (options: UseWebhookMonitoringOptions = {}) 
     lastUpdated: null
   });
 
-  const fetchMetrics = useCallback(async () {
+  const fetchMetrics = useCallback(async () => {
     try {
       setState(prev => ({ ...prev, loading: true, error: null }));
 
@@ -257,15 +257,15 @@ export const useWebhookMonitoring = (options: UseWebhookMonitoringOptions = {}) 
     }
   }, [webhookServerUrl]);
 
-  const refresh = useCallback(() {
+  const refresh = useCallback(() => {
     return fetchMetrics();
   }, [fetchMetrics]);
 
   // Auto-refresh effect
-  useEffect(() {
+  useEffect(() => {
     if (!autoRefresh) return;
 
-    const interval = setInterval(() {
+    const interval = setInterval(() => {
       fetchMetrics().catch(error => {
         console.error('Auto-refresh failed:', error);
       });
@@ -275,7 +275,7 @@ export const useWebhookMonitoring = (options: UseWebhookMonitoringOptions = {}) 
   }, [fetchMetrics, refreshInterval, autoRefresh]);
 
   // Initial fetch
-  useEffect(() {
+  useEffect(() => {
     fetchMetrics().catch(error => {
       console.error('Initial fetch failed:', error);
     });

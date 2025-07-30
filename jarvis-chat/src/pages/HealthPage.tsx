@@ -18,7 +18,7 @@ export const HealthPage: React.FC = () {
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-  const runHealthCheck = async () {
+  const runHealthCheck = async () => {
     setIsLoading(true);
     try {
       const result = await performHealthCheck();
@@ -31,7 +31,7 @@ export const HealthPage: React.FC = () {
     }
   };
 
-  useEffect(() {
+  useEffect(() => {
     runHealthCheck();
   }, []);
 

@@ -8,11 +8,11 @@ vi.mock('@/hooks/usePWAInstall');
 
 const mockUsePWAInstall = usePWAInstall as ReturnType<typeof vi.fn>;
 
-describe('InstallPrompt', () {
+describe('InstallPrompt', () => {
   const mockInstall = vi.fn();
   const mockClearError = vi.fn();
 
-  beforeEach(() {
+  beforeEach(() => {
     mockUsePWAInstall.mockReturnValue({
       canInstall: true,
       isInstalling: false,
@@ -28,7 +28,7 @@ describe('InstallPrompt', () {
     vi.clearAllMocks();
   });
 
-  it('should not render when canInstall is false', () {
+  it('should not render when canInstall is false', () => {
     mockUsePWAInstall.mockReturnValue({
       canInstall: false,
       isInstalling: false,
@@ -45,7 +45,7 @@ describe('InstallPrompt', () {
     expect(screen.queryByText('Install JARVIS Chat')).not.toBeInTheDocument();
   });
 
-  it('should render install prompt when canInstall is true', async () {
+  it('should render install prompt when canInstall is true', async () => {
     render(<InstallPrompt showDelay={0} />);
 
     await waitFor(() {
@@ -60,7 +60,7 @@ describe('InstallPrompt', () {
     expect(screen.getByText('Install')).toBeInTheDocument();
   });
 
-  it('should call install when install button is clicked', async () {
+  it('should call install when install button is clicked', async () => {
     mockInstall.mockResolvedValue(true);
 
     render(<InstallPrompt showDelay={0} />);
@@ -73,7 +73,7 @@ describe('InstallPrompt', () {
     expect(mockInstall).toHaveBeenCalled();
   });
 
-  it('should show installing state when isInstalling is true', async () {
+  it('should show installing state when isInstalling is true', async () => {
     mockUsePWAInstall.mockReturnValue({
       canInstall: true,
       isInstalling: true,
@@ -93,7 +93,7 @@ describe('InstallPrompt', () {
     });
   });
 
-  it('should display error message when installError is present', async () {
+  it('should display error message when installError is present', async () => {
     const errorMessage = 'Installation failed';
     mockUsePWAInstall.mockReturnValue({
       canInstall: true,
@@ -114,7 +114,7 @@ describe('InstallPrompt', () {
     });
   });
 
-  it('should dismiss prompt when X button is clicked', async () {
+  it('should dismiss prompt when X button is clicked', async () => {
     render(<InstallPrompt showDelay={0} />);
 
     await waitFor(() {
@@ -129,7 +129,7 @@ describe('InstallPrompt', () {
     });
   });
 
-  it('should respect showDelay prop', async () {
+  it('should respect showDelay prop', async () => {
     render(<InstallPrompt showDelay={100} />);
 
     // Should not be visible immediately
@@ -144,7 +144,7 @@ describe('InstallPrompt', () {
     );
   });
 
-  it('should hide prompt after successful installation', async () {
+  it('should hide prompt after successful installation', async () => {
     mockInstall.mockResolvedValue(true);
 
     render(<InstallPrompt showDelay={0} />);

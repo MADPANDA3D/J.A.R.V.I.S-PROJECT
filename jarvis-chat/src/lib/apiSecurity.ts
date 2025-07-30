@@ -616,12 +616,12 @@ class APISecurityService {
 
   private startCleanupTasks(): void {
     // Clean up expired rate limit buckets every 5 minutes
-    setInterval(() {
+    setInterval(() => {
       this.cleanupExpiredBuckets();
     }, 5 * 60 * 1000);
 
     // Clean up suspicious activity records every hour
-    setInterval(() {
+    setInterval(() => {
       this.suspiciousActivity.clear();
     }, 60 * 60 * 1000);
   }

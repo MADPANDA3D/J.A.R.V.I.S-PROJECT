@@ -159,7 +159,7 @@ class AdvancedErrorTracker {
     // Network error recovery
     this.recoveryStrategies.set('NetworkError', {
       errorType: 'NetworkError',
-      recoveryAction: async () {
+      recoveryAction: async () => {
         // Attempt to reconnect or switch to offline mode
         try {
           const response = await fetch('/api/health');
@@ -178,7 +178,7 @@ class AdvancedErrorTracker {
     // Database connection recovery
     this.recoveryStrategies.set('DatabaseError', {
       errorType: 'DatabaseError',
-      recoveryAction: async () {
+      recoveryAction: async () => {
         // Clear connection pools and retry
         try {
           // This would typically involve reconnecting to Supabase
@@ -198,7 +198,7 @@ class AdvancedErrorTracker {
     // Authentication error recovery
     this.recoveryStrategies.set('AuthenticationError', {
       errorType: 'AuthenticationError',
-      recoveryAction: async () {
+      recoveryAction: async () => {
         // Attempt to refresh authentication
         try {
           const { error } = await import('./supabase').then(m =>
@@ -221,7 +221,7 @@ class AdvancedErrorTracker {
     this.isMonitoring = true;
 
     // Check thresholds every 30 seconds
-    this.monitoringInterval = window.setInterval(() {
+    this.monitoringInterval = window.setInterval(() => {
       this.checkThresholds();
       this.detectPatterns();
       this.attemptRecoveries();
@@ -526,7 +526,7 @@ class AdvancedErrorTracker {
   }
 
   private attemptRecoveries(): void {
-    this.recoveryStrategies.forEach(async (recovery, errorType) {
+    this.recoveryStrategies.forEach(async (recovery, errorType) => {
       if (recovery.retryCount >= recovery.maxRetries) return;
 
       const lastAttempt = recovery.lastAttempt || 0;

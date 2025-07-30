@@ -6,10 +6,10 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { WebhookService, WebhookPayload } from '../webhookService';
 
-describe('Real n8n Webhook Integration', () {
+describe('Real n8n Webhook Integration', () => {
   let webhookService: WebhookService;
 
-  beforeEach(() {
+  beforeEach(() => {
     // Use actual webhook configuration from environment
     webhookService = new WebhookService({
       webhookUrl:
@@ -31,7 +31,7 @@ describe('Real n8n Webhook Integration', () {
     });
   });
 
-  it('should successfully send message to real n8n webhook', async () {
+  it('should successfully send message to real n8n webhook', async () => {
     const payload: WebhookPayload = {
       message: 'Hello from JARVIS Chat integration test!',
       userId: 'test_user_123',
@@ -63,7 +63,7 @@ describe('Real n8n Webhook Integration', () {
     console.log('📊 Webhook Metrics:', metrics);
   }, 15000); // 15 second timeout for real network request
 
-  it('should perform health check successfully', async () {
+  it('should perform health check successfully', async () => {
     const healthStatus = await webhookService.healthCheck();
 
     expect(healthStatus.status).toMatch(/healthy|degraded/);
@@ -76,7 +76,7 @@ describe('Real n8n Webhook Integration', () {
     console.log('🏥 Health Check Result:', healthStatus);
   }, 15000);
 
-  it('should handle conversation context properly', async () {
+  it('should handle conversation context properly', async () => {
     const conversationId = `test_conv_${Date.now()}`;
 
     // Send first message
@@ -114,7 +114,7 @@ describe('Real n8n Webhook Integration', () {
     console.log('  Message 2 Response:', response2.response);
   }, 20000);
 
-  it('should demonstrate error recovery and circuit breaker', async () {
+  it('should demonstrate error recovery and circuit breaker', async () => {
     // This test will only run if we want to test error scenarios
     // For now, we'll just verify the service configuration
     const config = webhookService.getConfig();
@@ -133,7 +133,7 @@ describe('Real n8n Webhook Integration', () {
     });
   });
 
-  it('should test different message types and formats', async () {
+  it('should test different message types and formats', async () => {
     const testMessages = [
       'Simple greeting message',
       'Question: What is the weather like today?',

@@ -25,7 +25,7 @@ sw.addEventListener('install', (event: ExtendableEvent) {
         console.log('[SW] Caching app shell');
         return cache.addAll(STATIC_CACHE_FILES);
       })
-      .then(() {
+      .then(() => {
         // Force the waiting service worker to become the active service worker
         return sw.skipWaiting();
       })
@@ -52,7 +52,7 @@ sw.addEventListener('activate', (event: ExtendableEvent) {
             })
         );
       })
-      .then(() {
+      .then(() => {
         // Take control of all clients
         return sw.clients.claim();
       })
@@ -83,7 +83,7 @@ sw.addEventListener('fetch', (event: FetchEvent) {
           }
           return response;
         })
-        .catch(() {
+        .catch(() => {
           // Fallback to cache for API requests
           return caches.match(request);
         })
@@ -120,7 +120,7 @@ sw.addEventListener('fetch', (event: FetchEvent) {
           return response;
         });
       })
-      .catch(() {
+      .catch(() => {
         // Fallback for HTML requests - serve app shell
         if (request.headers.get('accept')?.includes('text/html')) {
           return caches.match('/index.html');

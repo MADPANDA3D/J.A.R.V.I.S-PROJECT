@@ -173,7 +173,7 @@ export function RuntimeErrorMonitor({
   }, [maxErrors]);
 
   // Set up error monitoring
-  useEffect(() {
+  useEffect(() => {
     if (!isMonitoring) return;
 
     // JavaScript errors
@@ -245,7 +245,7 @@ export function RuntimeErrorMonitor({
   }, [isMonitoring, addError]);
 
   // Filter errors
-  useEffect(() {
+  useEffect(() => {
     let filtered = errors;
 
     // Apply type filter

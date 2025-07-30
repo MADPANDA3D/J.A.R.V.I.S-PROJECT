@@ -10,7 +10,7 @@ interface MockBeforeInstallPromptEvent {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
-describe('usePWAInstall', () {
+describe('usePWAInstall', () => {
   let mockEvent: MockBeforeInstallPromptEvent;
 
   // Helper function to dispatch mock beforeinstallprompt event
@@ -37,7 +37,7 @@ describe('usePWAInstall', () {
     window.dispatchEvent(event);
   };
 
-  beforeEach(() {
+  beforeEach(() => {
     // Reset window properties
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
@@ -62,11 +62,11 @@ describe('usePWAInstall', () {
     } as MockBeforeInstallPromptEvent;
   });
 
-  afterEach(() {
+  afterEach(() => {
     vi.clearAllMocks();
   });
 
-  it('should initialize with correct default state', () {
+  it('should initialize with correct default state', () => {
     const { result } = renderHook(() => usePWAInstall());
 
     expect(result.current.isInstallable).toBe(false);
@@ -78,7 +78,7 @@ describe('usePWAInstall', () {
     expect(result.current.isPWASupported).toBe(false); // jsdom doesn't support PushManager
   });
 
-  it('should detect when app is installed in standalone mode', () {
+  it('should detect when app is installed in standalone mode', () => {
     // Mock standalone display mode
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
@@ -99,7 +99,7 @@ describe('usePWAInstall', () {
     expect(result.current.isInstalled).toBe(true);
   });
 
-  it('should handle beforeinstallprompt event', () {
+  it('should handle beforeinstallprompt event', () => {
     const { result } = renderHook(() => usePWAInstall());
 
     act(() {
@@ -111,7 +111,7 @@ describe('usePWAInstall', () {
     expect(result.current.canInstall).toBe(true);
   });
 
-  it('should handle successful installation', async () {
+  it('should handle successful installation', async () => {
     const { result } = renderHook(() => usePWAInstall());
 
     // Trigger beforeinstallprompt
@@ -120,7 +120,7 @@ describe('usePWAInstall', () {
     });
 
     // Install the app
-    await act(async () {
+    await act(async () => {
       const success = await result.current.install();
       expect(success).toBe(true);
     });
@@ -128,7 +128,7 @@ describe('usePWAInstall', () {
     expect(mockEvent.prompt).toHaveBeenCalled();
   });
 
-  it('should handle installation rejection', async () {
+  it('should handle installation rejection', async () => {
     // Mock rejected installation
     mockEvent.userChoice = Promise.resolve({ outcome: 'dismissed' });
 
@@ -138,7 +138,7 @@ describe('usePWAInstall', () {
       dispatchMockInstallPrompt();
     });
 
-    await act(async () {
+    await act(async () => {
       const success = await result.current.install();
       expect(success).toBe(false);
     });
@@ -147,7 +147,7 @@ describe('usePWAInstall', () {
     expect(result.current.installPrompt).toBe(null);
   });
 
-  it('should handle installation error', async () {
+  it('should handle installation error', async () => {
     // Mock installation error
     const errorMessage = 'Installation failed';
     mockEvent.prompt = vi.fn().mockRejectedValue(new Error(errorMessage));
@@ -158,7 +158,7 @@ describe('usePWAInstall', () {
       dispatchMockInstallPrompt();
     });
 
-    await act(async () {
+    await act(async () => {
       const success = await result.current.install();
       expect(success).toBe(false);
     });
@@ -167,7 +167,7 @@ describe('usePWAInstall', () {
     expect(result.current.isInstalling).toBe(false);
   });
 
-  it('should handle appinstalled event', () {
+  it('should handle appinstalled event', () => {
     const { result } = renderHook(() => usePWAInstall());
 
     // First make it installable
@@ -188,7 +188,7 @@ describe('usePWAInstall', () {
     expect(result.current.installPrompt).toBe(null);
   });
 
-  it('should clear error when clearError is called', () {
+  it('should clear error when clearError is called', () => {
     const { result } = renderHook(() => usePWAInstall());
 
     // Set an error state manually (this would normally happen during failed install)
@@ -204,10 +204,10 @@ describe('usePWAInstall', () {
     expect(result.current.installError).toBe(null);
   });
 
-  it('should return false for install when no prompt is available', async () {
+  it('should return false for install when no prompt is available', async () => {
     const { result } = renderHook(() => usePWAInstall());
 
-    await act(async () {
+    await act(async () => {
       const success = await result.current.install();
       expect(success).toBe(false);
     });

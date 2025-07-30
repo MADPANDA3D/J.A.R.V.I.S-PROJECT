@@ -255,7 +255,7 @@ export class WebhookDeliveryVerificationService {
     const maxWaitTime = this.config.deploymentTimeout;
     
     return new Promise((resolve) {
-      const checkInterval = setInterval(async () {
+      const checkInterval = setInterval(async () => {
         const elapsed = Date.now() - startTime;
         
         if (elapsed > maxWaitTime) {
@@ -363,7 +363,7 @@ export class WebhookDeliveryVerificationService {
     this.pendingVerifications.delete(verificationId);
     
     // Keep result for reporting (cleanup after 1 hour)
-    setTimeout(() {
+    setTimeout(() => {
       this.verificationResults.delete(verificationId);
       this.deploymentStatuses.delete(verificationId);
     }, 3600000);
@@ -417,7 +417,7 @@ export class WebhookDeliveryVerificationService {
    */
   private startVerificationMonitoring() {
     // Clean up old pending verifications
-    setInterval(() {
+    setInterval(() => {
       const now = Date.now();
       for (const [id, request] of this.pendingVerifications.entries()) {
         if (now - request.timestamp.getTime() > this.config.verificationTimeout * 2) {

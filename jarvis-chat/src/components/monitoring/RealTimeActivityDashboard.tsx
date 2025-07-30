@@ -58,13 +58,13 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
   const refreshTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize dashboard
-  useEffect(() {
+  useEffect(() => {
     initializeDashboard();
     return () => cleanup();
   }, []);
 
   // Setup auto-refresh
-  useEffect(() {
+  useEffect(() => {
     if (autoRefresh) {
       startAutoRefresh();
     } else {
@@ -74,7 +74,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     return () => stopAutoRefresh();
   }, [autoRefresh, refreshInterval]);
 
-  const initializeDashboard = async () {
+  const initializeDashboard = async () => {
     try {
       setIsLoading(true);
       await refreshData();
@@ -86,7 +86,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     }
   };
 
-  const refreshData = async () {
+  const refreshData = async () => {
     try {
       const [
         performance,
@@ -136,7 +136,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
       websocketRef.current.onclose = () {
         setIsConnected(false);
         // Attempt reconnection after 5 seconds
-        setTimeout(() {
+        setTimeout(() => {
           if (websocketRef.current?.readyState === WebSocket.CLOSED) {
             setupWebSocket();
           }
@@ -204,7 +204,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
   };
 
   const startAutoRefresh = () {
-    refreshTimerRef.current = setInterval(() {
+    refreshTimerRef.current = setInterval(() => {
       refreshData();
     }, refreshInterval);
   };
@@ -468,7 +468,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
         <div className="bg-white rounded-lg shadow p-4 mb-6">
           <h3 className="text-lg font-medium text-gray-900 mb-4">Activity Heatmap</h3>
           <div className="grid grid-cols-12 gap-1">
-            {data.heatmap[0]?.intervals.slice(0, 24).map((interval, index) {
+            {data.heatmap[0]?.intervals.slice(0, 24).map((interval, index) => {
               const intensity = Math.min(interval.concurrentUsers / Math.max(data.heatmap[0]?.peakConcurrency || 1, 1), 1);
               return (
                 <div

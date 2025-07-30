@@ -26,7 +26,7 @@ export const ErrorTrendChart: React.FC<ErrorTrendChartProps> = ({
   className = '',
   timeWindow = 24 // 24 hours
 }) {
-  const chartData = useMemo(() {
+  const chartData = useMemo(() => {
     const now = Date.now();
     const windowStart = now - (timeWindow * 60 * 60 * 1000);
     
@@ -128,7 +128,7 @@ export const ErrorTrendChart: React.FC<ErrorTrendChartProps> = ({
       {/* Chart */}
       <div className="bg-gray-50 rounded-lg p-4">
         <div className="flex items-end justify-between h-64 space-x-1">
-          {chartData.map((dataPoint, index) {
+          {chartData.map((dataPoint, index) => {
             const totalCount = dataPoint.errorCount + dataPoint.warningCount + dataPoint.infoCount;
             
             return (
@@ -230,7 +230,7 @@ export const ErrorTrendChart: React.FC<ErrorTrendChartProps> = ({
               {Object.entries(
                 errors
                   .filter(e => e.level === 'error')
-                  .reduce((acc, error) {
+                  .reduce((acc, error) => {
                     const key = error.message.substring(0, 50);
                     acc[key] = (acc[key] || 0) + 1;
                     return acc;
@@ -256,7 +256,7 @@ export const ErrorTrendChart: React.FC<ErrorTrendChartProps> = ({
               {Object.entries(
                 errors
                   .filter(e => e.level === 'error')
-                  .reduce((acc, error) {
+                  .reduce((acc, error) => {
                     const source = error.component || error.context?.source || 'Unknown';
                     acc[source] = (acc[source] || 0) + 1;
                     return acc;

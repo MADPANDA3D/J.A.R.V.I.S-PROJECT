@@ -65,12 +65,12 @@ class ScreenReaderManager {
     region.textContent = '';
 
     // Add new message after a brief delay to ensure screen readers detect the change
-    setTimeout(() {
+    setTimeout(() => {
       region.textContent = announcement.message;
 
       // Clear message after timeout if specified
       if (announcement.timeout) {
-        setTimeout(() {
+        setTimeout(() => {
           region.textContent = '';
         }, announcement.timeout);
       }
@@ -398,7 +398,7 @@ export class AriaManager {
     element: HTMLElement,
     properties: Record<string, string | boolean | number>
   ): void {
-    Object.entries(properties).forEach(([key, value]) {
+    Object.entries(properties).forEach(([key, value]) => {
       const ariaKey = key.startsWith('aria-') ? key : `aria-${key}`;
       element.setAttribute(ariaKey, String(value));
     });
@@ -745,7 +745,7 @@ export class AccessibilityTester {
 
       report += `## Detailed Issues\n\n`;
 
-      audit.issues.forEach((issue, index) {
+      audit.issues.forEach((issue, index) => {
         report += `### ${index + 1}. ${issue.type} (${issue.severity})\n`;
         report += `${issue.message}\n\n`;
       });

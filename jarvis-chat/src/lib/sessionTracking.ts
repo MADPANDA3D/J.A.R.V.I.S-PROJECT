@@ -292,7 +292,7 @@ class SessionTracker {
       clearTimeout(this.activityTimer);
     }
 
-    this.activityTimer = setTimeout(() {
+    this.activityTimer = setTimeout(() => {
       this.handleInactivityTimeout();
     }, this.activityTimeout);
   }
@@ -532,7 +532,7 @@ class SessionTracker {
       .map(s => new Date(s.endTime!).getTime() - new Date(s.startTime).getTime());
 
     const pageViews = allSessions.flatMap(s => s.pageViews);
-    const pageViewCounts = pageViews.reduce((acc, pv) {
+    const pageViewCounts = pageViews.reduce((acc, pv) => {
       acc[pv.url] = (acc[pv.url] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);

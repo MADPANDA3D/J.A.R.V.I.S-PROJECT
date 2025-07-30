@@ -75,7 +75,7 @@ vi.mock('../supabase', () => ({
   }
 }));
 
-describe('BugReportingService', () {
+describe('BugReportingService', () => {
   const mockBugData: BugReportData = {
     title: 'Test Bug Report',
     description: 'This is a test bug report description with sufficient length to meet validation requirements.',
@@ -101,11 +101,11 @@ describe('BugReportingService', () {
     currentUrl: 'https://jarvis-chat.example.com/test'
   };
 
-  beforeEach(() {
+  beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('creates bug report successfully', async () {
+  it('creates bug report successfully', async () => {
     const result = await bugReportingService.createBugReport(mockBugData);
 
     expect(result.success).toBe(true);
@@ -114,7 +114,7 @@ describe('BugReportingService', () {
     expect(result.message).toBe('Bug report submitted successfully');
   });
 
-  it('collects enhanced error context', async () {
+  it('collects enhanced error context', async () => {
     const result = await bugReportingService.createBugReport(mockBugData);
 
     expect(result.success).toBe(true);
@@ -125,7 +125,7 @@ describe('BugReportingService', () {
     expect(errorTracker.addCorrelation).toHaveBeenCalled();
   });
 
-  it('integrates with performance metrics', async () {
+  it('integrates with performance metrics', async () => {
     const result = await bugReportingService.createBugReport(mockBugData);
 
     expect(result.success).toBe(true);
@@ -135,7 +135,7 @@ describe('BugReportingService', () {
     expect(performanceMetrics.getCurrentMetrics).toHaveBeenCalled();
   });
 
-  it('handles database submission errors', async () {
+  it('handles database submission errors', async () => {
     const { bugReportOperations } = await import('../supabase');
     vi.mocked(bugReportOperations.createBugReport).mockResolvedValueOnce({
       data: null,
@@ -148,7 +148,7 @@ describe('BugReportingService', () {
     expect(result.message).toContain('Database error');
   });
 
-  it('logs submission activity', async () {
+  it('logs submission activity', async () => {
     await bugReportingService.createBugReport(mockBugData);
 
     const { centralizedLogging } = await import('../centralizedLogging');
@@ -163,7 +163,7 @@ describe('BugReportingService', () {
     );
   });
 
-  it('handles missing browser info gracefully', async () {
+  it('handles missing browser info gracefully', async () => {
     const bugDataWithoutBrowser = {
       ...mockBugData,
       browserInfo: undefined
@@ -174,7 +174,7 @@ describe('BugReportingService', () {
     expect(result.success).toBe(true);
   });
 
-  it('correlates bug reports with errors', async () {
+  it('correlates bug reports with errors', async () => {
     const result = await bugReportingService.createBugReport(mockBugData);
 
     expect(result.success).toBe(true);
@@ -189,7 +189,7 @@ describe('BugReportingService', () {
     );
   });
 
-  it('generates correlation IDs for tracking', async () {
+  it('generates correlation IDs for tracking', async () => {
     const result = await bugReportingService.createBugReport(mockBugData);
 
     expect(result.success).toBe(true);
@@ -207,7 +207,7 @@ describe('BugReportingService', () {
     );
   });
 
-  it('handles network errors gracefully', async () {
+  it('handles network errors gracefully', async () => {
     const { bugReportOperations } = await import('../supabase');
     vi.mocked(bugReportOperations.createBugReport).mockRejectedValueOnce(
       new Error('Network error')
@@ -230,7 +230,7 @@ describe('BugReportingService', () {
     );
   });
 
-  it('collects comprehensive monitoring data', async () {
+  it('collects comprehensive monitoring data', async () => {
     const result = await bugReportingService.createBugReport(mockBugData);
 
     expect(result.success).toBe(true);

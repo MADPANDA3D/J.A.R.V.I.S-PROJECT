@@ -82,7 +82,7 @@ function CommentEditor({
   const [attachments, setAttachments] = useState<File[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleSubmit = async (e: React.FormEvent) {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!content.trim()) {
@@ -158,7 +158,7 @@ function CommentEditor({
       setContent(newContent);
       
       // Move cursor after mention
-      setTimeout(() {
+      setTimeout(() => {
         textarea.selectionStart = textarea.selectionEnd = start + username.length + 2;
         textarea.focus();
       }, 0);
@@ -369,7 +369,7 @@ function CommentItem({
     return content.replace(/@(\w+)/g, '<span class="text-blue-600 font-medium">@$1</span>');
   };
 
-  const handleReaction = async (emoji: string) {
+  const handleReaction = async (emoji: string) => {
     try {
       await internalCommunicationService.addReaction(comment.id, currentUserId, emoji);
       if (onReaction) {
@@ -384,7 +384,7 @@ function CommentItem({
     }
   };
 
-  const handleEdit = async () {
+  const handleEdit = async () => {
     try {
       const result = await internalCommunicationService.editComment(
         comment.id,
@@ -413,7 +413,7 @@ function CommentItem({
     }
   };
 
-  const handleDelete = async () {
+  const handleDelete = async () => {
     try {
       const result = await internalCommunicationService.deleteComment(
         comment.id,
@@ -509,7 +509,7 @@ function CommentItem({
           {/* Reactions */}
           {comment.reactions.length > 0 && (
             <div className="flex flex-wrap gap-1">
-              {comment.reactions.reduce((acc, reaction) {
+              {comment.reactions.reduce((acc, reaction) => {
                 const existing = acc.find(r => r.emoji === reaction.emoji);
                 if (existing) {
                   existing.count++;
@@ -660,11 +660,11 @@ export function InternalComments({
   const [filterVisibility, setFilterVisibility] = useState<CommentVisibility | 'all'>('all');
   const [showFilters, setShowFilters] = useState(false);
 
-  useEffect(() {
+  useEffect(() => {
     loadComments();
   }, [bugId, showPrivateComments]);
 
-  const loadComments = async () {
+  const loadComments = async () => {
     try {
       setLoading(true);
       const loadedComments = internalCommunicationService.getBugComments(bugId, {

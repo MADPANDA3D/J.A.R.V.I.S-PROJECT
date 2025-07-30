@@ -174,7 +174,7 @@ class PerformanceMetricsService {
   }
 
   private startMetricsCollection(): void {
-    this.collectionTimer = setInterval(() {
+    this.collectionTimer = setInterval(() => {
       this.collectMetrics();
     }, this.config.collectionInterval);
 
@@ -750,7 +750,7 @@ class PerformanceMetricsService {
 
   private setupCleanupTimer(): void {
     // Clean up old data every hour
-    setInterval(() {
+    setInterval(() => {
       this.cleanupOldData();
     }, 60 * 60 * 1000);
   }
@@ -769,7 +769,7 @@ class PerformanceMetricsService {
     });
 
     // Clean up old alerts
-    this.activeAlerts.forEach((alert, alertId) {
+    this.activeAlerts.forEach((alert, alertId) => {
       if (alert.timestamp < cutoffISO) {
         this.activeAlerts.delete(alertId);
       }
@@ -814,7 +814,7 @@ class PerformanceMetricsService {
 
     const benchmarks: PerformanceBenchmark[] = [];
 
-    Object.entries(this.config.benchmarking.targets).forEach(([metricName, target]) {
+    Object.entries(this.config.benchmarking.targets).forEach(([metricName, target]) => {
       const currentValue = this.getMetricValue(metricName, currentMetrics);
       if (currentValue === undefined) return;
 

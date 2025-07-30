@@ -172,7 +172,7 @@ export function useSearchState(userId: string) {
   const [searchState, setSearchState] = useState<PersistentSearchState>(defaultState);
 
   // Load persisted state on mount with migration support
-  useEffect(() {
+  useEffect(() => {
     if (!userId) return;
 
     try {
@@ -197,7 +197,7 @@ export function useSearchState(userId: string) {
   }, [userId]);
 
   // Save state to localStorage when it changes
-  useEffect(() {
+  useEffect(() => {
     if (!userId) return;
 
     try {
@@ -405,7 +405,7 @@ export function useSearchState(userId: string) {
   }, [searchState.searchHistory, searchState.popularQueries, searchState.preferences.enableSearchSuggestions]);
 
   // Clear search state
-  const clearSearch = useCallback(() {
+  const clearSearch = useCallback(() => {
     setSearchState(prev => ({
       ...prev,
       filters: { ...defaultFilters },
@@ -415,7 +415,7 @@ export function useSearchState(userId: string) {
   }, []);
 
   // Clear search history
-  const clearHistory = useCallback(() {
+  const clearHistory = useCallback(() => {
     setSearchState(prev => ({
       ...prev,
       searchHistory: [],
@@ -432,7 +432,7 @@ export function useSearchState(userId: string) {
   }, []);
 
   // Reset all analytics
-  const resetAnalytics = useCallback(() {
+  const resetAnalytics = useCallback(() => {
     setSearchState(prev => ({
       ...prev,
       searchCount: 0,

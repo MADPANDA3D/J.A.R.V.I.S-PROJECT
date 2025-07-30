@@ -147,7 +147,7 @@ class CentralizedLoggingService {
       clearInterval(this.flushTimer);
     }
 
-    this.flushTimer = setInterval(() {
+    this.flushTimer = setInterval(() => {
       this.flushLogs();
     }, this.config.flushInterval);
   }
@@ -247,7 +247,7 @@ class CentralizedLoggingService {
         const obj = value as Record<string, unknown>;
         const sanitizedObj: Record<string, unknown> = {};
         
-        Object.entries(obj).forEach(([key, val]) {
+        Object.entries(obj).forEach(([key, val]) => {
           const lowerKey = key.toLowerCase();
           if (sensitiveKeys.some(sensitive => lowerKey.includes(sensitive))) {
             sanitizedObj[key] = '[REDACTED]';
@@ -262,7 +262,7 @@ class CentralizedLoggingService {
       return value;
     };
 
-    Object.entries(sanitized).forEach(([key, value]) {
+    Object.entries(sanitized).forEach(([key, value]) => {
       const lowerKey = key.toLowerCase();
       if (sensitiveKeys.some(sensitive => lowerKey.includes(sensitive))) {
         sanitized[key] = '[REDACTED]';
@@ -595,7 +595,7 @@ class CentralizedLoggingService {
 export const centralizedLogging = new CentralizedLoggingService();
 
 // Utility functions
-export const sendToCentralizedLogging = async (type: string, data: unknown) {
+export const sendToCentralizedLogging = async (type: string, data: unknown) => {
   centralizedLogging.info('system', 'external', `External data: ${type}`, { 
     type, 
     data,

@@ -43,8 +43,8 @@ export const SessionAnalyticsDashboard: React.FC<SessionAnalyticsDashboardProps>
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Refresh data periodically
-  useEffect(() {
-    const refreshData = async () {
+  useEffect(() => {
+    const refreshData = async () => {
       setIsRefreshing(true);
       
       try {

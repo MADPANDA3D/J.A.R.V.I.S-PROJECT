@@ -12,7 +12,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Setup global keyboard shortcuts for the application
-  useEffect(() {
+  useEffect(() => {
     // Register global keyboard shortcuts
     keyboardNav.registerShortcut(
       'alt+m',

@@ -50,7 +50,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   };
 
   // Focus management for better accessibility
-  useEffect(() {
+  useEffect(() => {
     if (!disabled && textareaRef.current) {
       textareaRef.current.focus();
     }

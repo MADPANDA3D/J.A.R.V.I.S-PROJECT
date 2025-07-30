@@ -52,7 +52,7 @@ export function ConversationSessionGroup({
     onSessionSelect?.(session.id);
   };
 
-  const handleLoadMore = async () {
+  const handleLoadMore = async () => {
     if (isLoadingMore || !hasMoreMessages) return;
     
     setIsLoadingMore(true);

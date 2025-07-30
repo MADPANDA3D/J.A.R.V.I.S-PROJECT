@@ -32,7 +32,7 @@ export const VisualAccessibilityControls: React.FC<
     issues: Array<{ element: string; issue: string }>;
   } | null>(null);
 
-  React.useEffect(() {
+  React.useEffect(() => {
     // Update contrast report when preferences change
     const report = colorContrastValidator.getThemeContrastReport();
     setContrastReport(report);

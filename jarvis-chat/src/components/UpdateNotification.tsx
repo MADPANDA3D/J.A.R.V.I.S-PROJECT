@@ -22,7 +22,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
   const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'disconnected'>('disconnected');
   const [, setWs] = useState<WebSocket | null>(null);
 
-  useEffect(() {
+  useEffect(() => {
     // Only connect if we're in the browser and have a valid URL
     if (typeof window === 'undefined' || !websocketUrl) return;
 
@@ -51,7 +51,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
             
             // Auto-hide success messages after 10 seconds
             if (data.type === 'success') {
-              setTimeout(() {
+              setTimeout(() => {
                 setIsVisible(false);
                 setTimeout(() => setNotification(null), 300);
               }, 10000);
@@ -59,7 +59,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
             
             // Auto-hide info messages after 5 seconds unless they mention restart
             if (data.type === 'info' && !data.message.toLowerCase().includes('restart')) {
-              setTimeout(() {
+              setTimeout(() => {
                 setIsVisible(false);
                 setTimeout(() => setNotification(null), 300);
               }, 5000);

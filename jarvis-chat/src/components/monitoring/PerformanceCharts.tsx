@@ -71,7 +71,7 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({ metrics })
     const minValue = Math.min(...data.map(d => d.value));
     const range = maxValue - minValue;
     
-    const points = data.map((point, index) {
+    const points = data.map((point, index) => {
       const x = (index / (data.length - 1)) * 300; // 300px width
       const y = 100 - ((point.value - minValue) / range) * 80; // 80px usable height, inverted
       return `${x},${y}`;
@@ -179,7 +179,7 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({ metrics })
                 cx={radius}
                 cy={radius}
               />
-              {data.map((item, index) {
+              {data.map((item, index) => {
                 const percentage = (item.value / total) * 100;
                 const strokeDasharray = `${percentage / 100 * circumference} ${circumference}`;
                 const strokeDashoffset = -cumulativePercentage / 100 * circumference;

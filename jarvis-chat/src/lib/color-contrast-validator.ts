@@ -283,7 +283,7 @@ export class ColorContrastValidator {
       },
     ];
 
-    colorPairs.forEach(({ fg, bg, name }) {
+    colorPairs.forEach(({ fg, bg, name }) => {
       if (fg && bg) {
         const result = this.validateColorPair(fg, bg);
         let severity: 'error' | 'warning' | 'success';

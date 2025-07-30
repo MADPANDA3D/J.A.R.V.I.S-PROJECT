@@ -59,7 +59,7 @@ vi.mock('../notificationService', () => ({
   sendNotification: vi.fn(() => Promise.resolve({ success: true }))
 }));
 
-describe('Bug Lifecycle Integration Tests', () {
+describe('Bug Lifecycle Integration Tests', () => {
   const mockBugReport: Partial<BugReport> = {
     id: 'integration-test-bug',
     title: 'Integration Test Bug',
@@ -72,7 +72,7 @@ describe('Bug Lifecycle Integration Tests', () {
     created_at: new Date().toISOString()
   };
 
-  beforeEach(() {
+  beforeEach(() => {
     vi.clearAllMocks();
     
     // Initialize assignment system with test team members
@@ -157,12 +157,12 @@ describe('Bug Lifecycle Integration Tests', () {
     });
   });
 
-  afterEach(() {
+  afterEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('Complete Bug Lifecycle Workflow', () {
-    it('processes complete bug lifecycle from open to closed', async () {
+  describe('Complete Bug Lifecycle Workflow', () => {
+    it('processes complete bug lifecycle from open to closed', async () => {
       const bugId = 'integration-test-bug';
       // const userId = 'user_1'; // For future use
       const assignerId = 'admin_user';
@@ -362,7 +362,7 @@ describe('Bug Lifecycle Integration Tests', () {
       expect(statusTransitions).toContain(BugStatus.CLOSED);
     });
 
-    it('handles escalation workflow correctly', async () {
+    it('handles escalation workflow correctly', async () => {
       const bugId = 'integration-test-bug';
       const userId = 'user_1';
 
@@ -407,8 +407,8 @@ describe('Bug Lifecycle Integration Tests', () {
     });
   });
 
-  describe('Notification Integration', () {
-    it('sends notifications throughout bug lifecycle', async () {
+  describe('Notification Integration', () => {
+    it('sends notifications throughout bug lifecycle', async () => {
       const bugId = 'integration-test-bug';
       const userId = 'user_1';
       const originalReporter = 'original_reporter';
@@ -453,7 +453,7 @@ describe('Bug Lifecycle Integration Tests', () {
       expect(sendFeedbackRequestSpy).toHaveBeenCalled();
     });
 
-    it('respects user notification preferences', async () {
+    it('respects user notification preferences', async () => {
       const bugId = 'integration-test-bug';
       const userId = 'user_1';
 
@@ -478,8 +478,8 @@ describe('Bug Lifecycle Integration Tests', () {
     });
   });
 
-  describe('Communication and Collaboration', () {
-    it('handles threaded discussions correctly', async () {
+  describe('Communication and Collaboration', () => {
+    it('handles threaded discussions correctly', async () => {
       const bugId = 'integration-test-bug';
       const user1 = 'user_1';
       const user2 = 'user_2';
@@ -535,7 +535,7 @@ describe('Bug Lifecycle Integration Tests', () {
       expect(mentionComment?.mentions[0].targetId).toBe('user_2');
     });
 
-    it('tracks audit trail for all activities', async () {
+    it('tracks audit trail for all activities', async () => {
       const bugId = 'integration-test-bug';
       const userId = 'user_1';
 
@@ -571,8 +571,8 @@ describe('Bug Lifecycle Integration Tests', () {
     });
   });
 
-  describe('Feedback Integration', () {
-    it('processes feedback lifecycle correctly', async () {
+  describe('Feedback Integration', () => {
+    it('processes feedback lifecycle correctly', async () => {
       const bugId = 'integration-test-bug';
       const userId = 'original_reporter';
 
@@ -642,8 +642,8 @@ describe('Bug Lifecycle Integration Tests', () {
     });
   });
 
-  describe('Performance and Scalability', () {
-    it('handles concurrent operations efficiently', async () {
+  describe('Performance and Scalability', () => {
+    it('handles concurrent operations efficiently', async () => {
       const startTime = performance.now();
       
       // Simulate concurrent operations
@@ -676,7 +676,7 @@ describe('Bug Lifecycle Integration Tests', () {
       expect(successCount).toBeGreaterThan(operations.length * 0.7); // At least 70% success
     });
 
-    it('maintains data consistency under load', async () {
+    it('maintains data consistency under load', async () => {
       const bugId = 'consistency-test-bug';
       
       // Perform multiple operations on the same bug
@@ -704,8 +704,8 @@ describe('Bug Lifecycle Integration Tests', () {
     });
   });
 
-  describe('Error Handling and Recovery', () {
-    it('handles service failures gracefully', async () {
+  describe('Error Handling and Recovery', () => {
+    it('handles service failures gracefully', async () => {
       const bugId = 'error-test-bug';
 
       // Mock successful getBugReportById with proper assigned_to field
@@ -748,7 +748,7 @@ describe('Bug Lifecycle Integration Tests', () {
       expect(retryResult.success).toBe(true);
     });
 
-    it('validates state transitions correctly', async () {
+    it('validates state transitions correctly', async () => {
       const bugId = 'validation-test-bug';
 
       // Mock bug in OPEN status for invalid transition test
@@ -792,8 +792,8 @@ describe('Bug Lifecycle Integration Tests', () {
     });
   });
 
-  describe('Integration with Monitoring', () {
-    it('tracks all lifecycle events for monitoring', async () {
+  describe('Integration with Monitoring', () => {
+    it('tracks all lifecycle events for monitoring', async () => {
       const bugId = 'monitoring-test-bug';
       const { trackBugReportEvent } = await import('../monitoring');
 
@@ -814,8 +814,8 @@ describe('Bug Lifecycle Integration Tests', () {
     });
   });
 
-  describe('Workflow Optimization', () {
-    it('optimizes assignment recommendations based on workload', async () {
+  describe('Workflow Optimization', () => {
+    it('optimizes assignment recommendations based on workload', async () => {
       // Set up different workloads for team members
       bugAssignmentSystem.updateTeamMember('user_1', { currentWorkload: 2 });
       bugAssignmentSystem.updateTeamMember('user_2', { currentWorkload: 6 });
@@ -832,7 +832,7 @@ describe('Bug Lifecycle Integration Tests', () {
       expect(topRecommendation.workloadImpact).toBeLessThan(0.5);
     });
 
-    it('provides workload balancing recommendations', async () {
+    it('provides workload balancing recommendations', async () => {
       // Create imbalanced workload scenario
       bugAssignmentSystem.updateTeamMember('user_1', { currentWorkload: 1 });
       bugAssignmentSystem.updateTeamMember('user_2', { currentWorkload: 8 });

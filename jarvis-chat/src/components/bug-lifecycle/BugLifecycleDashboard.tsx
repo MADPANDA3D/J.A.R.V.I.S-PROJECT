@@ -118,7 +118,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter }: DashboardProps)
   const [selectedTimeRange, setSelectedTimeRange] = useState<string>('7d');
   const [refreshing, setRefreshing] = useState(false);
 
-  const loadDashboardData = useCallback(async () {
+  const loadDashboardData = useCallback(async () => {
     try {
       setRefreshing(true);
       
@@ -143,7 +143,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter }: DashboardProps)
     }
   }, [dateRange, refreshBugs, toast]);
 
-  useEffect(() {
+  useEffect(() => {
     loadDashboardData();
   }, [loadDashboardData]);
 
@@ -172,7 +172,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter }: DashboardProps)
     feedbackCount: trend.feedbackCount
   })) || [];
 
-  const priorityDistribution = bugs.reduce((acc, bug) {
+  const priorityDistribution = bugs.reduce((acc, bug) => {
     const priority = bug.priority || 'medium';
     acc[priority] = (acc[priority] || 0) + 1;
     return acc;
@@ -653,7 +653,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter }: DashboardProps)
                 <div>
                   <h4 className="font-medium mb-3">Workflow Bottlenecks</h4>
                   <div className="space-y-2">
-                    {Object.entries(stats?.statusDistribution || {}).map(([status, count]) {
+                    {Object.entries(stats?.statusDistribution || {}).map(([status, count]) => {
                       const percentage = count / (stats?.totalStatusChanges || 1) * 100;
                       return (
                         <div key={status} className="flex items-center justify-between">

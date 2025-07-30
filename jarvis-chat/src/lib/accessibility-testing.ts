@@ -175,7 +175,7 @@ export class AccessibilityTester {
     if (totalChecks === 0) return 100;
 
     // Weight violations by impact
-    const violationScore = violations.reduce((score, violation) {
+    const violationScore = violations.reduce((score, violation) => {
       switch (violation.impact) {
         case 'critical':
           return score + 10;
@@ -284,7 +284,7 @@ export class AccessibilityTester {
 
           report += `### ${emoji} ${impact.toUpperCase()} (${impactViolations.length})\n\n`;
 
-          impactViolations.forEach((violation, index) {
+          impactViolations.forEach((violation, index) => {
             report += `#### ${index + 1}. ${violation.description}\n\n`;
             report += `**Rule:** ${violation.id}\n`;
             report += `**Help:** ${violation.help}\n`;
@@ -292,7 +292,7 @@ export class AccessibilityTester {
             report += `**Affected Elements:** ${violation.nodes.length}\n\n`;
 
             // Show first few affected elements
-            violation.nodes.slice(0, 3).forEach((node, nodeIndex) {
+            violation.nodes.slice(0, 3).forEach((node, nodeIndex) => {
               report += `**Element ${nodeIndex + 1}:**\n`;
               report += `- Target: \`${node.target.join(' > ')}\`\n`;
               report += `- HTML: \`${node.html.substring(0, 100)}${node.html.length > 100 ? '...' : ''}\`\n`;
@@ -354,7 +354,7 @@ export class AccessibilityTester {
   public schedulePeriodicTests(intervalMinutes: number = 60): () => void {
     let isRunning = true;
 
-    const runPeriodicTest = async () {
+    const runPeriodicTest = async () => {
       if (!isRunning) return;
 
       try {

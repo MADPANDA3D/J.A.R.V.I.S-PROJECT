@@ -53,7 +53,7 @@ export function LogStreamViewer({
   const [autoScroll, setAutoScroll] = useState(true);
 
   // WebSocket connection management
-  const connectWebSocket = useCallback(() {
+  const connectWebSocket = useCallback(() => {
     if (wsRef.current?.readyState === WebSocket.OPEN) return;
 
     setConnectionStatus('connecting');
@@ -132,7 +132,7 @@ export function LogStreamViewer({
   }, [websocketUrl, isPaused, maxLogEntries]);
 
   // Effect to establish WebSocket connection
-  useEffect(() {
+  useEffect(() => {
     connectWebSocket();
 
     return () {
@@ -144,14 +144,14 @@ export function LogStreamViewer({
   }, [connectWebSocket]);
 
   // Auto-scroll effect
-  useEffect(() {
+  useEffect(() => {
     if (autoScroll && logsEndRef.current) {
       logsEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [filteredLogs, autoScroll]);
 
   // Filter logs based on search query and filters
-  useEffect(() {
+  useEffect(() => {
     let filtered = logs;
 
     // Apply level filter
@@ -175,7 +175,7 @@ export function LogStreamViewer({
   }, [logs, searchQuery, levelFilter, sourceFilter]);
 
   // Persistence effect
-  useEffect(() {
+  useEffect(() => {
     if (enablePersistence && logs.length > 0) {
       const persistKey = `log-stream-${websocketUrl}`;
       try {
@@ -187,7 +187,7 @@ export function LogStreamViewer({
   }, [logs, enablePersistence, websocketUrl]);
 
   // Load persisted logs on mount
-  useEffect(() {
+  useEffect(() => {
     if (enablePersistence) {
       const persistKey = `log-stream-${websocketUrl}`;
       try {
@@ -303,7 +303,7 @@ export function LogStreamViewer({
     setFilter(newFilter);
   };
 
-  const handleScroll = useCallback(() {
+  const handleScroll = useCallback(() => {
     if (logContainerRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = logContainerRef.current;
       const isAtBottom = scrollHeight - scrollTop - clientHeight < 5;
