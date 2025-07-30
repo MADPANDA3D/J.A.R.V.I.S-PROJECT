@@ -15,6 +15,11 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     
+    # Set default working directory for all steps
+    defaults:
+      run:
+        working-directory: jarvis-chat
+    
     env:
       NODE_VERSION: '20'
       WORKING_DIRECTORY: 'jarvis-chat'
@@ -30,7 +35,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: 'jarvis-chat/package-lock.json' 
+          cache-dependency-path: 'jarvis-chat/package-lock.json'
 
       - name: 📋 Display build environment
         run: |
@@ -46,14 +51,12 @@ jobs:
 
       - name: 📦 Install dependencies
         run: |
-          cd ${{ env.WORKING_DIRECTORY }}
           echo "📦 Installing dependencies with npm ci..."
           npm ci --production=false
           echo "✅ Dependencies installed successfully"
         
       - name: 🔍 Validate environment
         run: |
-          cd ${{ env.WORKING_DIRECTORY }}
           echo "🔍 Validating project configuration..."
           
           # Check package.json exists and has required scripts
@@ -80,7 +83,6 @@ jobs:
 
       - name: 🧪 Run tests
         run: |
-          cd ${{ env.WORKING_DIRECTORY }}
           echo "🧪 Running test suite..."
           
           # Run tests with proper error handling
@@ -100,7 +102,6 @@ jobs:
 
       - name: 🔧 Run linting
         run: |
-          cd ${{ env.WORKING_DIRECTORY }}
           echo "🔧 Running code linting..."
           
           if npm run lint; then
@@ -112,7 +113,6 @@ jobs:
 
       - name: 📊 Type checking
         run: |
-          cd ${{ env.WORKING_DIRECTORY }}
           echo "📊 Running TypeScript type checking..."
           
           if npm run type-check; then
@@ -131,7 +131,6 @@ jobs:
 
       - name: 🏗️ Build application
         run: |
-          cd ${{ env.WORKING_DIRECTORY }}
           echo "🏗️ Building application for production..."
           
           # Set build environment
@@ -153,7 +152,6 @@ jobs:
 
       - name: 🔍 Validate build artifacts
         run: |
-          cd ${{ env.WORKING_DIRECTORY }}
           echo "🔍 Validating build artifacts..."
           
           if [ ! -d "dist" ]; then
@@ -182,6 +180,8 @@ jobs:
           echo "✅ Build artifacts validation completed"
 
       - name: 📤 Prepare deployment metadata
+        # This step needs to run from repo root to create the metadata file
+        working-directory: .
         run: |
           echo "📤 Preparing deployment metadata..."
           
