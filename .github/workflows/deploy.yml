@@ -34,8 +34,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: 'jarvis-chat/package-lock.json'
+          # Removed cache configuration to fix the path resolution issue
 
       - name: 📋 Display build environment
         run: |
