@@ -196,7 +196,7 @@ export function AssignmentInterface({
   };
 
   const getRoleIcon = (role: string) => {
-    switch (role) => {
+    switch (role) {
       case 'admin': return <Star className="h-4 w-4" />;
       case 'senior_dev': return <TrendingUp className="h-4 w-4" />;
       case 'developer': return <User className="h-4 w-4" />;

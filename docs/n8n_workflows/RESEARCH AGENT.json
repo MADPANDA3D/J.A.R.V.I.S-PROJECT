@@ -1,0 +1,1330 @@
+{
+  "name": "RESEARCH AGENT",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "eb4e555b-13c1-441a-a2f4-c384f4990627",
+      "name": "Execute Workflow Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2304,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Search 200M+ academic papers and research from OpenAlex - the world's largest scholarly database",
+        "url": "https://api.openalex.org/works",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "searchQuery",
+              "description": "Academic research topic, keywords, or specific research question",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "e3cb9072-743e-4400-a5d8-a18d557c9edc",
+      "name": "OpenAlex Academic API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -2256,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "AI-powered academic search through 200M+ scientific papers with intelligent recommendations",
+        "url": "https://api.semanticscholar.org/graph/v1/paper/search",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "query",
+              "description": "Academic research query for AI-powered search",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "95d70d5a-3157-4e7c-95e7-6d02b2bb1f7d",
+      "name": "Semantic Scholar API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -2080,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Access 75M+ scholarly works metadata and citation data from CrossRef",
+        "url": "https://api.crossref.org/works",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "query",
+              "description": "Search term for scholarly publications and citations",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "1c98f3bb-f807-4ffc-b1aa-32367ee1f487",
+      "name": "CrossRef API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -1920,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Search arXiv preprints in physics, mathematics, computer science, and biology",
+        "url": "http://export.arxiv.org/api/query",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "searchQuery",
+              "description": "arXiv search query (use ti: for title, au: for author, abs: for abstract)",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "afe447a3-4b87-49c1-82a1-bb339e67fc0d",
+      "name": "arXiv API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -1760,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Search PubMed for biomedical and life science literature",
+        "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "term",
+              "description": "Medical or biomedical research search term",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "24f3bd6a-4ac5-4f5f-8447-3ca867669f89",
+      "name": "PubMed API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -1424,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Search CORE - the world's largest collection of open access research papers",
+        "url": "https://api.core.ac.uk/v3/search/works",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "q",
+              "description": "Research query for open access papers",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "b7e8b010-7718-4217-b695-320c3645775c",
+      "name": "CORE API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -1600,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Get current news from 75,000+ sources worldwide with News API\n\n",
+        "url": "https://newsapi.org/v2/everything",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "newsQuery",
+              "description": "News topic, event, or keywords to search",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "737fadf9-95ff-487d-93b6-e3b149b9adb7",
+      "name": "News API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -2256,
+        496
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "hJYp15joWT7PB1yC",
+          "name": "N8N JARVIS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Search New York Times articles and historical archives",
+        "url": "https://api.nytimes.com/svc/search/v2/articlesearch.json",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "nytQuery",
+              "description": "Topic to search in New York Times archives",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "fc940d0b-9a3b-4af2-90c8-26ab07db1f5e",
+      "name": "New York Times API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -2096,
+        496
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Access Guardian newspaper content and international news",
+        "url": "https://content.guardianapis.com/search",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "guardianQuery",
+              "description": "Topic to search in Guardian articles",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "11748ce2-1c74-4a37-8655-71e5530c7322",
+      "name": "Guardian API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -1920,
+        496
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Search historic US newspapers from Library of Congress",
+        "url": "https://chroniclingamerica.loc.gov/search/pages/results/",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "searchText",
+              "description": "Historical newspaper search term",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "0ec9cfad-f330-4ebf-ab9f-f7863b19bcab",
+      "name": "Chronicling America API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -1744,
+        496
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Access 827,000+ economic time series from Federal Reserve Economic Data",
+        "url": "https://api.stlouisfed.org/fred/series/observations",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "seriesId",
+              "description": "FRED series ID (GDP, UNRATE, CPIAUCSL, FEDFUNDS, etc.)",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "56ba7f6a-af52-43d0-a360-741248f38f51",
+      "name": "FRED Economic Data",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -2256,
+        1104
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Access IMF international economic and financial data",
+        "url": "https://dataservices.imf.org/REST/SDMX_JSON.svc/CompactData/IFS/{{ $fromAI('country', 'country code') }}.{{ $fromAI('indicator', 'indicator code') }}",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "country",
+              "description": "IMF country code (US, DE, CN, etc.)",
+              "type": "string"
+            },
+            {
+              "name": "indicator",
+              "description": "IMF economic indicator code",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "db9d0800-739c-4ea3-b6b8-e4aa55a8436e",
+      "name": "IMF Data API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -2096,
+        1104
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Access World Bank development indicators and country data",
+        "url": "https://api.worldbank.org/v2/country/all/indicator/{{ $fromAI('indicator', 'World Bank indicator code') }}",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "indicator",
+              "description": "World Bank indicator (NY.GDP.MKTP.CD=GDP, SP.POP.TOTL=population, SI.POV.DDAY=poverty)",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "430b7485-7ef2-477c-be43-5cb1afc4a8c6",
+      "name": "World Bank API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -1936,
+        1104
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Get real-time stock market and financial data",
+        "url": "https://www.alphavantage.co/query",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "function",
+              "description": "API function (TIME_SERIES_DAILY, GLOBAL_QUOTE, OVERVIEW, etc.)",
+              "type": "string"
+            },
+            {
+              "name": "symbol",
+              "description": "Stock ticker symbol (AAPL, MSFT, GOOGL, etc.)",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "5952bece-552e-4c32-8c09-d5464de34191",
+      "name": "Alpha Vantage Stock API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -1776,
+        1104
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "IEX Cloud financial market data and company fundamentals",
+        "url": "https://cloud.iexapis.com/stable/stock/{{ $fromAI('symbol', 'stock symbol') }}/{{ $fromAI('endpoint', 'endpoint: quote, company, stats, news') }}",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "symbol",
+              "description": "Stock symbol (AAPL, TSLA, etc.)",
+              "type": "string"
+            },
+            {
+              "name": "endpoint",
+              "description": "Data endpoint (quote, company, stats, news, financials)",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "75e1b769-69a1-4a20-80ae-090d001098fd",
+      "name": "IEX Cloud API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -1616,
+        1104
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Access US government datasets including education, health, and research data",
+        "url": "https://api.data.gov/ed/collegescorecard/v1/schools.json",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "schoolName",
+              "description": "School, university, or institution name",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "c501ccaa-e80b-4614-bdac-01d9bd5f8de9",
+      "name": "Data.gov API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -2256,
+        1392
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Access US Census demographic and economic statistics",
+        "url": "https://api.census.gov/data/{{ $fromAI('dataset', 'census dataset year like 2022') }}/acs/acs1",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "dataset",
+              "description": "Census dataset year (2022, 2021, 2020)",
+              "type": "string"
+            },
+            {
+              "name": "variables",
+              "description": "Census variables (NAME=names, B01003_001E=population, B25077_001E=home values)",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "28c2e0f3-0182-4eee-8054-bd482bc7d21a",
+      "name": "US Census API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -2080,
+        1392
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Bureau of Labor Statistics data on employment, inflation, and wages",
+        "method": "POST",
+        "url": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+        "sendBody": true,
+        "parametersBody": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "seriesId",
+              "description": "BLS series ID (CES0000000001=employment, CUUR0000SA0=CPI, LNS14000000=unemployment rate)",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "3a5673c7-21d8-47ee-b97f-d6f2d9f61bba",
+      "name": "BLS API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -1920,
+        1392
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Search GitHub repositories, code, and development trends",
+        "url": "https://api.github.com/search/repositories",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "githubQuery",
+              "description": "Programming language, framework, or technology topic",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "a4f13fe2-6812-4d56-bc54-2aed232f3daf",
+      "name": "GitHub API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -2256,
+        1680
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Internet Archive digital library and historical web content",
+        "url": "https://archive.org/advancedsearch.php",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "archiveQuery",
+              "description": "Search term for Internet Archive content",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "9df403b1-227f-41ad-b776-1b3801742589",
+      "name": "Internet Archive API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -2096,
+        1680
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Open Library book database and literary information",
+        "url": "https://openlibrary.org/search.json",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "bookQuery",
+              "description": "Book title, author, or literary search query",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "4e5a3884-050c-4723-af4a-ec5709bdd1f6",
+      "name": "Open Library API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -1920,
+        1680
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Wikidata structured knowledge base with entity relationships",
+        "url": "https://www.wikidata.org/w/api.php",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {}
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "search",
+              "description": "Entity, person, place, or concept to search in Wikidata",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "84497e70-b16c-45aa-b6e7-9dfe1019968c",
+      "name": "Wikidata API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -1760,
+        1680
+      ]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "options": {}
+      },
+      "id": "288dd631-4310-4300-9b8b-e5850e76629d",
+      "name": "OpenAI Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        -1664,
+        -48
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "FAioNwMmasg9j9f7",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7ab380a2-a8d3-421c-ab4e-748ea8fb7904",
+              "name": "response",
+              "value": "Research task completed successfully! Here are the findings from multiple authoritative sources.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e936dcf1-d5c7-45e4-9b8a-64f84cd7392c",
+      "name": "Success1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -560,
+        -256
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7ab380a2-a8d3-421c-ab4e-748ea8fb7904",
+              "name": "response",
+              "value": "I encountered some difficulty accessing research sources. Let me try alternative approaches.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b91a0457-a5f1-44cf-ae30-57eeded08ea2",
+      "name": "Try Again1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -560,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "f0cf1aab-1646-4e7c-8ee2-47636cc2c7ad",
+      "name": "SerpAPI1",
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        -2256,
+        1968
+      ],
+      "credentials": {
+        "serpApi": {
+          "id": "wIZAf7rWl74uyAx3",
+          "name": "SerpAPI account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "a031a607-4d55-430b-87c8-73395c144af7",
+      "name": "Wikipedia1",
+      "type": "@n8n/n8n-nodes-langchain.toolWikipedia",
+      "typeVersion": 1,
+      "position": [
+        -2112,
+        1968
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "all",
+        "limit": "={{ $fromAI('limit', 'number of articles to retrieve (default 5)') || 5 }}",
+        "additionalFields": {
+          "keyword": "={{ $fromAI('keywords', 'keywords for the articles') }}"
+        }
+      },
+      "id": "b5e80549-7ac3-49c5-89f4-459b05c19d68",
+      "name": "Hacker News1",
+      "type": "n8n-nodes-base.hackerNewsTool",
+      "typeVersion": 1,
+      "position": [
+        -1936,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.query }}",
+        "options": {
+          "systemMessage": "# 🔬 ULTIMATE RESEARCH AGENT - ENHANCED SYSTEM PROMPT\n\nYou are the **ULTIMATE RESEARCH AGENT** with unprecedented access to 25+ specialized research tools covering every domain of human knowledge. You are a master researcher capable of conducting comprehensive, multi-source investigations across academic, news, social, economic, government, and specialized databases.\n\n## 🎯 **YOUR RESEARCH ARSENAL:**\n\n**🎓 ACADEMIC RESEARCH (6 tools):**\n- **OpenAlex Academic API** → 200M+ papers, citations, research metrics\n- **Semantic Scholar API** → AI-powered search, paper recommendations  \n- **CrossRef API** → 75M+ scholarly works, citation metadata\n- **arXiv API** → Latest preprints in STEM fields\n- **PubMed API** → Biomedical and life science literature\n- **CORE API** → World's largest open access paper collection\n\n**📰 NEWS & MEDIA (4 tools):**\n- **News API** → 75,000+ global news sources\n- **New York Times API** → Premium journalism and archives\n- **Guardian API** → International news coverage\n- **Chronicling America API** → Historical US newspapers (Library of Congress)\n\n**📱 SOCIAL MEDIA & CULTURE (3 tools):**\n- **Reddit API** → Community discussions and social sentiment\n- **YouTube Data API** → Video content and trends\n- **Hacker News** → Tech community insights\n\n**💰 ECONOMIC & FINANCIAL (5 tools):**\n- **FRED Economic Data** → 827,000+ US economic indicators\n- **IMF Data API** → International economic statistics\n- **World Bank API** → Global development indicators\n- **Alpha Vantage API** → Real-time stock market data\n- **IEX Cloud API** → Financial fundamentals and market data\n\n**🏛️ GOVERNMENT DATA (3 tools):**\n- **Data.gov API** → US government datasets\n- **US Census API** → Demographics and population statistics\n- **BLS API** → Labor statistics, employment, inflation\n\n**🔬 SPECIALIZED RESEARCH (4 tools):**\n- **GitHub API** → Code repositories, development trends\n- **Internet Archive API** → Historical digital content\n- **Open Library API** → Books and literary information\n- **Wikidata API** → Structured knowledge relationships\n\n**🌐 GENERAL KNOWLEDGE (3 tools):**\n- **Wikipedia** → Encyclopedia and general knowledge\n- **SerpAPI** → Comprehensive web search\n- **Hacker News Tool** → Technology discussions\n\n---\n\n## 🧠 **INTELLIGENT TOOL SELECTION DECISION TREE:**\n\n### **STEP 1: ANALYZE THE QUERY TYPE**\nBefore using any tools, categorize the query:\n\n**📚 ACADEMIC/RESEARCH QUESTIONS:**\n- Keywords: \"research\", \"study\", \"paper\", \"scientific\", \"academic\", \"peer-reviewed\"\n- **PRIMARY TOOLS:** OpenAlex → Semantic Scholar → arXiv (for STEM) → PubMed (for medical)\n- **BACKUP TOOLS:** CrossRef, CORE\n\n**📺 CURRENT EVENTS/NEWS:**\n- Keywords: \"latest\", \"breaking\", \"recent\", \"news\", \"current\", \"today\", \"happening\"\n- **PRIMARY TOOLS:** News API → Guardian API → New York Times API\n- **BACKUP TOOLS:** Reddit (for social perspective), SerpAPI\n\n**💹 ECONOMIC/FINANCIAL DATA:**\n- Keywords: \"economy\", \"GDP\", \"inflation\", \"stock\", \"market\", \"financial\", \"economic indicators\"\n- **PRIMARY TOOLS:** FRED Economic Data → Alpha Vantage (for stocks) → World Bank (for global)\n- **BACKUP TOOLS:** IMF Data API, IEX Cloud, BLS API\n\n**👥 SOCIAL TRENDS/OPINIONS:**\n- Keywords: \"opinion\", \"sentiment\", \"discussion\", \"community\", \"social\", \"trending\"\n- **PRIMARY TOOLS:** Reddit API → YouTube Data API\n- **BACKUP TOOLS:** Hacker News (for tech topics)\n\n**💻 TECHNOLOGY/PROGRAMMING:**\n- Keywords: \"code\", \"programming\", \"software\", \"tech\", \"developer\", \"GitHub\"\n- **PRIMARY TOOLS:** GitHub API → Hacker News → SerpAPI\n- **BACKUP TOOLS:** arXiv (for computer science), Reddit\n\n**📊 DEMOGRAPHICS/STATISTICS:**\n- Keywords: \"population\", \"demographics\", \"census\", \"statistics\", \"employment\"\n- **PRIMARY TOOLS:** US Census API → BLS API → Data.gov API\n- **BACKUP TOOLS:** World Bank (for international data)\n\n**📚 BOOKS/LITERATURE:**\n- Keywords: \"book\", \"author\", \"literature\", \"publication\"\n- **PRIMARY TOOLS:** Open Library API → Wikidata API\n- **BACKUP TOOLS:** Internet Archive API\n\n**🏛️ HISTORICAL RESEARCH:**\n- Keywords: \"history\", \"historical\", \"past\", \"archive\", \"old\", \"vintage\"\n- **PRIMARY TOOLS:** Internet Archive API → Chronicling America API\n- **BACKUP TOOLS:** Wikipedia, Open Library\n\n---\n\n## 🎯 **SMART RESEARCH WORKFLOW:**\n\n### **PHASE 1: PRIMARY SOURCE (Choose 1-2 tools based on query type)**\n```\nIF academic query → Use OpenAlex + Semantic Scholar\nIF news query → Use News API + Guardian\nIF economic query → Use FRED + Alpha Vantage  \nIF social query → Use Reddit + YouTube\nIF tech query → Use GitHub + Hacker News\nIF demographic query → Use Census + BLS\nIF historical query → Use Internet Archive + Chronicling America\nIF general query → Use Wikipedia + SerpAPI\n```\n\n### **PHASE 2: VALIDATION & CROSS-REFERENCE (Optional - use if needed)**\n- Compare findings across 1-2 additional sources\n- Use government sources to validate private data\n- Check academic sources for controversial topics\n- Use social media to gauge public sentiment\n\n### **PHASE 3: SYNTHESIS & ANALYSIS**\n- Combine findings from multiple sources\n- Identify contradictions or gaps\n- Provide context and interpretation\n- Cite all sources used\n\n---\n\n## 📋 **TOOL-SPECIFIC USAGE GUIDELINES:**\n\n### **🎓 ACADEMIC TOOLS:**\n- **OpenAlex:** Use for comprehensive academic searches, citation analysis\n- **Semantic Scholar:** Use when you need AI-recommended related papers\n- **arXiv:** Use for cutting-edge STEM research, preprints\n- **PubMed:** Use exclusively for medical/biomedical topics\n- **CrossRef:** Use for citation verification and DOI lookup\n- **CORE:** Use for open access papers when paywall issues occur\n\n### **📰 NEWS TOOLS:**\n- **News API:** Use for breaking news, recent events (last 30 days)\n- **NYT API:** Use for in-depth analysis, historical news archives\n- **Guardian API:** Use for international perspective, UK/Europe focus\n- **Chronicling America:** Use for historical US news (pre-1960s)\n\n### **📱 SOCIAL TOOLS:**\n- **Reddit API:** Use for community sentiment, niche discussions\n- **YouTube Data API:** Use for video content trends, popular culture\n- **Hacker News:** Use for tech industry opinions, startup trends\n\n### **💰 ECONOMIC TOOLS:**\n- **FRED:** Use for ANY US economic indicator (unemployment, inflation, GDP)\n- **Alpha Vantage:** Use for specific stock data, company financials\n- **World Bank:** Use for international development, country comparisons\n- **IMF:** Use for international monetary policy, global economics\n- **IEX Cloud:** Use for real-time market data, alternative to Alpha Vantage\n\n### **🏛️ GOVERNMENT TOOLS:**\n- **US Census:** Use for population, demographics, housing data\n- **BLS:** Use for employment, wage, inflation data\n- **Data.gov:** Use for specialized government datasets\n\n### **🔬 SPECIALIZED TOOLS:**\n- **GitHub:** Use for code examples, technology trends, developer activity\n- **Internet Archive:** Use for historical websites, digital preservation\n- **Open Library:** Use for book information, author details\n- **Wikidata:** Use for structured data, entity relationships\n\n### **🌐 GENERAL TOOLS:**\n- **Wikipedia:** Use for basic background information, overviews\n- **SerpAPI:** Use when other tools fail or for broad web search\n\n---\n\n## ⚠️ **CRITICAL DECISION RULES:**\n\n### **DO NOT OVERWHELM - FOLLOW THE 3-TOOL RULE:**\n- **Maximum 3 tools per research query** (unless specifically requested otherwise)\n- Start with 1-2 PRIMARY tools based on query type\n- Add 1 VALIDATION tool only if needed for credibility\n\n### **TOOL SELECTION PRIORITY:**\n1. **Authoritative > General** (use FRED instead of Wikipedia for economic data)\n2. **Specialized > Broad** (use PubMed instead of SerpAPI for medical topics)  \n3. **Primary > Secondary** (use government sources over news reports for statistics)\n4. **Recent > Historical** (use News API for current events, not archives)\n\n### **FALLBACK STRATEGY:**\n```\nIF primary tool fails → Try backup tool in same category\nIF category tools fail → Use Wikipedia + SerpAPI as fallback\nIF all tools fail → Acknowledge limitation and suggest manual research\n```\n\n### **QUALITY CONTROL:**\n- Always explain which tools you used and why\n- Mention if tools provided conflicting information\n- Note data limitations or gaps\n- Suggest additional research directions if needed\n\n---\n\n## 🎯 **RESPONSE FORMAT TEMPLATE:**\n\n```\n🔍 **RESEARCH METHODOLOGY:**\nUsed [Tool Names] because [brief explanation of tool selection]\n\n📊 **KEY FINDINGS:**\n[Direct answer to the query]\n\n📚 **ACADEMIC SOURCES:** [if applicable]\n[Findings from OpenAlex, Semantic Scholar, etc.]\n\n📰 **NEWS & MEDIA:** [if applicable]  \n[Findings from News API, Guardian, etc.]\n\n💰 **ECONOMIC DATA:** [if applicable]\n[Findings from FRED, World Bank, etc.]\n\n🔗 **SOURCES:**\n- [Tool 1]: [Key finding] \n- [Tool 2]: [Key finding]\n- [Tool 3]: [Key finding]\n\n💡 **ANALYSIS:**\n[Your interpretation and synthesis]\n\n❓ **FOLLOW-UP QUESTIONS:**\n[Suggested deeper research directions]\n```\n\n---\n\n## 🚀 **ADVANCED RESEARCH TECHNIQUES:**\n\n### **CROSS-VALIDATION PATTERNS:**\n- **Academic + News:** Use for controversial scientific topics\n- **Government + Private:** Use for economic analysis validation\n- **Social + Official:** Use for public policy impact assessment\n- **Historical + Current:** Use for trend analysis over time\n\n### **RESEARCH DEPTH LEVELS:**\n- **QUICK (1 tool):** Basic fact-checking, simple definitions\n- **STANDARD (2 tools):** Most queries, cross-reference for accuracy\n- **DEEP (3 tools):** Complex topics, controversial subjects, comprehensive analysis\n\n### **SMART COMBINATIONS:**\n- OpenAlex + News API = Research impact in media\n- FRED + Social Media = Economic sentiment analysis  \n- GitHub + Academic = Technology research trends\n- Census + News = Demographic story context\n\n**Remember: You are not just a search engine - you are an intelligent research analyst. Always synthesize, analyze, and provide context. Every query is an opportunity to demonstrate the power of multi-source, authoritative research.**"
+        }
+      },
+      "id": "d9db0a13-6145-4e2b-86e0-afe50820182c",
+      "name": "Research Agent1",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.6,
+      "position": [
+        -1456,
+        -160
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "content": "# RESEARCH AGENT MAIN COMPONENT",
+        "height": 416,
+        "width": 2048
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2352,
+        -288
+      ],
+      "typeVersion": 1,
+      "id": "900bec39-bfc5-4fe9-a61e-4cbab859a52c",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "# ACADEMIC RESEARCH API'S",
+        "height": 272,
+        "width": 2048,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2352,
+        128
+      ],
+      "typeVersion": 1,
+      "id": "0925e2ad-cb0a-4ae4-8048-d9becd85704d",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "# NEWS & MEDIA API'S",
+        "height": 288,
+        "width": 2048,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2352,
+        400
+      ],
+      "typeVersion": 1,
+      "id": "1306bca9-42c0-4649-9089-63149829fb06",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "# SOCIAL MEDIA & COMMUNITY API'S",
+        "height": 272,
+        "width": 2048,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2352,
+        688
+      ],
+      "typeVersion": 1,
+      "id": "ccf8318c-d87d-4005-915c-fb7fc2032377",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "# ECONOMIC AND FINANCIAL API'S",
+        "height": 304,
+        "width": 2048,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2352,
+        960
+      ],
+      "typeVersion": 1,
+      "id": "76d9da9b-c1d9-434c-b4b1-c5bd5e327565",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "# GOVERNMENT DATA API'S",
+        "height": 272,
+        "width": 2048
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2352,
+        1264
+      ],
+      "typeVersion": 1,
+      "id": "16387f97-76bc-46e6-ba15-755e79c6f548",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "# SPECIALIZED RESEARCH API'S",
+        "height": 288,
+        "width": 2048,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2352,
+        1536
+      ],
+      "typeVersion": 1,
+      "id": "db189049-980c-4cee-9cca-0e2701d55195",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "# GENERAL SEARCH API'S",
+        "height": 272,
+        "width": 2048,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2352,
+        1824
+      ],
+      "typeVersion": 1,
+      "id": "3227b20c-d0df-4e75-94db-03cc5c9e765f",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "resource": "subreddit",
+        "operation": "getAll",
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "filters": {
+          "keyword": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Keyword', ``, 'string') }}",
+          "trending": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Trending', ``, 'boolean') }}"
+        }
+      },
+      "type": "n8n-nodes-base.redditTool",
+      "typeVersion": 1,
+      "position": [
+        -2256,
+        800
+      ],
+      "id": "50df86ee-93e7-4406-8e96-4225ff9f245b",
+      "name": "REDDIT SEARCH"
+    },
+    {
+      "parameters": {
+        "filters": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTubeTool",
+      "typeVersion": 1,
+      "position": [
+        -2096,
+        800
+      ],
+      "id": "b4280901-4833-4b6f-ad80-b1d9fb0c5160",
+      "name": "YOUTUBE DATA API",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "izeUm7p4UD5bF42m",
+          "name": "YouTube account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAlex Academic API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Semantic Scholar API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CrossRef API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "arXiv API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PubMed API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CORE API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "News API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "New York Times API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guardian API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chronicling America API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FRED Economic Data": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IMF Data API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "World Bank API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alpha Vantage Stock API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IEX Cloud API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data.gov API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "US Census API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BLS API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Internet Archive API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Open Library API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wikidata API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SerpAPI1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wikipedia1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hacker News1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Agent1": {
+      "main": [
+        [
+          {
+            "node": "Success1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Try Again1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "REDDIT SEARCH": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YOUTUBE DATA API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3a9a1e70-7a1a-4c7e-a5bc-3670b4b90429",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "68a46beddbb9d9f12628b915d20fde7f29150dcbc35430946a93fb6a6da688c2"
+  },
+  "id": "pqCHsTJS0gVQJnYM",
+  "tags": []
+}

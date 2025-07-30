@@ -129,7 +129,7 @@ function CommentEditor({
       } else {
         throw new Error(result.error || 'Failed to add comment');
       }
-    } catch (error) => {
+    } catch (error) {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to add comment",
@@ -373,7 +373,7 @@ function CommentItem({
       if (onReaction) {
         onReaction(comment, emoji);
       }
-    } catch (error) => {
+    } catch (error) {
       toast({
         title: "Error",
         description: "Failed to add reaction",
@@ -402,7 +402,7 @@ function CommentItem({
       } else {
         throw new Error(result.error);
       }
-    } catch (error) => {
+    } catch (error) {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to edit comment",
@@ -430,7 +430,7 @@ function CommentItem({
       } else {
         throw new Error(result.error);
       }
-    } catch (error) => {
+    } catch (error) {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to delete comment",
@@ -676,7 +676,7 @@ export function InternalComments({
         : loadedComments.filter(c => !c.isPrivate);
       
       setComments(filteredComments);
-    } catch (error) => {
+    } catch (error) {
       toast({
         title: "Error",
         description: "Failed to load comments",

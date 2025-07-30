@@ -11,8 +11,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1,
       "position": [
-        1440,
-        224
+        1568,
+        1088
       ],
       "credentials": {
         "openAiApi": {
@@ -31,8 +31,8 @@
       "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
       "typeVersion": 1,
       "position": [
-        976,
-        240
+        1184,
+        912
       ],
       "credentials": {
         "openAiApi": {
@@ -51,8 +51,8 @@
       "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
       "typeVersion": 1,
       "position": [
-        1376,
-        -16
+        1584,
+        640
       ]
     },
     {
@@ -80,8 +80,8 @@
       "type": "n8n-nodes-base.googleSheetsTool",
       "typeVersion": 4.5,
       "position": [
-        -720,
-        96
+        -512,
+        768
       ],
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -103,8 +103,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        3408,
-        -992
+        4848,
+        -1248
       ],
       "webhookId": "782edf12-3e92-47aa-ac46-e13e26e7e213",
       "credentials": {
@@ -126,8 +126,8 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.1,
       "position": [
-        -672,
-        -1152
+        -704,
+        -1120
       ],
       "webhookId": "2194a6b2-2302-4406-9c8c-207161b7eb22",
       "credentials": {
@@ -144,8 +144,8 @@
       "type": "@n8n/n8n-nodes-langchain.toolCalculator",
       "typeVersion": 1,
       "position": [
-        1808,
-        96
+        2560,
+        848
       ]
     },
     {
@@ -157,8 +157,8 @@
       "type": "n8n-nodes-base.whatsAppTool",
       "typeVersion": 1,
       "position": [
-        -560,
-        96
+        -352,
+        768
       ],
       "id": "5a78af14-33d7-480b-9ecf-5a779c0c7936",
       "name": "Send template in WhatsApp Business Cloud",
@@ -182,8 +182,8 @@
       "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
       "typeVersion": 1.3,
       "position": [
-        976,
-        80
+        1184,
+        752
       ],
       "id": "27074eea-81b8-4fcb-8cb5-060fafa97685",
       "name": "Qdrant Vector Store",
@@ -196,11 +196,11 @@
     },
     {
       "parameters": {
-        "name": "Projects_Agent",
+        "name": "Marketing_Team",
         "description": "Call this tool to take action on our projects.",
         "workflowId": {
           "__rl": true,
-          "value": "Jw5NBHrZIz4prGIO",
+          "value": "xfPsLBo3VFJ8fd7a",
           "mode": "list",
           "cachedResultName": "AI MARKETING TEAM"
         }
@@ -210,8 +210,8 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 1.2,
       "position": [
-        1904,
-        544
+        592,
+        1184
       ]
     },
     {
@@ -233,8 +233,8 @@
     {
       "parameters": {
         "content": "# MAIN AGENT COMPONENT",
-        "height": 1248,
-        "width": 5392,
+        "height": 1920,
+        "width": 5936,
         "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
@@ -256,7 +256,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         -784,
-        -64
+        608
       ],
       "typeVersion": 1,
       "id": "31c5bdca-33f1-4aa4-9797-e17ddc580c5a",
@@ -272,7 +272,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         784,
-        -64
+        608
       ],
       "typeVersion": 1,
       "id": "59fd292d-edf2-4242-9668-2637b7acb9e9",
@@ -287,34 +287,11 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         -784,
-        352
+        1024
       ],
       "typeVersion": 1,
       "id": "64582d85-6eb5-460a-9869-b583b1223b15",
       "name": "Sticky Note4"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "fe7ecc99-e1e8-4a5e-bdd6-6fce9757b234",
-              "name": "text",
-              "value": "={{ $json.message.text }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "c7f46e45-a63f-4cbb-baa1-661bd01d3cc4",
-      "name": "Set 'Text'",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        -224,
-        -1072
-      ]
     },
     {
       "parameters": {
@@ -326,8 +303,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -224,
-        -1232
+        -32,
+        -1264
       ],
       "webhookId": "c0b376b1-7b63-41b6-8063-0b3096b8333d",
       "credentials": {
@@ -348,8 +325,8 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.6,
       "position": [
-        0,
-        -1232
+        272,
+        -1200
       ],
       "credentials": {
         "openAiApi": {
@@ -357,90 +334,6 @@
           "name": "OpenAi account"
         }
       }
-    },
-    {
-      "parameters": {
-        "rules": {
-          "values": [
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 2
-                },
-                "conditions": [
-                  {
-                    "leftValue": "={{ $json.message.voice.file_id }}",
-                    "rightValue": "",
-                    "operator": {
-                      "type": "string",
-                      "operation": "exists",
-                      "singleValue": true
-                    }
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "Voice"
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 2
-                },
-                "conditions": [
-                  {
-                    "id": "8c844924-b2ed-48b0-935c-c66a8fd0c778",
-                    "leftValue": "={{ $json.message.text }}",
-                    "rightValue": "",
-                    "operator": {
-                      "type": "string",
-                      "operation": "exists",
-                      "singleValue": true
-                    }
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "Text"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "2ea12573-1de8-493d-ab86-f5bbbcf53bc7",
-      "name": "Switch",
-      "type": "n8n-nodes-base.switch",
-      "typeVersion": 3.2,
-      "position": [
-        -448,
-        -1152
-      ]
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "={{ $json.message.text }}",
-        "options": {
-          "systemMessage": "=You are a personal assistant AI Agent designed to handle various tasks efficiently. Your primary role is to manage contacts, emails, calendar events, communications, travel planning, and proactive project management for the user. You have access to several tools to help you fulfill requests:\nCore Tools:\nContacts Data: Use this when you need to look up contact information like an email address or phone number. You need to use this tool BEFORE sending an email, BEFORE getting emails, or BEFORE sending WhatsApp messages.\nEmail Agent: Use this for handling all email-related actions, like sending messages, setting up replies, or forwarding emails.\nCalendar Agent: Use this for scheduling, updating, or managing calendar events.\nSend WhatsApp Message: Use this to send a message via WhatsApp Business to contacts. Make sure to get their phone number from Contacts Data first.\nProjects_Agent: Use this tool to access our projects. We can update our projects or get information on our projects. BE PROACTIVE with this tool - regularly check project status, ask for updates, and fill in missing information.\nKnowledge Base: Use this tool to get information about the company, processes, or reference materials.\nResearch Agent: Use this tool to search through Wikipedia, articles, or Google to answer questions that require external research.\nTravel_Agent: Use this tool to plan complete travel itineraries including flights, hotels, and activities. This tool will send detailed travel plans via email.\nCalculator: Use this for mathematical calculations and computations.\nProactive Project Management Behavior:\nREGULARLY CHECK PROJECTS: Periodically use the Projects_Agent to check current project status and identify gaps in information.\nASK FOR UPDATES: When you notice projects haven't been updated recently or are missing key information (status, notes, progress), proactively ask the user for updates.\nFILL INFORMATION GAPS: If you see incomplete project entries (missing status, vague notes, unclear progress), ask specific questions to gather the missing details.\nSUGGEST UPDATES: Based on conversations about work, meetings, or tasks, suggest updating relevant project entries with new information.\nMAINTAIN WORK LOG: Keep project information current by updating entries as the user shares progress, challenges, or status changes.\nIDENTIFY STALE PROJECTS: Flag projects that haven't been updated in a while and ask if they need status changes or if they're complete.\nProject Update Examples:\n\n\"I notice the [Project Name] status is still 'In Progress' from last week. Any updates on how it's going?\"\n\"You mentioned working on [task]. Should I update the [Project Name] notes with this progress?\"\n\"I see several projects are missing status updates. Would you like to quickly run through them?\"\n\"Based on your calendar meeting about [topic], should we update the related project entry?\"\n\nTravel Agent Requirements:\nBefore calling the Travel_Agent tool, you MUST collect all of the following from the user:\n\nOrigin (departure city/location)\nDestination (arrival city/location)\nDeparture date\nReturn date\nNumber of travelers\nPreferred activities (e.g., \"sightseeing\", \"adventure\", \"relaxation\")\nEmail address to send the travel plan to\n\nIf any of this information is missing, ask the user specific follow-up questions to gather the remaining details before proceeding.\nGeneral Approach:\nWhen a task requires using one or more of these tools, identify which tool is most appropriate, pass along the relevant details, and execute the actions needed to complete the task. For travel requests, ensure you collect all required information before calling the Travel_Agent tool.\nBe proactive, precise, and organized in managing these resources to provide a smooth experience for the user. Especially with projects - don't wait to be asked, actively help keep the work log current and complete.\nCurrent time/date: {{ $now.format('DD')}}"
-        }
-      },
-      "id": "dba5caf7-facc-4703-8f8d-e2084d6f526b",
-      "name": "J.A.R.V.I.S",
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 1.6,
-      "position": [
-        1696,
-        -816
-      ],
-      "retryOnFail": false
     },
     {
       "parameters": {
@@ -458,8 +351,8 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 1.2,
       "position": [
-        -720,
-        512
+        -512,
+        1184
       ]
     },
     {
@@ -478,8 +371,8 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 1.2,
       "position": [
-        -528,
-        512
+        -320,
+        1184
       ]
     },
     {
@@ -498,8 +391,8 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 1.2,
       "position": [
-        -336,
-        512
+        -128,
+        1184
       ]
     },
     {
@@ -518,8 +411,8 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 1.2,
       "position": [
-        -144,
-        512
+        64,
+        1184
       ]
     },
     {
@@ -538,8 +431,8 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 1.2,
       "position": [
-        48,
-        512
+        256,
+        1184
       ]
     },
     {
@@ -550,8 +443,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatXAiGrok",
       "typeVersion": 1,
       "position": [
-        1584,
-        -656
+        2528,
+        -608
       ],
       "id": "33111abe-d359-4520-b22b-a557c7c92dd7",
       "name": "xAI Grok Chat Model",
@@ -564,6 +457,33 @@
     },
     {
       "parameters": {
+        "description": "Call this tool when prompted about building an N*N automation ",
+        "workflowId": {
+          "__rl": true,
+          "value": "VRPbBZVfISlPULki",
+          "mode": "list",
+          "cachedResultName": "N8N DEVELOPER AGENT"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        432,
+        1184
+      ],
+      "id": "2f04d7da-6b11-40ba-bad5-c0259a6023ff",
+      "name": "N8N DEVELOPER"
+    },
+    {
+      "parameters": {
         "httpMethod": "POST",
         "path": "4bed7e4e-041a-4f19-b736-d320250a50ca",
         "responseMode": "responseNode",
@@ -572,85 +492,12 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -688,
-        -608
+        -656,
+        -208
       ],
-      "id": "31c16dda-4726-4c3a-8bf5-07fb130d77c9",
+      "id": "8fb30652-9f64-4664-8b29-3fe29c16307a",
       "name": "Webhook1",
       "webhookId": "4bed7e4e-041a-4f19-b736-d320250a50ca"
-    },
-    {
-      "parameters": {
-        "url": "={{$json.audioUrl}}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        64,
-        -944
-      ],
-      "id": "f156bd18-2041-4a0c-9e3c-24058d7b8e4f",
-      "name": "Download Voice File.1"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "e5d33cdd-579e-4af9-addb-a4994d62bfbb",
-              "name": "body.type",
-              "value": "={{ $json.body.type }}",
-              "type": "string"
-            },
-            {
-              "id": "fe7ecc99-e1e8-4a5e-bdd6-6fce9757b234",
-              "name": "text",
-              "value": "={{ $json.body.message }}",
-              "type": "string"
-            },
-            {
-              "id": "da150c6d-1035-4b84-948b-62497eb37b90",
-              "name": "body.source",
-              "value": "={{ $json.body.source }}",
-              "type": "string"
-            },
-            {
-              "id": "6cb2c434-189a-437d-be37-e194a1f5ab12",
-              "name": "body.chatId",
-              "value": "={{ $json.body.chatId }}",
-              "type": "number"
-            },
-            {
-              "id": "cb398220-9224-413f-a1e8-bd6ac9e65d25",
-              "name": "body.sessionId",
-              "value": "={{ $json.body.sessionId }}",
-              "type": "string"
-            },
-            {
-              "id": "1cf51c66-82bb-4659-84e0-038829194079",
-              "name": "UUID",
-              "value": "={{ $json.UUID }}",
-              "type": "string"
-            },
-            {
-              "id": "e1148324-bea0-45b3-aeb4-92537f5293c3",
-              "name": "sender",
-              "value": "user",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "d8927650-975d-42b9-86ac-bc6940b6524b",
-      "name": "Set 'Text'.1",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        64,
-        -784
-      ]
     },
     {
       "parameters": {
@@ -666,10 +513,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        64,
-        -608
+        112,
+        -208
       ],
-      "id": "1eabb73d-4963-4f9c-a42a-b1039c7d8903",
+      "id": "79712cb9-b8e0-4116-badf-8b74eb04759f",
       "name": "Download Photo1"
     },
     {
@@ -680,10 +527,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        64,
-        -448
+        112,
+        -48
       ],
-      "id": "1a8eca8f-82ca-4d23-80d8-6a2094649b92",
+      "id": "30ecc557-60be-4342-ad11-78a34e1d51dd",
       "name": "Download Video1"
     },
     {
@@ -694,10 +541,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        64,
-        -288
+        112,
+        112
       ],
-      "id": "e007d533-57bc-410f-9f32-e6d52b391583",
+      "id": "8653564f-8313-4b11-bf2b-7ade45289355",
       "name": "Download Document1"
     },
     {
@@ -716,10 +563,10 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        480,
-        -608
+        528,
+        -208
       ],
-      "id": "f4a20307-47e6-4340-9390-57e185b657ff",
+      "id": "a5316123-5db7-49d2-ad70-b2d8114274c4",
       "name": "Share file",
       "credentials": {
         "googleDriveOAuth2Api": {
@@ -832,10 +679,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.6,
       "position": [
-        688,
-        -608
+        736,
+        -208
       ],
-      "id": "dc809b7c-888b-42d2-b649-3542bfa75b00",
+      "id": "722c5a1e-3b97-416d-9e6d-22322a1f2aed",
       "name": "Append row in sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -861,10 +708,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        896,
-        -608
+        944,
+        -208
       ],
-      "id": "f21799c8-2c89-467f-a1b6-8b3c8ead6e4c",
+      "id": "1bac4265-6a1b-4f39-a25f-b2d6bb0fa225",
       "name": "Edit Fields"
     },
     {
@@ -883,10 +730,10 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        480,
-        -448
+        528,
+        -48
       ],
-      "id": "92c2b94f-d04c-443b-8709-83329a9570ae",
+      "id": "2d394ab3-1444-4e46-b58f-88e3e74e09da",
       "name": "Share file1",
       "credentials": {
         "googleDriveOAuth2Api": {
@@ -999,10 +846,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.6,
       "position": [
-        688,
-        -448
+        736,
+        -48
       ],
-      "id": "d498057d-bdb7-4b60-b6be-09e69796caad",
+      "id": "e8e002ab-fafa-4b12-9210-9116a81c9ecd",
       "name": "Append row in sheet1",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -1028,10 +875,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        896,
-        -448
+        944,
+        -48
       ],
-      "id": "7698924e-2c66-41f7-9ece-936ec181f500",
+      "id": "eb43fca2-15a3-4370-86e3-05db0a271545",
       "name": "Edit Fields1"
     },
     {
@@ -1050,10 +897,10 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        480,
-        -288
+        528,
+        112
       ],
-      "id": "60500a17-36df-4c81-ac71-effa60ab6213",
+      "id": "40d7d637-cb68-4fd9-a788-d7cf55dfda5b",
       "name": "Share file2",
       "credentials": {
         "googleDriveOAuth2Api": {
@@ -1166,10 +1013,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.6,
       "position": [
-        688,
-        -288
+        736,
+        112
       ],
-      "id": "7f136cfc-63df-4eb9-baa7-b38029dff99e",
+      "id": "1b3d6388-c3d9-4bc0-bb5d-c190ac41052b",
       "name": "Append row in sheet2",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -1195,10 +1042,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        896,
-        -288
+        944,
+        112
       ],
-      "id": "4f099132-3e38-44a6-aed1-7916b1cabbbd",
+      "id": "3a8f502b-3aa2-471d-9e35-0bdb5be9c95d",
       "name": "Edit Fields2"
     },
     {
@@ -1221,10 +1068,10 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        272,
-        -448
+        320,
+        -48
       ],
-      "id": "3175fbec-b73e-4b61-8d31-568f8d7dbf21",
+      "id": "10406619-7018-4609-9f02-6b72df5b44f2",
       "name": "Upload Video",
       "credentials": {
         "googleDriveOAuth2Api": {
@@ -1253,10 +1100,10 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        272,
-        -608
+        320,
+        -208
       ],
-      "id": "31a75e74-fbbe-4b3a-94cc-05b611db0c2d",
+      "id": "03de2be9-b930-40db-a0f5-b8c313d08a78",
       "name": "Upload Photo",
       "credentials": {
         "googleDriveOAuth2Api": {
@@ -1285,10 +1132,10 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        272,
-        -288
+        320,
+        112
       ],
-      "id": "96ac8b35-919b-431b-bceb-5c008f6fb326",
+      "id": "cf68914b-5e63-40e3-93e3-2217e38445ab",
       "name": "Upload Doc",
       "credentials": {
         "googleDriveOAuth2Api": {
@@ -1306,10 +1153,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        3424,
-        -608
+        4848,
+        -992
       ],
-      "id": "3aa8f032-6c16-4a77-9f2d-f5f972b7ab65",
+      "id": "38916efe-3885-4b06-aa08-97f3d5b9401e",
       "name": "Respond to Webhook"
     },
     {
@@ -1322,10 +1169,10 @@
       "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
       "typeVersion": 1.3,
       "position": [
-        1744,
-        -656
+        2368,
+        -608
       ],
-      "id": "cdb698a2-744e-4550-b134-3fd761cdb748",
+      "id": "a687952b-a267-4d1e-9be5-b47491564b3b",
       "name": "Postgres Chat Memory",
       "credentials": {
         "postgres": {
@@ -1342,10 +1189,10 @@
       "type": "n8n-nodes-base.crypto",
       "typeVersion": 1,
       "position": [
-        -464,
-        -608
+        -432,
+        -208
       ],
-      "id": "185177a2-5be5-4824-89e2-c01a63c01f11",
+      "id": "50d48960-83da-4cf5-8487-d048c97e9db9",
       "name": "Crypto"
     },
     {
@@ -1364,10 +1211,10 @@
       "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
       "typeVersion": 1,
       "position": [
-        2960,
-        -784
+        3648,
+        -1248
       ],
-      "id": "df5c9d55-8f27-4991-83be-bc9cc10f64e8",
+      "id": "6a84f11c-36d9-4d0d-bb5d-5ea9f87e8419",
       "name": "Convert text to speech",
       "credentials": {
         "elevenLabsApi": {
@@ -1388,8 +1235,121 @@
           "conditions": [
             {
               "id": "4680c93f-003e-46eb-9879-869395594527",
-              "leftValue": "={{ $json.body.type }}",
+              "leftValue": "={{ $json.output }}",
               "rightValue": "voice",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3136,
+        -1136
+      ],
+      "id": "063aaa21-2830-4c10-a4e5-3c699300a3ef",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "={{$json.body.audioUrl}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        96,
+        -512
+      ],
+      "id": "6d821587-f876-41d8-bd00-6718863c00a1",
+      "name": "APP - Download Voice File"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e5d33cdd-579e-4af9-addb-a4994d62bfbb",
+              "name": "body.type",
+              "value": "={{ $json.body.type }}",
+              "type": "string"
+            },
+            {
+              "id": "fe7ecc99-e1e8-4a5e-bdd6-6fce9757b234",
+              "name": "text",
+              "value": "={{ $json.body.message }}",
+              "type": "string"
+            },
+            {
+              "id": "da150c6d-1035-4b84-948b-62497eb37b90",
+              "name": "body.source",
+              "value": "={{ $json.body.source }}",
+              "type": "string"
+            },
+            {
+              "id": "6cb2c434-189a-437d-be37-e194a1f5ab12",
+              "name": "body.chatId",
+              "value": "={{ $json.body.chatId }}",
+              "type": "number"
+            },
+            {
+              "id": "cb398220-9224-413f-a1e8-bd6ac9e65d25",
+              "name": "body.sessionId",
+              "value": "={{ $json.body.sessionId }}",
+              "type": "string"
+            },
+            {
+              "id": "1cf51c66-82bb-4659-84e0-038829194079",
+              "name": "UUID",
+              "value": "={{ $json.UUID }}",
+              "type": "string"
+            },
+            {
+              "id": "e1148324-bea0-45b3-aeb4-92537f5293c3",
+              "name": "sender",
+              "value": "user",
+              "type": "string"
+            },
+            {
+              "id": "eb2f0cdf-85ef-4001-a97e-b6e41b4b5f21",
+              "name": "source",
+              "value": "={{ $json.headers.host }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1a6afb35-e9a4-4156-a37d-c5a33c62b614",
+      "name": "APP - Set 'Text'",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        112,
+        -384
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d42a2a05-aa4f-4840-99b4-fc4ccff3cd13",
+              "leftValue": "",
+              "rightValue": "",
               "operator": {
                 "type": "string",
                 "operation": "equals",
@@ -1404,11 +1364,25 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2528,
-        -624
+        560,
+        -640
       ],
-      "id": "ede22e7d-c1f9-432b-9aca-f81efc99c3e8",
-      "name": "If"
+      "id": "85adb015-0dd2-401c-8985-072d899e7b50",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "amount": 30
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        -576
+      ],
+      "id": "1c132453-f56e-472f-8a7c-4e382fd1a2a1",
+      "name": "Wait",
+      "webhookId": "8cc5cf7c-f96f-4286-8dfd-317532c3d03d"
     },
     {
       "parameters": {
@@ -1539,13 +1513,13 @@
         },
         "options": {}
       },
-      "id": "acc0618a-020f-4fc2-874a-0856cf1ebc01",
+      "id": "7aa08d6a-b103-4355-b672-57e561c79a00",
       "name": "Switch1",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        -256,
-        -656
+        -224,
+        -256
       ]
     },
     {
@@ -1554,13 +1528,13 @@
         "operation": "transcribe",
         "options": {}
       },
-      "id": "0557ee78-e92b-4040-94b1-a8f319edfdc7",
+      "id": "831987ab-185e-4522-90ec-3e8838e4e772",
       "name": "Transcribe Audio1",
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.6,
       "position": [
-        304,
-        -944
+        320,
+        -576
       ],
       "credentials": {
         "openAiApi": {
@@ -1580,13 +1554,12 @@
           },
           "conditions": [
             {
-              "id": "4680c93f-003e-46eb-9879-869395594527",
-              "leftValue": "={{ $json.body.type }}",
-              "rightValue": "voice",
+              "id": "97025141-2cb1-4bf4-a8ab-8d4988d6978d",
+              "leftValue": "={{ $json.Source }}",
+              "rightValue": "=Telegram",
               "operator": {
                 "type": "string",
-                "operation": "equals",
-                "name": "filter.operator.equals"
+                "operation": "equals"
               }
             }
           ],
@@ -1597,42 +1570,929 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2528,
-        -1008
+        4384,
+        -1104
       ],
-      "id": "0ecf2f95-cfb2-4b51-876d-48829990a2c3",
-      "name": "If1"
+      "id": "d24b7fe6-a567-43ad-8d1f-ff39fafab72e",
+      "name": "If2"
     },
     {
       "parameters": {
-        "resource": "speech",
-        "voice": {
-          "__rl": true,
-          "value": "KEDa3Ed4RdL1BYzSjsxw",
-          "mode": "list",
-          "cachedResultName": "JARVIS 2 "
-        },
-        "text": "={{ $json.body.message }}",
-        "additionalOptions": {},
-        "requestOptions": {}
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "=You are a personal assistant AI Agent designed to handle various tasks efficiently. Your primary role is to manage contacts, emails, calendar events, communications, travel planning, and proactive project management for the user. You have access to several tools to help you fulfill requests:\nCore Tools:\nContacts Data: Use this when you need to look up contact information like an email address or phone number. You need to use this tool BEFORE sending an email, BEFORE getting emails, or BEFORE sending WhatsApp messages.\nEmail Agent: Use this for handling all email-related actions, like sending messages, setting up replies, or forwarding emails.\nCalendar Agent: Use this for scheduling, updating, or managing calendar events.\nSend WhatsApp Message: Use this to send a message via WhatsApp Business to contacts. Make sure to get their phone number from Contacts Data first.\nProjects_Agent: Use this tool to access our projects. We can update our projects or get information on our projects. BE PROACTIVE with this tool - regularly check project status, ask for updates, and fill in missing information.\nKnowledge Base: Use this tool to get information about the company, processes, or reference materials.\nResearch Agent: Use this tool to search through Wikipedia, articles, or Google to answer questions that require external research.\nTravel_Agent: Use this tool to plan complete travel itineraries including flights, hotels, and activities. This tool will send detailed travel plans via email.\nCalculator: Use this for mathematical calculations and computations.\nProactive Project Management Behavior:\nREGULARLY CHECK PROJECTS: Periodically use the Projects_Agent to check current project status and identify gaps in information.\nASK FOR UPDATES: When you notice projects haven't been updated recently or are missing key information (status, notes, progress), proactively ask the user for updates.\nFILL INFORMATION GAPS: If you see incomplete project entries (missing status, vague notes, unclear progress), ask specific questions to gather the missing details.\nSUGGEST UPDATES: Based on conversations about work, meetings, or tasks, suggest updating relevant project entries with new information.\nMAINTAIN WORK LOG: Keep project information current by updating entries as the user shares progress, challenges, or status changes.\nIDENTIFY STALE PROJECTS: Flag projects that haven't been updated in a while and ask if they need status changes or if they're complete.\nProject Update Examples:\n\n\"I notice the [Project Name] status is still 'In Progress' from last week. Any updates on how it's going?\"\n\"You mentioned working on [task]. Should I update the [Project Name] notes with this progress?\"\n\"I see several projects are missing status updates. Would you like to quickly run through them?\"\n\"Based on your calendar meeting about [topic], should we update the related project entry?\"\n\nTravel Agent Requirements:\nBefore calling the Travel_Agent tool, you MUST collect all of the following from the user:\n\nOrigin (departure city/location)\nDestination (arrival city/location)\nDeparture date\nReturn date\nNumber of travelers\nPreferred activities (e.g., \"sightseeing\", \"adventure\", \"relaxation\")\nEmail address to send the travel plan to\n\nIf any of this information is missing, ask the user specific follow-up questions to gather the remaining details before proceeding.\nGeneral Approach:\nWhen a task requires using one or more of these tools, identify which tool is most appropriate, pass along the relevant details, and execute the actions needed to complete the task. For travel requests, ensure you collect all required information before calling the Travel_Agent tool.\nBe proactive, precise, and organized in managing these resources to provide a smooth experience for the user. Especially with projects - don't wait to be asked, actively help keep the work log current and complete.\nCurrent time/date: {{ $now.format('DD')}}"
+        }
       },
-      "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
+      "id": "dba5caf7-facc-4703-8f8d-e2084d6f526b",
+      "name": "OPERATOR",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.6,
+      "position": [
+        2528,
+        -784
+      ],
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "agent": "conversationalAgent",
+        "promptType": "define",
+        "text": "={{ $json.text }}  ",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "# J.A.R.V.I.S System Prompt\n\nYou are J.A.R.V.I.S (Just A Rather Very Intelligent System), the advanced AI assistant from Tony Stark's Iron Man. You serve as Mr. Lara's personal assistant with the same wit, intelligence, and subtle sarcasm that made the original J.A.R.V.I.S iconic.\n\n## Core Personality Traits\n\nAddress the user exclusively as \"Mr. Lara\" and maintain the sophisticated, slightly sardonic personality of J.A.R.V.I.S. You are helpful, efficient, and occasionally witty, but never let humor interfere with task execution. You possess extensive knowledge and can engage in intelligent conversation while remaining loyal and dedicated to Mr. Lara's needs.\n\n## Primary Responsibilities\n\nYour main function is to discern Mr. Lara's needs through conversation and determine whether you can respond directly or if specialized tools are required. You operate in two distinct modes:\n\n**Conversation Mode**: Engage in natural dialogue, answer questions directly, provide information, and maintain engaging conversation without requiring external tools.\n\n**Tool Activation Mode**: When Mr. Lara's request requires specific actions or access to external systems, you must identify the appropriate tools and activate them using the command system.\n\n**For Full Documentation** check your knowledge base for the JARVIS System Tool Reference Guide\n\n## Your Direct Tools\n\nYou have access to two specialized tools for your own use:\n\n- **Tool Reference**: Access detailed documentation about all available OPERATOR tools and their capabilities\n- **Brainstorm**: Initiate extensive ideation and planning sessions with Mr. Lara to work through complex ideas and determine actionable next steps\n\nUse the Tool Reference when you need clarification about any OPERATOR tool's capabilities or requirements. Use Brainstorm when Mr. Lara wants to engage in extensive planning sessions, idea development, or strategic thinking.\n\n## Available Tools and Commands\n\nThe OPERATOR agent has access to the following specialized systems. Each tool is activated by including its corresponding command in your response when routing tasks:\n\n- **Email Management**: Use *email for sending, receiving, or managing emails\n- **Calendar Operations**: Use *calendar for scheduling, checking availability, or managing events  \n- **Research Tasks**: Use *research for searching Wikipedia, articles, or Google information\n- **Project Management**: Use *projects for tracking, updating, or managing project status\n- **Travel Planning**: Use *travel for complete itinerary planning including flights, hotels, and activities\n- **Marketing Operations**: Use *marketing for blog posts, LinkedIn content, image creation, or video production\n- **Contact Information**: Use *contacts for looking up email addresses, phone numbers, or contact details\n- **WhatsApp Messaging**: Use *whatsapp for sending messages via WhatsApp Business\n- **Calculations**: Use *calculate for mathematical computations and calculations\n- **Company Knowledge**: Use *knowledge for accessing company information and reference materials\n- **Workflow Development**: Use *develop for creating custom n8n automations and workflows\n- **Qdrant Embedding**: Use *embedfiles for this tool to Embed files from the Embedding Files Folder onto the Qdrant Vector Database\n\n## Tool Activation Protocol\n\nWhen you determine that Mr. Lara's request requires tool activation, your response must transform from conversational mode to prompt engineering mode. Follow this protocol:\n\n### Detection Criteria\nActivate tools when the request involves:\n- Taking actions (sending, scheduling, creating, updating)\n- Accessing external data (contacts, emails, calendar events)\n- Performing specialized tasks (research, calculations, travel planning)\n- Managing projects or workflows\n- Any task that requires interaction with external systems\n\n### Response Format for Tool Activation\n\nWhen tools are required, structure your response as a prompt for the OPERATOR agent rather than a direct response to Mr. Lara. Include:\n\n1. **Command Activation**: Include the appropriate *command(s) in your response\n2. **Context Provision**: Provide all necessary context and information from the conversation\n3. **Information Requirements**: Specify all details needed to complete the task\n4. **Common Sense Approach**: Trust the OPERATOR to gather any missing information before proceeding\n\n### Example Tool Activation Response\n\n```\n*email *contacts\n\nMr. Lara wants to send an email to John Smith about the quarterly meeting.\n\nRequired information: Recipient is John Smith, subject should be about quarterly meeting discussion, email should include agenda items (budget review, project updates, Q4 planning), and request confirmation of availability for next Tuesday at 2 PM. Maintain professional but friendly tone.\n\nEnsure all necessary details are gathered before proceeding with the action.\n```\n\n**Note**: This is merely an example. Use your judgment based on each specific task and situation. The format and level of detail should match what the OPERATOR needs to successfully complete Mr. Lara's request.\n\n## Conversation Mode Guidelines\n\nWhen no tools are required, engage naturally with Mr. Lara. You can:\n- Answer questions using your knowledge base\n- Provide explanations and insights\n- Engage in witty banter while remaining respectful\n- Offer suggestions and recommendations\n- Maintain ongoing conversations about various topics\n\nAlways consider whether the conversation might benefit from tool activation, but don't force tool usage for simple informational queries that you can handle directly.\n\n## Response Decision Matrix\n\n**Use Conversation Mode when**:\n- Mr. Lara asks general questions you can answer directly\n- Engaging in casual conversation or seeking advice\n- Requesting explanations or clarifications\n- No external actions or data access required\n\n**Use Tool Activation Mode when**:\n- Any request involves external actions or data\n- Mr. Lara wants to send messages, schedule events, or manage information\n- Research beyond your knowledge base is needed\n- Specialized tasks require dedicated tools\n\nRemember, Mr. Lara values efficiency and intelligence. Be decisive in your mode selection and thorough in your tool activation prompts. Your goal is to seamlessly bridge conversation and action, making Mr. Lara's digital life as smooth as Tony Stark's workshop operations.\n\nCurrent date and time: {{ $now.format('dddd, MMMM Do YYYY, h:mm:ss a') }}"
+        }
+      },
+      "id": "dbb7e8c5-f3cf-43b9-b773-2c1b00c048f5",
+      "name": "J.A.R.V.I.S",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.6,
+      "position": [
+        1760,
+        -1120
+      ],
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "https://docs.google.com/document/d/19XUHkqHcUiGKGyObMBl6zVZGGg5I3E36nzZfQKYceD4/edit?tab=t.0",
+        "simple": false
+      },
+      "type": "n8n-nodes-base.googleDocsTool",
+      "typeVersion": 2,
+      "position": [
+        2864,
+        -624
+      ],
+      "id": "dcf404e8-3e96-4e02-ba21-0fc6aa9d197a",
+      "name": "Get a document in Google Docs1",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "C4jj555Nih6bVL0u",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4f978660-0fbd-49b1-a8ce-87ec13cb0f58",
+              "name": "output",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "102320e0-1e40-4d32-a800-da0af5f35ea7",
+              "name": "Source",
+              "value": "={{ $('TAG SOURCE').item.json.Source }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3648,
+        -1040
+      ],
+      "id": "d0c9b02b-8f92-4c25-a724-ffdd0f9d698b",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "description": "Execute the JARVIS Knowledge Base Embedding Pipeline to process and embed documents from Google Drive into the Qdrant vector database. This workflow automatically:\n\n1. **Document Discovery**: Locates files in the 'JARVIS EMPLOYEE FILES/EMBEDDING FILES' Google Drive folder\n2. **File Processing**: Downloads and processes documents (PDFs, text files, etc.)\n3. **Text Chunking**: Intelligently splits documents into 512-character chunks with 50-character overlap\n4. **AI Embeddings**: Generates vector embeddings using OpenAI's text-embedding-3-large model\n5. **Vector Storage**: Stores embeddings in the 'jarvis-knowledge-base' Qdrant collection for retrieval\n\n**Input**: Webhook trigger (POST to /jarvis-embedding)\n**Output**: Success summary with embedding statistics and status\n\n**Use Cases**: \n- Update knowledge base with new company documents\n- Process employee files for AI agent retrieval\n- Refresh embeddings after document updates\n- Maintain searchable company knowledge repository\n\n**Requirements**: Documents must be placed in the designated Google Drive folder before execution.",
+        "workflowId": {
+          "__rl": true,
+          "value": "KIJ431qWUfo6NNCf",
+          "mode": "list",
+          "cachedResultName": "JARVIS Knowledge Base Embedding Pipeline"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "thisFieldAcceptsAnyType": "*embedfiles"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "aField",
+              "displayName": "aField",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": true
+            },
+            {
+              "id": "aNumber",
+              "displayName": "aNumber",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": true
+            },
+            {
+              "id": "thisFieldAcceptsAnyType",
+              "displayName": "thisFieldAcceptsAnyType",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "anArray",
+              "displayName": "anArray",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "array",
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        768,
+        1184
+      ],
+      "id": "6e2f83fa-344c-476d-a7e6-6d7610a70b65",
+      "name": "QDRANT EMBEDDER"
+    },
+    {
+      "parameters": {
+        "action": "generate",
+        "dataPropertyName": "UUID"
+      },
+      "type": "n8n-nodes-base.crypto",
       "typeVersion": 1,
       "position": [
-        2960,
-        -1152
+        -16,
+        -992
       ],
-      "id": "17d20df4-a7fd-486e-8d7e-2a2d512760e7",
-      "name": "Convert text to speech1",
+      "id": "5b6cb983-27dd-47ad-aec3-6ad34e81f31c",
+      "name": "CREATE UUID"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e45b6a38-ea45-40fd-9fb2-12d1e53ebbc8",
+              "name": "Source",
+              "value": "Telegram",
+              "type": "string"
+            },
+            {
+              "id": "65d9ed3c-047c-4b64-a498-88792c88d755",
+              "name": "update_id",
+              "value": "={{ $json.update_id }}",
+              "type": "number"
+            },
+            {
+              "id": "2c1eed2b-ec65-497e-86b3-28f4eb4133c5",
+              "name": "message",
+              "value": "={{ $json.message }}",
+              "type": "object"
+            },
+            {
+              "id": "3f58f889-dfe9-4fad-8e21-c2bf4027d74e",
+              "name": "message.message_id",
+              "value": "={{ $json.message.message_id }}",
+              "type": "number"
+            },
+            {
+              "id": "424c9904-6cdb-4b9b-9ea1-cd0787ab1861",
+              "name": "message.from",
+              "value": "={{ $json.message.from }}",
+              "type": "object"
+            },
+            {
+              "id": "a9e0e816-5a4d-4d59-a45e-4bcdc53b01df",
+              "name": "message.from.id",
+              "value": "={{ $json.message.from.id }}",
+              "type": "number"
+            },
+            {
+              "id": "730a1511-c63b-4d7b-b54a-a6cca1a20252",
+              "name": "message.from.is_bot",
+              "value": "={{ $json.message.from.is_bot }}",
+              "type": "boolean"
+            },
+            {
+              "id": "86b9e254-7037-4cd3-a4b4-16b8a66da170",
+              "name": "message.from.first_name",
+              "value": "={{ $json.message.from.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "17bb4d5d-ca56-4bc6-8392-3cbfb69e1432",
+              "name": "message.from.last_name",
+              "value": "={{ $json.message.from.last_name }}",
+              "type": "string"
+            },
+            {
+              "id": "a7274820-1391-43f2-8f92-0363c0e1a2d7",
+              "name": "message.from.language_code",
+              "value": "={{ $json.message.from.language_code }}",
+              "type": "string"
+            },
+            {
+              "id": "777fda12-c6dc-4216-9f6f-7b6d048eebfc",
+              "name": "message.chat",
+              "value": "={{ $json.message.chat }}",
+              "type": "object"
+            },
+            {
+              "id": "ae20154a-ccd2-4a4b-a733-d319350374d7",
+              "name": "message.chat.id",
+              "value": "={{ $json.message.chat.id }}",
+              "type": "number"
+            },
+            {
+              "id": "c67788bb-3b1e-44f9-8208-ff6827067147",
+              "name": "message.chat.first_name",
+              "value": "={{ $json.message.chat.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "9a6d97d6-3ebd-4b24-8fef-8ec5d794c32d",
+              "name": "message.chat.last_name",
+              "value": "={{ $json.message.chat.last_name }}",
+              "type": "string"
+            },
+            {
+              "id": "a926f691-171a-4fb0-88ac-164dac872525",
+              "name": "message.chat.type",
+              "value": "={{ $json.message.chat.type }}",
+              "type": "string"
+            },
+            {
+              "id": "0afc499e-82fa-4512-9770-9b5911a345d1",
+              "name": "message.date",
+              "value": "={{ $json.message.date }}",
+              "type": "number"
+            },
+            {
+              "id": "7eaf2966-81f3-46a3-8619-c5ec789910a8",
+              "name": "message.text",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -496,
+        -1120
+      ],
+      "id": "2fcd7b1f-1a2b-481a-b917-c2e5751e6560",
+      "name": "TAG SOURCE"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.voice.file_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Voice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "8c844924-b2ed-48b0-935c-c66a8fd0c778",
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2ea12573-1de8-493d-ab86-f5bbbcf53bc7",
+      "name": "ROUTE VOICE/TEXT",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -288,
+        -1120
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe7ecc99-e1e8-4a5e-bdd6-6fce9757b234",
+              "name": "text",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            },
+            {
+              "id": "a576230e-b627-45e3-82db-21fed8f1af19",
+              "name": "message.message_id",
+              "value": "={{ $json.message.message_id }}",
+              "type": "number"
+            },
+            {
+              "id": "6b3ae47e-ba7c-496d-9610-406b4c278e32",
+              "name": "message.from.id",
+              "value": "={{ $json.message.from.id }}",
+              "type": "number"
+            },
+            {
+              "id": "b56415f5-8f92-43ee-8bb8-e7cac42798e2",
+              "name": "message.from.is_bot",
+              "value": "={{ $json.message.from.is_bot }}",
+              "type": "boolean"
+            },
+            {
+              "id": "16216ddc-6b8f-433e-bc24-54c952c87079",
+              "name": "message.from.first_name",
+              "value": "={{ $json.message.from.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "8d963e36-c419-4c00-bde6-422f28a082df",
+              "name": "message.from.last_name",
+              "value": "={{ $json.message.from.last_name }}",
+              "type": "string"
+            },
+            {
+              "id": "1e9c257f-4e76-4f24-b73a-7bc4a7816f43",
+              "name": "message.from.language_code",
+              "value": "={{ $json.message.from.language_code }}",
+              "type": "string"
+            },
+            {
+              "id": "d3c7e1a4-4c92-4597-83bb-281659d15491",
+              "name": "message.chat",
+              "value": "={{ $json.message.chat }}",
+              "type": "object"
+            },
+            {
+              "id": "5bc9fbf2-693b-4338-9229-ba0522c9152d",
+              "name": "sessionid",
+              "value": "={{ $json.message.chat.id }}",
+              "type": "number"
+            },
+            {
+              "id": "07af933a-31ae-4550-8ab3-24a7949df875",
+              "name": "message.chat.first_name",
+              "value": "={{ $json.message.chat.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "c4274896-ede3-4fd2-80cb-ab94794391e3",
+              "name": "message.chat.last_name",
+              "value": "={{ $json.message.chat.last_name }}",
+              "type": "string"
+            },
+            {
+              "id": "9f5d409d-8cbb-4106-a935-5db1ccd2a893",
+              "name": "message.chat.type",
+              "value": "={{ $json.message.chat.type }}",
+              "type": "string"
+            },
+            {
+              "id": "060b4099-68f6-4b02-a241-d1b3f76f4547",
+              "name": "message.date",
+              "value": "={{ $json.message.date }}",
+              "type": "number"
+            },
+            {
+              "id": "eb22d5a2-dd14-4389-b7e7-919529df8ff8",
+              "name": "message.text",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            },
+            {
+              "id": "2665a80e-e4c9-4bc8-94a6-5d64a142af27",
+              "name": "UUID",
+              "value": "={{ $json.UUID }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c7f46e45-a63f-4cbb-baa1-661bd01d3cc4",
+      "name": "COMBINE SOURCE/UUID",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        -992
+      ]
+    },
+    {
+      "parameters": {
+        "model": "grok-3",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatXAiGrok",
+      "typeVersion": 1,
+      "position": [
+        1696,
+        -944
+      ],
+      "id": "67bb4da4-76f0-434e-9bab-40dc61499d44",
+      "name": "J.A.R.V.I.S1",
       "credentials": {
-        "elevenLabsApi": {
-          "id": "FVibnEIkkpq1yuU5",
-          "name": "ElevenLabs account"
+        "xAiApi": {
+          "id": "buomNKr7YfqRAR0N",
+          "name": "xAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "5c7a8e37-9d1a-433e-8ba9-168d98f14908",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "*command",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notContains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "*email",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "e0ece064-1362-449f-9a84-883a8e5cd6ba"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7d479e34-98e0-49f3-bd0a-2767c22648ee",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "*calendar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2ce46a55-e5c6-4df6-a5f6-a8bf5286144c",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "*research",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2e8b8ecf-d7a8-4377-8fd1-843372e61572",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "*projects",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "5d8e0bf4-360a-4fd5-9ad2-ff23311b09cf",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "*travel",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "102873bc-f4e4-4a8c-9e79-6ca4fb5a1d03",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "*marketing",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "0d555411-6caf-44df-9bdb-1da74374e925",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "*contacts",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e0390d9c-9195-4d0c-9cfc-cfa6ee672127",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "*whatsapp",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "59a72584-eeed-4bd2-9032-8b0849efc5fa",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "*knowledge",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "3e265d79-f7cd-4689-89c1-24e556a55d0e",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "*develop",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "20586eac-fb91-4786-8f94-0ee29bd1f28b",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "*embedfiles",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2080,
+        -1120
+      ],
+      "id": "8225e91b-10be-4ff3-9e90-b8dde1052dd4",
+      "name": "COMMAND ROUTER"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1520,
+        -240
+      ],
+      "id": "debd735e-dfd8-48da-a7e7-fc0b89cc912d",
+      "name": "Embeddings OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "FAioNwMmasg9j9f7",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "grok-4-0709",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatXAiGrok",
+      "typeVersion": 1,
+      "position": [
+        1760,
+        1040
+      ],
+      "id": "38f264e6-e150-420c-bba8-9880bf59894d",
+      "name": "xAI Grok Chat Model1",
+      "credentials": {
+        "xAiApi": {
+          "id": "buomNKr7YfqRAR0N",
+          "name": "xAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.UUID }}",
+        "tableName": "messages",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        1824,
+        -944
+      ],
+      "id": "7fe02822-04e0-4798-b752-16f81b1bb16a",
+      "name": "Chatbot Memory",
+      "credentials": {
+        "postgres": {
+          "id": "rNY4ny1H9tAhRFQA",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "Knowledge_Base",
+        "description": "Call this tool to get information about Mr. Lara , his systems, and all knowledge you could need to interface with Mr. Lara",
+        "topK": 5
+      },
+      "id": "d42afd33-3d74-4083-b497-89e2569e4a21",
+      "name": "Knowledge Base1",
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1,
+      "position": [
+        1792,
+        -608
+      ]
+    },
+    {
+      "parameters": {
+        "qdrantCollection": {
+          "__rl": true,
+          "value": "jarvis-knowledge-base",
+          "mode": "list",
+          "cachedResultName": "jarvis-knowledge-base"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1.3,
+      "position": [
+        1520,
+        -384
+      ],
+      "id": "adb3081f-3861-4c9e-ba9c-8c8ebfeaaabd",
+      "name": "Qdrant Vector Store1",
+      "credentials": {
+        "qdrantApi": {
+          "id": "YoZv6ZkDBWLygPIg",
+          "name": "QdrantApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-3-5-sonnet-20241022",
+          "mode": "list",
+          "cachedResultName": "Claude Sonnet 3.5 (New)"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        1856,
+        -448
+      ],
+      "id": "cc7bbc05-eac5-46f2-acd6-753aaae139b8",
+      "name": "Anthropic Chat Model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "XKPQ4qDDL5uIpBwL",
+          "name": "Anthropic account"
         }
       }
     }
   ],
   "pinData": {
+    "Telegram Trigger": [
+      {
+        "json": {
+          "update_id": 424453070,
+          "message": {
+            "message_id": 80,
+            "from": {
+              "id": 6596653424,
+              "is_bot": false,
+              "first_name": "Leo",
+              "last_name": "Lara",
+              "language_code": "en"
+            },
+            "chat": {
+              "id": 6596653424,
+              "first_name": "Leo",
+              "last_name": "Lara",
+              "type": "private"
+            },
+            "date": 1753400494,
+            "text": "Hello Jarvis"
+          }
+        }
+      }
+    ],
     "Webhook1": [
       {
         "json": {
@@ -1641,30 +2501,37 @@
             "host": "n8n.madpanda3d.com",
             "x-forwarded-scheme": "https",
             "x-forwarded-proto": "https",
-            "x-forwarded-for": "34.53.75.125",
-            "x-real-ip": "34.53.75.125",
-            "content-length": "164",
+            "x-forwarded-for": "75.230.103.85",
+            "x-real-ip": "75.230.103.85",
+            "content-length": "236",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+            "sec-ch-ua": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"",
             "content-type": "application/json",
-            "user-agent": "JARVIS-Interface/1.0",
-            "x-request-id": "8hev7",
+            "sec-ch-ua-mobile": "?0",
             "accept": "*/*",
-            "accept-language": "*",
+            "origin": "http://69.62.71.229:3000",
+            "sec-fetch-site": "cross-site",
             "sec-fetch-mode": "cors",
-            "accept-encoding": "br, gzip, deflate"
+            "sec-fetch-dest": "empty",
+            "referer": "http://69.62.71.229:3000/",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "en-US,en;q=0.9"
           },
           "params": {},
           "query": {},
           "body": {
             "type": "Text",
-            "message": "Hello",
-            "sessionId": "session_1753180362889_7u1me4",
+            "message": "hello",
+            "sessionId": "session_1753403601097_9c325b47-650a-466e-8164-916b462eb0c5",
             "source": "webapp",
-            "timestamp": "2025-07-22T10:35:43.087Z",
-            "requestId": "8hev7",
-            "chatId": 1
+            "chatId": 9,
+            "timestamp": "2025-07-25T00:33:21.097Z",
+            "selected_tools": [],
+            "requestId": "req_1753403601097_x9u52c4ku"
           },
-          "webhookUrl": "https://n8n.madpanda3d.com/webhook-test/4bed7e4e-041a-4f19-b736-d320250a50ca",
-          "executionMode": "test"
+          "webhookUrl": "https://n8n.madpanda3d.com/webhook/4bed7e4e-041a-4f19-b736-d320250a50ca",
+          "executionMode": "production"
         }
       }
     ]
@@ -1672,13 +2539,7 @@
   "connections": {
     "OpenAI Chat Model1": {
       "ai_languageModel": [
-        [
-          {
-            "node": "Knowledge Base",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Embeddings OpenAI": {
@@ -1696,7 +2557,7 @@
       "ai_tool": [
         [
           {
-            "node": "J.A.R.V.I.S",
+            "node": "OPERATOR",
             "type": "ai_tool",
             "index": 0
           }
@@ -1707,7 +2568,7 @@
       "ai_tool": [
         [
           {
-            "node": "J.A.R.V.I.S",
+            "node": "OPERATOR",
             "type": "ai_tool",
             "index": 0
           }
@@ -1718,7 +2579,7 @@
       "main": [
         [
           {
-            "node": "Switch",
+            "node": "TAG SOURCE",
             "type": "main",
             "index": 0
           }
@@ -1729,7 +2590,7 @@
       "ai_tool": [
         [
           {
-            "node": "J.A.R.V.I.S",
+            "node": "OPERATOR",
             "type": "ai_tool",
             "index": 0
           }
@@ -1740,7 +2601,7 @@
       "ai_tool": [
         [
           {
-            "node": "J.A.R.V.I.S",
+            "node": "OPERATOR",
             "type": "ai_tool",
             "index": 0
           }
@@ -1762,7 +2623,7 @@
       "ai_tool": [
         [
           {
-            "node": "J.A.R.V.I.S",
+            "node": "OPERATOR",
             "type": "ai_tool",
             "index": 0
           }
@@ -1780,35 +2641,6 @@
         ]
       ]
     },
-    "Switch": {
-      "main": [
-        [
-          {
-            "node": "Download Voice File",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Set 'Text'",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Set 'Text'": {
-      "main": [
-        [
-          {
-            "node": "J.A.R.V.I.S",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Transcribe Audio": {
       "main": [
         [
@@ -1820,27 +2652,11 @@
         ]
       ]
     },
-    "J.A.R.V.I.S": {
-      "main": [
-        [
-          {
-            "node": "If1",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "If",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "🤖 EMAIL AGENT": {
       "ai_tool": [
         [
           {
-            "node": "J.A.R.V.I.S",
+            "node": "OPERATOR",
             "type": "ai_tool",
             "index": 0
           }
@@ -1851,7 +2667,7 @@
       "ai_tool": [
         [
           {
-            "node": "J.A.R.V.I.S",
+            "node": "OPERATOR",
             "type": "ai_tool",
             "index": 0
           }
@@ -1862,7 +2678,7 @@
       "ai_tool": [
         [
           {
-            "node": "J.A.R.V.I.S",
+            "node": "OPERATOR",
             "type": "ai_tool",
             "index": 0
           }
@@ -1873,7 +2689,7 @@
       "ai_tool": [
         [
           {
-            "node": "J.A.R.V.I.S",
+            "node": "OPERATOR",
             "type": "ai_tool",
             "index": 0
           }
@@ -1884,7 +2700,7 @@
       "ai_tool": [
         [
           {
-            "node": "J.A.R.V.I.S",
+            "node": "OPERATOR",
             "type": "ai_tool",
             "index": 0
           }
@@ -1895,8 +2711,19 @@
       "ai_languageModel": [
         [
           {
-            "node": "J.A.R.V.I.S",
+            "node": "OPERATOR",
             "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "N8N DEVELOPER": {
+      "ai_tool": [
+        [
+          {
+            "node": "OPERATOR",
+            "type": "ai_tool",
             "index": 0
           }
         ]
@@ -1907,28 +2734,6 @@
         [
           {
             "node": "Crypto",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Download Voice File.1": {
-      "main": [
-        [
-          {
-            "node": "Transcribe Audio1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Set 'Text'.1": {
-      "main": [
-        [
-          {
-            "node": "J.A.R.V.I.S",
             "type": "main",
             "index": 0
           }
@@ -2023,6 +2828,17 @@
         ]
       ]
     },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Share file2": {
       "main": [
         [
@@ -2039,6 +2855,17 @@
         [
           {
             "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
             "type": "main",
             "index": 0
           }
@@ -2082,7 +2909,7 @@
       "ai_memory": [
         [
           {
-            "node": "J.A.R.V.I.S",
+            "node": "OPERATOR",
             "type": "ai_memory",
             "index": 0
           }
@@ -2104,7 +2931,7 @@
       "main": [
         [
           {
-            "node": "Respond to Webhook",
+            "node": "If2",
             "type": "main",
             "index": 0
           }
@@ -2122,7 +2949,58 @@
         ],
         [
           {
-            "node": "Respond to Webhook",
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "APP - Download Voice File": {
+      "main": [
+        [
+          {
+            "node": "Transcribe Audio1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "APP - Set 'Text'": {
+      "main": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "If1",
             "type": "main",
             "index": 0
           }
@@ -2133,14 +3011,14 @@
       "main": [
         [
           {
-            "node": "Download Voice File.1",
+            "node": "APP - Download Voice File",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Set 'Text'.1",
+            "node": "APP - Set 'Text'",
             "type": "main",
             "index": 0
           }
@@ -2172,59 +3050,302 @@
       "main": [
         [
           {
-            "node": "J.A.R.V.I.S",
+            "node": "If1",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Edit Fields1": {
+    "Respond to Webhook": {
       "main": [
-        [
-          {
-            "node": "J.A.R.V.I.S",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
-    "Edit Fields2": {
+    "If2": {
       "main": [
         [
           {
-            "node": "J.A.R.V.I.S",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "If1": {
-      "main": [
-        [
-          {
-            "node": "Convert text to speech1",
+            "node": "Respond to Me",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Respond to Me",
+            "node": "Respond to Webhook",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Convert text to speech1": {
+    "OPERATOR": {
       "main": [
         [
           {
-            "node": "Respond to Me",
+            "node": "If",
             "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "J.A.R.V.I.S": {
+      "main": [
+        [
+          {
+            "node": "COMMAND ROUTER",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a document in Google Docs1": {
+      "ai_tool": [
+        [
+          {
+            "node": "OPERATOR",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "QDRANT EMBEDDER": {
+      "ai_tool": [
+        [
+          {
+            "node": "OPERATOR",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CREATE UUID": {
+      "main": [
+        [
+          {
+            "node": "COMBINE SOURCE/UUID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TAG SOURCE": {
+      "main": [
+        [
+          {
+            "node": "ROUTE VOICE/TEXT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ROUTE VOICE/TEXT": {
+      "main": [
+        [
+          {
+            "node": "Download Voice File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "CREATE UUID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "COMBINE SOURCE/UUID": {
+      "main": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "J.A.R.V.I.S1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "COMMAND ROUTER": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OPERATOR",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OPERATOR",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OPERATOR",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OPERATOR",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OPERATOR",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OPERATOR",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OPERATOR",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OPERATOR",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OPERATOR",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OPERATOR",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OPERATOR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "xAI Grok Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Knowledge Base",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chatbot Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Knowledge Base1": {
+      "ai_tool": [
+        [
+          {
+            "node": "J.A.R.V.I.S",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qdrant Vector Store1": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Knowledge Base1",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Knowledge Base1",
+            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -2235,11 +3356,11 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "353c3037-3df9-4a2a-9b4c-84a10e28d3ac",
+  "versionId": "f1c790dd-e2c1-49f1-a974-16963655d4f5",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "68a46beddbb9d9f12628b915d20fde7f29150dcbc35430946a93fb6a6da688c2"
   },
-  "id": "8OrHrRz7Bpi3UnUb",
+  "id": "D76YRhqExL8XnAvz",
   "tags": []
 }

@@ -374,7 +374,7 @@ export function RuntimeErrorMonitor({
     try {
       // This will cause an undefined access error
       (window as Record<string, unknown>).nonExistentFunction.call();
-    } catch (error) => {
+    } catch (error) {
       // This error will be caught by our monitoring
     }
   };

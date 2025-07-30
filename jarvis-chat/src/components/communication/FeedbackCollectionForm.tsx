@@ -149,7 +149,7 @@ export function FeedbackCollectionForm({
       });
       setFormData(initialData);
 
-    } catch (error) => {
+    } catch (error) {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to load feedback form",
@@ -246,7 +246,7 @@ export function FeedbackCollectionForm({
         throw new Error(result.error || 'Submission failed');
       }
       
-    } catch (error) => {
+    } catch (error) {
       toast({
         title: "Submission Error",
         description: error instanceof Error ? error.message : "Failed to submit feedback",

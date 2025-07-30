@@ -89,7 +89,7 @@ export function LogStreamViewer({
             }
             return newLogs;
           });
-        } catch (error) => {
+        } catch (error) {
           // If JSON parsing fails, treat as plain text log
           const logEntry: LogEntry = {
             id: crypto.randomUUID(),
@@ -122,7 +122,7 @@ export function LogStreamViewer({
         setConnectionStatus('disconnected');
       };
 
-    } catch (error) => {
+    } catch (error) {
       console.error('❌ Failed to create WebSocket connection:', error);
       setConnectionStatus('disconnected');
       
@@ -180,7 +180,7 @@ export function LogStreamViewer({
       const persistKey = `log-stream-${websocketUrl}`;
       try {
         localStorage.setItem(persistKey, JSON.stringify(logs.slice(-100))); // Persist last 100 logs
-      } catch (error) => {
+      } catch (error) {
         console.warn('Failed to persist logs:', error);
       }
     }
@@ -200,7 +200,7 @@ export function LogStreamViewer({
           }));
           setLogs(logsWithDates);
         }
-      } catch (error) => {
+      } catch (error) {
         console.warn('Failed to load persisted logs:', error);
       }
     }

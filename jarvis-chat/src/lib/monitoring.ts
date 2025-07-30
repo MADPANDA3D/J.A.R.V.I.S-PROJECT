@@ -1271,7 +1271,7 @@ export const trackBugReportValidationError = (field: string, error: string): voi
   });
 };
 
-export const trackBugReportFileUpload = (fileName: string, fileSize: number, success: boolean) {
+export const trackBugReportFileUpload = (fileName: string, fileSize: number, success: boolean): void => {
   monitoringService.trackBusinessEvent('bug_report_file_upload', {
     file_name: fileName,
     file_size: fileSize,
