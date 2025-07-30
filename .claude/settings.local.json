@@ -79,7 +79,8 @@
       "Bash(rg:*)",
       "mcp__n8n-mcp__n8n_update_full_workflow",
       "mcp__n8n-mcp__get_database_statistics",
-      "mcp__n8n-mcp__n8n_update_partial_workflow"
+      "mcp__n8n-mcp__n8n_update_partial_workflow",
+      "Bash(./node_modules/.bin/vite:*)"
     ],
     "deny": []
   }

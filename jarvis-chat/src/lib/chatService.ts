@@ -2,6 +2,7 @@ import { supabase } from './supabase';
 import { webhookService, WebhookPayload } from './webhookService';
 import { searchOptimizer, SearchQueryOptimizer } from './searchOptimization';
 import { createSearchAnalytics } from './searchAnalytics';
+import { SearchFilters } from '@/hooks/useSearchState';
 import type { DateRange } from 'react-day-picker';
 
 export interface ChatMessage {
@@ -18,14 +19,6 @@ export interface N8nWebhookResponse {
   response: string;
   success: boolean;
   error?: string;
-}
-
-export interface SearchFilters {
-  query: string;
-  dateRange?: DateRange;
-  messageTypes: ('user' | 'assistant')[];
-  sessionId?: string;
-  hasErrors?: boolean;
 }
 
 export interface SearchResult {

@@ -18,20 +18,12 @@ import {
   ConversationSession, 
   ConversationSessionGroup, 
   SessionSearchFilters, 
-  GroupedSearchResponse 
+  GroupedSearchResponse,
+  SearchResult
 } from '@/lib/chatService';
 import { useSearchState, SearchFilters } from '@/hooks/useSearchState';
 import { ConversationSessionGroup as SessionGroupComponent } from './ConversationSessionGroup';
 import { SessionNavigation } from './SessionNavigation';
-
-export interface SearchResult {
-  messageId: string;
-  content: string;
-  role: 'user' | 'assistant';
-  timestamp: Date;
-  highlightedContent: string;
-  matchScore: number;
-}
 
 interface SearchResponse {
   results: SearchResult[];
