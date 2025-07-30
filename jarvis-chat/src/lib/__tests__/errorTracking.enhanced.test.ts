@@ -389,12 +389,12 @@ describe('Enhanced Error Tracking', () => {
     });
 
     it('should handle localStorage errors gracefully', () => {
-      localStorageMock.setItem.mockImplementation(() {
+      localStorageMock.setItem.mockImplementation(() => {
         throw new Error('Storage quota exceeded');
       });
       
       // Should not throw error
-      expect(() {
+      expect(() => {
         captureError(new Error('Test error'));
       }).not.toThrow();
     });

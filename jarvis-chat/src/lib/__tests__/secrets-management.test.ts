@@ -433,7 +433,7 @@ describe('Secrets Management System', () => {
 
   describe('Logging', () => {
     it('should log secrets status without revealing values', () => {
-      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() {});
+      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY = 'test-key';

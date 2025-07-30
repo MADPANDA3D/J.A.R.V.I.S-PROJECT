@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll, beforeEach, vi } from 'vitest';
-import request from 'supertest';
+// import request from 'supertest'; // Commented out - supertest not available in CI
 import express from 'express';
 import { externalIntegrationService } from '../externalIntegration';
 import { webhookDeliveryService } from '../webhookService';

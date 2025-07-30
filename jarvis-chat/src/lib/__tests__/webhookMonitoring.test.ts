@@ -362,14 +362,14 @@ describe('WebhookMonitoringService', () => {
     });
 
     it('should handle subscriber errors gracefully', () => {
-      const errorCallback = vi.fn().mockImplementation(() {
+      const errorCallback = vi.fn().mockImplementation(() => {
         throw new Error('Subscriber error');
       });
       const normalCallback = vi.fn();
 
       const consoleSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() {});
+        .mockImplementation(() => {});
 
       monitoringService.subscribeToAlerts(errorCallback);
       monitoringService.subscribeToAlerts(normalCallback);

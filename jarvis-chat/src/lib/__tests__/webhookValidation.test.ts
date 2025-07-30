@@ -562,7 +562,7 @@ describe('WebhookValidation', () => {
     });
 
     it('should throw error for invalid payload construction', () => {
-      expect(() {
+      expect(() => {
         WebhookValidator.createValidatedPayload(
           '', // Empty message not allowed
           'session_123',

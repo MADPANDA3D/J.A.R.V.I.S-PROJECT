@@ -1233,7 +1233,7 @@ export const withMonitoring = <T extends (...args: unknown[]) => unknown>(
 };
 
 // Bug report integration
-export const trackBugReportEvent = (event: string, data: Record<string, unknown>) {
+export const trackBugReportEvent = (event: string, data: Record<string, unknown>) => {
   monitoringService.trackBusinessEvent(event, data);
 };
 

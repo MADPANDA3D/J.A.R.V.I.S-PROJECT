@@ -370,7 +370,7 @@ describe('WebhookService', () => {
       expect(mockFetch).toHaveBeenCalledTimes(3);
     });
 
-    it('should not retry on 4xx client errors (except 408, 429)', async () {
+    it('should not retry on 4xx client errors (except 408, 429)', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 400,
@@ -829,7 +829,7 @@ describe('WebhookService', () => {
 
     it('should handle mixed success/failure in concurrent requests', async () => {
       let callCount = 0;
-      mockFetch.mockImplementation(() {
+      mockFetch.mockImplementation(() => {
         callCount++;
         if (callCount % 2 === 0) {
           return Promise.reject(new TypeError('Network error'));

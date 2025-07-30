@@ -8,7 +8,7 @@ import { chatService } from '../chatService';
 import * as webhookServiceModule from '../webhookService';
 
 // Mock the webhook service
-vi.mock('../webhookService', () {
+vi.mock('../webhookService', () => {
   const mockWebhookService = {
     sendMessage: vi.fn(),
     healthCheck: vi.fn(),
@@ -26,6 +26,29 @@ vi.mock('../webhookService', () {
         public type: string,
         public statusCode?: number,
         public isRetryable: boolean = true
+      ) {
+        super(message);
+        this.name = 'WebhookError';
+      }
+    },
+    WebhookErrorType: {
+      NETWORK_ERROR: 'network_error',
+      TIMEOUT_ERROR: 'timeout_error',
+      HTTP_ERROR: 'http_error',
+      VALIDATION_ERROR: 'validation_error',
+      CIRCUIT_BREAKER_OPEN: 'circuit_breaker_open',
+      UNKNOWN_ERROR: 'unknown_error',
+    },
+  };
+
+  return {
+    webhookService: mockWebhookService,
+    WebhookError: class WebhookError extends Error {
+      constructor(
+        message: string,
+        public readonly type?: string,
+        public readonly statusCode?: number,
+        public readonly retryable?: boolean
       ) {
         super(message);
         this.name = 'WebhookError';

@@ -76,7 +76,10 @@ const localStorageMock = {
   removeItem: vi.fn(),
   clear: vi.fn(),
 };
-(global as any).localStorage = localStorageMock;
+Object.defineProperty(global, 'localStorage', {
+  value: localStorageMock,
+  writable: true
+});
 
 // Mock sessionStorage
 const sessionStorageMock = {
@@ -85,7 +88,10 @@ const sessionStorageMock = {
   removeItem: vi.fn(),
   clear: vi.fn(),
 };
-(global as any).sessionStorage = sessionStorageMock;
+Object.defineProperty(global, 'sessionStorage', {
+  value: sessionStorageMock,
+  writable: true
+});
 
 // Set test environment variables
 process.env.NODE_ENV = 'test';
