@@ -35,7 +35,17 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: 'jarvis-chat/package-lock.json'
+          cache-dependency-path: './jarvis-chat/package-lock.json'
+
+      - name: 🗂️ Restore npm cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            ./jarvis-chat/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('./jarvis-chat/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: 📋 Display build environment
         run: |
@@ -52,7 +62,16 @@ jobs:
       - name: 📦 Install dependencies
         run: |
           echo "📦 Installing dependencies with npm ci..."
-          npm ci --production=false
+          
+          # Clean install to fix lockfile issues
+          if [ -f "package-lock.json" ]; then
+            echo "🔄 Using existing package-lock.json"
+            npm ci --production=false --no-audit --prefer-offline
+          else
+            echo "⚠️ No package-lock.json found, generating new one"
+            npm install --production=false --no-audit
+          fi
+          
           echo "✅ Dependencies installed successfully"
         
       - name: 🔍 Validate environment
@@ -85,8 +104,11 @@ jobs:
         run: |
           echo "🧪 Running test suite..."
           
-          # Run tests with proper error handling
-          if npm run test:run; then
+          # Set Node.js memory limit to prevent OOM errors
+          export NODE_OPTIONS="--max-old-space-size=4096"
+          
+          # Run tests with proper error handling and memory optimization
+          if npm run test:ci; then
             echo "✅ All tests passed successfully"
           else
             echo "❌ Tests failed"
