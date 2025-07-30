@@ -15,11 +15,6 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     
-    # Set default working directory for all steps
-    defaults:
-      run:
-        working-directory: jarvis-chat
-    
     env:
       NODE_VERSION: '20'
       WORKING_DIRECTORY: 'jarvis-chat'
@@ -34,9 +29,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          # Removed cache configuration to fix the path resolution issue
+          cache: 'npm'
+          cache-dependency-path: './jarvis-chat/package-lock.json'
 
+      # Set working directory for all subsequent steps
       - name: 📋 Display build environment
+        working-directory: ./jarvis-chat
         run: |
           echo "🔍 Build Environment Information:"
           echo "Node.js version: $(node --version)"
@@ -49,12 +47,14 @@ jobs:
           echo "Run ID: ${{ github.run_id }}"
 
       - name: 📦 Install dependencies
+        working-directory: ./jarvis-chat
         run: |
           echo "📦 Installing dependencies with npm ci..."
           npm ci --production=false
           echo "✅ Dependencies installed successfully"
         
       - name: 🔍 Validate environment
+        working-directory: ./jarvis-chat
         run: |
           echo "🔍 Validating project configuration..."
           
@@ -81,6 +81,7 @@ jobs:
           echo "✅ Environment validation completed"
 
       - name: 🧪 Run tests
+        working-directory: ./jarvis-chat
         run: |
           echo "🧪 Running test suite..."
           
@@ -100,6 +101,7 @@ jobs:
           fi
 
       - name: 🔧 Run linting
+        working-directory: ./jarvis-chat
         run: |
           echo "🔧 Running code linting..."
           
@@ -111,6 +113,7 @@ jobs:
           fi
 
       - name: 📊 Type checking
+        working-directory: ./jarvis-chat
         run: |
           echo "📊 Running TypeScript type checking..."
           
@@ -129,6 +132,7 @@ jobs:
           fi
 
       - name: 🏗️ Build application
+        working-directory: ./jarvis-chat
         run: |
           echo "🏗️ Building application for production..."
           
@@ -150,6 +154,7 @@ jobs:
           fi
 
       - name: 🔍 Validate build artifacts
+        working-directory: ./jarvis-chat
         run: |
           echo "🔍 Validating build artifacts..."
           
@@ -179,8 +184,6 @@ jobs:
           echo "✅ Build artifacts validation completed"
 
       - name: 📤 Prepare deployment metadata
-        # This step needs to run from repo root to create the metadata file
-        working-directory: .
         run: |
           echo "📤 Preparing deployment metadata..."
           
