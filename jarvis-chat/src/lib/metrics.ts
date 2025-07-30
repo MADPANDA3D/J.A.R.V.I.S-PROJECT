@@ -193,7 +193,7 @@ class MetricsService {
 
   private setupActivityTracking(): void {
     // Track page visibility changes
-    document.addEventListener('visibilitychange', () {
+    document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
         this.trackKPI('user.page_hidden', 1, 'events', 'user');
       } else {
@@ -213,7 +213,7 @@ class MetricsService {
     });
 
     // Track page unload
-    window.addEventListener('beforeunload', () {
+    window.addEventListener('beforeunload', () => {
       this.endCurrentSession();
     });
   }

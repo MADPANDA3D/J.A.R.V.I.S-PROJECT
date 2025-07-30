@@ -289,7 +289,7 @@ class UserActivityTrackingService {
 
   private setupEventListeners(): void {
     // Page visibility change
-    document.addEventListener('visibilitychange', () {
+    document.addEventListener('visibilitychange', () => {
       this.trackEvent('page_view', {
         visibility: document.visibilityState,
         hidden: document.hidden
@@ -297,7 +297,7 @@ class UserActivityTrackingService {
     });
 
     // Navigation events
-    window.addEventListener('beforeunload', () {
+    window.addEventListener('beforeunload', () => {
       this.trackEvent('navigation', {
         eventType: 'page_unload',
         url: window.location.href

@@ -569,7 +569,7 @@ export class AccessibilityPreferencesManager {
 
     // Listen for color scheme changes
     const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    darkModeQuery.addEventListener('change', () {
+    darkModeQuery.addEventListener('change', () => {
       if (this.preferences.colorScheme === 'auto') {
         this.applyPreferences();
       }
@@ -785,11 +785,11 @@ export function initializeAccessibility(): void {
     border-radius: 4px;
   `;
 
-  skipLink.addEventListener('focus', () {
+  skipLink.addEventListener('focus', () => {
     skipLink.style.top = '6px';
   });
 
-  skipLink.addEventListener('blur', () {
+  skipLink.addEventListener('blur', () => {
     skipLink.style.top = '-40px';
   });
 

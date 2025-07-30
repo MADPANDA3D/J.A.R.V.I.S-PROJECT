@@ -496,7 +496,7 @@ class LogAccessService {
     }
 
     // Apply sorting
-    logs.sort((a, b) {
+    logs.sort((a, b) => {
       let aValue: string | number, bValue: string | number;
       
       switch (query.sortBy) {

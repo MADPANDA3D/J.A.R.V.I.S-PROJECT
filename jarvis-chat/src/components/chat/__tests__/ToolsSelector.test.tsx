@@ -170,7 +170,7 @@ describe('ToolsSelector', () => {
       // Open dropdown
       fireEvent.click(screen.getByTestId('dropdown-menu'));
 
-      await waitFor(() {
+      await waitFor(() => {
         expect(screen.getByTestId('dropdown-content')).toBeInTheDocument();
       });
 

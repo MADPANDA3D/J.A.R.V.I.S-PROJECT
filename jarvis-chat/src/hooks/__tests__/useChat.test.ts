@@ -80,7 +80,7 @@ describe('useChat', () => {
 
     const { result } = renderHook(() => useChat());
 
-    await waitFor(() {
+    await waitFor(() => {
       expect(result.current.isLoadingHistory).toBe(false);
     });
 
@@ -176,7 +176,7 @@ describe('useChat', () => {
 
     const { result } = renderHook(() => useChat());
 
-    act(() {
+    act(() => {
       result.current.clearMessages();
     });
 
@@ -190,7 +190,7 @@ describe('useChat', () => {
 
     const { result } = renderHook(() => useChat());
 
-    act(() {
+    act(() => {
       result.current.clearError();
     });
 

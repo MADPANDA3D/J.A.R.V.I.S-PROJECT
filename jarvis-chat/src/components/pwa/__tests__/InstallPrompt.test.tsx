@@ -48,7 +48,7 @@ describe('InstallPrompt', () => {
   it('should render install prompt when canInstall is true', async () => {
     render(<InstallPrompt showDelay={0} />);
 
-    await waitFor(() {
+    await waitFor(() => {
       expect(screen.getByText('Install JARVIS Chat')).toBeInTheDocument();
     });
 
@@ -65,7 +65,7 @@ describe('InstallPrompt', () => {
 
     render(<InstallPrompt showDelay={0} />);
 
-    await waitFor(() {
+    await waitFor(() => {
       expect(screen.getByText('Install')).toBeInTheDocument();
     });
 
@@ -88,7 +88,7 @@ describe('InstallPrompt', () => {
 
     render(<InstallPrompt showDelay={0} />);
 
-    await waitFor(() {
+    await waitFor(() => {
       expect(screen.getByText('Installing...')).toBeInTheDocument();
     });
   });
@@ -109,7 +109,7 @@ describe('InstallPrompt', () => {
 
     render(<InstallPrompt showDelay={0} />);
 
-    await waitFor(() {
+    await waitFor(() => {
       expect(screen.getByText(`Error: ${errorMessage}`)).toBeInTheDocument();
     });
   });
@@ -117,14 +117,14 @@ describe('InstallPrompt', () => {
   it('should dismiss prompt when X button is clicked', async () => {
     render(<InstallPrompt showDelay={0} />);
 
-    await waitFor(() {
+    await waitFor(() => {
       expect(screen.getByText('Install JARVIS Chat')).toBeInTheDocument();
     });
 
     const dismissButton = screen.getByRole('button', { name: '' }); // X button has no text
     fireEvent.click(dismissButton);
 
-    await waitFor(() {
+    await waitFor(() => {
       expect(screen.queryByText('Install JARVIS Chat')).not.toBeInTheDocument();
     });
   });
@@ -149,13 +149,13 @@ describe('InstallPrompt', () => {
 
     render(<InstallPrompt showDelay={0} />);
 
-    await waitFor(() {
+    await waitFor(() => {
       expect(screen.getByText('Install')).toBeInTheDocument();
     });
 
     fireEvent.click(screen.getByText('Install'));
 
-    await waitFor(() {
+    await waitFor(() => {
       expect(screen.queryByText('Install JARVIS Chat')).not.toBeInTheDocument();
     });
   });

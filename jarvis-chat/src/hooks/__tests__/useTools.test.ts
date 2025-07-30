@@ -115,7 +115,7 @@ describe('useTools', () => {
       expect(result.current.isToolSelected('web_search')).toBe(false);
 
       // Toggle web_search on
-      act(() {
+      act(() => {
         result.current.toggleTool('web_search');
       });
 
@@ -123,7 +123,7 @@ describe('useTools', () => {
       expect(result.current.getSelectedToolIds()).toContain('web_search');
 
       // Toggle web_search off
-      act(() {
+      act(() => {
         result.current.toggleTool('web_search');
       });
 
@@ -140,7 +140,7 @@ describe('useTools', () => {
         await new Promise(resolve => setTimeout(resolve, 0));
       });
 
-      act(() {
+      act(() => {
         result.current.toggleTool('web_search');
       });
 
@@ -165,7 +165,7 @@ describe('useTools', () => {
       expect(result.current.getSelectedToolIds()).toEqual(['file_analysis']);
 
       // Add web_search
-      act(() {
+      act(() => {
         result.current.toggleTool('web_search');
       });
 
@@ -175,7 +175,7 @@ describe('useTools', () => {
       ]);
 
       // Disable file_analysis
-      act(() {
+      act(() => {
         result.current.toggleTool('file_analysis');
       });
 
@@ -193,7 +193,7 @@ describe('useTools', () => {
         await new Promise(resolve => setTimeout(resolve, 0));
       });
 
-      act(() {
+      act(() => {
         result.current.updatePreferences({
           auto_suggest: false,
           analytics_enabled: false,
@@ -217,13 +217,13 @@ describe('useTools', () => {
       });
 
       // Make some changes
-      act(() {
+      act(() => {
         result.current.toggleTool('web_search');
         result.current.updatePreferences({ auto_suggest: false });
       });
 
       // Reset to defaults
-      act(() {
+      act(() => {
         result.current.resetToDefaults();
       });
 
@@ -263,7 +263,7 @@ describe('useTools', () => {
         await new Promise(resolve => setTimeout(resolve, 0));
       });
 
-      act(() {
+      act(() => {
         result.current.toggleTool('web_search');
       });
 
@@ -284,11 +284,11 @@ describe('useTools', () => {
       });
 
       // Disable analytics
-      act(() {
+      act(() => {
         result.current.updatePreferences({ analytics_enabled: false });
       });
 
-      act(() {
+      act(() => {
         result.current.toggleTool('web_search');
       });
 

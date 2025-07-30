@@ -184,7 +184,7 @@ class SessionTracker {
     this.resetActivityTimer();
 
     // Track when user leaves/returns to page
-    document.addEventListener('visibilitychange', () {
+    document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
         this.handlePageHidden();
       } else {
@@ -193,7 +193,7 @@ class SessionTracker {
     });
 
     // Track page unload
-    window.addEventListener('beforeunload', () {
+    window.addEventListener('beforeunload', () => {
       this.endSession();
     });
   }
@@ -247,7 +247,7 @@ class SessionTracker {
 
     // Track scroll depth
     let maxScrollDepth = 0;
-    document.addEventListener('scroll', () {
+    document.addEventListener('scroll', () => {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;

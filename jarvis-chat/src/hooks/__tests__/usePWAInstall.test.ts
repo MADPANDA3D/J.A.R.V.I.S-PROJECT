@@ -102,7 +102,7 @@ describe('usePWAInstall', () => {
   it('should handle beforeinstallprompt event', () => {
     const { result } = renderHook(() => usePWAInstall());
 
-    act(() {
+    act(() => {
       dispatchMockInstallPrompt();
     });
 
@@ -115,7 +115,7 @@ describe('usePWAInstall', () => {
     const { result } = renderHook(() => usePWAInstall());
 
     // Trigger beforeinstallprompt
-    act(() {
+    act(() => {
       dispatchMockInstallPrompt();
     });
 
@@ -134,7 +134,7 @@ describe('usePWAInstall', () => {
 
     const { result } = renderHook(() => usePWAInstall());
 
-    act(() {
+    act(() => {
       dispatchMockInstallPrompt();
     });
 
@@ -154,7 +154,7 @@ describe('usePWAInstall', () => {
 
     const { result } = renderHook(() => usePWAInstall());
 
-    act(() {
+    act(() => {
       dispatchMockInstallPrompt();
     });
 
@@ -171,14 +171,14 @@ describe('usePWAInstall', () => {
     const { result } = renderHook(() => usePWAInstall());
 
     // First make it installable
-    act(() {
+    act(() => {
       dispatchMockInstallPrompt();
     });
 
     expect(result.current.isInstallable).toBe(true);
 
     // Then trigger app installed
-    act(() {
+    act(() => {
       const installedEvent = new Event('appinstalled');
       window.dispatchEvent(installedEvent);
     });
@@ -192,12 +192,12 @@ describe('usePWAInstall', () => {
     const { result } = renderHook(() => usePWAInstall());
 
     // Set an error state manually (this would normally happen during failed install)
-    act(() {
+    act(() => {
       dispatchMockInstallPrompt();
     });
 
     // Mock a failed install to set error
-    act(() {
+    act(() => {
       result.current.clearError();
     });
 

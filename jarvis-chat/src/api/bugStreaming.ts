@@ -222,11 +222,11 @@ class BugStreamingService {
       await this.handleMessage(connectionId, data);
     });
 
-    ws.on('close', (code: number, reason: Buffer) {
+    ws.on('close', (code: number, reason: Buffer) => {
       this.handleDisconnection(connectionId, code, reason.toString());
     });
 
-    ws.on('error', (error: Error) {
+    ws.on('error', (error: Error) => {
       this.handleConnectionError(connectionId, error);
     });
 

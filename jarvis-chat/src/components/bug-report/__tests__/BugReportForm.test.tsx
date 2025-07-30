@@ -95,7 +95,7 @@ describe('BugReportForm', () => {
     fireEvent.click(screen.getByText('Select Functionality'));
     
     // Should move to details step
-    await waitFor(() {
+    await waitFor(() => {
       expect(screen.getByLabelText('Bug Title *')).toBeInTheDocument();
     });
   });
@@ -129,7 +129,7 @@ describe('BugReportForm', () => {
     // Select bug type first
     fireEvent.click(screen.getByText('Select Functionality'));
     
-    await waitFor(() {
+    await waitFor(() => {
       expect(screen.getByText('Title is required')).toBeInTheDocument();
       expect(screen.getByText('Description is required')).toBeInTheDocument();
     });
@@ -141,7 +141,7 @@ describe('BugReportForm', () => {
     // Go through all steps and submit
     fireEvent.click(screen.getByText('Select Functionality'));
     
-    await waitFor(() {
+    await waitFor(() => {
       expect(screen.getByLabelText('Bug Title *')).toBeInTheDocument();
     });
 
@@ -154,7 +154,7 @@ describe('BugReportForm', () => {
     const submitButton = screen.getByText('Submit Bug Report');
     fireEvent.click(submitButton);
 
-    await waitFor(() {
+    await waitFor(() => {
       expect(mockOnSubmit).toHaveBeenCalledWith('test-bug-id', 'BUG-25-12345678');
     });
   });
@@ -208,7 +208,7 @@ describe('BugReportForm', () => {
     render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
     
     // Auto-save indicator should be visible when form is dirty
-    await waitFor(() {
+    await waitFor(() => {
       expect(screen.getByText(/Last saved:/)).toBeInTheDocument();
     });
   });
@@ -218,11 +218,11 @@ describe('BugReportForm', () => {
     
     fireEvent.click(screen.getByText('Select Functionality'));
     
-    await waitFor(() {
+    await waitFor(() => {
       fireEvent.click(screen.getByText('Next: Attachments'));
     });
     
-    await waitFor(() {
+    await waitFor(() => {
       expect(screen.getByTestId('file-attachment-upload')).toBeInTheDocument();
     });
   });

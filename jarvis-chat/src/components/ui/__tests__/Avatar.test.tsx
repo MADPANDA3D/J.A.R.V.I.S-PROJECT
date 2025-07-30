@@ -25,7 +25,7 @@ describe('Avatar', () => {
     const img = screen.getByRole('img');
     img.dispatchEvent(new Event('error'));
 
-    await waitFor(() {
+    await waitFor(() => {
       expect(screen.getByText('JD')).toBeInTheDocument();
     });
   });
