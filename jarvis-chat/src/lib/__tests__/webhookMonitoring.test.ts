@@ -318,7 +318,7 @@ describe('WebhookMonitoringService', () => {
     });
 
     it('should limit recent alerts in dashboard data', () => {
-      const unsubscribe = monitoringService.subscribeToAlerts(() {});
+      const unsubscribe = monitoringService.subscribeToAlerts(() => {});
 
       // Generate multiple alerts
       for (let batch = 0; batch < 15; batch++) {
@@ -461,7 +461,7 @@ describe('WebhookMonitoringService', () => {
       monitoringService.recordRequest(100, true);
       monitoringService.recordRequest(100, false);
 
-      const unsubscribe = monitoringService.subscribeToAlerts(() {});
+      const unsubscribe = monitoringService.subscribeToAlerts(() => {});
 
       // Trigger an alert
       for (let i = 0; i < 10; i++) {

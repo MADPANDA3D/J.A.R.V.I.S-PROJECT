@@ -10,7 +10,7 @@ describe('Live Webhook Test', () => {
   it(
     'should test the actual n8n webhook with Hello JARVIS message',
     { timeout: 35000 },
-    async () {
+    async () => {
       console.log('\n🚀 TESTING LIVE WEBHOOK');
       console.log('='.repeat(50));
 

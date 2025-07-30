@@ -12,7 +12,7 @@ const mockEnv = {
 };
 
 // Mock the env-validation module with controlled import.meta.env
-vi.mock('../env-validation', async () {
+vi.mock('../env-validation', async () => {
   const actual = (await vi.importActual('../env-validation')) as Record<string, unknown>;
 
   // Override import.meta.env for this module

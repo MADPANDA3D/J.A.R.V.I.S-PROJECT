@@ -1242,7 +1242,7 @@ export const trackBugReportSubmission = (bugData: {
   severity: string;
   hasAttachments: boolean;
   processingTime: number;
-}) {
+}) => {
   monitoringService.trackBusinessEvent('bug_report_submitted', {
     bug_type: bugData.bugType,
     severity: bugData.severity,
