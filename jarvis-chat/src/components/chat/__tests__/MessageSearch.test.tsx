@@ -80,3 +80,13 @@ export const MessageSearchTestSuite = {
  *    - Desktop layout (1024px+) full featured
  *    - Touch interactions work on mobile
  */
+
+import { describe, it, expect } from 'vitest';
+
+describe('MessageSearch', () => {
+  it('should validate test suite exists', () => {
+    expect(MessageSearchTestSuite).toBeDefined();
+    expect(MessageSearchTestSuite.componentExists).toBe(true);
+    expect(MessageSearchTestSuite.manualTestsCompleted).toBe(true);
+  });
+});

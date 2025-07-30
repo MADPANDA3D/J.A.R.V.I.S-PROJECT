@@ -489,13 +489,13 @@ describe('WebhookMonitoringService', () => {
 
       for (let i = 0; i < 100; i++) {
         promises.push(
-          Promise.resolve().then(() {
+          Promise.resolve().then(() => {
             monitoringService.recordRequest(100 + i, i % 10 !== 0);
           })
         );
       }
 
-      return Promise.all(promises).then(() {
+      return Promise.all(promises).then(() => {
         const metrics = monitoringService.getCurrentMetrics();
         expect(metrics.totalRequests).toBe(100);
         expect(metrics.successfulRequests).toBe(90); // 90% success rate

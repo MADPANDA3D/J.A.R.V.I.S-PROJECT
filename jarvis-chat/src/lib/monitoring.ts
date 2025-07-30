@@ -1257,14 +1257,14 @@ export const trackBugReportSubmission = (bugData: {
   });
 };
 
-export const trackBugReportError = (error: string, context: Record<string, unknown>) {
+export const trackBugReportError = (error: string, context: Record<string, unknown>): void => {
   monitoringService.trackBusinessEvent('bug_report_error', {
     error,
     context
   });
 };
 
-export const trackBugReportValidationError = (field: string, error: string) {
+export const trackBugReportValidationError = (field: string, error: string): void => {
   monitoringService.trackBusinessEvent('bug_report_validation_error', {
     field,
     error

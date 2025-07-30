@@ -53,6 +53,12 @@ vi.mock('../monitoring', () => ({
   trackBugReportEvent: vi.fn()
 }));
 
+vi.mock('../notificationService', () => ({
+  sendEscalationAlert: vi.fn(() => Promise.resolve([])),
+  sendFeedbackRequest: vi.fn(() => Promise.resolve({ success: true })),
+  sendNotification: vi.fn(() => Promise.resolve({ success: true }))
+}));
+
 describe('Bug Lifecycle Integration Tests', () => {
   const mockBugReport: Partial<BugReport> = {
     id: 'integration-test-bug',

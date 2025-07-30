@@ -65,6 +65,7 @@ describe('WebhookService', () => {
 
   describe('Message Sending Success Scenarios', () => {
     it('should send message successfully with valid payload', async () => {
+      vi.useRealTimers(); // Use real timers for this test
       const mockResponse: WebhookResponse = {
         response: 'Hello, how can I help you?',
         success: true,
@@ -99,6 +100,7 @@ describe('WebhookService', () => {
           body: expect.stringContaining('"message":"Hello"'),
         })
       );
+      vi.useFakeTimers(); // Reset to fake timers
     });
 
     it('should include request metadata in payload', async () => {
