@@ -16,7 +16,7 @@ vi.mock('../env-validation', async () => {
   const actual = (await vi.importActual('../env-validation')) as Record<string, unknown>;
 
   // Override import.meta.env for this module
-  const mockValidateEnvironment = () {
+  const mockValidateEnvironment = () => {
     const errors: string[] = [];
     const warnings: string[] = [];
     const config: Record<string, string> = {};
@@ -84,7 +84,7 @@ vi.mock('../env-validation', async () => {
     };
   };
 
-  const mockGetEnvironmentInfo = () {
+  const mockGetEnvironmentInfo = () => {
     const result = mockValidateEnvironment();
 
     return {

@@ -830,7 +830,7 @@ class LogAccessService {
     }, heartbeatInterval);
 
     // Setup log streaming
-    const streamLogs = () {
+    const streamLogs = () => {
       if (buffer.length === 0) return;
 
       const logsToSend = buffer.splice(0, Math.min(buffer.length, bufferSize));
@@ -870,7 +870,7 @@ class LogAccessService {
     }, 2000); // Check every 2 seconds
 
     // Cleanup on connection close
-    websocket.onclose = () {
+    websocket.onclose = () => {
       clearInterval(heartbeatTimer);
       clearInterval(streamTimer);
       clearInterval(logListener);

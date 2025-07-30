@@ -23,7 +23,7 @@ const chatMessageToMessage = (chatMsg: ChatMessage): Message => ({
 //   user_id: userId,
 // });
 
-export const useChat = () {
+export const useChat = () => {
   const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);

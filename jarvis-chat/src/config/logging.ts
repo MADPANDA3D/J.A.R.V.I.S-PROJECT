@@ -419,7 +419,7 @@ export const testLoggingConfiguration = async (): Promise<{
 };
 
 // Get deployment information
-export const getDeploymentInfo = () {
+export const getDeploymentInfo = () => {
   const env = getCurrentEnvironment();
   const config = getLoggingConfig();
   

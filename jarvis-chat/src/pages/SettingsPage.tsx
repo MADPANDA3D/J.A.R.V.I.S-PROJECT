@@ -17,7 +17,7 @@ import {
 import { useAuth } from '@/contexts/AuthContext';
 import { getEnvironmentInfo } from '@/lib/env-validation';
 
-export const SettingsPage: React.FC = () {
+export const SettingsPage: React.FC = () => {
   const { user, signOut } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showApiKey, setShowApiKey] = useState(false);

@@ -89,7 +89,7 @@ export function EnvironmentValidator({
     }
   };
 
-  const getConfigurationStatus = () {
+  const getConfigurationStatus = () => {
     if (!validationResult) return null;
 
     // const envInfo = getEnvironmentInfo(); // Used in future implementation

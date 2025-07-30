@@ -364,7 +364,7 @@ export function useBugLifecycleStats() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadStats = () {
+    const loadStats = () => {
       try {
         const statistics = bugLifecycleService.getLifecycleStatistics();
         setStats(statistics);

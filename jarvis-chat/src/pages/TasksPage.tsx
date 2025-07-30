@@ -24,7 +24,7 @@ interface Task {
   createdAt: string;
 }
 
-export const TasksPage: React.FC = () {
+export const TasksPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState<
     'all' | 'todo' | 'in-progress' | 'completed'

@@ -57,7 +57,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) {
     );
   }, [sidebarOpen]);
 
-  const handleMenuClick = () {
+  const handleMenuClick = () => {
     setSidebarOpen(true);
     screenReader.announce({
       message: 'Navigation menu opened',
@@ -65,7 +65,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) {
     });
   };
 
-  const handleSidebarClose = () {
+  const handleSidebarClose = () => {
     setSidebarOpen(false);
     screenReader.announce({
       message: 'Navigation menu closed',

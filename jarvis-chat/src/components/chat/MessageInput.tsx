@@ -34,7 +34,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
     }
   };
 
-  const handleSend = () {
+  const handleSend = () => {
     if (!value.trim() || disabled) return;
 
     // Get selected tools if tools selector is enabled

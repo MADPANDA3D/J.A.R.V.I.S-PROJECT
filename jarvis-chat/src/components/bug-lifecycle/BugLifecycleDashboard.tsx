@@ -147,7 +147,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter }: DashboardProps)
     loadDashboardData();
   }, [loadDashboardData]);
 
-  const handleRefresh = () {
+  const handleRefresh = () => {
     loadDashboardData();
   };
 

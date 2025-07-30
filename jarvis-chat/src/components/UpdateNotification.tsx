@@ -28,14 +28,14 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
 
     let currentWebSocket: WebSocket | null = null;
 
-    const connectWebSocket = () {
+    const connectWebSocket = () => {
       setConnectionStatus('connecting');
       
       try {
         const websocket = new WebSocket(websocketUrl);
         currentWebSocket = websocket;
         
-        websocket.onopen = () {
+        websocket.onopen = () => {
           console.log('🔌 Connected to update notifications');
           setConnectionStatus('connected');
           setWs(websocket);
@@ -69,7 +69,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
           }
         };
         
-        websocket.onclose = () {
+        websocket.onclose = () => {
           console.log('🔌 Disconnected from update notifications');
           setConnectionStatus('disconnected');
           setWs(null);
@@ -130,12 +130,12 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
     }
   };
 
-  const dismissNotification = () {
+  const dismissNotification = () => {
     setIsVisible(false);
     setTimeout(() => setNotification(null), 300);
   };
 
-  const refreshPage = () {
+  const refreshPage = () => {
     window.location.reload();
   };
 

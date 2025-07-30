@@ -333,7 +333,7 @@ export function MessageSearch({
     // Implementation would depend on additional backend support
   }, []);
 
-  const handleClearSearch = () {
+  const handleClearSearch = () => {
     clearSearchState();
     setResults([]);
     setSessionGroups([]);

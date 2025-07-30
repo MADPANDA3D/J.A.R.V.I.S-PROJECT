@@ -100,7 +100,7 @@ export function SystemHealthMonitor({
             });
           }, service.timeout);
 
-          ws.onopen = () {
+          ws.onopen = () => {
             clearTimeout(timeout);
             const responseTime = performance.now() - startTime;
             ws.close();
@@ -114,7 +114,7 @@ export function SystemHealthMonitor({
             });
           };
 
-          ws.onerror = () {
+          ws.onerror = () => {
             clearTimeout(timeout);
             resolve({
               service: service.name,

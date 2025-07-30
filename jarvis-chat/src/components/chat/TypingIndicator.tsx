@@ -1,7 +1,7 @@
 import React from 'react';
 import { Bot } from 'lucide-react';
 
-export const TypingIndicator: React.FC = () {
+export const TypingIndicator: React.FC = () => {
   return (
     <div className="flex gap-3">
       {/* Avatar */}

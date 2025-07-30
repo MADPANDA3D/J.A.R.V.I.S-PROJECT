@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Home, MessageCircle, ArrowLeft } from 'lucide-react';
 
-export const NotFound: React.FC = () {
+export const NotFound: React.FC = () => {
   const navigate = useNavigate();
 
-  const handleGoBack = () {
+  const handleGoBack = () => {
     navigate(-1);
   };
 

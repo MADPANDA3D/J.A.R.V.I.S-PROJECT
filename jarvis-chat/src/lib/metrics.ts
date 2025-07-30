@@ -841,7 +841,7 @@ export const setMetricsUser = (
 ) => metricsService.setUser(userId, properties);
 
 // React hooks for metrics
-export const useMetrics = () {
+export const useMetrics = () => {
   return {
     trackKPI,
     trackUserInteraction,

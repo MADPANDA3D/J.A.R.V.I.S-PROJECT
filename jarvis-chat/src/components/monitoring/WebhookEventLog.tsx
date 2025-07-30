@@ -19,7 +19,7 @@ interface WebhookEvent {
   };
 }
 
-export const WebhookEventLog: React.FC = () {
+export const WebhookEventLog: React.FC = () => {
   const [events, setEvents] = useState<WebhookEvent[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<WebhookEvent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -150,7 +150,7 @@ export const WebhookEventLog: React.FC = () {
     };
   };
 
-  const getUniqueEventTypes = () {
+  const getUniqueEventTypes = () => {
     return [...new Set(events.map(event => event.event_type))];
   };
 

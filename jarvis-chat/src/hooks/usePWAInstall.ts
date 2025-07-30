@@ -13,7 +13,7 @@ interface PWAInstallState {
   installError: string | null;
 }
 
-export const usePWAInstall = () {
+export const usePWAInstall = () => {
   const [state, setState] = useState<PWAInstallState>({
     isInstallable: false,
     isInstalled: false,
@@ -49,7 +49,7 @@ export const usePWAInstall = () {
       }));
     };
 
-    const handleAppInstalled = () {
+    const handleAppInstalled = () => {
       console.log('✅ PWA was installed');
       setState(prev => ({
         ...prev,

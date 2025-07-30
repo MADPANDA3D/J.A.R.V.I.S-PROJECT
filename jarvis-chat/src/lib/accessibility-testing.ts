@@ -59,7 +59,7 @@ export class AccessibilityTester {
         'https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.7.2/axe.min.js';
 
       await new Promise<void>((resolve, reject) {
-        script.onload = () {
+        script.onload = () => {
           this.axeLoaded = true;
           resolve();
         };

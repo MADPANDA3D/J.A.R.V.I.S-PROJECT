@@ -46,7 +46,7 @@ export const VisualAccessibilityControls: React.FC<
     setPreferences(accessibilityPrefs.getPreferences());
   };
 
-  const resetToDefaults = () {
+  const resetToDefaults = () => {
     accessibilityPrefs.resetToDefaults();
     setPreferences(accessibilityPrefs.getPreferences());
   };

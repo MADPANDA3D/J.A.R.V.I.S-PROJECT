@@ -99,7 +99,7 @@ export const HealthStatusIndicator: React.FC<HealthStatusIndicatorProps> = ({ me
     }
   };
 
-  const getHealthScore = () {
+  const getHealthScore = () => {
     const successRate = metrics.metrics.webhook_delivery.success_rate;
     const errorRate = metrics.services.webhook_server.error_rate;
     const authSuccessRate = metrics.services.webhook_auth.success_rate;

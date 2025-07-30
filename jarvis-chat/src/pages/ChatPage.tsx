@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { screenReader } from '@/lib/accessibility';
 
-export const ChatPage: React.FC = () {
+export const ChatPage: React.FC = () => {
   const { user } = useAuth();
   const {
     messages,

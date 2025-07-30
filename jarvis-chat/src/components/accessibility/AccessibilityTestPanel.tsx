@@ -112,7 +112,7 @@ export const AccessibilityTestPanel: React.FC<AccessibilityTestPanelProps> = ({
     }
   };
 
-  const downloadReport = () {
+  const downloadReport = () => {
     if (!lastResult) return;
 
     const report = accessibilityTester.generateReport(lastResult);

@@ -153,7 +153,7 @@ export class FocusManager {
     container.addEventListener('keydown', handleKeyDown);
 
     // Store cleanup function
-    (container as HTMLElement & { _focusTrapCleanup?: () => void })._focusTrapCleanup = () {
+    (container as HTMLElement & { _focusTrapCleanup?: () => void })._focusTrapCleanup = () => {
       container.removeEventListener('keydown', handleKeyDown);
     };
 

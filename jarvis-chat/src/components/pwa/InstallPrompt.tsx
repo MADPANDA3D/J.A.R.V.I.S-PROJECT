@@ -45,7 +45,7 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({
     }
   };
 
-  const handleDismiss = () {
+  const handleDismiss = () => {
     setIsVisible(false);
     setIsDismissed(true);
   };

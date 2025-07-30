@@ -169,7 +169,7 @@ class UserActivityTrackingService {
     try {
       this.websocket.connection = new WebSocket(this.config.websocketUrl);
 
-      this.websocket.connection.onopen = () {
+      this.websocket.connection.onopen = () => {
         this.websocket.isConnected = true;
         this.websocket.reconnectAttempts = 0;
         
@@ -188,7 +188,7 @@ class UserActivityTrackingService {
         });
       };
 
-      this.websocket.connection.onclose = () {
+      this.websocket.connection.onclose = () => {
         this.websocket.isConnected = false;
         this.handleWebSocketReconnect();
       };

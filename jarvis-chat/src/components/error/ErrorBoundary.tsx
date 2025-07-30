@@ -78,7 +78,7 @@ export class ErrorBoundary extends Component<
     errorTracker.captureReactError(error, errorInfo);
   }
 
-  resetError = () {
+  resetError = () => {
     // Add breadcrumb for error reset
     errorTracker.addBreadcrumb('info', 'user_action', 'Error boundary reset', {
       component: this.componentName,
@@ -91,7 +91,7 @@ export class ErrorBoundary extends Component<
     });
   };
 
-  reportBug = () {
+  reportBug = () => {
     // This will be used by the ErrorFallback component to open bug report modal
     errorTracker.addBreadcrumb('info', 'user_action', 'Bug report initiated from error boundary', {
       component: this.componentName,

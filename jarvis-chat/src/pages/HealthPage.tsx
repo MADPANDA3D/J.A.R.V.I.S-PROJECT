@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { performHealthCheck, type HealthCheckResult } from '@/lib/healthCheck';
 
-export const HealthPage: React.FC = () {
+export const HealthPage: React.FC = () => {
   const [healthData, setHealthData] = useState<HealthCheckResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);

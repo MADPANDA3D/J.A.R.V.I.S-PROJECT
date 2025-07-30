@@ -62,7 +62,7 @@ export function LogStreamViewer({
       const ws = new WebSocket(websocketUrl);
       wsRef.current = ws;
 
-      ws.onopen = () {
+      ws.onopen = () => {
         console.log('🔌 Connected to log stream');
         setConnectionStatus('connected');
       };
@@ -109,7 +109,7 @@ export function LogStreamViewer({
         }
       };
 
-      ws.onclose = () {
+      ws.onclose = () => {
         console.log('🔌 Disconnected from log stream');
         setConnectionStatus('disconnected');
         
@@ -265,7 +265,7 @@ export function LogStreamViewer({
     }).format(timestamp);
   };
 
-  const exportLogs = () {
+  const exportLogs = () => {
     const data = filteredLogs.map(log => ({
       timestamp: log.timestamp.toISOString(),
       level: log.level,
@@ -285,7 +285,7 @@ export function LogStreamViewer({
     URL.revokeObjectURL(url);
   };
 
-  const clearLogs = () {
+  const clearLogs = () => {
     setLogs([]);
     if (enablePersistence) {
       const persistKey = `log-stream-${websocketUrl}`;

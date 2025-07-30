@@ -200,7 +200,7 @@ class SessionTracker {
 
   private setupNavigationTracking(): void {
     // Track page navigation
-    const trackNavigation = () {
+    const trackNavigation = () => {
       this.trackPageView();
     };
 

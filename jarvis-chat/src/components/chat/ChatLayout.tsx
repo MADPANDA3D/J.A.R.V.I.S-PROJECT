@@ -143,7 +143,7 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
     });
   };
 
-  const handleClearSearch = () {
+  const handleClearSearch = () => {
     setShowSearch(false);
     setCurrentSearchTerms([]);
     setHighlightedMessageId(null);

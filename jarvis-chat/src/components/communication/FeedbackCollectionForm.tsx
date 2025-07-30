@@ -261,7 +261,7 @@ export function FeedbackCollectionForm({
     }
   };
 
-  const handleCancel = () {
+  const handleCancel = () => {
     if (onCancel) {
       onCancel();
     }
