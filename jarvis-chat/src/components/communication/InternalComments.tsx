@@ -82,7 +82,7 @@ function CommentEditor({
   const [attachments, setAttachments] = useState<File[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) {
     e.preventDefault();
     
     if (!content.trim()) {
@@ -140,16 +140,16 @@ function CommentEditor({
     }
   };
 
-  const handleFileAttachment = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileAttachment = (e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files || []);
     setAttachments(prev => [...prev, ...files]);
   };
 
-  const removeAttachment = (index: number) => {
+  const removeAttachment = (index: number) {
     setAttachments(prev => prev.filter((_, i) => i !== index));
   };
 
-  const insertMention = (username: string) => {
+  const insertMention = (username: string) {
     const textarea = textareaRef.current;
     if (textarea) {
       const start = textarea.selectionStart;
@@ -158,7 +158,7 @@ function CommentEditor({
       setContent(newContent);
       
       // Move cursor after mention
-      setTimeout(() => {
+      setTimeout(() {
         textarea.selectionStart = textarea.selectionEnd = start + username.length + 2;
         textarea.focus();
       }, 0);
@@ -337,14 +337,15 @@ function CommentItem({
   onDelete,
   onReaction,
   showReplies = true
-}: CommentItemProps) => {
+}: CommentItemProps) {
   const { toast } = useToast();
   const [showReplyEditor, setShowReplyEditor] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
 
-  const getCommentTypeIcon = (type: CommentType) => {
-    switch (type) => {
+  const getCommentTypeIcon = (type: CommentType) {
+    switch (type) {
+    }
       case 'note': return <MessageSquare className="h-4 w-4 text-blue-600" />;
       case 'status_change': return <CheckCircle className="h-4 w-4 text-green-600" />;
       case 'resolution': return <CheckCircle className="h-4 w-4 text-green-600" />;
@@ -354,20 +355,21 @@ function CommentItem({
     }
   };
 
-  const getVisibilityIcon = (visibility: CommentVisibility) => {
-    switch (visibility) => {
+  const getVisibilityIcon = (visibility: CommentVisibility) {
+    switch (visibility) {
+    }
       case 'internal': return <Eye className="h-3 w-3 text-red-500" />;
       case 'team_only': return <Users className="h-3 w-3 text-yellow-500" />;
       case 'public': return <Eye className="h-3 w-3 text-green-500" />;
     }
   };
 
-  const formatContent = (content: string) => {
+  const formatContent = (content: string) {
     // Simple formatting for mentions
     return content.replace(/@(\w+)/g, '<span class="text-blue-600 font-medium">@$1</span>');
   };
 
-  const handleReaction = async (emoji: string) => {
+  const handleReaction = async (emoji: string) {
     try {
       await internalCommunicationService.addReaction(comment.id, currentUserId, emoji);
       if (onReaction) {
@@ -382,7 +384,7 @@ function CommentItem({
     }
   };
 
-  const handleEdit = async () => {
+  const handleEdit = async () {
     try {
       const result = await internalCommunicationService.editComment(
         comment.id,
@@ -411,7 +413,7 @@ function CommentItem({
     }
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async () {
     try {
       const result = await internalCommunicationService.deleteComment(
         comment.id,
@@ -507,7 +509,7 @@ function CommentItem({
           {/* Reactions */}
           {comment.reactions.length > 0 && (
             <div className="flex flex-wrap gap-1">
-              {comment.reactions.reduce((acc, reaction) => {
+              {comment.reactions.reduce((acc, reaction) {
                 const existing = acc.find(r => r.emoji === reaction.emoji);
                 if (existing) {
                   existing.count++;
@@ -596,7 +598,7 @@ function CommentItem({
             authorId={currentUserId}
             parentCommentId={comment.id}
             placeholder="Reply to this comment..."
-            onSubmit={(newComment) => {
+            onSubmit={(newComment) {
               setShowReplyEditor(false);
               if (onReply) {
                 onReply(newComment);
@@ -649,7 +651,7 @@ export function InternalComments({
   currentUserId,
   showPrivateComments = false,
   onCommentAdded
-}: InternalCommentsProps) => {
+}: InternalCommentsProps) {
   const { toast } = useToast();
   const [comments, setComments] = useState<InternalComment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -658,11 +660,11 @@ export function InternalComments({
   const [filterVisibility, setFilterVisibility] = useState<CommentVisibility | 'all'>('all');
   const [showFilters, setShowFilters] = useState(false);
 
-  useEffect(() => {
+  useEffect(() {
     loadComments();
   }, [bugId, showPrivateComments]);
 
-  const loadComments = async () => {
+  const loadComments = async () {
     try {
       setLoading(true);
       const loadedComments = internalCommunicationService.getBugComments(bugId, {
@@ -687,20 +689,20 @@ export function InternalComments({
     }
   };
 
-  const handleCommentAdded = (newComment: InternalComment) => {
+  const handleCommentAdded = (newComment: InternalComment) {
     setComments(prev => [...prev, newComment]);
     if (onCommentAdded) {
       onCommentAdded(newComment);
     }
   };
 
-  const handleCommentUpdated = (updatedComment: InternalComment) => {
+  const handleCommentUpdated = (updatedComment: InternalComment) {
     setComments(prev =>
       prev.map(c => c.id === updatedComment.id ? updatedComment : c)
     );
   };
 
-  const handleCommentDeleted = (deletedComment: InternalComment) => {
+  const handleCommentDeleted = (deletedComment: InternalComment) {
     setComments(prev =>
       prev.map(c => c.id === deletedComment.id ? { ...c, isDeleted: true } : c)
     );

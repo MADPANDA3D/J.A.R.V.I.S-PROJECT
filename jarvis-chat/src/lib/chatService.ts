@@ -242,7 +242,7 @@ class ChatService {
       )
       .subscribe();
 
-    return () => {
+    return () {
       supabase.removeChannel(subscription);
     };
   }
@@ -354,7 +354,7 @@ class ChatService {
         .order('created_at', { ascending: false });
 
       // Apply optimized filters
-      const applyFilters = (q: ReturnType<typeof supabase.from>) => {
+      const applyFilters = (q: ReturnType<typeof supabase.from>) {
         if (filters.query.trim()) {
           // Use more efficient full-text search if available
           const searchTerm = filters.query.trim();

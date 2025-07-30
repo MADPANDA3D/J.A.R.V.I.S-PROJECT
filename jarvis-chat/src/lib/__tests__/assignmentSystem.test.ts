@@ -68,7 +68,7 @@ vi.mock('../bugLifecycle', () => ({
   }
 }));
 
-describe('BugAssignmentSystem', () => {
+describe('BugAssignmentSystem', () {
   const mockBugReport: Partial<BugReport> = {
     id: 'test-bug-id',
     title: 'Test Bug Report',
@@ -81,16 +81,16 @@ describe('BugAssignmentSystem', () => {
     created_at: new Date().toISOString()
   };
 
-  beforeEach(() => {
+  beforeEach(() {
     vi.clearAllMocks();
   });
 
-  afterEach(() => {
+  afterEach(() {
     vi.clearAllMocks();
   });
 
-  describe('Manual Assignment', () => {
-    it('assigns bug to team member successfully', async () => {
+  describe('Manual Assignment', () {
+    it('assigns bug to team member successfully', async () {
       const result = await bugAssignmentSystem.assignBug(
         'test-bug-id',
         'user_1',
@@ -115,7 +115,7 @@ describe('BugAssignmentSystem', () => {
       );
     });
 
-    it('handles assignment to non-existent user', async () => {
+    it('handles assignment to non-existent user', async () {
       const result = await bugAssignmentSystem.assignBug(
         'test-bug-id',
         'non_existent_user',
@@ -127,7 +127,7 @@ describe('BugAssignmentSystem', () => {
       expect(result.error).toContain('Assignee not found');
     });
 
-    it('handles database update failures', async () => {
+    it('handles database update failures', async () {
       const { bugReportOperations } = await import('../supabase');
       vi.mocked(bugReportOperations.updateBugReport).mockResolvedValueOnce({
         error: { message: 'Database error' }
@@ -144,7 +144,7 @@ describe('BugAssignmentSystem', () => {
       expect(result.error).toContain('Database error');
     });
 
-    it('tracks assignment history', async () => {
+    it('tracks assignment history', async () {
       await bugAssignmentSystem.assignBug(
         'test-bug-id',
         'user_1',
@@ -160,7 +160,7 @@ describe('BugAssignmentSystem', () => {
       expect(history[0].reason).toBe('Initial assignment');
     });
 
-    it('handles reassignment correctly', async () => {
+    it('handles reassignment correctly', async () {
       // First assignment
       await bugAssignmentSystem.assignBug(
         'test-bug-id',
@@ -197,8 +197,8 @@ describe('BugAssignmentSystem', () => {
     });
   });
 
-  describe('Auto Assignment', () => {
-    it('auto-assigns bug successfully', async () => {
+  describe('Auto Assignment', () {
+    it('auto-assigns bug successfully', async () {
       const assignedTo = await bugAssignmentSystem.autoAssignBug('test-bug-id');
 
       expect(assignedTo).toBeDefined();
@@ -210,12 +210,12 @@ describe('BugAssignmentSystem', () => {
       expect(history[history.length - 1].method).toBe('auto');
     });
 
-    it('returns null when no suitable assignee found', async () => {
+    it('returns null when no suitable assignee found', async () {
       // Mock all team members as unavailable
       const teamMembers = (bugAssignmentSystem as any).teamMembers;
       const originalMembers = new Map(teamMembers);
       
-      teamMembers.forEach((member: TeamMember) => {
+      teamMembers.forEach((member: TeamMember) {
         member.availability = 'unavailable';
         member.currentWorkload = member.workloadCapacity;
       });
@@ -228,7 +228,7 @@ describe('BugAssignmentSystem', () => {
       (bugAssignmentSystem as any).teamMembers = originalMembers;
     });
 
-    it('considers workload when auto-assigning', async () => {
+    it('considers workload when auto-assigning', async () {
       // Set one team member with lower workload
       const teamMembers = (bugAssignmentSystem as any).teamMembers;
       const user1 = teamMembers.get('user_1');
@@ -246,8 +246,8 @@ describe('BugAssignmentSystem', () => {
     });
   });
 
-  describe('Assignment Recommendations', () => {
-    it('generates assignment recommendations', async () => {
+  describe('Assignment Recommendations', () {
+    it('generates assignment recommendations', async () {
       const recommendations = await bugAssignmentSystem.getAssignmentRecommendations(mockBugReport);
 
       expect(recommendations).toBeDefined();
@@ -264,7 +264,7 @@ describe('BugAssignmentSystem', () => {
       }
     });
 
-    it('sorts recommendations by confidence', async () => {
+    it('sorts recommendations by confidence', async () {
       const recommendations = await bugAssignmentSystem.getAssignmentRecommendations(mockBugReport);
 
       if (recommendations.length > 1) {
@@ -276,7 +276,7 @@ describe('BugAssignmentSystem', () => {
       }
     });
 
-    it('considers skill matching in recommendations', async () => {
+    it('considers skill matching in recommendations', async () {
       const frontendBug = {
         ...mockBugReport,
         bug_type: 'ui_ux',
@@ -298,8 +298,8 @@ describe('BugAssignmentSystem', () => {
     });
   });
 
-  describe('Priority Escalation', () => {
-    it('escalates bug priority successfully', async () => {
+  describe('Priority Escalation', () {
+    it('escalates bug priority successfully', async () {
       const result = await bugAssignmentSystem.escalateBugPriority(
         'test-bug-id',
         'Bug has been open too long',
@@ -321,7 +321,7 @@ describe('BugAssignmentSystem', () => {
       );
     });
 
-    it('prevents escalation beyond maximum priority', async () => {
+    it('prevents escalation beyond maximum priority', async () {
       // Mock bug with urgent priority
       const { bugReportOperations } = await import('../supabase');
       vi.mocked(bugReportOperations.getBugReportById).mockResolvedValueOnce({
@@ -341,7 +341,7 @@ describe('BugAssignmentSystem', () => {
       expect(result.error).toContain('maximum priority level');
     });
 
-    it('sends escalation alerts to managers', async () => {
+    it('sends escalation alerts to managers', async () {
       await bugAssignmentSystem.escalateBugPriority(
         'test-bug-id',
         'Critical issue requiring attention'
@@ -352,8 +352,8 @@ describe('BugAssignmentSystem', () => {
     });
   });
 
-  describe('Workload Management', () => {
-    it('calculates workload metrics correctly', () => {
+  describe('Workload Management', () {
+    it('calculates workload metrics correctly', () {
       const metrics = bugAssignmentSystem.getWorkloadMetrics();
 
       expect(Array.isArray(metrics)).toBe(true);
@@ -368,7 +368,7 @@ describe('BugAssignmentSystem', () => {
       expect(metric.recentActivity).toBeDefined();
     });
 
-    it('identifies workload imbalances', async () => {
+    it('identifies workload imbalances', async () {
       // Set up imbalanced workload
       const teamMembers = (bugAssignmentSystem as any).teamMembers;
       const user1 = teamMembers.get('user_1');
@@ -390,7 +390,7 @@ describe('BugAssignmentSystem', () => {
       }
     });
 
-    it('updates team member information', () => {
+    it('updates team member information', () {
       const result = bugAssignmentSystem.updateTeamMember('user_1', {
         availability: 'busy',
         currentWorkload: 5
@@ -404,7 +404,7 @@ describe('BugAssignmentSystem', () => {
       expect(user1Metrics?.totalAssigned).toBe(5);
     });
 
-    it('handles update of non-existent team member', () => {
+    it('handles update of non-existent team member', () {
       const result = bugAssignmentSystem.updateTeamMember('non_existent_user', {
         availability: 'available'
       });
@@ -413,8 +413,8 @@ describe('BugAssignmentSystem', () => {
     });
   });
 
-  describe('Assignment Rules', () => {
-    it('applies assignment rules correctly', async () => {
+  describe('Assignment Rules', () {
+    it('applies assignment rules correctly', async () {
       // Create a frontend bug that should match rule
       const frontendBug = {
         ...mockBugReport,
@@ -434,7 +434,7 @@ describe('BugAssignmentSystem', () => {
       expect(assignedTo).toBe('user_1');
     });
 
-    it('falls back to recommendations when no rules match', async () => {
+    it('falls back to recommendations when no rules match', async () {
       const genericBug = {
         ...mockBugReport,
         bug_type: 'other',
@@ -455,8 +455,8 @@ describe('BugAssignmentSystem', () => {
     });
   });
 
-  describe('Error Handling', () => {
-    it('handles bug fetch errors gracefully', async () => {
+  describe('Error Handling', () {
+    it('handles bug fetch errors gracefully', async () {
       const { bugReportOperations } = await import('../supabase');
       vi.mocked(bugReportOperations.getBugReportById).mockResolvedValueOnce({
         data: null,
@@ -473,7 +473,7 @@ describe('BugAssignmentSystem', () => {
       expect(result.error).toContain('Bug not found');
     });
 
-    it('handles notification failures gracefully', async () => {
+    it('handles notification failures gracefully', async () {
       const { sendAssignmentNotification } = await import('../notificationService');
       vi.mocked(sendAssignmentNotification).mockRejectedValueOnce(
         new Error('Notification service unavailable')
@@ -499,8 +499,8 @@ describe('BugAssignmentSystem', () => {
     });
   });
 
-  describe('Performance', () => {
-    it('handles concurrent assignments without conflicts', async () => {
+  describe('Performance', () {
+    it('handles concurrent assignments without conflicts', async () {
       const promises = [
         bugAssignmentSystem.assignBug('bug-1', 'user_1', 'admin_user'),
         bugAssignmentSystem.assignBug('bug-2', 'user_2', 'admin_user'),
@@ -514,7 +514,7 @@ describe('BugAssignmentSystem', () => {
       });
     });
 
-    it('maintains reasonable performance with large workload', async () => {
+    it('maintains reasonable performance with large workload', async () {
       const startTime = performance.now();
 
       // Generate multiple recommendations

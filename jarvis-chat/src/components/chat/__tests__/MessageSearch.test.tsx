@@ -83,8 +83,8 @@ export const MessageSearchTestSuite = {
 
 import { describe, it, expect } from 'vitest';
 
-describe('MessageSearch', () => {
-  it('should validate test suite exists', () => {
+describe('MessageSearch', () {
+  it('should validate test suite exists', () {
     expect(MessageSearchTestSuite).toBeDefined();
     expect(MessageSearchTestSuite.componentExists).toBe(true);
     expect(MessageSearchTestSuite.manualTestsCompleted).toBe(true);

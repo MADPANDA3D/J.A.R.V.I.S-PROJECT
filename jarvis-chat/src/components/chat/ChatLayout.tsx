@@ -40,7 +40,7 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
   isLoading = false,
   className = '',
   enableSessionGrouping = false,
-}) => {
+}) {
   const [inputValue, setInputValue] = useState('');
   const [isSending, setIsSending] = useState(false);
   // const [showSearch, setShowSearch] = useState(false); // Unused for now
@@ -49,11 +49,11 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom when new messages arrive
-  useEffect(() => {
+  useEffect(() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSendMessage = async (content: string) => {
+  const handleSendMessage = async (content: string) {
     if (!content.trim() || isSending) return;
 
     setIsSending(true);
@@ -132,7 +132,7 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
     }
   };
 
-  const handleSessionSelect = (sessionId: string) => {
+  const handleSessionSelect = (sessionId: string) {
     // Handle session selection logic here
     console.log('Session selected:', sessionId);
     
@@ -143,19 +143,19 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
     });
   };
 
-  const handleClearSearch = () => {
+  const handleClearSearch = () {
     setShowSearch(false);
     setCurrentSearchTerms([]);
     setHighlightedMessageId(null);
   };
 
-  const handleSearchResultClick = (messageId: string) => {
+  const handleSearchResultClick = (messageId: string) {
     onMessageClick?.(messageId);
     setHighlightedMessageId(messageId);
     setShowSearch(false);
     
     // Scroll to the message if possible
-    setTimeout(() => {
+    setTimeout(() {
       const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
       if (messageElement) {
         messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });

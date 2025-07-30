@@ -26,8 +26,8 @@ const mockUser = {
   email: 'test@example.com',
 };
 
-describe('useChat', () => {
-  beforeEach(() => {
+describe('useChat', () {
+  beforeEach(() {
     vi.clearAllMocks();
 
     // Default auth state
@@ -43,7 +43,7 @@ describe('useChat', () => {
     } as AuthContextType);
   });
 
-  it('should initialize with empty state', () => {
+  it('should initialize with empty state', () {
     mockUseAuth.mockReturnValue({
       user: null,
       session: null,
@@ -63,7 +63,7 @@ describe('useChat', () => {
     expect(result.current.error).toBeNull();
   });
 
-  it('should load message history when user logs in', async () => {
+  it('should load message history when user logs in', async () {
     const mockHistory = [
       {
         id: '1',
@@ -76,11 +76,11 @@ describe('useChat', () => {
     ];
 
     mockChatService.loadMessageHistory.mockResolvedValue(mockHistory);
-    mockChatService.subscribeToMessages.mockReturnValue(() => {});
+    mockChatService.subscribeToMessages.mockReturnValue(() {});
 
     const { result } = renderHook(() => useChat());
 
-    await waitFor(() => {
+    await waitFor(() {
       expect(result.current.isLoadingHistory).toBe(false);
     });
 
@@ -91,7 +91,7 @@ describe('useChat', () => {
     expect(result.current.messages[0].content).toBe('Hello');
   });
 
-  it('should handle send message successfully', async () => {
+  it('should handle send message successfully', async () {
     const mockUserMsg = {
       id: '1',
       content: 'Hello',
@@ -111,7 +111,7 @@ describe('useChat', () => {
     };
 
     mockChatService.loadMessageHistory.mockResolvedValue([]);
-    mockChatService.subscribeToMessages.mockReturnValue(() => {});
+    mockChatService.subscribeToMessages.mockReturnValue(() {});
     mockChatService.processChatMessage.mockResolvedValue({
       userMsg: mockUserMsg,
       aiMsg: mockAiMsg,
@@ -119,7 +119,7 @@ describe('useChat', () => {
 
     const { result } = renderHook(() => useChat());
 
-    await act(async () => {
+    await act(async () {
       await result.current.sendMessage('Hello');
     });
 
@@ -133,16 +133,16 @@ describe('useChat', () => {
     expect(result.current.isLoading).toBe(false);
   });
 
-  it('should handle send message error', async () => {
+  it('should handle send message error', async () {
     mockChatService.loadMessageHistory.mockResolvedValue([]);
-    mockChatService.subscribeToMessages.mockReturnValue(() => {});
+    mockChatService.subscribeToMessages.mockReturnValue(() {});
     mockChatService.processChatMessage.mockRejectedValue(
       new Error('Network error')
     );
 
     const { result } = renderHook(() => useChat());
 
-    await act(async () => {
+    await act(async () {
       await result.current.sendMessage('Hello');
     });
 
@@ -156,13 +156,13 @@ describe('useChat', () => {
     expect(result.current.messages[1].status).toBe('error');
   });
 
-  it('should not send empty messages', async () => {
+  it('should not send empty messages', async () {
     mockChatService.loadMessageHistory.mockResolvedValue([]);
-    mockChatService.subscribeToMessages.mockReturnValue(() => {});
+    mockChatService.subscribeToMessages.mockReturnValue(() {});
 
     const { result } = renderHook(() => useChat());
 
-    await act(async () => {
+    await act(async () {
       await result.current.sendMessage('   ');
     });
 
@@ -170,13 +170,13 @@ describe('useChat', () => {
     expect(result.current.messages).toHaveLength(0);
   });
 
-  it('should clear messages', () => {
+  it('should clear messages', () {
     mockChatService.loadMessageHistory.mockResolvedValue([]);
-    mockChatService.subscribeToMessages.mockReturnValue(() => {});
+    mockChatService.subscribeToMessages.mockReturnValue(() {});
 
     const { result } = renderHook(() => useChat());
 
-    act(() => {
+    act(() {
       result.current.clearMessages();
     });
 
@@ -184,13 +184,13 @@ describe('useChat', () => {
     expect(result.current.error).toBeNull();
   });
 
-  it('should clear error', () => {
+  it('should clear error', () {
     mockChatService.loadMessageHistory.mockResolvedValue([]);
-    mockChatService.subscribeToMessages.mockReturnValue(() => {});
+    mockChatService.subscribeToMessages.mockReturnValue(() {});
 
     const { result } = renderHook(() => useChat());
 
-    act(() => {
+    act(() {
       result.current.clearError();
     });
 

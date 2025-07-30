@@ -101,7 +101,7 @@ export interface UseWebhookMonitoringOptions {
   webhookServerUrl?: string;
 }
 
-export const useWebhookMonitoring = (options: UseWebhookMonitoringOptions = {}) => {
+export const useWebhookMonitoring = (options: UseWebhookMonitoringOptions = {}) {
   const {
     refreshInterval = 30000, // 30 seconds default
     autoRefresh = true,
@@ -115,7 +115,7 @@ export const useWebhookMonitoring = (options: UseWebhookMonitoringOptions = {}) 
     lastUpdated: null
   });
 
-  const fetchMetrics = useCallback(async () => {
+  const fetchMetrics = useCallback(async () {
     try {
       setState(prev => ({ ...prev, loading: true, error: null }));
 
@@ -257,7 +257,7 @@ export const useWebhookMonitoring = (options: UseWebhookMonitoringOptions = {}) 
     }
   }, [webhookServerUrl]);
 
-  const refresh = useCallback(() => {
+  const refresh = useCallback(() {
     return fetchMetrics();
   }, [fetchMetrics]);
 

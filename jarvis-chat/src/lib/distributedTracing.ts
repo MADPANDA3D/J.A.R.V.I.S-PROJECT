@@ -696,14 +696,14 @@ class DistributedTracingService {
   private startExportTimer(): void {
     if (!this.config.export.endpoint) return;
 
-    this.exportTimer = setInterval(() => {
+    this.exportTimer = setInterval(() {
       this.exportSpans();
     }, this.config.export.flushInterval);
   }
 
   private setupCleanupTimer(): void {
     // Clean up old data every hour
-    setInterval(() => {
+    setInterval(() {
       this.cleanupOldData();
     }, 60 * 60 * 1000);
   }

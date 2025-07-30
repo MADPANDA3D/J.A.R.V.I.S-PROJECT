@@ -472,13 +472,13 @@ class IncidentResponseService {
     this.isMonitoring = true;
 
     // Monitor for incidents every 30 seconds
-    this.monitoringInterval = window.setInterval(() => {
+    this.monitoringInterval = window.setInterval(() {
       this.detectIncidents();
       this.executeAutomatedActions();
     }, 30000);
 
     // Check escalation rules every minute
-    this.escalationInterval = window.setInterval(() => {
+    this.escalationInterval = window.setInterval(() {
       this.checkEscalationRules();
     }, 60000);
   }

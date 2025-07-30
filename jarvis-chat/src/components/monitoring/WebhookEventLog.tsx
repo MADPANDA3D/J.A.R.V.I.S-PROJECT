@@ -19,7 +19,7 @@ interface WebhookEvent {
   };
 }
 
-export const WebhookEventLog: React.FC = () => {
+export const WebhookEventLog: React.FC = () {
   const [events, setEvents] = useState<WebhookEvent[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<WebhookEvent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -40,7 +40,7 @@ export const WebhookEventLog: React.FC = () => {
       'webhook-test-client/1.0'
     ];
 
-    return Array.from({ length: 50 }, (_, i) => {
+    return Array.from({ length: 50 }, (_, i) {
       const eventType = eventTypes[Math.floor(Math.random() * eventTypes.length)];
       const status = statuses[Math.floor(Math.random() * statuses.length)];
       const timestamp = new Date(Date.now() - i * 60000 * Math.random() * 30).toISOString();
@@ -63,9 +63,9 @@ export const WebhookEventLog: React.FC = () => {
     }).sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
   };
 
-  useEffect(() => {
+  useEffect(() {
     // Simulate API call
-    setTimeout(() => {
+    setTimeout(() {
       const mockEvents = generateMockEvents();
       setEvents(mockEvents);
       setFilteredEvents(mockEvents);
@@ -73,7 +73,7 @@ export const WebhookEventLog: React.FC = () => {
     }, 1000);
   }, []);
 
-  useEffect(() => {
+  useEffect(() {
     let filtered = events;
 
     // Apply search filter
@@ -92,12 +92,12 @@ export const WebhookEventLog: React.FC = () => {
     }
 
     // Apply event type filter
-    if (eventTypeFilter !== 'all') => {
+    if (eventTypeFilter !== 'all') {
       filtered = filtered.filter(event => event.event_type === eventTypeFilter);
     }
 
     // Apply sort order
-    filtered = filtered.sort((a, b) => {
+    filtered = filtered.sort((a, b) {
       const timeA = new Date(a.timestamp).getTime();
       const timeB = new Date(b.timestamp).getTime();
       return sortOrder === 'desc' ? timeB - timeA : timeA - timeB;
@@ -106,8 +106,9 @@ export const WebhookEventLog: React.FC = () => {
     setFilteredEvents(filtered);
   }, [events, searchTerm, statusFilter, eventTypeFilter, sortOrder]);
 
-  const getStatusColor = (status: string) => {
-    switch (status) => {
+  const getStatusColor = (status: string) {
+    switch (status) {
+    }
       case 'success': return 'bg-green-100 text-green-800';
       case 'error': return 'bg-red-100 text-red-800';
       case 'warning': return 'bg-yellow-100 text-yellow-800';
@@ -115,8 +116,9 @@ export const WebhookEventLog: React.FC = () => {
     }
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) => {
+  const getStatusIcon = (status: string) {
+    switch (status) {
+    }
       case 'success':
         return (
           <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
@@ -140,7 +142,7 @@ export const WebhookEventLog: React.FC = () => {
     }
   };
 
-  const formatTimestamp = (timestamp: string) => {
+  const formatTimestamp = (timestamp: string) {
     const date = new Date(timestamp);
     return {
       date: date.toLocaleDateString(),
@@ -148,11 +150,11 @@ export const WebhookEventLog: React.FC = () => {
     };
   };
 
-  const getUniqueEventTypes = () => {
+  const getUniqueEventTypes = () {
     return [...new Set(events.map(event => event.event_type))];
   };
 
-  if (loading) => {
+  if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
@@ -258,7 +260,7 @@ export const WebhookEventLog: React.FC = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredEvents.map((event) => {
+              {filteredEvents.map((event) {
                 const timestamp = formatTimestamp(event.timestamp);
                 return (
                   <tr key={event.id} className="hover:bg-gray-50">

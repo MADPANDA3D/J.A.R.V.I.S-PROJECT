@@ -53,7 +53,7 @@ export function LogStreamViewer({
   const [autoScroll, setAutoScroll] = useState(true);
 
   // WebSocket connection management
-  const connectWebSocket = useCallback(() => {
+  const connectWebSocket = useCallback(() {
     if (wsRef.current?.readyState === WebSocket.OPEN) return;
 
     setConnectionStatus('connecting');
@@ -62,12 +62,12 @@ export function LogStreamViewer({
       const ws = new WebSocket(websocketUrl);
       wsRef.current = ws;
 
-      ws.onopen = () => {
+      ws.onopen = () {
         console.log('🔌 Connected to log stream');
         setConnectionStatus('connected');
       };
 
-      ws.onmessage = (event) => {
+      ws.onmessage = (event) {
         if (isPaused) return;
 
         try {
@@ -109,7 +109,7 @@ export function LogStreamViewer({
         }
       };
 
-      ws.onclose = () => {
+      ws.onclose = () {
         console.log('🔌 Disconnected from log stream');
         setConnectionStatus('disconnected');
         
@@ -117,7 +117,7 @@ export function LogStreamViewer({
         setTimeout(connectWebSocket, 5000);
       };
 
-      ws.onerror = (error) => {
+      ws.onerror = (error) {
         console.error('❌ WebSocket error:', error);
         setConnectionStatus('disconnected');
       };
@@ -132,10 +132,10 @@ export function LogStreamViewer({
   }, [websocketUrl, isPaused, maxLogEntries]);
 
   // Effect to establish WebSocket connection
-  useEffect(() => {
+  useEffect(() {
     connectWebSocket();
 
-    return () => {
+    return () {
       if (wsRef.current) {
         wsRef.current.close();
         wsRef.current = null;
@@ -144,14 +144,14 @@ export function LogStreamViewer({
   }, [connectWebSocket]);
 
   // Auto-scroll effect
-  useEffect(() => {
+  useEffect(() {
     if (autoScroll && logsEndRef.current) {
       logsEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [filteredLogs, autoScroll]);
 
   // Filter logs based on search query and filters
-  useEffect(() => {
+  useEffect(() {
     let filtered = logs;
 
     // Apply level filter
@@ -175,7 +175,7 @@ export function LogStreamViewer({
   }, [logs, searchQuery, levelFilter, sourceFilter]);
 
   // Persistence effect
-  useEffect(() => {
+  useEffect(() {
     if (enablePersistence && logs.length > 0) {
       const persistKey = `log-stream-${websocketUrl}`;
       try {
@@ -187,7 +187,7 @@ export function LogStreamViewer({
   }, [logs, enablePersistence, websocketUrl]);
 
   // Load persisted logs on mount
-  useEffect(() => {
+  useEffect(() {
     if (enablePersistence) {
       const persistKey = `log-stream-${websocketUrl}`;
       try {
@@ -207,8 +207,9 @@ export function LogStreamViewer({
   }, [enablePersistence, websocketUrl]);
 
   // Utility functions
-  const getLogLevelIcon = (level: string) => {
-    switch (level) => {
+  const getLogLevelIcon = (level: string) {
+    switch (level) {
+    }
       case 'error':
         return <AlertCircle className="h-3 w-3 text-red-500" />;
       case 'warning':
@@ -222,7 +223,7 @@ export function LogStreamViewer({
     }
   };
 
-  const getLogLevelBadge = (level: string) => {
+  const getLogLevelBadge = (level: string) {
     const variants = {
       error: 'destructive',
       warning: 'secondary',
@@ -237,7 +238,7 @@ export function LogStreamViewer({
     );
   };
 
-  const getSourceBadge = (source: string) => {
+  const getSourceBadge = (source: string) {
     const colors = {
       docker: 'bg-blue-100 text-blue-800',
       webhook: 'bg-green-100 text-green-800',
@@ -255,7 +256,7 @@ export function LogStreamViewer({
     );
   };
 
-  const formatTimestamp = (timestamp: Date) => {
+  const formatTimestamp = (timestamp: Date) {
     return new Intl.DateTimeFormat('en-US', {
       hour: '2-digit',
       minute: '2-digit',
@@ -264,7 +265,7 @@ export function LogStreamViewer({
     }).format(timestamp);
   };
 
-  const exportLogs = () => {
+  const exportLogs = () {
     const data = filteredLogs.map(log => ({
       timestamp: log.timestamp.toISOString(),
       level: log.level,
@@ -284,7 +285,7 @@ export function LogStreamViewer({
     URL.revokeObjectURL(url);
   };
 
-  const clearLogs = () => {
+  const clearLogs = () {
     setLogs([]);
     if (enablePersistence) {
       const persistKey = `log-stream-${websocketUrl}`;
@@ -292,7 +293,7 @@ export function LogStreamViewer({
     }
   };
 
-  const toggleFilter = (filter: Set<string>, setFilter: (filter: Set<string>) => void, value: string) => {
+  const toggleFilter = (filter: Set<string>, setFilter: (filter: Set<string>) => void, value: string) {
     const newFilter = new Set(filter);
     if (newFilter.has(value)) {
       newFilter.delete(value);
@@ -302,7 +303,7 @@ export function LogStreamViewer({
     setFilter(newFilter);
   };
 
-  const handleScroll = useCallback(() => {
+  const handleScroll = useCallback(() {
     if (logContainerRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = logContainerRef.current;
       const isAtBottom = scrollHeight - scrollTop - clientHeight < 5;
@@ -494,7 +495,7 @@ export function LogStreamViewer({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => {
+              onClick={() {
                 setAutoScroll(true);
                 logsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
               }}

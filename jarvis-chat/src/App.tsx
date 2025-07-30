@@ -20,12 +20,12 @@ import { accessibilityTester } from '@/lib/accessibility-testing';
 
 function App() {
   // Initialize accessibility features when the app loads
-  useEffect(() => {
+  useEffect(() {
     initializeAccessibility();
 
     // Run initial accessibility audit in development
     if (import.meta.env.DEV) {
-      setTimeout(async () => {
+      setTimeout(async () {
         try {
           const result = await accessibilityTester.auditPage();
           console.log('Initial accessibility audit completed:', {

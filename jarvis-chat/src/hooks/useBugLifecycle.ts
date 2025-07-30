@@ -52,7 +52,7 @@ export function useBugLifecycle(
   });
 
   // Refresh bug report data
-  const refreshBugReport = useCallback(async () => {
+  const refreshBugReport = useCallback(async () {
     if (!bugId) return;
 
     try {
@@ -259,14 +259,14 @@ export function useBugLifecycle(
   }, []);
 
   // Initial load
-  useEffect(() => {
+  useEffect(() {
     if (bugId) {
       refreshBugReport();
     }
   }, [bugId, refreshBugReport]);
 
   // Auto-refresh functionality
-  useEffect(() => {
+  useEffect(() {
     if (!autoRefresh || !bugId) return;
 
     const interval = setInterval(() {

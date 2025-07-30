@@ -65,12 +65,12 @@ class ScreenReaderManager {
     region.textContent = '';
 
     // Add new message after a brief delay to ensure screen readers detect the change
-    setTimeout(() => {
+    setTimeout(() {
       region.textContent = announcement.message;
 
       // Clear message after timeout if specified
       if (announcement.timeout) {
-        setTimeout(() => {
+        setTimeout(() {
           region.textContent = '';
         }, announcement.timeout);
       }
@@ -132,7 +132,7 @@ export class FocusManager {
     const firstElement = focusableElements[0];
     const lastElement = focusableElements[focusableElements.length - 1];
 
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const handleKeyDown = (event: KeyboardEvent) {
       if (event.key !== 'Tab') return;
 
       if (event.shiftKey) {
@@ -153,7 +153,7 @@ export class FocusManager {
     container.addEventListener('keydown', handleKeyDown);
 
     // Store cleanup function
-    (container as HTMLElement & { _focusTrapCleanup?: () => void })._focusTrapCleanup = () => {
+    (container as HTMLElement & { _focusTrapCleanup?: () => void })._focusTrapCleanup = () {
       container.removeEventListener('keydown', handleKeyDown);
     };
 
@@ -398,7 +398,7 @@ export class AriaManager {
     element: HTMLElement,
     properties: Record<string, string | boolean | number>
   ): void {
-    Object.entries(properties).forEach(([key, value]) => {
+    Object.entries(properties).forEach(([key, value]) {
       const ariaKey = key.startsWith('aria-') ? key : `aria-${key}`;
       element.setAttribute(ariaKey, String(value));
     });
@@ -569,7 +569,7 @@ export class AccessibilityPreferencesManager {
 
     // Listen for color scheme changes
     const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    darkModeQuery.addEventListener('change', () => {
+    darkModeQuery.addEventListener('change', () {
       if (this.preferences.colorScheme === 'auto') {
         this.applyPreferences();
       }
@@ -745,7 +745,7 @@ export class AccessibilityTester {
 
       report += `## Detailed Issues\n\n`;
 
-      audit.issues.forEach((issue, index) => {
+      audit.issues.forEach((issue, index) {
         report += `### ${index + 1}. ${issue.type} (${issue.severity})\n`;
         report += `${issue.message}\n\n`;
       });
@@ -785,11 +785,11 @@ export function initializeAccessibility(): void {
     border-radius: 4px;
   `;
 
-  skipLink.addEventListener('focus', () => {
+  skipLink.addEventListener('focus', () {
     skipLink.style.top = '6px';
   });
 
-  skipLink.addEventListener('blur', () => {
+  skipLink.addEventListener('blur', () {
     skipLink.style.top = '-40px';
   });
 
@@ -798,7 +798,7 @@ export function initializeAccessibility(): void {
   // Register common keyboard shortcuts
   keyboardNav.registerShortcut(
     'alt+h',
-    () => {
+    () {
       const heading = document.querySelector('h1, h2');
       if (heading) {
         focusManager.setFocus(
@@ -812,7 +812,7 @@ export function initializeAccessibility(): void {
 
   keyboardNav.registerShortcut(
     'alt+m',
-    () => {
+    () {
       const main =
         document.getElementById('main-content') ||
         document.querySelector('main');
@@ -825,7 +825,7 @@ export function initializeAccessibility(): void {
 
   keyboardNav.registerShortcut(
     'alt+/',
-    () => {
+    () {
       // Toggle shortcuts help
       const help = document.getElementById('keyboard-shortcuts-help');
       if (help) {

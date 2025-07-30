@@ -16,11 +16,11 @@ import {
 import { useAuth } from '@/contexts/AuthContext';
 import { screenReader } from '@/lib/accessibility';
 
-export const Dashboard: React.FC = () => {
+export const Dashboard: React.FC = () {
   const { user } = useAuth();
 
   // Announce page load to screen readers
-  useEffect(() => {
+  useEffect(() {
     screenReader.announce({
       message:
         'Dashboard page loaded. Overview of your JARVIS assistant activity and system status.',

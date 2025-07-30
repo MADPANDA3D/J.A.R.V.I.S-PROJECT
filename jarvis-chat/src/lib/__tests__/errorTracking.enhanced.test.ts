@@ -47,19 +47,19 @@ vi.mock('../sessionTracking', () => ({
   incrementSessionErrors: vi.fn(),
 }));
 
-describe('Enhanced Error Tracking', () => {
-  beforeEach(() => {
+describe('Enhanced Error Tracking', () {
+  beforeEach(() {
     vi.clearAllMocks();
     localStorageMock.getItem.mockReturnValue(null);
     errorTracker.clearErrors();
   });
 
-  afterEach(() => {
+  afterEach(() {
     vi.clearAllTimers();
   });
 
-  describe('Enhanced Error Reports', () => {
-    it('should create enhanced error reports with session info', () => {
+  describe('Enhanced Error Reports', () {
+    it('should create enhanced error reports with session info', () {
       const error = new Error('Test error');
       const errorId = captureError(error, { component: 'TestComponent' });
       
@@ -75,7 +75,7 @@ describe('Enhanced Error Tracking', () => {
       expect(capturedError?.component).toBe('TestComponent');
     });
 
-    it('should generate fingerprints for error grouping', () => {
+    it('should generate fingerprints for error grouping', () {
       const error1 = new Error('Same error message');
       const error2 = new Error('Same error message');
       
@@ -90,7 +90,7 @@ describe('Enhanced Error Tracking', () => {
       expect(err1?.fingerprint[0]).toBe(err2?.fingerprint[0]);
     });
 
-    it('should include release and environment information', () => {
+    it('should include release and environment information', () {
       const error = new Error('Test error');
       const errorId = captureError(error);
       
@@ -102,8 +102,8 @@ describe('Enhanced Error Tracking', () => {
     });
   });
 
-  describe('Breadcrumb System', () => {
-    it('should add breadcrumbs with proper categorization', () => {
+  describe('Breadcrumb System', () {
+    it('should add breadcrumbs with proper categorization', () {
       addBreadcrumb('info', 'navigation', 'User navigated to page', { url: '/test' });
       addBreadcrumb('error', 'error', 'API call failed', { endpoint: '/api/test' });
       
@@ -116,7 +116,7 @@ describe('Enhanced Error Tracking', () => {
       expect(breadcrumbs[1].level).toBe('error');
     });
 
-    it('should limit breadcrumb storage', () => {
+    it('should limit breadcrumb storage', () {
       // Add many breadcrumbs
       for (let i = 0; i < 100; i++) {
         addBreadcrumb('info', 'info', `Breadcrumb ${i}`);
@@ -128,7 +128,7 @@ describe('Enhanced Error Tracking', () => {
       expect(breadcrumbs.length).toBeLessThanOrEqual(50);
     });
 
-    it('should include breadcrumbs in error reports', () => {
+    it('should include breadcrumbs in error reports', () {
       addBreadcrumb('info', 'user_action', 'User clicked button');
       addBreadcrumb('warning', 'http', 'Slow API response');
       
@@ -142,8 +142,8 @@ describe('Enhanced Error Tracking', () => {
     });
   });
 
-  describe('API Failure Tracking', () => {
-    it('should track API failures with detailed context', () => {
+  describe('API Failure Tracking', () {
+    it('should track API failures with detailed context', () {
       const apiContext = {
         endpoint: '/api/users',
         method: 'GET',
@@ -168,7 +168,7 @@ describe('Enhanced Error Tracking', () => {
       }));
     });
 
-    it('should add breadcrumbs for API failures', () => {
+    it('should add breadcrumbs for API failures', () {
       const apiContext = {
         endpoint: '/api/test',
         method: 'POST',
@@ -192,8 +192,8 @@ describe('Enhanced Error Tracking', () => {
     });
   });
 
-  describe('Authentication Error Tracking', () => {
-    it('should track auth errors with context', () => {
+  describe('Authentication Error Tracking', () {
+    it('should track auth errors with context', () {
       const authContext = {
         authEvent: 'sign_in' as const,
         supabaseError: 'Invalid credentials',
@@ -214,7 +214,7 @@ describe('Enhanced Error Tracking', () => {
       }));
     });
 
-    it('should add breadcrumbs for auth events', () => {
+    it('should add breadcrumbs for auth events', () {
       const authContext = {
         authEvent: 'sign_up' as const,
         supabaseError: 'Email already exists',
@@ -233,8 +233,8 @@ describe('Enhanced Error Tracking', () => {
     });
   });
 
-  describe('User Action Tracking', () => {
-    it('should track user actions as breadcrumbs', () => {
+  describe('User Action Tracking', () {
+    it('should track user actions as breadcrumbs', () {
       const actionContext = {
         actionType: 'chat_message' as const,
         elementId: 'message-input',
@@ -255,7 +255,7 @@ describe('Enhanced Error Tracking', () => {
       }));
     });
 
-    it('should handle different action types', () => {
+    it('should handle different action types', () {
       const actions = [
         { actionType: 'form_submit' as const, formData: { field: 'value' } },
         { actionType: 'navigation' as const, navigationFrom: '/page1', navigationTo: '/page2' },
@@ -273,8 +273,8 @@ describe('Enhanced Error Tracking', () => {
     });
   });
 
-  describe('Tags Management', () => {
-    it('should set and retrieve tags', () => {
+  describe('Tags Management', () {
+    it('should set and retrieve tags', () {
       const tags = { component: 'TestComponent', version: '1.0.0' };
       setErrorTags(tags);
       
@@ -282,7 +282,7 @@ describe('Enhanced Error Tracking', () => {
       expect(currentTags).toEqual(tags);
     });
 
-    it('should merge tags when setting multiple times', () => {
+    it('should merge tags when setting multiple times', () {
       setErrorTags({ component: 'TestComponent' });
       setErrorTags({ version: '1.0.0' });
       
@@ -293,7 +293,7 @@ describe('Enhanced Error Tracking', () => {
       });
     });
 
-    it('should include tags in error reports', () => {
+    it('should include tags in error reports', () {
       setErrorTags({ feature: 'authentication', module: 'login' });
       
       const error = new Error('Login failed');
@@ -309,8 +309,8 @@ describe('Enhanced Error Tracking', () => {
     });
   });
 
-  describe('Session Integration', () => {
-    it('should include session ID in error reports', () => {
+  describe('Session Integration', () {
+    it('should include session ID in error reports', () {
       const sessionId = getSessionId();
       expect(sessionId).toMatch(/^session_\d+_[a-z0-9]+$/);
       
@@ -323,7 +323,7 @@ describe('Enhanced Error Tracking', () => {
       expect(capturedError?.sessionId).toBe(sessionId);
     });
 
-    it('should set user context', () => {
+    it('should set user context', () {
       const userId = 'user-123';
       const metadata = { email: 'test@example.com', role: 'admin' };
       
@@ -339,8 +339,8 @@ describe('Enhanced Error Tracking', () => {
     });
   });
 
-  describe('Performance', () => {
-    it('should handle high volume of errors efficiently', () => {
+  describe('Performance', () {
+    it('should handle high volume of errors efficiently', () {
       const startTime = Date.now();
       
       // Generate many errors
@@ -355,7 +355,7 @@ describe('Enhanced Error Tracking', () => {
       expect(duration).toBeLessThan(1000);
     });
 
-    it('should limit stored errors to prevent memory leaks', () => {
+    it('should limit stored errors to prevent memory leaks', () {
       // Generate many errors
       for (let i = 0; i < 200; i++) {
         captureError(new Error(`Error ${i}`));
@@ -368,8 +368,8 @@ describe('Enhanced Error Tracking', () => {
     });
   });
 
-  describe('Data Persistence', () => {
-    it('should persist errors to localStorage', () => {
+  describe('Data Persistence', () {
+    it('should persist errors to localStorage', () {
       const error = new Error('Test error');
       captureError(error);
       
@@ -379,7 +379,7 @@ describe('Enhanced Error Tracking', () => {
       );
     });
 
-    it('should persist breadcrumbs to localStorage', () => {
+    it('should persist breadcrumbs to localStorage', () {
       addBreadcrumb('info', 'info', 'Test breadcrumb');
       
       expect(localStorageMock.setItem).toHaveBeenCalledWith(
@@ -388,20 +388,20 @@ describe('Enhanced Error Tracking', () => {
       );
     });
 
-    it('should handle localStorage errors gracefully', () => {
-      localStorageMock.setItem.mockImplementation(() => {
+    it('should handle localStorage errors gracefully', () {
+      localStorageMock.setItem.mockImplementation(() {
         throw new Error('Storage quota exceeded');
       });
       
       // Should not throw error
-      expect(() => {
+      expect(() {
         captureError(new Error('Test error'));
       }).not.toThrow();
     });
   });
 
-  describe('External Monitoring Integration', () => {
-    it('should send errors to external monitoring asynchronously', async () => {
+  describe('External Monitoring Integration', () {
+    it('should send errors to external monitoring asynchronously', async () {
       const error = new Error('Test error');
       captureError(error);
       
@@ -413,7 +413,7 @@ describe('Enhanced Error Tracking', () => {
       expect(captureExternalError).toHaveBeenCalled();
     });
 
-    it('should send breadcrumbs to external monitoring', async () => {
+    it('should send breadcrumbs to external monitoring', async () {
       addBreadcrumb('info', 'navigation', 'Test breadcrumb');
       
       // Wait for async operation

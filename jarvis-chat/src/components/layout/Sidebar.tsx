@@ -52,12 +52,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isOpen = false,
   onClose,
   className,
-}) => {
+}) {
   const sidebarRef = useRef<HTMLElement>(null);
   const firstFocusableRef = useRef<HTMLButtonElement>(null);
 
   // Handle focus management when sidebar opens/closes
-  useEffect(() => {
+  useEffect(() {
     if (isOpen && sidebarRef.current) {
       // Trap focus within sidebar when open on mobile
       focusManager.trapFocus(sidebarRef.current);
@@ -84,8 +84,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   }, [isOpen]);
 
   // Handle keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
+  useEffect(() {
+    const handleKeyDown = (event: KeyboardEvent) {
       if (isOpen && event.key === 'Escape') {
         event.preventDefault();
         onClose?.();

@@ -302,14 +302,14 @@ export function createDebouncedSearch<T extends unknown[], R>(
   }> = [];
 
   return (...args: T): Promise<R> => {
-    return new Promise<R>((resolve, reject) => {
+    return new Promise<R>((resolve, reject) {
       pendingResolvers.push({ resolve, reject });
 
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
 
-      timeoutId = setTimeout(async () => {
+      timeoutId = setTimeout(async () {
         const resolvers = [...pendingResolvers];
         pendingResolvers = [];
 
@@ -337,14 +337,14 @@ export class BatchQueryOptimizer {
 
   // Add query to batch
   addQuery(query: OptimizedQuery): Promise<unknown> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) {
       this.pendingQueries.push({ query, resolve, reject });
 
       if (this.batchTimeout) {
         clearTimeout(this.batchTimeout);
       }
 
-      this.batchTimeout = setTimeout(() => {
+      this.batchTimeout = setTimeout(() {
         this.executeBatch();
       }, this.batchDelayMs);
     });
@@ -366,7 +366,7 @@ export class BatchQueryOptimizer {
         // Execute grouped queries (implementation would depend on actual database client)
         const results = await this.executeQueryGroup(group);
         
-        group.forEach((item, index) => {
+        group.forEach((item, index) {
           item.resolve(results[index]);
         });
       } catch (error) {

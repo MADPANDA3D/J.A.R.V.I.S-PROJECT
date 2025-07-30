@@ -6,7 +6,7 @@
 import { vi } from 'vitest';
 
 // Common error factory
-export const createTestError = (message: string, code?: string) => {
+export const createTestError = (message: string, code?: string) {
   const error = new Error(message);
   if (code) {
     (error as any).code = code;
@@ -71,7 +71,7 @@ export const createMockUser = (overrides: any = {}) => ({
 });
 
 // Setup function to reset all mocks
-export const resetAllMocks = () => {
+export const resetAllMocks = () {
   Object.values(mockSupabaseOperations).forEach(mock => mock.mockReset());
   Object.values(mockNotificationService).forEach(mock => mock.mockReset());
   Object.values(mockBugLifecycleService).forEach(mock => mock.mockReset());

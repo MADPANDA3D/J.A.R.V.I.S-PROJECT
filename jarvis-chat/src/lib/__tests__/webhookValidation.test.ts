@@ -9,9 +9,9 @@ import {
   ValidationErrorSchema,
 } from '../webhookValidation';
 
-describe('WebhookValidation', () => {
-  describe('Webhook Payload Schema Validation', () => {
-    it('should validate a basic valid payload', () => {
+describe('WebhookValidation', () {
+  describe('Webhook Payload Schema Validation', () {
+    it('should validate a basic valid payload', () {
       const validPayload = {
         type: 'Text',
         message: 'Hello, this is a test message',
@@ -34,7 +34,7 @@ describe('WebhookValidation', () => {
       }
     });
 
-    it('should validate payload with all optional fields', () => {
+    it('should validate payload with all optional fields', () {
       const fullPayload = {
         type: 'Voice',
         message: 'Voice message content',
@@ -61,7 +61,7 @@ describe('WebhookValidation', () => {
       }
     });
 
-    it('should reject payload with missing required fields', () => {
+    it('should reject payload with missing required fields', () {
       const invalidPayload = {
         type: 'Text',
         message: 'Missing sessionId and chatId',
@@ -86,7 +86,7 @@ describe('WebhookValidation', () => {
       }
     });
 
-    it('should reject payload with invalid field types', () => {
+    it('should reject payload with invalid field types', () {
       const invalidPayload = {
         type: 'InvalidType', // Invalid enum value
         message: 123, // Should be string
@@ -111,7 +111,7 @@ describe('WebhookValidation', () => {
       }
     });
 
-    it('should reject payload with extra unknown fields', () => {
+    it('should reject payload with extra unknown fields', () {
       const payloadWithExtra = {
         type: 'Text',
         message: 'Valid message',
@@ -136,7 +136,7 @@ describe('WebhookValidation', () => {
       }
     });
 
-    it('should validate message length constraints', () => {
+    it('should validate message length constraints', () {
       // Test empty message
       const emptyMessage = {
         type: 'Text',
@@ -173,7 +173,7 @@ describe('WebhookValidation', () => {
       }
     });
 
-    it('should validate all supported message types', () => {
+    it('should validate all supported message types', () {
       const messageTypes = ['Text', 'Voice', 'Photo', 'Video', 'Document'];
 
       messageTypes.forEach(type => {
@@ -192,7 +192,7 @@ describe('WebhookValidation', () => {
       });
     });
 
-    it('should validate all supported tool IDs', () => {
+    it('should validate all supported tool IDs', () {
       const validTools = [
         'web_search',
         'file_analysis',
@@ -219,7 +219,7 @@ describe('WebhookValidation', () => {
       }
     });
 
-    it('should validate UUID format strictly', () => {
+    it('should validate UUID format strictly', () {
       const validUUID = '550e8400-e29b-41d4-a716-446655440000';
       const invalidUUIDs = [
         '550e8400-e29b-41d4-a716-44665544000', // Too short
@@ -266,8 +266,8 @@ describe('WebhookValidation', () => {
     });
   });
 
-  describe('Enhanced Webhook Payload Schema Validation', () => {
-    it('should validate enhanced payload with metadata', () => {
+  describe('Enhanced Webhook Payload Schema Validation', () {
+    it('should validate enhanced payload with metadata', () {
       const enhancedPayload = {
         type: 'Text',
         message: 'Enhanced test message',
@@ -311,7 +311,7 @@ describe('WebhookValidation', () => {
       }
     });
 
-    it('should apply default values for optional metadata fields', () => {
+    it('should apply default values for optional metadata fields', () {
       const minimalEnhanced = {
         type: 'Text',
         message: 'Minimal enhanced message',
@@ -340,7 +340,7 @@ describe('WebhookValidation', () => {
       }
     });
 
-    it('should validate tool selection metadata structure', () => {
+    it('should validate tool selection metadata structure', () {
       const invalidToolSelection = {
         type: 'Text',
         message: 'Test message',
@@ -375,8 +375,8 @@ describe('WebhookValidation', () => {
     });
   });
 
-  describe('Webhook Response Schema Validation', () => {
-    it('should validate successful webhook response', () => {
+  describe('Webhook Response Schema Validation', () {
+    it('should validate successful webhook response', () {
       const successResponse = {
         success: true,
         response: 'This is a successful response from the AI',
@@ -405,7 +405,7 @@ describe('WebhookValidation', () => {
       }
     });
 
-    it('should validate error webhook response', () => {
+    it('should validate error webhook response', () {
       const errorResponse = {
         success: false,
         error: 'AI service temporarily unavailable',
@@ -421,7 +421,7 @@ describe('WebhookValidation', () => {
       }
     });
 
-    it('should reject response with invalid structure', () => {
+    it('should reject response with invalid structure', () {
       const invalidResponses = [
         // Missing success field
         { response: 'Missing success field' },
@@ -443,7 +443,7 @@ describe('WebhookValidation', () => {
       });
     });
 
-    it('should validate optional response fields', () => {
+    it('should validate optional response fields', () {
       const minimalResponse = {
         success: true,
       };
@@ -453,8 +453,8 @@ describe('WebhookValidation', () => {
     });
   });
 
-  describe('Health Check Response Schema Validation', () => {
-    it('should validate healthy status response', () => {
+  describe('Health Check Response Schema Validation', () {
+    it('should validate healthy status response', () {
       const healthyResponse = {
         status: 'healthy',
         timestamp: new Date().toISOString(),
@@ -477,7 +477,7 @@ describe('WebhookValidation', () => {
       }
     });
 
-    it('should validate degraded status response', () => {
+    it('should validate degraded status response', () {
       const degradedResponse = {
         status: 'degraded',
         timestamp: new Date().toISOString(),
@@ -497,7 +497,7 @@ describe('WebhookValidation', () => {
       }
     });
 
-    it('should reject invalid health status values', () => {
+    it('should reject invalid health status values', () {
       const invalidStatus = {
         status: 'unknown_status', // Not in enum
         timestamp: new Date().toISOString(),
@@ -507,7 +507,7 @@ describe('WebhookValidation', () => {
       expect(result.success).toBe(false);
     });
 
-    it('should validate minimal health check response', () => {
+    it('should validate minimal health check response', () {
       const minimalResponse = {
         status: 'unhealthy',
         timestamp: new Date().toISOString(),
@@ -518,8 +518,8 @@ describe('WebhookValidation', () => {
     });
   });
 
-  describe('Validation Error Schema', () => {
-    it('should create properly structured validation errors', () => {
+  describe('Validation Error Schema', () {
+    it('should create properly structured validation errors', () {
       const invalidPayload = {
         type: 'InvalidType',
         message: '',
@@ -542,8 +542,8 @@ describe('WebhookValidation', () => {
     });
   });
 
-  describe('WebhookValidator Utility Methods', () => {
-    it('should create validated payload with createValidatedPayload', () => {
+  describe('WebhookValidator Utility Methods', () {
+    it('should create validated payload with createValidatedPayload', () {
       const payload = WebhookValidator.createValidatedPayload(
         'Test message',
         'session_123',
@@ -561,8 +561,8 @@ describe('WebhookValidation', () => {
       expect(payload.timestamp).toBeDefined();
     });
 
-    it('should throw error for invalid payload construction', () => {
-      expect(() => {
+    it('should throw error for invalid payload construction', () {
+      expect(() {
         WebhookValidator.createValidatedPayload(
           '', // Empty message not allowed
           'session_123',
@@ -571,7 +571,7 @@ describe('WebhookValidation', () => {
       }).toThrow('Invalid payload construction');
     });
 
-    it('should provide validation summary', () => {
+    it('should provide validation summary', () {
       const validPayload = {
         type: 'Text',
         message: 'Valid message',
@@ -591,7 +591,7 @@ describe('WebhookValidation', () => {
       expect(summary.extraFields).toEqual([]);
     });
 
-    it('should provide detailed validation summary for invalid payload', () => {
+    it('should provide detailed validation summary for invalid payload', () {
       const invalidPayload = {
         type: 'Text',
         message: 'Valid message',
@@ -606,7 +606,7 @@ describe('WebhookValidation', () => {
       expect(summary.extraFields).toContain('extraField');
     });
 
-    it('should handle edge cases in validation summary', () => {
+    it('should handle edge cases in validation summary', () {
       // Test with null/undefined
       const nullSummary = WebhookValidator.getValidationSummary(null);
       expect(nullSummary.isValid).toBe(false);
@@ -621,8 +621,8 @@ describe('WebhookValidation', () => {
     });
   });
 
-  describe('Schema Integration Tests', () => {
-    it('should work with real-world payload example', () => {
+  describe('Schema Integration Tests', () {
+    it('should work with real-world payload example', () {
       const realWorldPayload = {
         type: 'Text',
         message:
@@ -670,7 +670,7 @@ describe('WebhookValidation', () => {
       expect(enhancedResult.success).toBe(true);
     });
 
-    it('should handle complex validation error scenarios', () => {
+    it('should handle complex validation error scenarios', () {
       const complexInvalidPayload = {
         type: 'InvalidType',
         message: '', // Too short

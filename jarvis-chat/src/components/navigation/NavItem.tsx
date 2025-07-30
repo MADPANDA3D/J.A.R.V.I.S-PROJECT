@@ -20,11 +20,11 @@ export const NavItem: React.FC<NavItemProps> = ({
   badge,
   onClick,
   className,
-}) => {
+}) {
   const location = useLocation();
   const isActive = location.pathname === to;
 
-  const handleClick = () => {
+  const handleClick = () {
     // Announce navigation to screen readers
     screenReader.announce({
       message: `Navigating to ${label}`,

@@ -133,7 +133,7 @@ class HealthMonitoringService {
 
   private initializeDependencies(): void {
     // Database dependency
-    this.dependencies.set('database', async () => {
+    this.dependencies.set('database', async () {
       const startTime = Date.now();
       try {
         const { error } = await supabase
@@ -172,7 +172,7 @@ class HealthMonitoringService {
     });
 
     // API dependency
-    this.dependencies.set('api', async () => {
+    this.dependencies.set('api', async () {
       const startTime = Date.now();
       try {
         const response = await fetch('/api/health', { method: 'GET' });
@@ -206,7 +206,7 @@ class HealthMonitoringService {
     });
 
     // N8N webhook dependency
-    this.dependencies.set('webhook', async () => {
+    this.dependencies.set('webhook', async () {
       const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL;
       if (!webhookUrl) {
         return {
@@ -257,7 +257,7 @@ class HealthMonitoringService {
     });
 
     // Monitoring service dependency
-    this.dependencies.set('monitoring', async () => {
+    this.dependencies.set('monitoring', async () {
       try {
         const monitoringHealth = monitoringService.getMonitoringHealth();
 
@@ -298,7 +298,7 @@ class HealthMonitoringService {
     this.isMonitoring = true;
 
     // Perform health checks every 30 seconds
-    this.monitoringInterval = window.setInterval(() => {
+    this.monitoringInterval = window.setInterval(() {
       this.performComprehensiveHealthCheck();
     }, 30000);
 
@@ -343,7 +343,7 @@ class HealthMonitoringService {
 
       // Check all dependencies
       const serviceChecks = await Promise.allSettled(
-        Array.from(this.dependencies.entries()).map(async ([name, checker]) => {
+        Array.from(this.dependencies.entries()).map(async ([name, checker]) {
           try {
             return await checker();
           } catch (error) {
@@ -362,7 +362,7 @@ class HealthMonitoringService {
       );
 
       // Process service results and generate alerts
-      serviceChecks.forEach((result, index) => {
+      serviceChecks.forEach((result, index) {
         if (result.status === 'fulfilled') {
           const service = result.value;
           this.checkServiceThresholds(service);

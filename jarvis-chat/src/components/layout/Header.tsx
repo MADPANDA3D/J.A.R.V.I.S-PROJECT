@@ -19,10 +19,10 @@ interface HeaderProps {
   className?: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onMenuClick, className }) => {
+export const Header: React.FC<HeaderProps> = ({ onMenuClick, className }) {
   const { user, signOut, loading } = useAuth();
 
-  const handleSignOut = async () => {
+  const handleSignOut = async () {
     try {
       screenReader.announce({
         message: 'Signing out...',

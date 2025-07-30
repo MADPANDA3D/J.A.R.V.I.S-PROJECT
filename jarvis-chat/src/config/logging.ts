@@ -210,7 +210,7 @@ export const validateLoggingConfig = (config: LoggingConfig): {
   }
 
   // Check destination configurations
-  config.destinations?.forEach((destination, index) => {
+  config.destinations?.forEach((destination, index) {
     if (!destination.type) {
       errors.push(`destination[${index}]: type is required`);
     }
@@ -419,7 +419,7 @@ export const testLoggingConfiguration = async (): Promise<{
 };
 
 // Get deployment information
-export const getDeploymentInfo = () => {
+export const getDeploymentInfo = () {
   const env = getCurrentEnvironment();
   const config = getLoggingConfig();
   

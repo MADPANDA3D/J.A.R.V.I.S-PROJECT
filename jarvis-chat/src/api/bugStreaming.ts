@@ -152,7 +152,7 @@ class BugStreamingService {
       maxPayload: 1024 * 1024 // 1MB max payload
     });
 
-    this.wss.on('connection', (ws: WebSocket, request: IncomingMessage) => {
+    this.wss.on('connection', (ws: WebSocket, request: IncomingMessage) {
       this.handleConnection(ws, request);
     });
 
@@ -218,15 +218,15 @@ class BugStreamingService {
     this.connections.set(connectionId, connection);
 
     // Set up message handlers
-    ws.on('message', async (data: Buffer) => {
+    ws.on('message', async (data: Buffer) {
       await this.handleMessage(connectionId, data);
     });
 
-    ws.on('close', (code: number, reason: Buffer) => {
+    ws.on('close', (code: number, reason: Buffer) {
       this.handleDisconnection(connectionId, code, reason.toString());
     });
 
-    ws.on('error', (error: Error) => {
+    ws.on('error', (error: Error) {
       this.handleConnectionError(connectionId, error);
     });
 
@@ -600,14 +600,14 @@ class BugStreamingService {
 
   private startEventProcessor() {
     // Process events every 1 second
-    setInterval(() => {
+    setInterval(() {
       this.processEventQueue();
       this.processAnalyticsQueue();
     }, 1000);
   }
 
   private startHeartbeat() {
-    this.heartbeatInterval = setInterval(() => {
+    this.heartbeatInterval = setInterval(() {
       this.sendHeartbeats();
     }, this.HEARTBEAT_INTERVAL);
   }
@@ -797,7 +797,7 @@ class BugStreamingService {
     if (connections.length === 0) return 0;
     
     const now = Date.now();
-    const totalDuration = connections.reduce((sum, conn) => {
+    const totalDuration = connections.reduce((sum, conn) {
       return sum + (now - new Date(conn.connectedAt).getTime());
     }, 0);
     

@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 import { createTestError } from './testUtils';
 
 // Global error function for tests
-(global as any).error = (message: string) => {
+(global as any).error = (message: string) {
   throw createTestError(message);
 };
 

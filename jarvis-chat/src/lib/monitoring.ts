@@ -242,7 +242,7 @@ class MonitoringService implements APMService {
         // Cumulative Layout Shift (CLS)
         let clsValue = 0;
         const clsObserver = new PerformanceObserver(entryList => {
-          entryList.getEntries().forEach((entry: PerformanceEntry & { hadRecentInput?: boolean; value?: number }) => {
+          entryList.getEntries().forEach((entry: PerformanceEntry & { hadRecentInput?: boolean; value?: number }) {
             if (!entry.hadRecentInput) {
               clsValue += entry.value || 0;
             }
@@ -263,8 +263,8 @@ class MonitoringService implements APMService {
     try {
       // Monitor navigation timing
       if ('performance' in window && performance.timing) {
-        window.addEventListener('load', () => {
-          setTimeout(() => {
+        window.addEventListener('load', () {
+          setTimeout(() {
             const timing = performance.timing;
             const pageLoadTime = timing.loadEventEnd - timing.navigationStart;
             const domContentLoaded =
@@ -312,7 +312,7 @@ class MonitoringService implements APMService {
     try {
       // Enhanced global error handling
       const originalConsoleError = console.error;
-      console.error = (...args) => {
+      console.error = (...args) {
         this.captureMessage(`Console Error: ${args.join(' ')}`, 'error', {
           source: 'console',
           args: args.map(arg =>
@@ -344,7 +344,7 @@ class MonitoringService implements APMService {
     try {
       if ('PerformanceObserver' in window) {
         const resourceObserver = new PerformanceObserver(entryList => {
-          entryList.getEntries().forEach((entry: PerformanceResourceTiming) => {
+          entryList.getEntries().forEach((entry: PerformanceResourceTiming) {
             this.trackCustomMetric('resource.load_time', entry.duration, {
               name: entry.name,
               type: entry.initiatorType,
@@ -707,7 +707,7 @@ class MonitoringService implements APMService {
         }
       }
 
-      const checkComplete = () => {
+      const checkComplete = () {
         if (
           vitals.lcp !== undefined ||
           Date.now() - performance.timing.navigationStart > 5000
@@ -953,17 +953,17 @@ class MonitoringService implements APMService {
 
   private startRealTimeMonitoring(): void {
     // Check alert rules every 30 seconds
-    setInterval(() => {
+    setInterval(() {
       this.checkAlertRules();
     }, 30000);
 
     // Monitor memory usage every minute
-    setInterval(() => {
+    setInterval(() {
       this.trackMemoryUsage();
     }, 60000);
 
     // Clean up old data every 5 minutes
-    setInterval(() => {
+    setInterval(() {
       this.cleanupOldData();
     }, 300000);
   }
@@ -1193,7 +1193,7 @@ export const withMonitoring = <T extends (...args: unknown[]) => unknown>(
   name: string,
   operation: string = 'function'
 ): T => {
-  return ((...args: unknown[]) => {
+  return ((...args: unknown[]) {
     const transaction = startTransaction(name, operation);
     try {
       const result = fn(...args);
@@ -1233,7 +1233,7 @@ export const withMonitoring = <T extends (...args: unknown[]) => unknown>(
 };
 
 // Bug report integration
-export const trackBugReportEvent = (event: string, data: Record<string, unknown>) => {
+export const trackBugReportEvent = (event: string, data: Record<string, unknown>) {
   monitoringService.trackBusinessEvent(event, data);
 };
 
@@ -1242,7 +1242,7 @@ export const trackBugReportSubmission = (bugData: {
   severity: string;
   hasAttachments: boolean;
   processingTime: number;
-}) => {
+}) {
   monitoringService.trackBusinessEvent('bug_report_submitted', {
     bug_type: bugData.bugType,
     severity: bugData.severity,

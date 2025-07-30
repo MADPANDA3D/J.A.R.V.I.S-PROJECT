@@ -15,15 +15,15 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
   error,
   resetError,
   reportBug,
-}) => {
+}) {
   const [showBugReport, setShowBugReport] = useState(false);
 
-  const handleReportError = () => {
+  const handleReportError = () {
     reportBug?.();
     setShowBugReport(true);
   };
 
-  const handleBugReportSuccess = (bugId: string, trackingNumber: string) => {
+  const handleBugReportSuccess = (bugId: string, trackingNumber: string) {
     setShowBugReport(false);
     // You could show a success toast here
     console.log('Bug report submitted:', { bugId, trackingNumber });

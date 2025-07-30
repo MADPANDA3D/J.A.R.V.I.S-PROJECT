@@ -24,7 +24,7 @@ interface Task {
   createdAt: string;
 }
 
-export const TasksPage: React.FC = () => {
+export const TasksPage: React.FC = () {
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState<
     'all' | 'todo' | 'in-progress' | 'completed'
@@ -68,7 +68,7 @@ export const TasksPage: React.FC = () => {
     },
   ]);
 
-  const getStatusIcon = (status: Task['status']) => {
+  const getStatusIcon = (status: Task['status']) {
     switch (status) {
       case 'completed':
         return <CheckCircle2 className="w-4 h-4 text-green-600" />;
@@ -79,7 +79,7 @@ export const TasksPage: React.FC = () => {
     }
   };
 
-  const getPriorityColor = (priority: Task['priority']) => {
+  const getPriorityColor = (priority: Task['priority']) {
     switch (priority) {
       case 'high':
         return 'text-red-600 bg-red-50 border-red-200';

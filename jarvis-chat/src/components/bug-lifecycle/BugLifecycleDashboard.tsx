@@ -64,7 +64,7 @@ interface MetricCardProps {
 }
 
 function MetricCard({ title, value, change, changeType = 'neutral', icon, description }: MetricCardProps) {
-  const getChangeColor = (type: typeof changeType) => {
+  const getChangeColor = (type: typeof changeType) {
     switch (type) {
       case 'positive': return 'text-green-600';
       case 'negative': return 'text-red-600';
@@ -72,7 +72,7 @@ function MetricCard({ title, value, change, changeType = 'neutral', icon, descri
     }
   };
 
-  const getChangeIcon = (type: typeof changeType) => {
+  const getChangeIcon = (type: typeof changeType) {
     switch (type) {
       case 'positive': return <TrendingUp className="h-3 w-3" />;
       case 'negative': return <TrendingDown className="h-3 w-3" />;
@@ -118,7 +118,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter }: DashboardProps)
   const [selectedTimeRange, setSelectedTimeRange] = useState<string>('7d');
   const [refreshing, setRefreshing] = useState(false);
 
-  const loadDashboardData = useCallback(async () => {
+  const loadDashboardData = useCallback(async () {
     try {
       setRefreshing(true);
       
@@ -131,7 +131,8 @@ export function BugLifecycleDashboard({ dateRange, teamFilter }: DashboardProps)
       setFeedbackAnalytics(analytics);
 
       await refreshBugs();
-    } catch (_error) {
+    } catch (loadError) {
+      console.error('Failed to load dashboard data:', loadError);
       toast({
         title: "Error",
         description: "Failed to load dashboard data",
@@ -140,13 +141,13 @@ export function BugLifecycleDashboard({ dateRange, teamFilter }: DashboardProps)
     } finally {
       setRefreshing(false);
     }
-  }, [dateRange, teamFilter, selectedTimeRange, refreshBugs]);
+  }, [dateRange, refreshBugs, toast]);
 
-  useEffect(() => {
+  useEffect(() {
     loadDashboardData();
   }, [loadDashboardData]);
 
-  const handleRefresh = () => {
+  const handleRefresh = () {
     loadDashboardData();
   };
 
@@ -171,7 +172,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter }: DashboardProps)
     feedbackCount: trend.feedbackCount
   })) || [];
 
-  const priorityDistribution = bugs.reduce((acc, bug) => {
+  const priorityDistribution = bugs.reduce((acc, bug) {
     const priority = bug.priority || 'medium';
     acc[priority] = (acc[priority] || 0) + 1;
     return acc;
@@ -652,7 +653,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter }: DashboardProps)
                 <div>
                   <h4 className="font-medium mb-3">Workflow Bottlenecks</h4>
                   <div className="space-y-2">
-                    {Object.entries(stats?.statusDistribution || {}).map(([status, count]) => {
+                    {Object.entries(stats?.statusDistribution || {}).map(([status, count]) {
                       const percentage = count / (stats?.totalStatusChanges || 1) * 100;
                       return (
                         <div key={status} className="flex items-center justify-between">

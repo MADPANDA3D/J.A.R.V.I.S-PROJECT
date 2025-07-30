@@ -18,7 +18,7 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({
   onAcknowledge,
   className = '',
   compact = false
-}) => {
+}) {
   const [selectedAlert, setSelectedAlert] = useState<AlertNotification | null>(null);
   const [filterSeverity, setFilterSeverity] = useState<'all' | 'critical' | 'high' | 'medium' | 'low'>('all');
 
@@ -276,7 +276,7 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({
             {filteredAlerts.filter(a => !a.acknowledged).length} unacknowledged alerts
           </span>
           <button
-            onClick={() => {
+            onClick={() {
               filteredAlerts
                 .filter(a => !a.acknowledged)
                 .forEach(alert => onAcknowledge(alert.id));

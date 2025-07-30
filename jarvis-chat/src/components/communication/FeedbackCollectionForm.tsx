@@ -107,11 +107,11 @@ export function FeedbackCollectionForm({
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  useEffect(() {
     loadFeedbackData();
   }, [feedbackId]);
 
-  const loadFeedbackData = async () => {
+  const loadFeedbackData = async () {
     try {
       setIsLoading(true);
       
@@ -208,7 +208,7 @@ export function FeedbackCollectionForm({
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) {
     e.preventDefault();
     
     if (!validateForm()) {
@@ -225,7 +225,7 @@ export function FeedbackCollectionForm({
       // Convert form data to feedback format
       const feedbackData: Partial<BugFeedback> = {};
       
-      Object.entries(formData).forEach(([key, value]) => {
+      Object.entries(formData).forEach(([key, value]) {
         if (value !== undefined && value !== null && value !== '') {
           (feedbackData as any)[key] = value;
         }
@@ -261,13 +261,13 @@ export function FeedbackCollectionForm({
     }
   };
 
-  const handleCancel = () => {
+  const handleCancel = () {
     if (onCancel) {
       onCancel();
     }
   };
 
-  const updateFormData = (fieldId: string, value: unknown) => {
+  const updateFormData = (fieldId: string, value: unknown) {
     setFormData(prev => ({
       ...prev,
       [fieldId]: value
@@ -283,7 +283,7 @@ export function FeedbackCollectionForm({
     }
   };
 
-  const renderField = (field: FeedbackFormTemplate['fields'][0]) => {
+  const renderField = (field: FeedbackFormTemplate['fields'][0]) {
     const value = formData[field.id];
     const error = validationErrors[field.id];
     const isVisible = !field.conditional || 
@@ -291,7 +291,7 @@ export function FeedbackCollectionForm({
 
     if (!isVisible) return null;
 
-    switch (field.type) => {
+    switch (field.type) {
       case 'text':
         return (
           <div key={field.id} className="space-y-2">
@@ -395,8 +395,9 @@ export function FeedbackCollectionForm({
     }
   };
 
-  const getFeedbackTypeIcon = (type: FeedbackType) => {
-    switch (type) => {
+  const getFeedbackTypeIcon = (type: FeedbackType) {
+    switch (type) {
+    }
       case 'resolution_verification':
         return <CheckCircle className="h-5 w-5 text-green-600" />;
       case 'satisfaction_rating':
@@ -408,8 +409,9 @@ export function FeedbackCollectionForm({
     }
   };
 
-  const getFeedbackTypeColor = (type: FeedbackType) => {
-    switch (type) => {
+  const getFeedbackTypeColor = (type: FeedbackType) {
+    switch (type) {
+    }
       case 'resolution_verification':
         return 'bg-green-100 text-green-800';
       case 'satisfaction_rating':
@@ -548,9 +550,10 @@ interface FeedbackPreviewProps {
   showMetadata?: boolean;
 }
 
-export function FeedbackPreview({ feedback, showMetadata = false }: FeedbackPreviewProps) => {
-  const getStatusIcon = (status: BugFeedback['status']) => {
-    switch (status) => {
+export function FeedbackPreview({ feedback, showMetadata = false }: FeedbackPreviewProps) {
+  const getStatusIcon = (status: BugFeedback['status']) {
+    switch (status) {
+    }
       case 'submitted':
         return <CheckCircle className="h-4 w-4 text-green-600" />;
       case 'pending':
@@ -564,8 +567,9 @@ export function FeedbackPreview({ feedback, showMetadata = false }: FeedbackPrev
     }
   };
 
-  const getStatusColor = (status: BugFeedback['status']) => {
-    switch (status) => {
+  const getStatusColor = (status: BugFeedback['status']) {
+    switch (status) {
+    }
       case 'submitted':
         return 'bg-green-100 text-green-800';
       case 'pending':

@@ -538,7 +538,7 @@ class WebhookDeliveryService {
     const totalResponseTime = logs.reduce((sum, log) => sum + log.finalResult.responseTime, 0);
     const averageResponseTime = logs.length > 0 ? totalResponseTime / logs.length : 0;
 
-    const deliveriesByEventType = logs.reduce((acc, log) => {
+    const deliveriesByEventType = logs.reduce((acc, log) {
       const eventType = log.payload.eventType;
       acc[eventType] = (acc[eventType] || 0) + 1;
       return acc;
@@ -564,14 +564,14 @@ class WebhookDeliveryService {
 
   private startDeliveryProcessor() {
     // Process delivery queue every 2 seconds
-    setInterval(() => {
+    setInterval(() {
       this.processDeliveryQueue();
     }, 2000);
   }
 
   private startLogCleanup() {
     // Clean up old logs every hour
-    setInterval(() => {
+    setInterval(() {
       this.cleanupOldLogs();
     }, 60 * 60 * 1000);
   }

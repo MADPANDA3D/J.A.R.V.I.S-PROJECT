@@ -170,7 +170,7 @@ class ErrorTracker {
     this.persistError(errorReport);
 
     // Increment session error count and send to external monitoring (async import to avoid circular dependency)
-    setTimeout(async () => {
+    setTimeout(async () {
       try {
         const { incrementSessionErrors } = await import('./sessionTracking');
         incrementSessionErrors();
@@ -266,7 +266,7 @@ class ErrorTracker {
     }
 
     // Send breadcrumb to external monitoring (async to not block)
-    setTimeout(async () => {
+    setTimeout(async () {
       try {
         const { captureExternalBreadcrumb } = await import('./externalMonitoring');
         captureExternalBreadcrumb(breadcrumb);

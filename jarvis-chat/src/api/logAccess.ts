@@ -496,7 +496,7 @@ class LogAccessService {
     }
 
     // Apply sorting
-    logs.sort((a, b) => {
+    logs.sort((a, b) {
       let aValue: string | number, bValue: string | number;
       
       switch (query.sortBy) {
@@ -784,7 +784,7 @@ class LogAccessService {
       
       if (includeMetadata && log.metadata) {
         xml += '    <metadata>\n';
-        Object.entries(log.metadata).forEach(([key, value]) => {
+        Object.entries(log.metadata).forEach(([key, value]) {
           xml += `      <${key}><![CDATA[${JSON.stringify(value)}]]></${key}>\n`;
         });
         xml += '    </metadata>\n';
@@ -815,7 +815,7 @@ class LogAccessService {
     let lastHeartbeat = Date.now();
 
     // Setup heartbeat
-    const heartbeatTimer = setInterval(() => {
+    const heartbeatTimer = setInterval(() {
       if (websocket.readyState === WebSocket.OPEN) {
         websocket.send(JSON.stringify({
           type: 'heartbeat',
@@ -830,7 +830,7 @@ class LogAccessService {
     }, heartbeatInterval);
 
     // Setup log streaming
-    const streamLogs = () => {
+    const streamLogs = () {
       if (buffer.length === 0) return;
 
       const logsToSend = buffer.splice(0, Math.min(buffer.length, bufferSize));
@@ -849,7 +849,7 @@ class LogAccessService {
     const streamTimer = setInterval(streamLogs, 1000); // Send every second
 
     // Listen for new logs (simplified - in real implementation, this would be event-driven)
-    const logListener = setInterval(() => {
+    const logListener = setInterval(() {
       try {
         // Get recent logs that match the query
         const recentLogs = this.executeLogSearch({
@@ -870,7 +870,7 @@ class LogAccessService {
     }, 2000); // Check every 2 seconds
 
     // Cleanup on connection close
-    websocket.onclose = () => {
+    websocket.onclose = () {
       clearInterval(heartbeatTimer);
       clearInterval(streamTimer);
       clearInterval(logListener);
@@ -1006,7 +1006,7 @@ class LogAccessService {
 
   // Cleanup
   private setupCleanupTimer(): void {
-    setInterval(() => {
+    setInterval(() {
       this.cleanupOldData();
     }, 60 * 60 * 1000); // Every hour
   }
@@ -1042,11 +1042,11 @@ class LogAccessService {
 export const logAccessService = new LogAccessService();
 
 // Express-style middleware functions (for reference - would be implemented in actual API routes)
-export const authenticateApiKeyMiddleware = async (apiKey: string) => {
+export const authenticateApiKeyMiddleware = async (apiKey: string) {
   return await logAccessService.authenticateApiKey(apiKey);
 };
 
-export const checkRateLimitMiddleware = async (apiKey: ApiKey, ipAddress: string) => {
+export const checkRateLimitMiddleware = async (apiKey: ApiKey, ipAddress: string) {
   return await logAccessService.checkRateLimit(apiKey, ipAddress);
 };
 
@@ -1056,7 +1056,7 @@ export const searchLogsEndpoint = async (
   apiKey: ApiKey,
   ipAddress: string,
   userAgent: string
-) => {
+) {
   // Check authorization
   const authorized = await logAccessService.authorizeAction(apiKey, 'read_logs', query);
   if (!authorized) {
@@ -1071,7 +1071,7 @@ export const exportLogsEndpoint = async (
   apiKey: ApiKey,
   ipAddress: string,
   userAgent: string
-) => {
+) {
   // Check authorization
   const authorized = await logAccessService.authorizeAction(apiKey, 'export_logs', request.query);
   if (!authorized) {
@@ -1085,7 +1085,7 @@ export const createLogStreamEndpoint = async (
   request: LogStreamRequest,
   apiKey: ApiKey,
   websocket: WebSocket
-) => {
+) {
   // Check authorization
   const authorized = await logAccessService.authorizeAction(apiKey, 'stream_logs', request.query);
   if (!authorized) {

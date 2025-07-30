@@ -22,7 +22,7 @@ interface LoginFormProps {
 export const LoginForm: React.FC<LoginFormProps> = ({
   onSuccess,
   onSwitchToRegister,
-}) => {
+}) {
   const { signIn, loading } = useAuth();
   const [error, setError] = useState<string | null>(null);
 
@@ -39,7 +39,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     },
   });
 
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async (data: LoginFormData) {
     try {
       setError(null);
       await signIn(data.email, data.password);
@@ -150,7 +150,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             type="button"
             className="text-sm text-primary hover:underline disabled:opacity-50"
             disabled={isLoading}
-            onClick={() => {
+            onClick={() {
               // TODO: Implement forgot password functionality
               console.log('Forgot password clicked');
             }}

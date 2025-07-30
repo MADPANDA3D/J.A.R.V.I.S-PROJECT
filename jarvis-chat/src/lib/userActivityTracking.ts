@@ -169,7 +169,7 @@ class UserActivityTrackingService {
     try {
       this.websocket.connection = new WebSocket(this.config.websocketUrl);
 
-      this.websocket.connection.onopen = () => {
+      this.websocket.connection.onopen = () {
         this.websocket.isConnected = true;
         this.websocket.reconnectAttempts = 0;
         
@@ -188,12 +188,12 @@ class UserActivityTrackingService {
         });
       };
 
-      this.websocket.connection.onclose = () => {
+      this.websocket.connection.onclose = () {
         this.websocket.isConnected = false;
         this.handleWebSocketReconnect();
       };
 
-      this.websocket.connection.onerror = (error) => {
+      this.websocket.connection.onerror = (error) {
         centralizedLogging.error(
           'activity-tracking',
           'system',
@@ -202,7 +202,7 @@ class UserActivityTrackingService {
         );
       };
 
-      this.websocket.connection.onmessage = (event) => {
+      this.websocket.connection.onmessage = (event) {
         this.handleWebSocketMessage(event.data);
       };
 
@@ -230,7 +230,7 @@ class UserActivityTrackingService {
     this.websocket.reconnectAttempts++;
     const delay = this.websocket.reconnectDelay * Math.pow(2, this.websocket.reconnectAttempts - 1);
 
-    setTimeout(() => {
+    setTimeout(() {
       centralizedLogging.info(
         'activity-tracking',
         'system',
@@ -289,7 +289,7 @@ class UserActivityTrackingService {
 
   private setupEventListeners(): void {
     // Page visibility change
-    document.addEventListener('visibilitychange', () => {
+    document.addEventListener('visibilitychange', () {
       this.trackEvent('page_view', {
         visibility: document.visibilityState,
         hidden: document.hidden
@@ -297,7 +297,7 @@ class UserActivityTrackingService {
     });
 
     // Navigation events
-    window.addEventListener('beforeunload', () => {
+    window.addEventListener('beforeunload', () {
       this.trackEvent('navigation', {
         eventType: 'page_unload',
         url: window.location.href
@@ -307,7 +307,7 @@ class UserActivityTrackingService {
 
     // User interaction events
     ['click', 'keydown', 'scroll', 'touchstart'].forEach(eventType => {
-      document.addEventListener(eventType, (event) => {
+      document.addEventListener(eventType, (event) {
         this.handleUserInteraction(eventType, event);
       }, { passive: true });
     });
@@ -535,7 +535,7 @@ class UserActivityTrackingService {
         const obj = value as Record<string, unknown>;
         const sanitizedObj: Record<string, unknown> = {};
         
-        Object.entries(obj).forEach(([key, val]) => {
+        Object.entries(obj).forEach(([key, val]) {
           const lowerKey = key.toLowerCase();
           if (sensitiveKeys.some(sensitive => lowerKey.includes(sensitive))) {
             sanitizedObj[key] = '[REDACTED]';
@@ -550,7 +550,7 @@ class UserActivityTrackingService {
       return value;
     };
 
-    Object.entries(sanitized).forEach(([key, value]) => {
+    Object.entries(sanitized).forEach(([key, value]) {
       const lowerKey = key.toLowerCase();
       if (sensitiveKeys.some(sensitive => lowerKey.includes(sensitive))) {
         sanitized[key] = '[REDACTED]';

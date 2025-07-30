@@ -48,7 +48,7 @@ export function useSearchHistory(
   });
 
   // Analyze search patterns from history
-  const searchPatterns = useMemo(() => {
+  const searchPatterns = useMemo(() {
     const patterns = new Map<string, SearchPattern>();
 
     searchHistory.forEach(item => {
@@ -101,7 +101,7 @@ export function useSearchHistory(
     });
 
     // Add popular query matches
-    popularQueries.forEach((popularQuery, index) => {
+    popularQueries.forEach((popularQuery, index) {
       if (popularQuery.includes(query)) {
         const score = Math.max(0.8 - (index * 0.05), 0.3); // Score based on popularity rank
         suggestions.push({
@@ -146,7 +146,7 @@ export function useSearchHistory(
 
     // Sort by score and relevance, limit to top 8
     return suggestions
-      .sort((a, b) => {
+      .sort((a, b) {
         if (a.score !== b.score) return b.score - a.score;
         // Secondary sort by recency for same scores
         const aTime = a.metadata?.lastUsed?.getTime() || 0;

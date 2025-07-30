@@ -30,11 +30,11 @@ app.post('/api/bugs/:id/assign', bugDashboardAPI.assignBug.bind(bugDashboardAPI)
 app.post('/api/bugs/search', bugDashboardAPI.searchBugs.bind(bugDashboardAPI));
 app.get('/api/bugs/analytics', bugDashboardAPI.getBugAnalytics.bind(bugDashboardAPI));
 
-describe('Bug Dashboard API', () => {
+describe('Bug Dashboard API', () {
   let validApiKey: string;
   let invalidApiKey: string;
 
-  beforeAll(async () => {
+  beforeAll(async () {
     // Create test API keys
     const userKey = await apiSecurityService.createAPIKey('test-user', 'Test User Key', {
       read: true,
@@ -67,13 +67,13 @@ describe('Bug Dashboard API', () => {
     invalidApiKey = 'invalid_key_123';
   });
 
-  beforeEach(() => {
+  beforeEach(() {
     // Reset mocks
     vi.clearAllMocks();
   });
 
-  describe('GET /api/bugs', () => {
-    it('should return paginated bugs with valid API key', async () => {
+  describe('GET /api/bugs', () {
+    it('should return paginated bugs with valid API key', async () {
       // Mock bug data
       const mockBugs = [
         {
@@ -121,7 +121,7 @@ describe('Bug Dashboard API', () => {
       expect(response.body.pagination.total).toBe(2);
     });
 
-    it('should return 401 for invalid API key', async () => {
+    it('should return 401 for invalid API key', async () {
       const response = await request(app)
         .get('/api/bugs')
         .set('Authorization', `Bearer ${invalidApiKey}`);
@@ -130,7 +130,7 @@ describe('Bug Dashboard API', () => {
       expect(response.body).toHaveProperty('error', 'Invalid API key');
     });
 
-    it('should return 401 for missing API key', async () => {
+    it('should return 401 for missing API key', async () {
       const response = await request(app)
         .get('/api/bugs');
 
@@ -138,7 +138,7 @@ describe('Bug Dashboard API', () => {
       expect(response.body).toHaveProperty('error', 'Invalid API key');
     });
 
-    it('should apply status filters correctly', async () => {
+    it('should apply status filters correctly', async () {
       vi.mocked(bugReportOperations.searchBugReports).mockResolvedValue({
         data: [],
         count: 0,
@@ -160,7 +160,7 @@ describe('Bug Dashboard API', () => {
       );
     });
 
-    it('should apply date range filters correctly', async () => {
+    it('should apply date range filters correctly', async () {
       vi.mocked(bugReportOperations.searchBugReports).mockResolvedValue({
         data: [],
         count: 0,
@@ -186,7 +186,7 @@ describe('Bug Dashboard API', () => {
       );
     });
 
-    it('should enforce pagination limits', async () => {
+    it('should enforce pagination limits', async () {
       vi.mocked(bugReportOperations.searchBugReports).mockResolvedValue({
         data: [],
         count: 0,
@@ -209,8 +209,8 @@ describe('Bug Dashboard API', () => {
     });
   });
 
-  describe('GET /api/bugs/:id', () => {
-    it('should return bug details with valid ID', async () => {
+  describe('GET /api/bugs/:id', () {
+    it('should return bug details with valid ID', async () {
       const mockBug = {
         id: 'bug-123',
         title: 'Test Bug',
@@ -236,7 +236,7 @@ describe('Bug Dashboard API', () => {
       expect(response.body.data.title).toBe('Test Bug');
     });
 
-    it('should return 404 for non-existent bug', async () => {
+    it('should return 404 for non-existent bug', async () {
       vi.mocked(bugReportOperations.getBugReportById).mockResolvedValue({
         data: null,
         error: null
@@ -251,8 +251,8 @@ describe('Bug Dashboard API', () => {
     });
   });
 
-  describe('PUT /api/bugs/:id/status', () => {
-    it('should update bug status with write permissions', async () => {
+  describe('PUT /api/bugs/:id/status', () {
+    it('should update bug status with write permissions', async () {
       vi.mocked(bugLifecycleService.changeStatus).mockResolvedValue({
         success: true,
         statusChange: {
@@ -286,7 +286,7 @@ describe('Bug Dashboard API', () => {
       );
     });
 
-    it('should return 400 for invalid status', async () => {
+    it('should return 400 for invalid status', async () {
       const response = await request(app)
         .put('/api/bugs/bug-123/status')
         .set('Authorization', `Bearer ${validApiKey}`)
@@ -298,7 +298,7 @@ describe('Bug Dashboard API', () => {
       expect(response.body).toHaveProperty('error', 'Invalid status');
     });
 
-    it('should return 401 for insufficient permissions', async () => {
+    it('should return 401 for insufficient permissions', async () {
       // Create a read-only API key
       const readOnlyKey = await apiSecurityService.createAPIKey('read-only-user', 'Read Only Key', {
         read: true,
@@ -325,8 +325,8 @@ describe('Bug Dashboard API', () => {
     });
   });
 
-  describe('POST /api/bugs/:id/assign', () => {
-    it('should assign bug with write permissions', async () => {
+  describe('POST /api/bugs/:id/assign', () {
+    it('should assign bug with write permissions', async () {
       vi.mocked(bugAssignmentSystem.assignBug).mockResolvedValue({
         success: true,
         assignment: {
@@ -359,7 +359,7 @@ describe('Bug Dashboard API', () => {
       );
     });
 
-    it('should return 400 for failed assignment', async () => {
+    it('should return 400 for failed assignment', async () {
       vi.mocked(bugAssignmentSystem.assignBug).mockResolvedValue({
         success: false,
         error: 'User not found'
@@ -377,8 +377,8 @@ describe('Bug Dashboard API', () => {
     });
   });
 
-  describe('POST /api/bugs/search', () => {
-    it('should perform text search with results', async () => {
+  describe('POST /api/bugs/search', () {
+    it('should perform text search with results', async () {
       const mockSearchResults = [
         {
           id: 'bug-1',
@@ -414,7 +414,7 @@ describe('Bug Dashboard API', () => {
       expect(response.body.results).toHaveLength(1);
     });
 
-    it('should return empty results for no matches', async () => {
+    it('should return empty results for no matches', async () {
       vi.mocked(bugReportOperations.searchBugReports).mockResolvedValue({
         data: [],
         count: 0,
@@ -434,8 +434,8 @@ describe('Bug Dashboard API', () => {
     });
   });
 
-  describe('GET /api/bugs/analytics', () => {
-    it('should return analytics data', async () => {
+  describe('GET /api/bugs/analytics', () {
+    it('should return analytics data', async () {
       // Mock lifecycle statistics
       vi.mocked(bugLifecycleService.getLifecycleStatistics).mockReturnValue({
         totalStatusChanges: 100,
@@ -484,7 +484,7 @@ describe('Bug Dashboard API', () => {
       expect(response.body.summary.averageResolutionTime).toBe(48.5);
     });
 
-    it('should use default time range when not specified', async () => {
+    it('should use default time range when not specified', async () {
       vi.mocked(bugLifecycleService.getLifecycleStatistics).mockReturnValue({
         totalStatusChanges: 50,
         statusDistribution: {},
@@ -505,8 +505,8 @@ describe('Bug Dashboard API', () => {
     });
   });
 
-  describe('Rate Limiting', () => {
-    it('should enforce rate limits', async () => {
+  describe('Rate Limiting', () {
+    it('should enforce rate limits', async () {
       // Create a rate-limited API key
       const rateLimitedKey = await apiSecurityService.createAPIKey('rate-limited-user', 'Rate Limited Key', {
         read: true,
@@ -549,8 +549,8 @@ describe('Bug Dashboard API', () => {
     });
   });
 
-  describe('Error Handling', () => {
-    it('should handle database errors gracefully', async () => {
+  describe('Error Handling', () {
+    it('should handle database errors gracefully', async () {
       vi.mocked(bugReportOperations.searchBugReports).mockRejectedValue(
         new Error('Database connection failed')
       );
@@ -562,7 +562,7 @@ describe('Bug Dashboard API', () => {
       expect(response.status).toBe(500);
     });
 
-    it('should handle service errors gracefully', async () => {
+    it('should handle service errors gracefully', async () {
       vi.mocked(bugLifecycleService.changeStatus).mockRejectedValue(
         new Error('Service unavailable')
       );
@@ -578,8 +578,8 @@ describe('Bug Dashboard API', () => {
     });
   });
 
-  describe('Input Validation', () => {
-    it('should validate required fields for status updates', async () => {
+  describe('Input Validation', () {
+    it('should validate required fields for status updates', async () {
       const response = await request(app)
         .put('/api/bugs/bug-123/status')
         .set('Authorization', `Bearer ${validApiKey}`)
@@ -588,7 +588,7 @@ describe('Bug Dashboard API', () => {
       expect(response.status).toBe(400);
     });
 
-    it('should validate required fields for assignments', async () => {
+    it('should validate required fields for assignments', async () {
       const response = await request(app)
         .post('/api/bugs/bug-123/assign')
         .set('Authorization', `Bearer ${validApiKey}`)
@@ -597,7 +597,7 @@ describe('Bug Dashboard API', () => {
       expect(response.status).toBe(400);
     });
 
-    it('should validate pagination parameters', async () => {
+    it('should validate pagination parameters', async () {
       vi.mocked(bugReportOperations.searchBugReports).mockResolvedValue({
         data: [],
         count: 0,
@@ -623,7 +623,7 @@ describe('Bug Dashboard API', () => {
     });
   });
 
-  afterAll(async () => {
+  afterAll(async () {
     // Cleanup test API keys
     // In a real implementation, you'd clean up the test data
   });

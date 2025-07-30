@@ -47,8 +47,8 @@ interface HealthStatusIndicatorProps {
   };
 }
 
-export const HealthStatusIndicator: React.FC<HealthStatusIndicatorProps> = ({ metrics }) => {
-  const getStatusColor = (status: string) => {
+export const HealthStatusIndicator: React.FC<HealthStatusIndicatorProps> = ({ metrics }) {
+  const getStatusColor = (status: string) {
     switch (status) {
       case 'healthy': return 'bg-green-500';
       case 'degraded': return 'bg-yellow-500';
@@ -57,7 +57,7 @@ export const HealthStatusIndicator: React.FC<HealthStatusIndicatorProps> = ({ me
     }
   };
 
-  const getStatusIcon = (status: string) => {
+  const getStatusIcon = (status: string) {
     switch (status) {
       case 'healthy':
         return (
@@ -86,7 +86,7 @@ export const HealthStatusIndicator: React.FC<HealthStatusIndicatorProps> = ({ me
     }
   };
 
-  const getStatusMessage = (status: string) => {
+  const getStatusMessage = (status: string) {
     switch (status) {
       case 'healthy':
         return 'All systems operational';
@@ -99,7 +99,7 @@ export const HealthStatusIndicator: React.FC<HealthStatusIndicatorProps> = ({ me
     }
   };
 
-  const getHealthScore = () => {
+  const getHealthScore = () {
     const successRate = metrics.metrics.webhook_delivery.success_rate;
     const errorRate = metrics.services.webhook_server.error_rate;
     const authSuccessRate = metrics.services.webhook_auth.success_rate;

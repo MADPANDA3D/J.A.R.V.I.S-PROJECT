@@ -401,7 +401,7 @@ class AlertingSystemService {
   }
 
   private startEvaluation(): void {
-    this.evaluationTimer = setInterval(() => {
+    this.evaluationTimer = setInterval(() {
       this.evaluateRules();
     }, this.config.evaluationInterval);
 

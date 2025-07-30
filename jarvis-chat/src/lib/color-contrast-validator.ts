@@ -76,7 +76,7 @@ export class ColorContrastValidator {
     s /= 100;
     l /= 100;
 
-    const hue2rgb = (p: number, q: number, t: number) => {
+    const hue2rgb = (p: number, q: number, t: number) {
       if (t < 0) t += 1;
       if (t > 1) t -= 1;
       if (t < 1 / 6) return p + (q - p) * 6 * t;
@@ -283,7 +283,7 @@ export class ColorContrastValidator {
       },
     ];
 
-    colorPairs.forEach(({ fg, bg, name }) => {
+    colorPairs.forEach(({ fg, bg, name }) {
       if (fg && bg) {
         const result = this.validateColorPair(fg, bg);
         let severity: 'error' | 'warning' | 'success';

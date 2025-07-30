@@ -73,34 +73,34 @@ vi.mock('@/components/bug-report/FileAttachmentUpload', () => ({
   )
 }));
 
-describe('BugReportForm', () => {
+describe('BugReportForm', () {
   const mockOnSubmit = vi.fn();
   const mockOnCancel = vi.fn();
 
-  beforeEach(() => {
+  beforeEach(() {
     vi.clearAllMocks();
   });
 
-  it('renders initial bug type selection step', () => {
+  it('renders initial bug type selection step', () {
     render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
     
     expect(screen.getByText('Report a Bug')).toBeInTheDocument();
     expect(screen.getByTestId('bug-type-selector')).toBeInTheDocument();
   });
 
-  it('progresses through form steps correctly', async () => {
+  it('progresses through form steps correctly', async () {
     render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
     
     // Step 1: Select bug type
     fireEvent.click(screen.getByText('Select Functionality'));
     
     // Should move to details step
-    await waitFor(() => {
+    await waitFor(() {
       expect(screen.getByLabelText('Bug Title *')).toBeInTheDocument();
     });
   });
 
-  it('validates required fields', async () => {
+  it('validates required fields', async () {
     const mockUseBugReport = vi.mocked(await import('@/hooks/useBugReport')).useBugReport;
     mockUseBugReport.mockReturnValue({
       formState: {
@@ -129,19 +129,19 @@ describe('BugReportForm', () => {
     // Select bug type first
     fireEvent.click(screen.getByText('Select Functionality'));
     
-    await waitFor(() => {
+    await waitFor(() {
       expect(screen.getByText('Title is required')).toBeInTheDocument();
       expect(screen.getByText('Description is required')).toBeInTheDocument();
     });
   });
 
-  it('handles form submission successfully', async () => {
+  it('handles form submission successfully', async () {
     render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
     
     // Go through all steps and submit
     fireEvent.click(screen.getByText('Select Functionality'));
     
-    await waitFor(() => {
+    await waitFor(() {
       expect(screen.getByLabelText('Bug Title *')).toBeInTheDocument();
     });
 
@@ -154,12 +154,12 @@ describe('BugReportForm', () => {
     const submitButton = screen.getByText('Submit Bug Report');
     fireEvent.click(submitButton);
 
-    await waitFor(() => {
+    await waitFor(() {
       expect(mockOnSubmit).toHaveBeenCalledWith('test-bug-id', 'BUG-25-12345678');
     });
   });
 
-  it('displays success message after submission', async () => {
+  it('displays success message after submission', async () {
     render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
     
     // Simulate successful submission by manually triggering success state
@@ -168,7 +168,7 @@ describe('BugReportForm', () => {
     expect(true).toBe(true); // Placeholder for success state test
   });
 
-  it('handles form cancellation', () => {
+  it('handles form cancellation', () {
     render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
     
     // Go to a step where cancel button exists
@@ -178,7 +178,7 @@ describe('BugReportForm', () => {
     expect(mockOnCancel).not.toHaveBeenCalled(); // Initial state
   });
 
-  it('supports auto-save functionality', async () => {
+  it('supports auto-save functionality', async () {
     const mockUpdateFormData = vi.fn();
     
     const mockUseBugReport = vi.mocked(await import('@/hooks/useBugReport')).useBugReport;
@@ -208,21 +208,21 @@ describe('BugReportForm', () => {
     render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
     
     // Auto-save indicator should be visible when form is dirty
-    await waitFor(() => {
+    await waitFor(() {
       expect(screen.getByText(/Last saved:/)).toBeInTheDocument();
     });
   });
 
-  it('handles file attachment uploads', async () => {
+  it('handles file attachment uploads', async () {
     render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
     
     fireEvent.click(screen.getByText('Select Functionality'));
     
-    await waitFor(() => {
+    await waitFor(() {
       fireEvent.click(screen.getByText('Next: Attachments'));
     });
     
-    await waitFor(() => {
+    await waitFor(() {
       expect(screen.getByTestId('file-attachment-upload')).toBeInTheDocument();
     });
   });

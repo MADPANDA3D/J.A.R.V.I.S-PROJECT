@@ -21,10 +21,10 @@ global.AbortController = vi.fn(() => ({
   abort: vi.fn(),
 })) as unknown as typeof AbortController;
 
-describe('WebhookService - Basic Tests', () => {
+describe('WebhookService - Basic Tests', () {
   let webhookService: WebhookService;
 
-  beforeEach(() => {
+  beforeEach(() {
     vi.clearAllMocks();
     mockFetch.mockClear();
 
@@ -48,8 +48,8 @@ describe('WebhookService - Basic Tests', () => {
     });
   });
 
-  describe('Message Sending Success Scenarios', () => {
-    it('should send message successfully with valid payload', async () => {
+  describe('Message Sending Success Scenarios', () {
+    it('should send message successfully with valid payload', async () {
       const mockResponse: WebhookResponse = {
         response: 'Hello, how can I help you?',
         success: true,
@@ -86,7 +86,7 @@ describe('WebhookService - Basic Tests', () => {
       );
     });
 
-    it('should include request metadata in payload', async () => {
+    it('should include request metadata in payload', async () {
       const mockResponse: WebhookResponse = {
         response: 'Response',
         success: true,
@@ -120,8 +120,8 @@ describe('WebhookService - Basic Tests', () => {
     });
   });
 
-  describe('Error Handling', () => {
-    it('should throw validation error for missing webhook URL', async () => {
+  describe('Error Handling', () {
+    it('should throw validation error for missing webhook URL', async () {
       const serviceWithoutUrl = new WebhookService({ webhookUrl: '' });
 
       const payload: WebhookPayload = {
@@ -139,7 +139,7 @@ describe('WebhookService - Basic Tests', () => {
       );
     });
 
-    it('should handle HTTP error responses', async () => {
+    it('should handle HTTP error responses', async () {
       // Mock all retry attempts to return the same error
       mockFetch.mockResolvedValue({
         ok: false,
@@ -162,7 +162,7 @@ describe('WebhookService - Basic Tests', () => {
       );
     });
 
-    it('should handle network errors', async () => {
+    it('should handle network errors', async () {
       // Mock all retry attempts to return the same network error
       mockFetch.mockRejectedValue(new TypeError('Failed to fetch'));
 
@@ -180,7 +180,7 @@ describe('WebhookService - Basic Tests', () => {
       );
     });
 
-    it('should handle malformed response format', async () => {
+    it('should handle malformed response format', async () {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -203,8 +203,8 @@ describe('WebhookService - Basic Tests', () => {
     });
   });
 
-  describe('Basic Retry Logic', () => {
-    it('should retry on retryable errors and eventually succeed', async () => {
+  describe('Basic Retry Logic', () {
+    it('should retry on retryable errors and eventually succeed', async () {
       // First two calls fail, third succeeds
       mockFetch
         .mockRejectedValueOnce(new TypeError('Network error'))
@@ -231,7 +231,7 @@ describe('WebhookService - Basic Tests', () => {
       expect(mockFetch).toHaveBeenCalledTimes(3);
     });
 
-    it('should not retry on non-retryable errors', async () => {
+    it('should not retry on non-retryable errors', async () {
       const serviceWithoutUrl = new WebhookService({ webhookUrl: '' });
 
       const payload: WebhookPayload = {
@@ -247,8 +247,8 @@ describe('WebhookService - Basic Tests', () => {
     });
   });
 
-  describe('Webhook Payload Validation', () => {
-    it('should validate required payload fields', async () => {
+  describe('Webhook Payload Validation', () {
+    it('should validate required payload fields', async () {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -277,7 +277,7 @@ describe('WebhookService - Basic Tests', () => {
       expect(requestBody).toHaveProperty('clientVersion');
     });
 
-    it('should include optional payload fields when provided', async () => {
+    it('should include optional payload fields when provided', async () {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -314,8 +314,8 @@ describe('WebhookService - Basic Tests', () => {
     });
   });
 
-  describe('Performance and Metrics', () => {
-    it('should track request metrics on success', async () => {
+  describe('Performance and Metrics', () {
+    it('should track request metrics on success', async () {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -342,7 +342,7 @@ describe('WebhookService - Basic Tests', () => {
       expect(metrics.averageResponseTime).toBeGreaterThanOrEqual(0);
     });
 
-    it('should track error metrics on failures', async () => {
+    it('should track error metrics on failures', async () {
       mockFetch.mockRejectedValueOnce(new TypeError('Network error'));
 
       const payload: WebhookPayload = {
@@ -360,8 +360,8 @@ describe('WebhookService - Basic Tests', () => {
     });
   });
 
-  describe('Health Check', () => {
-    it('should perform health check successfully', async () => {
+  describe('Health Check', () {
+    it('should perform health check successfully', async () {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -385,7 +385,7 @@ describe('WebhookService - Basic Tests', () => {
       expect(requestBody.userId).toBe('system');
     });
 
-    it('should return unhealthy status on errors', async () => {
+    it('should return unhealthy status on errors', async () {
       mockFetch.mockRejectedValueOnce(new TypeError('Connection failed'));
 
       const healthStatus = await webhookService.healthCheck();
@@ -396,8 +396,8 @@ describe('WebhookService - Basic Tests', () => {
     });
   });
 
-  describe('Configuration and Security', () => {
-    it('should include standard headers in all requests', async () => {
+  describe('Configuration and Security', () {
+    it('should include standard headers in all requests', async () {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -423,7 +423,7 @@ describe('WebhookService - Basic Tests', () => {
       expect(headers['User-Agent']).toBe('JARVIS-Chat/1.0');
     });
 
-    it('should generate unique request IDs', async () => {
+    it('should generate unique request IDs', async () {
       mockFetch.mockImplementation(() =>
         Promise.resolve({
           ok: true,
@@ -454,7 +454,7 @@ describe('WebhookService - Basic Tests', () => {
       expect(call1Body.requestId).not.toBe(call2Body.requestId);
     });
 
-    it('should provide circuit breaker configuration methods', () => {
+    it('should provide circuit breaker configuration methods', () {
       webhookService.configureCircuitBreaker({
         failureThreshold: 10,
         recoveryTimeout: 30000,
@@ -465,7 +465,7 @@ describe('WebhookService - Basic Tests', () => {
       expect(config.circuitBreakerOptions.recoveryTimeout).toBe(30000);
     });
 
-    it('should allow manual circuit breaker reset', () => {
+    it('should allow manual circuit breaker reset', () {
       webhookService.resetCircuitBreaker();
 
       const metrics = webhookService.getMetrics();

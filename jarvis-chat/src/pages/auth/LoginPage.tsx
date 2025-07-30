@@ -7,7 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 type AuthMode = 'login' | 'register';
 
-export const LoginPage: React.FC = () => {
+export const LoginPage: React.FC = () {
   const { user, initialized } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -21,11 +21,11 @@ export const LoginPage: React.FC = () => {
     return <Navigate to={from} replace />;
   }
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = () {
     navigate(from, { replace: true });
   };
 
-  const handleRegisterSuccess = () => {
+  const handleRegisterSuccess = () {
     // After successful registration, user might need to confirm email
     // For now, we'll redirect to the intended destination
     navigate(from, { replace: true });

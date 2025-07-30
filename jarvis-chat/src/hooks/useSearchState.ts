@@ -172,7 +172,7 @@ export function useSearchState(userId: string) {
   const [searchState, setSearchState] = useState<PersistentSearchState>(defaultState);
 
   // Load persisted state on mount with migration support
-  useEffect(() => {
+  useEffect(() {
     if (!userId) return;
 
     try {
@@ -197,7 +197,7 @@ export function useSearchState(userId: string) {
   }, [userId]);
 
   // Save state to localStorage when it changes
-  useEffect(() => {
+  useEffect(() {
     if (!userId) return;
 
     try {
@@ -222,7 +222,7 @@ export function useSearchState(userId: string) {
   }, [userId, searchState]);
 
   // Update filters
-  const updateFilters = useCallback((newFilters: Partial<SearchFilters>) => {
+  const updateFilters = useCallback((newFilters: Partial<SearchFilters>) {
     setSearchState(prev => ({
       ...prev,
       filters: { ...prev.filters, ...newFilters },
@@ -230,7 +230,7 @@ export function useSearchState(userId: string) {
   }, []);
 
   // Update current query
-  const setCurrentQuery = useCallback((query: string) => {
+  const setCurrentQuery = useCallback((query: string) {
     setSearchState(prev => ({
       ...prev,
       currentQuery: query,
@@ -239,7 +239,7 @@ export function useSearchState(userId: string) {
   }, []);
 
   // Update preferences
-  const updatePreferences = useCallback((newPreferences: Partial<SearchPreferences>) => {
+  const updatePreferences = useCallback((newPreferences: Partial<SearchPreferences>) {
     setSearchState(prev => ({
       ...prev,
       preferences: { ...prev.preferences, ...newPreferences },
@@ -247,7 +247,7 @@ export function useSearchState(userId: string) {
   }, []);
 
   // Update session expansion state
-  const updateSessionExpansion = useCallback((sessionId: string, isExpanded: boolean) => {
+  const updateSessionExpansion = useCallback((sessionId: string, isExpanded: boolean) {
     setSearchState(prev => ({
       ...prev,
       preferences: {
@@ -261,7 +261,7 @@ export function useSearchState(userId: string) {
   }, []);
 
   // Add search to history with analytics
-  const addToHistory = useCallback((query: string, resultCount: number, executionTime?: number, searchMode?: 'regular' | 'session-grouped') => {
+  const addToHistory = useCallback((query: string, resultCount: number, executionTime?: number, searchMode?: 'regular' | 'session-grouped') {
     if (!query.trim() || !searchState.preferences.autoSaveSearch) return;
 
     const historyItem: SearchHistoryItem = {
@@ -317,7 +317,7 @@ export function useSearchState(userId: string) {
   }, [searchState.filters, searchState.preferences.autoSaveSearch]);
 
   // Apply filters from history item
-  const applyFromHistory = useCallback((historyItem: SearchHistoryItem) => {
+  const applyFromHistory = useCallback((historyItem: SearchHistoryItem) {
     setSearchState(prev => ({
       ...prev,
       filters: historyItem.filters,
@@ -327,7 +327,7 @@ export function useSearchState(userId: string) {
   }, []);
 
   // Favorite filters management
-  const saveFavoriteFilter = useCallback((name: string, filters: SearchFilters) => {
+  const saveFavoriteFilter = useCallback((name: string, filters: SearchFilters) {
     const favoriteFilter: FavoriteFilter = {
       id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       name: name.trim(),
@@ -349,7 +349,7 @@ export function useSearchState(userId: string) {
     });
   }, []);
 
-  const applyFavoriteFilter = useCallback((favoriteId: string) => {
+  const applyFavoriteFilter = useCallback((favoriteId: string) {
     setSearchState(prev => {
       const favorite = prev.favoriteFilters.find(fav => fav.id === favoriteId);
       if (!favorite) return prev;
@@ -371,7 +371,7 @@ export function useSearchState(userId: string) {
     });
   }, []);
 
-  const removeFavoriteFilter = useCallback((favoriteId: string) => {
+  const removeFavoriteFilter = useCallback((favoriteId: string) {
     setSearchState(prev => ({
       ...prev,
       favoriteFilters: prev.favoriteFilters.filter(fav => fav.id !== favoriteId),
@@ -405,7 +405,7 @@ export function useSearchState(userId: string) {
   }, [searchState.searchHistory, searchState.popularQueries, searchState.preferences.enableSearchSuggestions]);
 
   // Clear search state
-  const clearSearch = useCallback(() => {
+  const clearSearch = useCallback(() {
     setSearchState(prev => ({
       ...prev,
       filters: { ...defaultFilters },
@@ -415,7 +415,7 @@ export function useSearchState(userId: string) {
   }, []);
 
   // Clear search history
-  const clearHistory = useCallback(() => {
+  const clearHistory = useCallback(() {
     setSearchState(prev => ({
       ...prev,
       searchHistory: [],
@@ -424,7 +424,7 @@ export function useSearchState(userId: string) {
   }, []);
 
   // Remove item from history
-  const removeFromHistory = useCallback((itemId: string) => {
+  const removeFromHistory = useCallback((itemId: string) {
     setSearchState(prev => ({
       ...prev,
       searchHistory: prev.searchHistory.filter(item => item.id !== itemId),
@@ -432,7 +432,7 @@ export function useSearchState(userId: string) {
   }, []);
 
   // Reset all analytics
-  const resetAnalytics = useCallback(() => {
+  const resetAnalytics = useCallback(() {
     setSearchState(prev => ({
       ...prev,
       searchCount: 0,

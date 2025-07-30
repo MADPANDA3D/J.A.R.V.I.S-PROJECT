@@ -15,7 +15,7 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
   width,
   height,
   lines = 1,
-}) => {
+}) {
   const baseClasses = 'animate-pulse bg-secondary/50';
 
   const variantClasses = {

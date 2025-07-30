@@ -36,7 +36,7 @@ interface RegisterFormProps {
 export const RegisterForm: React.FC<RegisterFormProps> = ({
   onSuccess,
   onSwitchToLogin,
-}) => {
+}) {
   const { signUp, loading } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -84,7 +84,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
     }
   };
 
-  const onSubmit = async (data: RegisterFormData) => {
+  const onSubmit = async (data: RegisterFormData) {
     try {
       setError(null);
       setSuccess(null);

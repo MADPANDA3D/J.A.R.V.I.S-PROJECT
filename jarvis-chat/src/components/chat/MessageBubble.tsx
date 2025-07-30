@@ -26,7 +26,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   highlightedContent,
   searchTerms,
   className = '',
-}) => {
+}) {
   const isUser = message.role === 'user';
 
   const highlightSearchTerms = (content: string, terms: string[]): string => {
@@ -46,7 +46,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
     return highlightedContent;
   };
 
-  const getDisplayContent = () => {
+  const getDisplayContent = () {
     if (highlightedContent) {
       return highlightedContent;
     }
@@ -60,7 +60,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
 
   const hasHighlights = highlightedContent || (searchTerms && searchTerms.length > 0);
 
-  const formatTime = (date: Date) => {
+  const formatTime = (date: Date) {
     return new Intl.DateTimeFormat('en-US', {
       hour: 'numeric',
       minute: '2-digit',
@@ -68,7 +68,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
     }).format(date);
   };
 
-  const getStatusIcon = () => {
+  const getStatusIcon = () {
     switch (message.status) {
       case 'sending':
         return (
@@ -96,7 +96,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
     }
   };
 
-  const handleRetry = () => {
+  const handleRetry = () {
     if (onRetry) {
       screenReader.announce({
         message: 'Retrying message send',

@@ -32,7 +32,7 @@ interface SessionAnalyticsDashboardProps {
 export const SessionAnalyticsDashboard: React.FC<SessionAnalyticsDashboardProps> = ({
   className = '',
   refreshInterval = 30000 // 30 seconds
-}) => {
+}) {
   const [currentSession, setCurrentSession] = useState(getCurrentSession());
   const [sessionHistory, setSessionHistory] = useState(getSessionHistory());
   const [analytics, setAnalytics] = useState(getSessionAnalytics());
@@ -43,8 +43,8 @@ export const SessionAnalyticsDashboard: React.FC<SessionAnalyticsDashboardProps>
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Refresh data periodically
-  useEffect(() => {
-    const refreshData = async () => {
+  useEffect(() {
+    const refreshData = async () {
       setIsRefreshing(true);
       
       try {
@@ -70,7 +70,7 @@ export const SessionAnalyticsDashboard: React.FC<SessionAnalyticsDashboardProps>
     return () => clearInterval(interval);
   }, [refreshInterval]);
 
-  const handleAlertAcknowledge = (alertId: string) => {
+  const handleAlertAcknowledge = (alertId: string) {
     if (acknowledgeAlert(alertId)) {
       setActiveAlerts(prev => prev.filter(alert => alert.id !== alertId));
     }

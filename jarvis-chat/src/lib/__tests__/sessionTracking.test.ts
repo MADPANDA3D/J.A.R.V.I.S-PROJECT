@@ -70,19 +70,19 @@ global.Intl = {
   })
 } as any;
 
-describe('Session Tracking', () => {
-  beforeEach(() => {
+describe('Session Tracking', () {
+  beforeEach(() {
     vi.clearAllMocks();
     localStorageMock.getItem.mockReturnValue(null);
     clearAllSessions();
   });
 
-  afterEach(() => {
+  afterEach(() {
     vi.clearAllTimers();
   });
 
-  describe('Session Creation', () => {
-    it('should create a new session on initialization', () => {
+  describe('Session Creation', () {
+    it('should create a new session on initialization', () {
       const currentSession = getCurrentSession();
       
       expect(currentSession).toBeDefined();
@@ -92,7 +92,7 @@ describe('Session Tracking', () => {
       expect(currentSession?.pageViews).toHaveLength(1); // Initial page view
     });
 
-    it('should generate unique session IDs', () => {
+    it('should generate unique session IDs', () {
       const session1 = getCurrentSession();
       clearAllSessions();
       const session2 = getCurrentSession();
@@ -100,7 +100,7 @@ describe('Session Tracking', () => {
       expect(session1?.sessionId).not.toBe(session2?.sessionId);
     });
 
-    it('should collect device information', () => {
+    it('should collect device information', () {
       const currentSession = getCurrentSession();
       const deviceInfo = currentSession?.deviceInfo;
       
@@ -113,8 +113,8 @@ describe('Session Tracking', () => {
     });
   });
 
-  describe('User Management', () => {
-    it('should set user ID and metadata', () => {
+  describe('User Management', () {
+    it('should set user ID and metadata', () {
       const userId = 'test-user-123';
       const metadata = { email: 'test@example.com', role: 'user' };
       
@@ -125,7 +125,7 @@ describe('Session Tracking', () => {
       expect(currentSession?.metadata).toEqual(expect.objectContaining(metadata));
     });
 
-    it('should track auth events', () => {
+    it('should track auth events', () {
       logSessionAuthEvent('sign_in', true, undefined, { method: 'password' });
       
       const currentSession = getCurrentSession();
@@ -137,7 +137,7 @@ describe('Session Tracking', () => {
       expect(signInEvent?.metadata).toEqual({ method: 'password' });
     });
 
-    it('should track failed auth events', () => {
+    it('should track failed auth events', () {
       logSessionAuthEvent('sign_in', false, 'Invalid credentials', { attempt: 1 });
       
       const currentSession = getCurrentSession();
@@ -148,8 +148,8 @@ describe('Session Tracking', () => {
     });
   });
 
-  describe('Session Analytics', () => {
-    it('should calculate session analytics', () => {
+  describe('Session Analytics', () {
+    it('should calculate session analytics', () {
       // Set up test data
       setSessionUser('test-user', { email: 'test@example.com' });
       logSessionAuthEvent('sign_in', true);
@@ -161,7 +161,7 @@ describe('Session Tracking', () => {
       expect(analytics.averageSessionDuration).toBeGreaterThanOrEqual(0);
     });
 
-    it('should track most visited pages', () => {
+    it('should track most visited pages', () {
       const analytics = getSessionAnalytics();
       
       expect(analytics.mostVisitedPages).toBeDefined();
@@ -169,15 +169,15 @@ describe('Session Tracking', () => {
     });
   });
 
-  describe('Session History', () => {
-    it('should maintain session history', () => {
+  describe('Session History', () {
+    it('should maintain session history', () {
       const history = getSessionHistory();
       
       expect(Array.isArray(history)).toBe(true);
       expect(history.length).toBeGreaterThan(0);
     });
 
-    it('should include current session in history', () => {
+    it('should include current session in history', () {
       const currentSession = getCurrentSession();
       const history = getSessionHistory();
       
@@ -186,8 +186,8 @@ describe('Session Tracking', () => {
     });
   });
 
-  describe('Error Integration', () => {
-    it('should increment error count', () => {
+  describe('Error Integration', () {
+    it('should increment error count', () {
       const { incrementSessionErrors } = require('../sessionTracking');
       
       const initialSession = getCurrentSession();
@@ -200,8 +200,8 @@ describe('Session Tracking', () => {
     });
   });
 
-  describe('Data Persistence', () => {
-    it('should attempt to persist session data', () => {
+  describe('Data Persistence', () {
+    it('should attempt to persist session data', () {
       // Session tracking automatically persists data
       expect(localStorageMock.setItem).toHaveBeenCalledWith(
         'jarvis_sessions',
@@ -209,20 +209,20 @@ describe('Session Tracking', () => {
       );
     });
 
-    it('should handle localStorage errors gracefully', () => {
-      localStorageMock.setItem.mockImplementation(() => {
+    it('should handle localStorage errors gracefully', () {
+      localStorageMock.setItem.mockImplementation(() {
         throw new Error('Storage quota exceeded');
       });
 
       // Should not throw error
-      expect(() => {
+      expect(() {
         setSessionUser('test-user');
       }).not.toThrow();
     });
   });
 
-  describe('Performance', () => {
-    it('should limit session storage size', () => {
+  describe('Performance', () {
+    it('should limit session storage size', () {
       // Create multiple sessions (would require more complex setup)
       const history = getSessionHistory();
       
@@ -230,7 +230,7 @@ describe('Session Tracking', () => {
       expect(history.length).toBeLessThanOrEqual(10);
     });
 
-    it('should handle rapid user actions without performance issues', () => {
+    it('should handle rapid user actions without performance issues', () {
       const startTime = Date.now();
       
       // Simulate rapid actions
@@ -246,8 +246,8 @@ describe('Session Tracking', () => {
     });
   });
 
-  describe('Memory Management', () => {
-    it('should not leak memory with continuous usage', () => {
+  describe('Memory Management', () {
+    it('should not leak memory with continuous usage', () {
       const initialSession = getCurrentSession();
       const initialPageViews = initialSession?.pageViews.length || 0;
       

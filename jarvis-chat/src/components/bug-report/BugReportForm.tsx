@@ -142,7 +142,7 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
   onCancel,
   initialData = {},
   className = ''
-}) => {
+}) {
   const {
     formState,
     submitBugReport,
@@ -158,9 +158,9 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
   const [submitSuccess, setSubmitSuccess] = useState<{ bugId: string; trackingNumber: string } | null>(null);
 
   // Auto-save functionality
-  useEffect(() => {
+  useEffect(() {
     if (formState.autoSaveEnabled && formState.isDirty) {
-      const autoSaveTimer = setTimeout(() => {
+      const autoSaveTimer = setTimeout(() {
         localStorage.setItem('bugReportDraft', JSON.stringify(formState.data));
       }, 2000);
 
@@ -169,7 +169,7 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
   }, [formState.data, formState.autoSaveEnabled, formState.isDirty]);
 
   // Load draft on mount
-  useEffect(() => {
+  useEffect(() {
     const draft = localStorage.getItem('bugReportDraft');
     if (draft && !initialData.title) {
       try {
@@ -181,7 +181,7 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
     }
   }, []);
 
-  const handleBugTypeSelect = useCallback((typeConfig: BugTypeConfig) => {
+  const handleBugTypeSelect = useCallback((typeConfig: BugTypeConfig) {
     setSelectedBugType(typeConfig);
     updateFormData({
       bugType: typeConfig.type,
@@ -190,7 +190,7 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
     setCurrentStep('details');
   }, [updateFormData]);
 
-  const handleFormSubmit = useCallback(async (e: React.FormEvent) => {
+  const handleFormSubmit = useCallback(async (e: React.FormEvent) {
     e.preventDefault();
     
     if (!validateForm()) {
@@ -224,7 +224,7 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
     }
   }, [formState.data, validateForm, submitBugReport, onSubmit]);
 
-  const handleCancel = useCallback(() => {
+  const handleCancel = useCallback(() {
     if (formState.isDirty) {
       const confirmCancel = window.confirm(
         'You have unsaved changes. Are you sure you want to cancel?'
@@ -260,7 +260,7 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
           </p>
           <div className="flex gap-3 justify-center">
             <Button
-              onClick={() => {
+              onClick={() {
                 setSubmitSuccess(null);
                 resetForm();
                 setCurrentStep('type');

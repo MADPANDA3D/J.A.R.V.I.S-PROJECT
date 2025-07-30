@@ -58,7 +58,7 @@ vi.mock('@/lib/centralizedLogging', () => ({
   }
 }));
 
-describe('Bug Report System Integration', () => {
+describe('Bug Report System Integration', () {
   const mockBugData: BugReportData = {
     title: 'Integration Test Bug Report',
     description: 'This is a comprehensive integration test for the bug reporting system. It should test all components working together seamlessly.',
@@ -87,7 +87,7 @@ describe('Bug Report System Integration', () => {
     ]
   };
 
-  beforeEach(() => {
+  beforeEach(() {
     vi.clearAllMocks();
     
     // Setup error tracker with test data
@@ -98,11 +98,11 @@ describe('Bug Report System Integration', () => {
     );
   });
 
-  afterEach(() => {
+  afterEach(() {
     vi.clearAllMocks();
   });
 
-  it('completes full bug report submission workflow', async () => {
+  it('completes full bug report submission workflow', async () {
     // Test the complete workflow from submission to storage
     const result = await bugSubmissionProcessor.processBugSubmission(mockBugData);
 
@@ -128,7 +128,7 @@ describe('Bug Report System Integration', () => {
     });
   });
 
-  it('integrates error tracking with bug reports', async () => {
+  it('integrates error tracking with bug reports', async () {
     const result = await bugReportingService.createBugReport(mockBugData);
 
     expect(result.success).toBe(true);
@@ -140,7 +140,7 @@ describe('Bug Report System Integration', () => {
     expect(errorTracker.getRecentErrors).toHaveBeenCalledWith(10);
   });
 
-  it('integrates performance monitoring', async () => {
+  it('integrates performance monitoring', async () {
     const result = await bugReportingService.createBugReport(mockBugData);
 
     expect(result.success).toBe(true);
@@ -157,7 +157,7 @@ describe('Bug Report System Integration', () => {
     });
   });
 
-  it('handles validation errors properly', async () => {
+  it('handles validation errors properly', async () {
     const invalidBugData = {
       ...mockBugData,
       title: 'Too short', // Less than 5 characters
@@ -181,7 +181,7 @@ describe('Bug Report System Integration', () => {
     );
   });
 
-  it('handles file upload failures gracefully', async () => {
+  it('handles file upload failures gracefully', async () {
     // Mock file upload failure
     const { bugReportOperations } = await import('@/lib/supabase');
     vi.mocked(bugReportOperations.uploadBugAttachment).mockResolvedValueOnce({
@@ -205,7 +205,7 @@ describe('Bug Report System Integration', () => {
     );
   });
 
-  it('detects and prevents duplicate submissions', async () => {
+  it('detects and prevents duplicate submissions', async () {
     // Configure deduplication enabled
     const processor = bugSubmissionProcessor;
     processor.updateConfiguration({ deduplicationEnabled: true });
@@ -227,7 +227,7 @@ describe('Bug Report System Integration', () => {
     expect(result.message).toContain('Similar bug report already exists');
   });
 
-  it('processes submission queue correctly', async () => {
+  it('processes submission queue correctly', async () {
     
     // Submit multiple bug reports concurrently
     const promises = [
@@ -256,7 +256,7 @@ describe('Bug Report System Integration', () => {
     expect(queueStatusAfter.processingCount).toBe(0);
   });
 
-  it('maintains data integrity throughout the process', async () => {
+  it('maintains data integrity throughout the process', async () {
     const result = await bugSubmissionProcessor.processBugSubmission(mockBugData);
 
     expect(result.success).toBe(true);
@@ -282,7 +282,7 @@ describe('Bug Report System Integration', () => {
     expect(createCall.monitoringData.submissionId).toBeDefined();
   });
 
-  it('handles system errors and recovers gracefully', async () => {
+  it('handles system errors and recovers gracefully', async () {
     // Simulate system error
     const { bugReportOperations } = await import('@/lib/supabase');
     vi.mocked(bugReportOperations.createBugReport).mockRejectedValueOnce(
@@ -312,7 +312,7 @@ describe('Bug Report System Integration', () => {
     );
   });
 
-  it('generates proper tracking numbers', async () => {
+  it('generates proper tracking numbers', async () {
     const result = await bugSubmissionProcessor.processBugSubmission(mockBugData);
 
     expect(result.success).toBe(true);
@@ -324,7 +324,7 @@ describe('Bug Report System Integration', () => {
     expect(createCall.monitoringData.submissionId).toBeDefined();
   });
 
-  it('maintains performance under load', async () => {
+  it('maintains performance under load', async () {
     const startTime = performance.now();
     
     // Submit multiple concurrent requests

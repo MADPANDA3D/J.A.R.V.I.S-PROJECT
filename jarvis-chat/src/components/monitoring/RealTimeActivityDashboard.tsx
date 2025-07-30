@@ -40,7 +40,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
   className = '',
   refreshInterval = 5000, // 5 seconds
   autoRefresh = true
-}) => {
+}) {
   const [data, setData] = useState<DashboardData>({
     performance: null,
     alerts: [],
@@ -58,13 +58,13 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
   const refreshTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize dashboard
-  useEffect(() => {
+  useEffect(() {
     initializeDashboard();
     return () => cleanup();
   }, []);
 
   // Setup auto-refresh
-  useEffect(() => {
+  useEffect(() {
     if (autoRefresh) {
       startAutoRefresh();
     } else {
@@ -74,7 +74,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     return () => stopAutoRefresh();
   }, [autoRefresh, refreshInterval]);
 
-  const initializeDashboard = async () => {
+  const initializeDashboard = async () {
     try {
       setIsLoading(true);
       await refreshData();
@@ -86,7 +86,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     }
   };
 
-  const refreshData = async () => {
+  const refreshData = async () {
     try {
       const [
         performance,
@@ -117,33 +117,33 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     }
   };
 
-  const setupWebSocket = () => {
+  const setupWebSocket = () {
     const wsUrl = import.meta.env.VITE_ACTIVITY_WEBSOCKET_URL;
     if (!wsUrl) return;
 
     try {
       websocketRef.current = new WebSocket(wsUrl);
 
-      websocketRef.current.onopen = () => {
+      websocketRef.current.onopen = () {
         setIsConnected(true);
         console.log('Connected to real-time monitoring WebSocket');
       };
 
-      websocketRef.current.onmessage = (event) => {
+      websocketRef.current.onmessage = (event) {
         handleWebSocketMessage(event.data);
       };
 
-      websocketRef.current.onclose = () => {
+      websocketRef.current.onclose = () {
         setIsConnected(false);
         // Attempt reconnection after 5 seconds
-        setTimeout(() => {
-          if (websocketRef.current?.readyState === WebSocket.CLOSED) => {
+        setTimeout(() {
+          if (websocketRef.current?.readyState === WebSocket.CLOSED) {
             setupWebSocket();
           }
         }, 5000);
       };
 
-      websocketRef.current.onerror = (error) => {
+      websocketRef.current.onerror = (error) {
         console.error('WebSocket error:', error);
         setIsConnected(false);
       };
@@ -152,11 +152,12 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     }
   };
 
-  const handleWebSocketMessage = (data: string) => {
+  const handleWebSocketMessage = (data: string) {
     try {
       const message = JSON.parse(data);
       
-      switch (message.type) => {
+      switch (message.type) {
+    }
         case 'activity_event':
           // Handle real-time activity updates
           updateActivityData(message.event);
@@ -177,7 +178,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     }
   };
 
-  const updateActivityData = (event: any) => {
+  const updateActivityData = (event: any) {
     // Update activity statistics in real-time
     setData(prev => ({
       ...prev,
@@ -188,36 +189,36 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     }));
   };
 
-  const updatePerformanceData = (metrics: PerformanceMetrics) => {
+  const updatePerformanceData = (metrics: PerformanceMetrics) {
     setData(prev => ({
       ...prev,
       performance: metrics
     }));
   };
 
-  const addAlert = (alert: PerformanceAlert) => {
+  const addAlert = (alert: PerformanceAlert) {
     setData(prev => ({
       ...prev,
       alerts: [alert, ...prev.alerts].slice(0, 10) // Keep latest 10 alerts
     }));
   };
 
-  const startAutoRefresh = () => {
-    refreshTimerRef.current = setInterval(() => {
+  const startAutoRefresh = () {
+    refreshTimerRef.current = setInterval(() {
       refreshData();
     }, refreshInterval);
   };
 
-  const stopAutoRefresh = () => {
-    if (refreshTimerRef.current) => {
+  const stopAutoRefresh = () {
+    if (refreshTimerRef.current) {
       clearInterval(refreshTimerRef.current);
       refreshTimerRef.current = null;
     }
   };
 
-  const cleanup = () => {
+  const cleanup = () {
     stopAutoRefresh();
-    if (websocketRef.current) => {
+    if (websocketRef.current) {
       websocketRef.current.close();
     }
   };
@@ -236,7 +237,8 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
   };
 
   const getAlertSeverityColor = (severity: string): string => {
-    switch (severity) => {
+    switch (severity) {
+    }
       case 'critical': return 'text-red-800 bg-red-100 border-red-200';
       case 'warning': return 'text-yellow-800 bg-yellow-100 border-yellow-200';
       default: return 'text-blue-800 bg-blue-100 border-blue-200';
@@ -254,7 +256,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     return isGood ? '✅' : '⚠️';
   };
 
-  if (isLoading) => {
+  if (isLoading) {
     return (
       <div className={`real-time-dashboard ${className}`}>
         <div className="flex items-center justify-center h-64">
@@ -466,7 +468,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
         <div className="bg-white rounded-lg shadow p-4 mb-6">
           <h3 className="text-lg font-medium text-gray-900 mb-4">Activity Heatmap</h3>
           <div className="grid grid-cols-12 gap-1">
-            {data.heatmap[0]?.intervals.slice(0, 24).map((interval, index) => {
+            {data.heatmap[0]?.intervals.slice(0, 24).map((interval, index) {
               const intensity = Math.min(interval.concurrentUsers / Math.max(data.heatmap[0]?.peakConcurrency || 1, 1), 1);
               return (
                 <div

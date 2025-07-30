@@ -36,7 +36,7 @@ const bugReportSchema = z.object({
 const attachmentSchema = z.object({
   size: z.number().max(10 * 1024 * 1024, 'File size must be less than 10MB'),
   type: z.string().refine(
-    (type) => {
+    (type) {
       const allowedTypes = [
         'image/jpeg', 'image/png', 'image/gif', 'image/webp',
         'text/plain', 'text/csv', 'application/json',
@@ -48,7 +48,7 @@ const attachmentSchema = z.object({
   )
 });
 
-export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
+export const useBugReport = (initialData: Partial<BugReportFormData> = {}) {
   const [formState, setFormState] = useState<BugReportFormState>({
     data: {
       title: '',
@@ -194,7 +194,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
     if (formState.data.attachments) {
       const attachmentErrors: string[] = [];
       
-      formState.data.attachments.forEach((file) => {
+      formState.data.attachments.forEach((file) {
         try {
           attachmentSchema.parse(file);
         } catch (error) {
@@ -225,7 +225,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
   }, [formState.data]);
 
   // Update form data
-  const updateFormData = useCallback((updates: Partial<BugReportFormData>) => {
+  const updateFormData = useCallback((updates: Partial<BugReportFormData>) {
     setFormState(prev => ({
       ...prev,
       data: {
@@ -282,7 +282,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
 
       // Upload attachments if any
       if (formData.attachments && formData.attachments.length > 0) {
-        const attachmentPromises = formData.attachments.map(async (file) => {
+        const attachmentPromises = formData.attachments.map(async (file) {
           try {
             setFormState(prev => ({
               ...prev,
@@ -373,7 +373,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
   }, [validateForm, collectBrowserInfo, collectErrorContext]);
 
   // Reset form
-  const resetForm = useCallback(() => {
+  const resetForm = useCallback(() {
     setFormState({
       data: {
         title: '',
@@ -438,14 +438,14 @@ interface CoreWebVitals {
 }
 
 async function collectCoreWebVitals(): Promise<CoreWebVitals> {
-  return new Promise((resolve) => {
+  return new Promise((resolve) {
     const vitals: CoreWebVitals = {};
     
     // Use Performance Observer if available
     if ('PerformanceObserver' in window) {
       try {
         // Largest Contentful Paint
-        const lcpObserver = new PerformanceObserver((list) => {
+        const lcpObserver = new PerformanceObserver((list) {
           const entries = list.getEntries();
           const lastEntry = entries[entries.length - 1];
           vitals.lcp = lastEntry.startTime;
@@ -453,19 +453,19 @@ async function collectCoreWebVitals(): Promise<CoreWebVitals> {
         lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
 
         // First Input Delay
-        const fidObserver = new PerformanceObserver((list) => {
+        const fidObserver = new PerformanceObserver((list) {
           const entries = list.getEntries();
-          entries.forEach((entry: PerformanceEventTiming) => {
+          entries.forEach((entry: PerformanceEventTiming) {
             vitals.fid = entry.processingStart - entry.startTime;
           });
         });
         fidObserver.observe({ type: 'first-input', buffered: true });
 
         // Cumulative Layout Shift
-        const clsObserver = new PerformanceObserver((list) => {
+        const clsObserver = new PerformanceObserver((list) {
           let clsValue = 0;
           const entries = list.getEntries();
-          entries.forEach((entry: any) => {
+          entries.forEach((entry: any) {
             if (!entry.hadRecentInput) {
               clsValue += entry.value;
             }
@@ -475,7 +475,7 @@ async function collectCoreWebVitals(): Promise<CoreWebVitals> {
         clsObserver.observe({ type: 'layout-shift', buffered: true });
 
         // Resolve after a short delay to collect metrics
-        setTimeout(() => {
+        setTimeout(() {
           resolve(vitals);
         }, 1000);
       } catch {

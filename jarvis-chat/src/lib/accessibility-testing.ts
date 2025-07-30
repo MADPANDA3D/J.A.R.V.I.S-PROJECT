@@ -58,8 +58,8 @@ export class AccessibilityTester {
       script.src =
         'https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.7.2/axe.min.js';
 
-      await new Promise<void>((resolve, reject) => {
-        script.onload = () => {
+      await new Promise<void>((resolve, reject) {
+        script.onload = () {
           this.axeLoaded = true;
           resolve();
         };
@@ -175,7 +175,7 @@ export class AccessibilityTester {
     if (totalChecks === 0) return 100;
 
     // Weight violations by impact
-    const violationScore = violations.reduce((score, violation) => {
+    const violationScore = violations.reduce((score, violation) {
       switch (violation.impact) {
         case 'critical':
           return score + 10;
@@ -260,7 +260,7 @@ export class AccessibilityTester {
     if (violations.length > 0) {
       // Group violations by impact
       const violationsByImpact = violations.reduce(
-        (groups, violation) => {
+        (groups, violation) {
           const impact = violation.impact;
           if (!groups[impact]) groups[impact] = [];
           groups[impact].push(violation);
@@ -284,7 +284,7 @@ export class AccessibilityTester {
 
           report += `### ${emoji} ${impact.toUpperCase()} (${impactViolations.length})\n\n`;
 
-          impactViolations.forEach((violation, index) => {
+          impactViolations.forEach((violation, index) {
             report += `#### ${index + 1}. ${violation.description}\n\n`;
             report += `**Rule:** ${violation.id}\n`;
             report += `**Help:** ${violation.help}\n`;
@@ -292,7 +292,7 @@ export class AccessibilityTester {
             report += `**Affected Elements:** ${violation.nodes.length}\n\n`;
 
             // Show first few affected elements
-            violation.nodes.slice(0, 3).forEach((node, nodeIndex) => {
+            violation.nodes.slice(0, 3).forEach((node, nodeIndex) {
               report += `**Element ${nodeIndex + 1}:**\n`;
               report += `- Target: \`${node.target.join(' > ')}\`\n`;
               report += `- HTML: \`${node.html.substring(0, 100)}${node.html.length > 100 ? '...' : ''}\`\n`;
@@ -354,7 +354,7 @@ export class AccessibilityTester {
   public schedulePeriodicTests(intervalMinutes: number = 60): () => void {
     let isRunning = true;
 
-    const runPeriodicTest = async () => {
+    const runPeriodicTest = async () {
       if (!isRunning) return;
 
       try {
@@ -381,7 +381,7 @@ export class AccessibilityTester {
     setTimeout(runPeriodicTest, 60000);
 
     // Return cleanup function
-    return () => {
+    return () {
       isRunning = false;
     };
   }
@@ -443,13 +443,13 @@ if (process.env.NODE_ENV === 'development') {
   if (document.readyState === 'complete') {
     cleanup = accessibilityTester.schedulePeriodicTests(30);
   } else {
-    window.addEventListener('load', () => {
+    window.addEventListener('load', () {
       cleanup = accessibilityTester.schedulePeriodicTests(30);
     });
   }
 
   // Cleanup on page unload
-  window.addEventListener('beforeunload', () => {
+  window.addEventListener('beforeunload', () {
     if (cleanup) cleanup();
   });
 }

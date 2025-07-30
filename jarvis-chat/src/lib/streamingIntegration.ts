@@ -484,7 +484,7 @@ class StreamingIntegrationService {
 
   private startBufferFlush() {
     // Flush buffer periodically
-    setInterval(() => {
+    setInterval(() {
       this.flushEventBuffer();
     }, this.BUFFER_FLUSH_INTERVAL);
   }
