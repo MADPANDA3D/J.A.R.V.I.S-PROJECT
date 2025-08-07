@@ -67,7 +67,7 @@ export const usePWAInstall = () => {
     // Check initial install status
     checkInstallStatus();
 
-    return () {
+    return () => {
       window.removeEventListener(
         'beforeinstallprompt',
         handleBeforeInstallPrompt

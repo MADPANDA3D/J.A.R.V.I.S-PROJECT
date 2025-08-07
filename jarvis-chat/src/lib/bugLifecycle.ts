@@ -166,7 +166,7 @@ class BugLifecycleService {
     reason?: string,
     notes?: string,
     metadata?: Record<string, unknown>
-  ): Promise< => { success: boolean; error?: string; statusChange?: StatusChange }> {
+  ): Promise<{ success: boolean; error?: string; statusChange?: StatusChange }> {
     const correlationId = this.generateCorrelationId();
 
     try {

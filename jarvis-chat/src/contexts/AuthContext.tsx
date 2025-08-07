@@ -131,12 +131,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
     });
 
-    return () {
+    return () => {
       subscription.unsubscribe();
     };
   }, []);
 
-  const signIn = async (email: string, password: string): Promise<void>  =>  => {
+  const signIn = async (email: string, password: string): Promise<void> => {
     addBreadcrumb('info', 'user_action', 'Sign in attempt', { email });
     setAuthState(prev => ({ ...prev, loading: true }));
 

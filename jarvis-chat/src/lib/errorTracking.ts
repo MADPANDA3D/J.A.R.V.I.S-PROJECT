@@ -109,7 +109,7 @@ class ErrorTracker {
     });
 
     // Handle global JavaScript errors
-    window.addEventListener(\'error\', event => {
+    window.addEventListener('error', (event) => {
       this.addBreadcrumb('error', 'error', `Global JS Error: ${event.message}`, {
         filename: event.filename,
         lineno: event.lineno,

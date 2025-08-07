@@ -90,7 +90,7 @@ class ChatService {
     userId: string,
     conversationId?: string,
     selectedTools?: string[]
-  ): Promise<string>  => {
+  ): Promise<string> {
     if (!this.n8nWebhookUrl) {
       // Fallback for development/testing
       return this.getFallbackResponse(message);

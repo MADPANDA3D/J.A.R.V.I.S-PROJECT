@@ -234,7 +234,7 @@ class CentralizedLoggingService {
     const sanitized = { ...metadata };
     const sensitiveKeys = ['password', 'token', 'secret', 'key', 'auth', 'credential', 'apikey'];
 
-    const sanitizeValue = (value: unknown): unknown  =>  => {
+    const sanitizeValue = (value: unknown): unknown => {
       if (typeof value === 'string') {
         // Check if the key or value contains sensitive data
         const lowerValue = value.toLowerCase();

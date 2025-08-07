@@ -427,7 +427,7 @@ class BugAssignmentSystem {
     bugId: string,
     reason: string,
     escalatedBy: string = 'system'
-  ): Promise< => { success: boolean; newPriority?: BugPriority; error?: string }> {
+  ): Promise<{ success: boolean; newPriority?: BugPriority; error?: string }> {
     const correlationId = this.generateCorrelationId();
 
     try {

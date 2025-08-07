@@ -83,7 +83,7 @@ interface ValidationSummary {
 /**
  * Validates required environment variables with comprehensive error reporting
  */
-export function validateEnvironment(): ValidationResult  => {
+export function validateEnvironment(): ValidationResult {
   const errors: ValidationError[] = [];
   const warnings: ValidationWarning[] = [];
   const config: Partial<EnvConfig> = {};
