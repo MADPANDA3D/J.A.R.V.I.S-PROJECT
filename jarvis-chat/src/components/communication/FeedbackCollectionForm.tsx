@@ -10,7 +10,6 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Progress } from '@/components/ui/progress';
@@ -34,7 +33,6 @@ import {
   type BugFeedback,
   type FeedbackType,
   type FeedbackFormTemplate,
-  type SatisfactionRating
 } from '@/lib/feedbackCollection';
 
 interface FeedbackCollectionFormProps {
@@ -104,12 +102,11 @@ export function FeedbackCollectionForm({
   const [formData, setFormData] = useState<Record<string, unknown>>({});
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     loadFeedbackData();
-  }, [feedbackId]);
+  }, [feedbackId, loadFeedbackData]);
 
   const loadFeedbackData = async () => {
     try {
@@ -160,7 +157,7 @@ export function FeedbackCollectionForm({
     }
   };
 
-  const validateForm = (): boolean  =>  => {
+  const validateForm = (): boolean => {
     if (!template) return false;
 
     const errors: Record<string, string> = {};

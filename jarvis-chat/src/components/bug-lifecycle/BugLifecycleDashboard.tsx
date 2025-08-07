@@ -108,7 +108,7 @@ function MetricCard({ title, value, change, changeType = 'neutral', icon, descri
   );
 }
 
-export function BugLifecycleDashboard({ dateRange, teamFilter }: DashboardProps) {
+export function BugLifecycleDashboard({ dateRange }: DashboardProps) {
   const { toast } = useToast();
   const { stats, loading: statsLoading } = useBugLifecycleStats();
   const { bugs, loading: bugsLoading, refreshBugs } = useBugList();

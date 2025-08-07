@@ -48,7 +48,7 @@ export const BugReportModal: React.FC<BugReportModalProps> = ({
       }
     }
 
-    return () {
+    return () => {
       document.body.style.overflow = '';
     };
   }, [isOpen]);

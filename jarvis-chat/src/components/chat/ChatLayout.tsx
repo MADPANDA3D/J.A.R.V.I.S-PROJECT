@@ -89,7 +89,7 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
   const handleSearch = async (
     filters: SearchFilters, 
     options?: { limit?: number; offset?: number }
-  ): Promise< =>  => { results: SearchResult[]; total: number; hasMore: boolean }> {
+  ): Promise<{ results: SearchResult[]; total: number; hasMore: boolean }> => {
     try {
       // Update current search terms for highlighting
       if (filters.query.trim()) {
@@ -112,7 +112,7 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
   const handleSessionGroupedSearch = async (
     filters: SessionSearchFilters,
     options?: { sessionLimit?: number; sessionOffset?: number; messagesPerSession?: number }
-  ): Promise<GroupedSearchResponse>  =>  => {
+  ): Promise<GroupedSearchResponse> => {
     try {
       // Update current search terms for highlighting
       if (filters.query.trim()) {

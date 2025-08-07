@@ -280,7 +280,7 @@ class BugReportingService {
         success: true,
         bugId: data.id,
         trackingNumber,
-        message: 'Bug report created successfully'
+        message: 'Bug report submitted successfully'
       };
 
     } catch (error) {

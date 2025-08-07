@@ -179,7 +179,7 @@ class LogReturnService {
     startPeriodicUpload = () => {
         console.log(`⏰ Starting periodic log upload (every ${this.config.uploadInterval / 1000} seconds)`);
         
-        setInterval(async () {
+        setInterval(async () => {
             if (!this.isUploading && this.logBuffer.length > 0) {
                 await this.uploadLogs();
             }

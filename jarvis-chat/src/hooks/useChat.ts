@@ -54,7 +54,7 @@ export const useChat = () => {
   useEffect(() => {
     if (!user?.id) return;
 
-    const unsubscribe = chatService.subscribeToMessages($1, chatMessage => {
+    const unsubscribe = chatService.subscribeToMessages(user.id, chatMessage => {
         const message = chatMessageToMessage(chatMessage);
         setMessages(prev => {
           // Avoid duplicates by checking if message already exists

@@ -129,7 +129,7 @@ export const FileAttachmentUpload: React.FC<FileAttachmentUploadProps> = ({
     setValidationErrors([]);
   }, [selectedFiles, onFileUpload]);
 
-  const formatFileSize = (bytes: number): string  =>  => {
+  const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return '0 B';
     const k = 1024;
     const sizes = ['B', 'KB', 'MB', 'GB'];
@@ -137,7 +137,7 @@ export const FileAttachmentUpload: React.FC<FileAttachmentUploadProps> = ({
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
   };
 
-  const getFileIcon = (file: File): string  =>  => {
+  const getFileIcon = (file: File): string => {
     if (file.type.startsWith('image/')) return '🖼️';
     if (file.type.includes('pdf')) return '📄';
     if (file.type.includes('text') || file.name.endsWith('.log')) return '📝';

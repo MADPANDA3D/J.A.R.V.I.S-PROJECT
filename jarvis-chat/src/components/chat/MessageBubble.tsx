@@ -29,7 +29,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
 }) => {
   const isUser = message.role === 'user';
 
-  const highlightSearchTerms = (content: string, terms: string[]): string  =>  => {
+  const highlightSearchTerms = (content: string, terms: string[]): string => {
     if (!terms || terms.length === 0) return content;
 
     let highlightedContent = content;

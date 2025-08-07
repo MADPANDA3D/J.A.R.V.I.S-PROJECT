@@ -309,7 +309,7 @@ class BugExportService {
 
       res.status(202).json(exportResponse);
 
-    } catch () {
+    } catch (error) {
       centralizedLogging.error(
         'bug-export',
         'system',
@@ -349,7 +349,7 @@ class BugExportService {
 
       res.json(exportResponse);
 
-    } catch () {
+    } catch (error) {
       centralizedLogging.error(
         'bug-export',
         'system',
@@ -391,7 +391,7 @@ class BugExportService {
       const filePath = this.getExportFilePath(exportId, exportResponse.format);
       try {
         await fs.access(filePath);
-      } catch () {
+      } catch {
         return res.status(404).json({ error: 'Export file not found' });
       }
 
@@ -419,7 +419,7 @@ class BugExportService {
         { correlationId, exportId, userId: apiKeyValidation.userId }
       );
 
-    } catch () {
+    } catch (error) {
       centralizedLogging.error(
         'bug-export',
         'system',
@@ -470,7 +470,7 @@ class BugExportService {
         nextExecution: this.calculateNextExecution(config.schedule)
       });
 
-    } catch () {
+    } catch (error) {
       centralizedLogging.error(
         'bug-export',
         'system',
@@ -497,7 +497,7 @@ class BugExportService {
 
       res.json({ templates });
 
-    } catch () {
+    } catch (error) {
       next(error);
     }
   }
@@ -574,7 +574,7 @@ class BugExportService {
         { exportId, recordCount: processedData.length, fileSize: fileStats.size }
       );
 
-    } catch () {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Export processing failed';
       
       this.updateExportStatus(exportId, 'failed', {
@@ -1007,7 +1007,7 @@ class BugExportService {
             { scheduleId, exportId: exportRequest.id }
           );
 
-        } catch () {
+        } catch (error) {
           centralizedLogging.error(
             'bug-export',
             'system',
@@ -1038,7 +1038,7 @@ class BugExportService {
         try {
           const filePath = this.getExportFilePath(exportId, exportResponse.format);
           await fs.unlink(filePath);
-        } catch () {
+        } catch {
           // File might not exist, ignore error
         }
       }

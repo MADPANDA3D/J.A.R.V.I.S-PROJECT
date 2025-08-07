@@ -96,7 +96,7 @@ export const UpdateNotification: React.FC<UpdateNotificationProps> = ({
     connectWebSocket();
 
     // Cleanup on unmount
-    return () {
+    return () => {
       if (currentWebSocket) {
         currentWebSocket.close();
         currentWebSocket = null;

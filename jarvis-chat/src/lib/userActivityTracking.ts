@@ -307,7 +307,7 @@ class UserActivityTrackingService {
 
     // User interaction events
     ['click', 'keydown', 'scroll', 'touchstart'].forEach(eventType => {
-      document.addEventListener(eventType, (event) {
+      document.addEventListener(eventType, (event) => {
         this.handleUserInteraction(eventType, event);
       }, { passive: true });
     });

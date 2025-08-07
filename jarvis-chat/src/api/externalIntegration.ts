@@ -310,7 +310,7 @@ class ExternalIntegrationService {
         integrationStatus
       });
 
-    } catch () {
+    } catch (error) {
       centralizedLogging.error(
         'external-integration',
         'system',
@@ -404,7 +404,7 @@ class ExternalIntegrationService {
         }
       });
 
-    } catch () {
+    } catch (error) {
       centralizedLogging.error(
         'external-integration',
         'system',
@@ -501,7 +501,7 @@ class ExternalIntegrationService {
         autoForwardEnabled: autoForward
       });
 
-    } catch () {
+    } catch (error) {
       centralizedLogging.error(
         'external-integration',
         'system',
@@ -607,7 +607,7 @@ class ExternalIntegrationService {
         autoForwardEnabled: autoForward
       });
 
-    } catch () {
+    } catch (error) {
       centralizedLogging.error(
         'external-integration',
         'system',
@@ -643,7 +643,7 @@ class ExternalIntegrationService {
 
       res.json(this.integrationStatus.get(integrationId));
 
-    } catch () {
+    } catch (error) {
       next(error);
     }
   }
@@ -673,7 +673,7 @@ class ExternalIntegrationService {
         }
       });
 
-    } catch () {
+    } catch (error) {
       next(error);
     }
   }
@@ -833,7 +833,7 @@ class ExternalIntegrationService {
 
     try {
       new URL(config.url);
-    } catch () {
+    } catch {
       return { valid: false, error: 'Invalid webhook URL' };
     }
 
@@ -867,7 +867,7 @@ class ExternalIntegrationService {
       // Mock Sentry connection test
       const responseTime = performance.now() - startTime;
       return { success: true, responseTime };
-    } catch () {
+    } catch (error) {
       return { 
         success: false, 
         error: error instanceof Error ? error.message : 'Connection test failed' 
@@ -882,7 +882,7 @@ class ExternalIntegrationService {
       // Mock DataDog connection test
       const responseTime = performance.now() - startTime;
       return { success: true, responseTime };
-    } catch () {
+    } catch (error) {
       return { 
         success: false, 
         error: error instanceof Error ? error.message : 'Connection test failed' 
@@ -923,7 +923,7 @@ class ExternalIntegrationService {
       };
       
       this.integrationStatus.set(integrationId, integration);
-    } catch () {
+    } catch {
       integration.healthCheck = {
         status: 'unhealthy',
         lastChecked: new Date().toISOString()
@@ -969,7 +969,7 @@ class ExternalIntegrationService {
 
     try {
       await this.deliverWebhookPayload(payload);
-    } catch () {
+    } catch (error) {
       centralizedLogging.error(
         'external-integration',
         'system',
@@ -1002,7 +1002,7 @@ class ExternalIntegrationService {
           status.lastActivity = new Date().toISOString();
           this.integrationStatus.set(webhook.id, status);
         }
-      } catch () {
+      } catch (error) {
         // Update failure metrics
         const status = this.integrationStatus.get(webhook.id);
         if (status) {

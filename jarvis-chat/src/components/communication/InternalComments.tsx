@@ -12,11 +12,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { 
   MessageSquare, 
   Send, 
@@ -24,19 +23,14 @@ import {
   Trash2,
   Reply,
   Pin,
-  PinOff,
   MoreHorizontal,
   Paperclip,
   AtSign,
   Smile,
   Eye,
   EyeOff,
-  Clock,
   User,
   Users,
-  AlertTriangle,
-  CheckCircle,
-  History,
   Filter,
   Search
 } from 'lucide-react';

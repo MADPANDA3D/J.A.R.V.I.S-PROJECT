@@ -723,7 +723,7 @@ describe('Bug Export API', () => {
           await fs.unlink(join(exportDir, file));
         }
       }
-    } catch (error) {
+    } catch {
       // Ignore cleanup errors
     }
   });
