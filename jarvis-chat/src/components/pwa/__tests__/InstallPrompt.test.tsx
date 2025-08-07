@@ -136,8 +136,7 @@ describe('InstallPrompt', () => {
     expect(screen.queryByText('Install JARVIS Chat')).not.toBeInTheDocument();
 
     // Should be visible after delay
-    await waitFor(
-      () => {
+    await waitFor(() => {
         expect(screen.getByText('Install JARVIS Chat')).toBeInTheDocument();
       },
       { timeout: 200 }

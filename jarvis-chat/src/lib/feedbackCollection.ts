@@ -133,7 +133,7 @@ class FeedbackCollectionService {
   private reminderTimers: Map<string, NodeJS.Timeout> = new Map();
   private formTemplates: Map<FeedbackType, FeedbackFormTemplate> = new Map();
 
-  private constructor() => {
+  private constructor() {
     this.initializeFormTemplates();
   }
 
@@ -153,7 +153,7 @@ class FeedbackCollectionService {
     feedbackType: FeedbackType,
     customMessage?: string,
     priority: 'low' | 'normal' | 'high' = 'normal'
-  ): Promise<{ success: boolean; requestId?: string; error?: string }> {
+  ): Promise< => { success: boolean; requestId?: string; error?: string }> {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -261,7 +261,7 @@ class FeedbackCollectionService {
         requestId: request.id
       };
 
-    } catch (error) => {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -284,7 +284,7 @@ class FeedbackCollectionService {
   async submitFeedback(
     feedbackId: string,
     feedbackData: Partial<BugFeedback>
-  ): Promise<{ success: boolean; error?: string }> {
+  ): Promise< => { success: boolean; error?: string }> {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -363,7 +363,7 @@ class FeedbackCollectionService {
 
       return { success: true };
 
-    } catch (error) => {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -411,7 +411,7 @@ class FeedbackCollectionService {
   /**
    * Cancel feedback request
    */
-  async cancelFeedbackRequest(feedbackId: string, reason?: string): Promise<boolean> {
+  async cancelFeedbackRequest(feedbackId: string, reason?: string): Promise<boolean>  {
     const feedback = this.feedbackStorage.get(feedbackId);
     if (!feedback || feedback.status !== 'pending') {
       return false;
@@ -618,7 +618,7 @@ class FeedbackCollectionService {
   private async validateFeedbackSubmission(
     feedback: BugFeedback,
     data: Partial<BugFeedback>
-  ): Promise<{ isValid: boolean; errors: string[]; warnings: string[] }> {
+  ): Promise< { isValid: boolean; errors: string[]; warnings: string[] }> {
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -629,7 +629,7 @@ class FeedbackCollectionService {
     }
 
     // Validate required fields
-    for (const field of template.fields) => {
+    for (const field of template.fields) {
       if (field.required) {
         const value = (data as any)[field.id];
         if (value === undefined || value === null || value === '') {
@@ -639,7 +639,7 @@ class FeedbackCollectionService {
     }
 
     // Validate field formats and constraints
-    for (const field of template.fields) => {
+    for (const field of template.fields) {
       const value = (data as any)[field.id];
       if (value !== undefined && value !== null && field.validation) {
         const validation = field.validation;
@@ -676,10 +676,10 @@ class FeedbackCollectionService {
     };
   }
 
-  private async processFeedbackSubmission(feedback: BugFeedback): Promise<void> {
+  private async processFeedbackSubmission(feedback: BugFeedback): Promise<void>  {
     try {
       // Process based on feedback type
-      switch (feedback.feedbackType) => {
+      switch (feedback.feedbackType) {
         case 'resolution_verification':
           await this.processResolutionVerification(feedback);
           break;
@@ -690,7 +690,7 @@ class FeedbackCollectionService {
           await this.processAdditionalInfo(feedback);
           break;
       }
-    } catch (error) => {
+    } catch (error) {
       centralizedLogging.warn(
         'feedback-collection',
         'system',
@@ -700,7 +700,7 @@ class FeedbackCollectionService {
     }
   }
 
-  private async processResolutionVerification(feedback: BugFeedback): Promise<void> {
+  private async processResolutionVerification(feedback: BugFeedback): Promise<void>  {
     if (feedback.isResolved === false) {
       // Bug was not actually resolved - reopen it
       centralizedLogging.info(
@@ -726,7 +726,7 @@ class FeedbackCollectionService {
     }
   }
 
-  private async processSatisfactionRating(feedback: BugFeedback): Promise<void> {
+  private async processSatisfactionRating(feedback: BugFeedback): Promise<void>  {
     // Log satisfaction metrics for analytics
     centralizedLogging.info(
       'feedback-collection',
@@ -758,7 +758,7 @@ class FeedbackCollectionService {
     }
   }
 
-  private async processAdditionalInfo(feedback: BugFeedback): Promise<void> {
+  private async processAdditionalInfo(feedback: BugFeedback): Promise<void>  {
     // Update bug report with additional information
     if (feedback.additionalDescription || feedback.newReproductionSteps) {
       centralizedLogging.info(
@@ -801,7 +801,7 @@ class FeedbackCollectionService {
     }
   }
 
-  private async sendReminder(feedbackId: string, reminderNumber: number): Promise<void> {
+  private async sendReminder(feedbackId: string, reminderNumber: number): Promise<void>  {
     const feedback = this.feedbackStorage.get(feedbackId);
     if (!feedback || feedback.status !== 'pending') return;
 
@@ -821,7 +821,7 @@ class FeedbackCollectionService {
         'Feedback reminder sent',
         { feedbackId, reminderNumber }
       );
-    } catch (error) => {
+    } catch (error) {
       centralizedLogging.error(
         'feedback-collection',
         'system',
@@ -865,7 +865,7 @@ class FeedbackCollectionService {
     return new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
   }
 
-  private getReminderSchedule(feedbackType: FeedbackType, priority: string) => {
+  private getReminderSchedule(feedbackType: FeedbackType, priority: string) {
     const baseSchedule = {
       enabled: true,
       intervals: [1, 3, 7], // Days
@@ -910,7 +910,7 @@ class FeedbackCollectionService {
     return ratings.length > 0 ? ratings.reduce((a, b) => a + b, 0) / ratings.length : 0;
   }
 
-  private analyzeCommonIssues(feedback: BugFeedback[]): Array<{ issue: string; frequency: number; category: string }> {
+  private analyzeCommonIssues(feedback: BugFeedback[]): Array< { issue: string; frequency: number; category: string }> {
     // Analyze common issues from feedback content
     const issueKeywords = new Map<string, number>();
 
@@ -940,7 +940,7 @@ class FeedbackCollectionService {
       }));
   }
 
-  private generateTrendData(feedback: BugFeedback[]): Array<{
+  private generateTrendData(feedback: BugFeedback[]): Array< {
     date: string;
     feedbackCount: number;
     averageRating: number;

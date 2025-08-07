@@ -14,7 +14,7 @@ class ScreenReaderManager {
   private politeRegion: HTMLElement | null = null;
   private assertiveRegion: HTMLElement | null = null;
 
-  constructor() => {
+  constructor() {
     this.createLiveRegions();
   }
 
@@ -153,7 +153,7 @@ export class FocusManager {
     container.addEventListener('keydown', handleKeyDown);
 
     // Store cleanup function
-    (container as HTMLElement & { _focusTrapCleanup?: () => void })._focusTrapCleanup = () => {
+    (container as HTMLElement & { _focusTrapCleanup?: () => void })._focusTrapCleanup = () {
       container.removeEventListener('keydown', handleKeyDown);
     };
 
@@ -227,7 +227,7 @@ export class ColorContrastValidator {
   /**
    * Convert hex color to RGB
    */
-  private hexToRgb(hex: string): { r: number; g: number; b: number } | null {
+  private hexToRgb(hex: string):   { r: number; g: number; b: number } | null {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result
       ? {
@@ -258,7 +258,7 @@ export class ColorContrastValidator {
     foreground: string,
     background: string,
     level: 'AA' | 'AAA' = 'AA'
-  ): {
+  ):   => {
     isCompliant: boolean;
     ratio: number;
     requiredRatio: number;
@@ -309,7 +309,7 @@ export class KeyboardNavigationManager {
     keys: string,
     callback: () => void,
     description?: string
-  ): void {
+  ): void  => {
     this.shortcuts.set(keys.toLowerCase(), callback);
 
     // Add to global shortcuts registry for help
@@ -397,7 +397,7 @@ export class AriaManager {
   setAria(
     element: HTMLElement,
     properties: Record<string, string | boolean | number>
-  ): void {
+  ): void  => {
     Object.entries(properties).forEach(([key, value]) => {
       const ariaKey = key.startsWith('aria-') ? key : `aria-${key}`;
       element.setAttribute(ariaKey, String(value));
@@ -464,7 +464,7 @@ export class AccessibilityPreferencesManager {
     colorScheme: 'auto',
   };
 
-  constructor() => {
+  constructor() {
     this.loadPreferences();
     this.applyPreferences();
     this.setupMediaQueryListeners();
@@ -492,7 +492,7 @@ export class AccessibilityPreferencesManager {
     if (stored) {
       try {
         this.preferences = { ...this.preferences, ...JSON.parse(stored) };
-      } catch (error) => {
+      } catch (error) {
         console.warn('Failed to load accessibility preferences:', error);
       }
     }
@@ -555,21 +555,21 @@ export class AccessibilityPreferencesManager {
     const reducedMotionQuery = window.matchMedia(
       '(prefers-reduced-motion: reduce)'
     );
-    reducedMotionQuery.addEventListener('change', e => {
+    reducedMotionQuery.addEventListener(\'change\', e => {
       this.preferences.reducedMotion = e.matches;
       this.applyPreferences();
     });
 
     // Listen for high contrast changes
     const highContrastQuery = window.matchMedia('(prefers-contrast: high)');
-    highContrastQuery.addEventListener('change', e => {
+    highContrastQuery.addEventListener(\'change\', e => {
       this.preferences.highContrast = e.matches;
       this.applyPreferences();
     });
 
     // Listen for color scheme changes
     const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    darkModeQuery.addEventListener('change', () => {
+    darkModeQuery.addEventListener("change", () => {
       if (this.preferences.colorScheme === 'auto') {
         this.applyPreferences();
       }
@@ -582,7 +582,7 @@ export class AccessibilityPreferencesManager {
   setPreference<K extends keyof AccessibilityPreferences>(
     key: K,
     value: AccessibilityPreferences[K]
-  ): void {
+  ): void  => {
     this.preferences[key] = value;
     this.savePreferences();
     this.applyPreferences();
@@ -625,7 +625,7 @@ export class AccessibilityTester {
   /**
    * Run basic accessibility audit
    */
-  async audit(): Promise<{
+  async audit(): Promise< => {
     issues: Array<{
       type: string;
       severity: 'error' | 'warning' | 'info';
@@ -721,7 +721,7 @@ export class AccessibilityTester {
   /**
    * Generate accessibility report
    */
-  async generateReport(): Promise<string> {
+  async generateReport(): Promise<string>  {
     const audit = await this.audit();
 
     let report = `# Accessibility Audit Report\n\n`;
@@ -762,9 +762,9 @@ export const accessibilityTester = new AccessibilityTester();
 /**
  * Initialize accessibility features
  */
-export function initializeAccessibility(): void {
+export function initializeAccessibility(): void  => {
   // Setup global keyboard navigation
-  document.addEventListener('keydown', event => {
+  document.addEventListener(\'keydown\', event => {
     keyboardNav.handleKeyDown(event);
   });
 
@@ -785,11 +785,11 @@ export function initializeAccessibility(): void {
     border-radius: 4px;
   `;
 
-  skipLink.addEventListener('focus', () => {
+  skipLink.addEventListener("focus", () => {
     skipLink.style.top = '6px';
   });
 
-  skipLink.addEventListener('blur', () => {
+  skipLink.addEventListener("blur", () => {
     skipLink.style.top = '-40px';
   });
 
@@ -798,7 +798,7 @@ export function initializeAccessibility(): void {
   // Register common keyboard shortcuts
   keyboardNav.registerShortcut(
     'alt+h',
-    () => {
+    () {
       const heading = document.querySelector('h1, h2');
       if (heading) {
         focusManager.setFocus(
@@ -812,7 +812,7 @@ export function initializeAccessibility(): void {
 
   keyboardNav.registerShortcut(
     'alt+m',
-    () => {
+    () {
       const main =
         document.getElementById('main-content') ||
         document.querySelector('main');
@@ -825,7 +825,7 @@ export function initializeAccessibility(): void {
 
   keyboardNav.registerShortcut(
     'alt+/',
-    () => {
+    () {
       // Toggle shortcuts help
       const help = document.getElementById('keyboard-shortcuts-help');
       if (help) {

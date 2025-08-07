@@ -40,7 +40,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
   className = '',
   refreshInterval = 5000, // 5 seconds
   autoRefresh = true
-}) {
+}) => {
   const [data, setData] = useState<DashboardData>({
     performance: null,
     alerts: [],
@@ -79,7 +79,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
       setIsLoading(true);
       await refreshData();
       setupWebSocket();
-    } catch (error) => {
+    } catch (error) {
       console.error('Failed to initialize dashboard:', error);
     } finally {
       setIsLoading(false);
@@ -112,7 +112,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
         activityStats,
         heatmap
       });
-    } catch (error) => {
+    } catch (error) {
       console.error('Failed to refresh dashboard data:', error);
     }
   };
@@ -147,7 +147,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
         console.error('WebSocket error:', error);
         setIsConnected(false);
       };
-    } catch (error) => {
+    } catch (error) {
       console.error('Failed to setup WebSocket:', error);
     }
   };
@@ -156,8 +156,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     try {
       const message = JSON.parse(data);
       
-      switch (message.type) => {
-    }
+      switch (message.type) {
         case 'activity_event':
           // Handle real-time activity updates
           updateActivityData(message.event);
@@ -173,7 +172,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
         default:
           console.debug('Unknown WebSocket message type:', message.type);
       }
-    } catch (error) => {
+    } catch (error) {
       console.warn('Failed to parse WebSocket message:', error);
     }
   };
@@ -223,35 +222,34 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     }
   };
 
-  const formatNumber = (num: number, decimals: number = 0): string => {
+  const formatNumber = (num: number, decimals: number = 0): string  =>  => {
     return num.toLocaleString(undefined, { 
       minimumFractionDigits: decimals, 
       maximumFractionDigits: decimals 
     });
   };
 
-  const formatDuration = (ms: number): string => {
+  const formatDuration = (ms: number): string  =>  => {
     if (ms < 1000) return `${ms.toFixed(0)}ms`;
     if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
     return `${(ms / 60000).toFixed(1)}m`;
   };
 
-  const getAlertSeverityColor = (severity: string): string => {
-    switch (severity) => {
-    }
+  const getAlertSeverityColor = (severity: string): string  =>  => {
+    switch (severity) {
       case 'critical': return 'text-red-800 bg-red-100 border-red-200';
       case 'warning': return 'text-yellow-800 bg-yellow-100 border-yellow-200';
       default: return 'text-blue-800 bg-blue-100 border-blue-200';
     }
   };
 
-  const getResourceUsageColor = (percentage: number): string => {
+  const getResourceUsageColor = (percentage: number): string  =>  => {
     if (percentage >= 85) return 'bg-red-500';
     if (percentage >= 70) return 'bg-yellow-500';
     return 'bg-green-500';
   };
 
-  const getMetricStatusIcon = (value: number, threshold: number, inverse: boolean = false): string => {
+  const getMetricStatusIcon = (value: number, threshold: number, inverse: boolean = false): string  =>  => {
     const isGood = inverse ? value < threshold : value >= threshold;
     return isGood ? '✅' : '⚠️';
   };

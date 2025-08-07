@@ -24,7 +24,7 @@ export interface HealthCheckResult {
   };
 }
 
-export const performHealthCheck = async (): Promise<HealthCheckResult> => {
+export const performHealthCheck = async (): Promise<HealthCheckResult>  =>  => {
   const timestamp = new Date().toISOString();
   const version = '1.0.0'; // You can replace this with actual version from package.json
   const environment = import.meta.env.PROD ? 'production' : 'development';
@@ -79,7 +79,7 @@ export const performHealthCheck = async (): Promise<HealthCheckResult> => {
       };
       healthCheck.checks.services.supabase = 'connected';
     }
-  } catch (dbError) => {
+  } catch (dbError) {
     healthCheck.checks.database = {
       status: 'down',
       error:
@@ -104,17 +104,17 @@ export const performHealthCheck = async (): Promise<HealthCheckResult> => {
 };
 
 // Utility function for simple health check endpoint
-export const getHealthStatus = async (): Promise<{
+export const getHealthStatus = async (): Promise< =>  => {
   status: string;
   timestamp: string;
-}> => {
+}> {
   try {
     const healthCheck = await performHealthCheck();
     return {
       status: healthCheck.status,
       timestamp: healthCheck.timestamp,
     };
-  } catch (error) => {
+  } catch (error) {
     return {
       status: 'unhealthy',
       timestamp: new Date().toISOString(),

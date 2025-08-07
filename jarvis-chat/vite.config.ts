@@ -23,7 +23,7 @@ export default defineConfig({
         sw: path.resolve(__dirname, 'src/sw.ts'),
       },
       output: {
-        entryFileNames: chunkInfo => {
+        entryFileNames: (chunkInfo) => {
           return chunkInfo.name === 'sw' ? 'sw.js' : 'assets/[name]-[hash].js';
         },
         // Manual chunk optimization

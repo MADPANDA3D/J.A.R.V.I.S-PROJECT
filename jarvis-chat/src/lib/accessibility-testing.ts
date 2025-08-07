@@ -49,7 +49,7 @@ export class AccessibilityTester {
   /**
    * Load axe-core library dynamically
    */
-  private async loadAxeCore(): Promise<void> {
+  private async loadAxeCore(): Promise<void>  {
     if (this.axeLoaded) return;
 
     try {
@@ -68,7 +68,7 @@ export class AccessibilityTester {
       });
 
       console.log('Axe-core loaded successfully');
-    } catch (error) => {
+    } catch (error) {
       console.error('Failed to load axe-core:', error);
       throw error;
     }
@@ -79,10 +79,10 @@ export class AccessibilityTester {
    */
   public async auditPage(
     config: AccessibilityTestConfig = {}
-  ): Promise<AccessibilityResult> {
+  ): Promise<AccessibilityResult>  => {
     await this.loadAxeCore();
 
-    if (!(window as typeof window & { axe?: { run: (options?: unknown) { Promise<unknown> } }).axe) {
+    if (!(window as typeof window & { axe?: { run: (options?: unknown) => { Promise<unknown> } }).axe) {
       throw new Error('Axe-core not available');
     }
 
@@ -127,7 +127,7 @@ export class AccessibilityTester {
       }
 
       return processedResult;
-    } catch (error) => {
+    } catch (error) {
       console.error('Accessibility audit failed:', error);
       throw error;
     }
@@ -176,7 +176,7 @@ export class AccessibilityTester {
 
     // Weight violations by impact
     const violationScore = violations.reduce((score, violation) => {
-      switch (violation.impact) => {
+      switch (violation.impact) {
         case 'critical':
           return score + 10;
         case 'serious':
@@ -201,7 +201,7 @@ export class AccessibilityTester {
    */
   public async runSpecificTests(
     testSuite: string
-  ): Promise<AccessibilityResult> {
+  ): Promise<AccessibilityResult>  => {
     const configs: Record<string, AccessibilityTestConfig> = {
       'wcag-aa': {
         includeTags: ['wcag2a', 'wcag2aa'],
@@ -259,8 +259,7 @@ export class AccessibilityTester {
 
     if (violations.length > 0) {
       // Group violations by impact
-      const violationsByImpact = violations.reduce(
-        (groups, violation) => {
+      const violationsByImpact = violations.reduce((groups, violation) => {
           const impact = violation.impact;
           if (!groups[impact]) groups[impact] = [];
           groups[impact].push(violation);
@@ -368,7 +367,7 @@ export class AccessibilityTester {
             `Found ${result.violations.length} accessibility violations`
           );
         }
-      } catch (error) => {
+      } catch (error) {
         console.error('Periodic accessibility test failed:', error);
       }
 
@@ -381,7 +380,7 @@ export class AccessibilityTester {
     setTimeout(runPeriodicTest, 60000);
 
     // Return cleanup function
-    return () => {
+    return () {
       isRunning = false;
     };
   }
@@ -389,10 +388,10 @@ export class AccessibilityTester {
   /**
    * Test specific component accessibility
    */
-  public async testComponent(selector: string): Promise<AccessibilityResult> {
+  public async testComponent(selector: string): Promise<AccessibilityResult>  {
     await this.loadAxeCore();
 
-    if (!(window as typeof window & { axe?: { run: (options?: unknown) { Promise<unknown> } }).axe) {
+    if (!(window as typeof window & { axe?: { run: (options?: unknown) => { Promise<unknown> } }).axe) {
       throw new Error('Axe-core not available');
     }
 
@@ -424,7 +423,7 @@ export class AccessibilityTester {
           results.passes
         ),
       };
-    } catch (error) => {
+    } catch (error) {
       console.error('Component accessibility audit failed:', error);
       throw error;
     }
@@ -443,13 +442,13 @@ if (process.env.NODE_ENV === 'development') {
   if (document.readyState === 'complete') {
     cleanup = accessibilityTester.schedulePeriodicTests(30);
   } else {
-    window.addEventListener('load', () => {
+    window.addEventListener("load", () => {
       cleanup = accessibilityTester.schedulePeriodicTests(30);
     });
   }
 
   // Cleanup on page unload
-  window.addEventListener('beforeunload', () => {
+  window.addEventListener("beforeunload", () => {
     if (cleanup) cleanup();
   });
 }

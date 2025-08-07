@@ -89,7 +89,7 @@ export function LogStreamViewer({
             }
             return newLogs;
           });
-        } catch (error) => {
+        } catch (error) {
           // If JSON parsing fails, treat as plain text log
           const logEntry: LogEntry = {
             id: crypto.randomUUID(),
@@ -122,7 +122,7 @@ export function LogStreamViewer({
         setConnectionStatus('disconnected');
       };
 
-    } catch (error) => {
+    } catch (error) {
       console.error('❌ Failed to create WebSocket connection:', error);
       setConnectionStatus('disconnected');
       
@@ -135,7 +135,7 @@ export function LogStreamViewer({
   useEffect(() => {
     connectWebSocket();
 
-    return () => {
+    return () {
       if (wsRef.current) {
         wsRef.current.close();
         wsRef.current = null;
@@ -180,7 +180,7 @@ export function LogStreamViewer({
       const persistKey = `log-stream-${websocketUrl}`;
       try {
         localStorage.setItem(persistKey, JSON.stringify(logs.slice(-100))); // Persist last 100 logs
-      } catch (error) => {
+      } catch (error) {
         console.warn('Failed to persist logs:', error);
       }
     }
@@ -200,7 +200,7 @@ export function LogStreamViewer({
           }));
           setLogs(logsWithDates);
         }
-      } catch (error) => {
+      } catch (error) {
         console.warn('Failed to load persisted logs:', error);
       }
     }
@@ -208,8 +208,7 @@ export function LogStreamViewer({
 
   // Utility functions
   const getLogLevelIcon = (level: string) => {
-    switch (level) => {
-    }
+    switch (level) {
       case 'error':
         return <AlertCircle className="h-3 w-3 text-red-500" />;
       case 'warning':
@@ -293,7 +292,7 @@ export function LogStreamViewer({
     }
   };
 
-  const toggleFilter = (filter: Set<string>, setFilter: (filter: Set<string>) => void, value: string) => {
+  const toggleFilter = (filter: Set<string>, setFilter: (filter: Set<string>) => void, value: string) {
     const newFilter = new Set(filter);
     if (newFilter.has(value)) {
       newFilter.delete(value);

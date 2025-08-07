@@ -202,7 +202,7 @@ class InternalCommunicationService {
   private auditTrail: Map<string, AuditTrailEntry[]> = new Map();
   private mentionNotificationQueue: Set<string> = new Set();
 
-  private constructor() => {
+  private constructor() {
     this.initializeSystemComments();
   }
 
@@ -229,7 +229,7 @@ class InternalCommunicationService {
       attachments?: File[];
       isPinned?: boolean;
     } = {}
-  ): Promise<{ success: boolean; commentId?: string; error?: string }> {
+  ): Promise< => { success: boolean; commentId?: string; error?: string }> {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -351,7 +351,7 @@ class InternalCommunicationService {
         commentId: comment.id
       };
 
-    } catch (error) => {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -376,7 +376,7 @@ class InternalCommunicationService {
     editorId: string,
     newContent: string,
     reason?: string
-  ): Promise<{ success: boolean; error?: string }> {
+  ): Promise< => { success: boolean; error?: string }> {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -438,7 +438,7 @@ class InternalCommunicationService {
 
       return { success: true };
 
-    } catch (error) => {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -462,7 +462,7 @@ class InternalCommunicationService {
     commentId: string,
     deleterId: string,
     reason?: string
-  ): Promise<{ success: boolean; error?: string }> {
+  ): Promise< => { success: boolean; error?: string }> {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -518,7 +518,7 @@ class InternalCommunicationService {
 
       return { success: true };
 
-    } catch (error) => {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -542,7 +542,7 @@ class InternalCommunicationService {
     commentId: string,
     userId: string,
     emoji: string
-  ): Promise<{ success: boolean; error?: string }> {
+  ): Promise< => { success: boolean; error?: string }> {
     try {
       const comment = this.commentsStorage.get(commentId);
       if (!comment || comment.isDeleted) {
@@ -573,7 +573,7 @@ class InternalCommunicationService {
 
       return { success: true };
 
-    } catch (error) => {
+    } catch (error) {
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error'
@@ -593,7 +593,7 @@ class InternalCommunicationService {
       limit?: number;
       offset?: number;
     } = {}
-  ): InternalComment[] {
+  ): InternalComment[]  => {
     const commentIds = this.commentsIndex.get(bugId) || [];
     let comments = commentIds
       .map(id => this.commentsStorage.get(id))
@@ -609,7 +609,7 @@ class InternalCommunicationService {
     }
 
     // Sort comments
-    switch (options.sortBy) => {
+    switch (options.sortBy) {
       case 'date_asc':
         comments.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
         break;
@@ -728,7 +728,7 @@ class InternalCommunicationService {
     hostId: string,
     sessionType: CollaborationSession['sessionType'],
     participantIds: string[] = []
-  ): Promise<{ success: boolean; sessionId?: string; error?: string }> {
+  ): Promise< => { success: boolean; sessionId?: string; error?: string }> {
     try {
       const sessionId = this.generateSessionId();
       
@@ -744,7 +744,7 @@ class InternalCommunicationService {
       ];
 
       // Add other participants
-      for (const participantId of participantIds) => {
+      for (const participantId of participantIds) {
         participants.push({
           userId: participantId,
           userName: await this.getUserName(participantId),
@@ -769,7 +769,7 @@ class InternalCommunicationService {
       this.collaborationSessions.set(sessionId, session);
 
       // Notify participants
-      for (const participant of participants) => {
+      for (const participant of participants) {
         if (!participant.isHost) {
           // In real implementation, send notification
         }
@@ -788,7 +788,7 @@ class InternalCommunicationService {
         sessionId
       };
 
-    } catch (error) => {
+    } catch (error) {
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error'
@@ -807,7 +807,7 @@ class InternalCommunicationService {
       dateRange?: { start: string; end: string };
       limit?: number;
     } = {}
-  ): AuditTrailEntry[] {
+  ): AuditTrailEntry[]  => {
     let entries = this.auditTrail.get(bugId) || [];
 
     // Apply filters
@@ -843,7 +843,7 @@ class InternalCommunicationService {
   private async processMentions(
     content: string,
     explicitMentions: Omit<CommentMention, 'id' | 'resolved' | 'notifiedAt'>[]
-  ): Promise<CommentMention[]> {
+  ): Promise<CommentMention[]>  => {
     const mentions: CommentMention[] = [];
     
     // Process explicit mentions
@@ -880,10 +880,10 @@ class InternalCommunicationService {
   private async processAttachments(
     files: File[],
     uploaderId: string
-  ): Promise<CommentAttachment[]> {
+  ): Promise<CommentAttachment[]>  => {
     const attachments: CommentAttachment[] = [];
 
-    for (const file of files) => {
+    for (const file of files) {
       // In real implementation, this would upload to storage service
       const attachment: CommentAttachment = {
         id: this.generateAttachmentId(),
@@ -910,7 +910,7 @@ class InternalCommunicationService {
     };
   }
 
-  private async updateParentCommentReplies(parentCommentId: string): Promise<void> {
+  private async updateParentCommentReplies(parentCommentId: string): Promise<void>  {
     const parentComment = this.commentsStorage.get(parentCommentId);
     if (parentComment) {
       const replies = Array.from(this.commentsStorage.values())
@@ -923,7 +923,7 @@ class InternalCommunicationService {
     }
   }
 
-  private async updateCommentThread(bugId: string, comment: InternalComment): Promise<void> {
+  private async updateCommentThread(bugId: string, comment: InternalComment): Promise<void>  {
     const threadId = comment.parentCommentId ? 
       this.findThreadByComment(comment.parentCommentId) : 
       this.generateThreadId();
@@ -961,8 +961,8 @@ class InternalCommunicationService {
     this.threadsStorage.set(threadId, thread);
   }
 
-  private async processMentionNotifications(comment: InternalComment): Promise<void> {
-    for (const mention of comment.mentions) => {
+  private async processMentionNotifications(comment: InternalComment): Promise<void>  {
+    for (const mention of comment.mentions) {
       if (!mention.resolved) {
         // In real implementation, send notification
         mention.notifiedAt = new Date().toISOString();
@@ -999,19 +999,19 @@ class InternalCommunicationService {
     return this.generateThreadId();
   }
 
-  private async canEditComment(userId: string): Promise<boolean> {
+  private async canEditComment(userId: string): Promise<boolean>  {
     // In real implementation, check user roles and permissions
     const userRole = await this.getUserRole(userId);
     return ['admin', 'senior_dev'].includes(userRole);
   }
 
-  private async canDeleteComment(userId: string): Promise<boolean> {
+  private async canDeleteComment(userId: string): Promise<boolean>  {
     // In real implementation, check user roles and permissions
     const userRole = await this.getUserRole(userId);
     return ['admin', 'senior_dev'].includes(userRole);
   }
 
-  private async getUserName(userId: string): Promise<string> {
+  private async getUserName(userId: string): Promise<string>  {
     // In real implementation, fetch from user service
     const userNames: Record<string, string> = {
       'user_1': 'Alice Johnson',
@@ -1022,7 +1022,7 @@ class InternalCommunicationService {
     return userNames[userId] || 'Unknown User';
   }
 
-  private async getUserRole(userId: string): Promise<string> {
+  private async getUserRole(userId: string): Promise<string>  {
     // In real implementation, fetch from user service
     const userRoles: Record<string, string> = {
       'user_1': 'senior_dev',
@@ -1033,7 +1033,7 @@ class InternalCommunicationService {
     return userRoles[userId] || 'user';
   }
 
-  private async getUserIdByUsername(username: string): Promise<string | null> {
+  private async getUserIdByUsername(username: string): Promise<string | null>  {
     // In real implementation, lookup user by username
     const usernameMap: Record<string, string> = {
       'alice': 'user_1',

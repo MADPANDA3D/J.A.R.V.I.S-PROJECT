@@ -64,7 +64,7 @@ class WebhookDeliveryService {
   private readonly DEFAULT_TIMEOUT = 30000; // 30 seconds
   private readonly MAX_RETRY_DELAY = 300000; // 5 minutes
 
-  private constructor() => {
+  private constructor() {
     this.startDeliveryProcessor();
     this.startLogCleanup();
   }
@@ -79,7 +79,7 @@ class WebhookDeliveryService {
   /**
    * Queue webhook for delivery
    */
-  async queueWebhookDelivery(config: WebhookConfig, payload: WebhookPayload): Promise<string> {
+  async queueWebhookDelivery(config: WebhookConfig, payload: WebhookPayload): Promise<string>  {
     const deliveryId = this.generateDeliveryId();
     
     // Create delivery log
@@ -120,7 +120,7 @@ class WebhookDeliveryService {
   /**
    * Deliver webhook with retry logic
    */
-  async deliverWebhook(config: WebhookConfig, payload: WebhookPayload): Promise<WebhookDeliveryResult> {
+  async deliverWebhook(config: WebhookConfig, payload: WebhookPayload): Promise<WebhookDeliveryResult>  {
     const startTime = performance.now();
     const deliveryId = this.generateDeliveryId();
     const correlationId = payload.data.metadata.correlationId;
@@ -156,7 +156,7 @@ class WebhookDeliveryService {
     let attempt = 0;
     const maxRetries = config.retryPolicy.maxRetries;
 
-    while (attempt <= maxRetries) => {
+    while (attempt <= maxRetries) {
       const attemptStartTime = performance.now();
       
       try {
@@ -215,7 +215,7 @@ class WebhookDeliveryService {
           attemptLog.error = lastError;
         }
 
-      } catch {
+      } catch (error) {
         const attemptLog: WebhookDeliveryAttempt = {
           attemptNumber: attempt + 1,
           timestamp: new Date().toISOString(),
@@ -297,7 +297,7 @@ class WebhookDeliveryService {
     config: WebhookConfig, 
     payload: WebhookPayload, 
     attempt: number
-  ): Promise<AxiosResponse> {
+  ): Promise<AxiosResponse>  => {
     // Prepare headers
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -310,7 +310,7 @@ class WebhookDeliveryService {
 
     // Add authentication headers
     if (config.authentication.type !== 'none' && config.authentication.credentials) {
-      switch (config.authentication.type) => {
+      switch (config.authentication.type) {
         case 'bearer':
           headers['Authorization'] = `Bearer ${config.authentication.credentials.token}`;
           break;
@@ -478,7 +478,7 @@ class WebhookDeliveryService {
     success?: boolean;
     dateRange?: { start: string; end: string };
     limit?: number;
-  } = {}): WebhookDeliveryLog[] {
+  } = {}): WebhookDeliveryLog[]  => {
     let logs = Array.from(this.deliveryLogs.values());
 
     // Apply filters
@@ -517,7 +517,7 @@ class WebhookDeliveryService {
   /**
    * Get webhook delivery statistics
    */
-  getDeliveryStats(webhookId?: string): {
+  getDeliveryStats(webhookId?: string):   {
     totalDeliveries: number;
     successfulDeliveries: number;
     failedDeliveries: number;
@@ -562,21 +562,21 @@ class WebhookDeliveryService {
 
   // Private helper methods
 
-  private startDeliveryProcessor() => {
+  private startDeliveryProcessor() {
     // Process delivery queue every 2 seconds
     setInterval(() => {
       this.processDeliveryQueue();
     }, 2000);
   }
 
-  private startLogCleanup() => {
+  private startLogCleanup() {
     // Clean up old logs every hour
     setInterval(() => {
       this.cleanupOldLogs();
     }, 60 * 60 * 1000);
   }
 
-  private async processDeliveryQueue() => {
+  private async processDeliveryQueue() {
     if (this.deliveryQueue.length === 0 || this.processingQueue.size >= this.MAX_CONCURRENT_DELIVERIES) {
       return;
     }
@@ -594,7 +594,7 @@ class WebhookDeliveryService {
     }
   }
 
-  private cleanupOldLogs() => {
+  private cleanupOldLogs() {
     const cutoffTime = Date.now() - (7 * 24 * 60 * 60 * 1000); // 7 days
     const logsToDelete: string[] = [];
 

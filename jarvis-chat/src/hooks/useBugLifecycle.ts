@@ -38,7 +38,7 @@ interface BugLifecycleActions {
 export function useBugLifecycle(
   bugId: string, 
   options: UseBugLifecycleOptions = {}
-): BugLifecycleState & BugLifecycleActions {
+): BugLifecycleState & BugLifecycleActions  => {
   const { autoRefresh = false, refreshInterval = 30000 } = options;
 
   const [state, setState] = useState<BugLifecycleState>({
@@ -92,7 +92,7 @@ export function useBugLifecycle(
         error: null
       }));
 
-    } catch {
+    } catch (error) {
       setState(prev => ({
         ...prev,
         loading: false,
@@ -106,7 +106,7 @@ export function useBugLifecycle(
     newStatus: BugStatus, 
     reason?: string, 
     notes?: string
-  ): Promise<boolean> => {
+  ): Promise<boolean>  => {
     if (!bugId) return false;
 
     try {
@@ -129,7 +129,7 @@ export function useBugLifecycle(
         }));
         return false;
       }
-    } catch {
+    } catch (error) {
       setState(prev => ({
         ...prev,
         error: error instanceof Error ? error.message : 'Failed to change status'
@@ -142,7 +142,7 @@ export function useBugLifecycle(
   const assignBug = useCallback(async (
     assigneeId: string, 
     reason?: string
-  ): Promise<boolean> => {
+  ): Promise<boolean>  => {
     if (!bugId) return false;
 
     try {
@@ -165,7 +165,7 @@ export function useBugLifecycle(
         }));
         return false;
       }
-    } catch {
+    } catch (error) {
       setState(prev => ({
         ...prev,
         error: error instanceof Error ? error.message : 'Failed to assign bug'
@@ -175,7 +175,7 @@ export function useBugLifecycle(
   }, [bugId, refreshBugReport]);
 
   // Auto-assign bug
-  const autoAssign = useCallback(async (): Promise<string | null> => {
+  const autoAssign = useCallback(async (): Promise<string | null>  => {
     if (!bugId) return null;
 
     try {
@@ -187,7 +187,7 @@ export function useBugLifecycle(
       }
       
       return assignedTo;
-    } catch {
+    } catch (error) {
       setState(prev => ({
         ...prev,
         error: error instanceof Error ? error.message : 'Failed to auto-assign bug'
@@ -197,7 +197,7 @@ export function useBugLifecycle(
   }, [bugId, refreshBugReport]);
 
   // Escalate bug priority
-  const escalatePriority = useCallback(async (reason: string): Promise<boolean> => {
+  const escalatePriority = useCallback(async (reason: string): Promise<boolean>  => {
     if (!bugId) return false;
 
     try {
@@ -214,7 +214,7 @@ export function useBugLifecycle(
         }));
         return false;
       }
-    } catch {
+    } catch (error) {
       setState(prev => ({
         ...prev,
         error: error instanceof Error ? error.message : 'Failed to escalate priority'
@@ -224,7 +224,7 @@ export function useBugLifecycle(
   }, [bugId, refreshBugReport]);
 
   // Get fresh assignment recommendations
-  const getRecommendations = useCallback(async (): Promise<void> => {
+  const getRecommendations = useCallback(async (): Promise<void>  => {
     if (!state.bugReport) return;
 
     try {
@@ -233,7 +233,7 @@ export function useBugLifecycle(
         ...prev,
         assignmentRecommendations: recommendations
       }));
-    } catch {
+    } catch (error) {
       setState(prev => ({
         ...prev,
         error: error instanceof Error ? error.message : 'Failed to get recommendations'
@@ -242,14 +242,14 @@ export function useBugLifecycle(
   }, [state.bugReport]);
 
   // Mark notification as read
-  const markNotificationAsRead = useCallback(async (notificationId: string): Promise<boolean> => {
+  const markNotificationAsRead = useCallback(async (notificationId: string): Promise<boolean>  => {
     try {
       const result = await notificationService.markNotificationAsRead(
         notificationId,
         'current_user' // In a real app, this would be the current user ID
       );
       return result;
-    } catch (error) => {
+    } catch (error) {
       setState(prev => ({
         ...prev,
         error: error instanceof Error ? error.message : 'Failed to mark notification as read'
@@ -333,7 +333,7 @@ export function useBugList(filters?: {
 
       setBugs(result.data || []);
       setTotalCount(result.count || 0);
-    } catch (err) => {
+    } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load bugs');
     } finally {
       setLoading(false);
@@ -354,7 +354,7 @@ export function useBugList(filters?: {
 }
 
 // Hook for lifecycle statistics
-export function useBugLifecycleStats() => {
+export function useBugLifecycleStats() {
   const [stats, setStats] = useState<{
     statusDistribution: Record<BugStatus, number>;
     averageResolutionTime: number;
@@ -368,7 +368,7 @@ export function useBugLifecycleStats() => {
       try {
         const statistics = bugLifecycleService.getLifecycleStatistics();
         setStats(statistics);
-      } catch {
+      } catch (error) {
         console.error('Failed to load lifecycle statistics:', error);
       } finally {
         setLoading(false);

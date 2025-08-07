@@ -30,7 +30,7 @@ class BugSubmissionProcessor {
   private submissionQueue: Map<string, BugReportData> = new Map();
   private processingSubmissions: Set<string> = new Set();
 
-  private constructor() => {
+  private constructor() {
     this.config = this.loadConfiguration();
   }
 
@@ -61,7 +61,7 @@ class BugSubmissionProcessor {
   /**
    * Process and submit a bug report
    */
-  async processBugSubmission(bugData: BugReportData): Promise<BugSubmissionResult> {
+  async processBugSubmission(bugData: BugReportData): Promise<BugSubmissionResult>  {
     const submissionId = this.generateSubmissionId();
     
     try {
@@ -167,7 +167,7 @@ class BugSubmissionProcessor {
         message: 'Bug report submitted successfully'
       };
 
-    } catch (error) => {
+    } catch (error) {
       // Clean up
       this.submissionQueue.delete(submissionId);
       this.processingSubmissions.delete(submissionId);
@@ -202,7 +202,7 @@ class BugSubmissionProcessor {
   /**
    * Validate bug submission data
    */
-  private async validateSubmission(bugData: BugReportData): Promise<{
+  private async validateSubmission(bugData: BugReportData): Promise< {
     isValid: boolean;
     errors: string[];
   }> {
@@ -256,7 +256,7 @@ class BugSubmissionProcessor {
   /**
    * Check for duplicate submissions
    */
-  private async checkForDuplicates(bugData: BugReportData): Promise<{
+  private async checkForDuplicates(bugData: BugReportData): Promise< {
     isDuplicate: boolean;
     existingBugId?: string;
   }> {
@@ -291,7 +291,7 @@ class BugSubmissionProcessor {
       }
 
       return { isDuplicate: false };
-    } catch (error) => {
+    } catch (error) {
       centralizedLogging.warn(
         'bug-submission-processor',
         'system',
@@ -305,7 +305,7 @@ class BugSubmissionProcessor {
   /**
    * Sanitize and enhance bug data
    */
-  private async sanitizeAndEnhanceData(bugData: BugReportData): Promise<BugReportData> {
+  private async sanitizeAndEnhanceData(bugData: BugReportData): Promise<BugReportData>  {
     const sanitized = { ...bugData };
 
     // Sanitize text fields
@@ -338,7 +338,7 @@ class BugSubmissionProcessor {
   private async submitToDatabase(
     bugData: BugReportData, 
     submissionId: string
-  ): Promise<BugSubmissionResult> {
+  ): Promise<BugSubmissionResult>  => {
     try {
       const { data, error } = await bugReportOperations.createBugReport({
         title: bugData.title,
@@ -375,7 +375,7 @@ class BugSubmissionProcessor {
         trackingNumber,
         message: 'Bug report created successfully'
       };
-    } catch (error) => {
+    } catch (error) {
       throw new Error(`Database submission failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
@@ -386,10 +386,10 @@ class BugSubmissionProcessor {
   private async processAttachments(
     bugId: string,
     attachments: File[]
-  ): Promise<AttachmentUploadResult[]> {
+  ): Promise<AttachmentUploadResult[]>  => {
     const results: AttachmentUploadResult[] = [];
 
-    for (const file of attachments) => {
+    for (const file of attachments) {
       try {
         // Virus scan if enabled
         if (this.config.virusScanEnabled) {
@@ -429,7 +429,7 @@ class BugSubmissionProcessor {
             mimeType: file.type
           });
         }
-      } catch (error) => {
+      } catch (error) {
         results.push({
           success: false,
           filename: file.name,
@@ -446,7 +446,7 @@ class BugSubmissionProcessor {
   /**
    * Send notifications for new bug report
    */
-  private async sendNotifications(bugId: string, bugData: BugReportData): Promise<void> {
+  private async sendNotifications(bugId: string, bugData: BugReportData): Promise<void>  {
     try {
       // This would integrate with notification services
       centralizedLogging.info(
@@ -459,7 +459,7 @@ class BugSubmissionProcessor {
           severity: bugData.severity
         }
       );
-    } catch (error) => {
+    } catch (error) {
       centralizedLogging.warn(
         'bug-submission-processor',
         'system',
@@ -487,7 +487,7 @@ class BugSubmissionProcessor {
       } else {
         // Track failed submissions
       }
-    } catch (error) => {
+    } catch (error) {
       // Silently fail - metrics are not critical
     }
   }
@@ -542,7 +542,7 @@ class BugSubmissionProcessor {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
   }
 
-  private async scanFileForViruses(file: File): Promise<{ clean: boolean; threats?: string[] }> {
+  private async scanFileForViruses(file: File): Promise< { clean: boolean; threats?: string[] }> {
     // Mock virus scanning - in production this would call a real antivirus API
     await new Promise(resolve => setTimeout(resolve, 100));
     
@@ -557,7 +557,7 @@ class BugSubmissionProcessor {
   }
 
   // Public methods for queue management
-  getQueueStatus(): {
+  getQueueStatus():   {
     queueSize: number;
     processingCount: number;
   } {

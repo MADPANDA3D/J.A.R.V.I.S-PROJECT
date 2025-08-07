@@ -75,7 +75,7 @@ describe('WebhookMonitoringService', () => {
       // const now = new Date();
 
       // Mock requests in the last minute
-      for (let i = 0; i < 5; i++) => {
+      for (let i = 0; i < 5; i++) {
         monitoringService.recordRequest(100, true);
       }
 
@@ -118,7 +118,7 @@ describe('WebhookMonitoringService', () => {
 
     it('should maintain performance history size limit', () => {
       // Record more than the max history size (1000)
-      for (let i = 0; i < 1200; i++) => {
+      for (let i = 0; i < 1200; i++) {
         monitoringService.recordRequest(100 + i, true);
       }
 
@@ -147,7 +147,7 @@ describe('WebhookMonitoringService', () => {
       const unsubscribe = monitoringService.subscribeToAlerts(alertCallback);
 
       // Generate high error rate (>10%)
-      for (let i = 0; i < 10; i++) => {
+      for (let i = 0; i < 10; i++) {
         monitoringService.recordRequest(100, i < 8); // 20% error rate
       }
 
@@ -163,7 +163,7 @@ describe('WebhookMonitoringService', () => {
       const unsubscribe = monitoringService.subscribeToAlerts(alertCallback);
 
       // Generate slow response times
-      for (let i = 0; i < 10; i++) => {
+      for (let i = 0; i < 10; i++) {
         monitoringService.recordRequest(1500, true); // >1000ms response time
       }
 
@@ -179,14 +179,14 @@ describe('WebhookMonitoringService', () => {
       const unsubscribe = monitoringService.subscribeToAlerts(alertCallback);
 
       // Generate high error rate to trigger alert
-      for (let i = 0; i < 10; i++) => {
+      for (let i = 0; i < 10; i++) {
         monitoringService.recordRequest(100, i < 8); // 20% error rate
       }
 
       expect(alertCallback).toHaveBeenCalledTimes(1);
 
       // Generate more errors immediately - should not trigger due to cooldown
-      for (let i = 0; i < 5; i++) => {
+      for (let i = 0; i < 5; i++) {
         monitoringService.recordRequest(100, false);
       }
 
@@ -223,7 +223,7 @@ describe('WebhookMonitoringService', () => {
       const unsubscribe = monitoringService.subscribeToAlerts(alertCallback);
 
       // Trigger an alert
-      for (let i = 0; i < 10; i++) => {
+      for (let i = 0; i < 10; i++) {
         monitoringService.recordRequest(100, false); // 100% error rate
       }
 
@@ -299,7 +299,7 @@ describe('WebhookMonitoringService', () => {
 
     it('should include performance trends in dashboard data', () => {
       // Record requests spread over time intervals
-      for (let i = 0; i < 20; i++) => {
+      for (let i = 0; i < 20; i++) {
         monitoringService.recordRequest(100 + i * 10, i % 4 !== 0); // 75% success rate
       }
 
@@ -321,9 +321,9 @@ describe('WebhookMonitoringService', () => {
       const unsubscribe = monitoringService.subscribeToAlerts(() => {});
 
       // Generate multiple alerts
-      for (let batch = 0; batch < 15; batch++) => {
+      for (let batch = 0; batch < 15; batch++) {
         monitoringService.clearHistory();
-        for (let i = 0; i < 10; i++) => {
+        for (let i = 0; i < 10; i++) {
           monitoringService.recordRequest(100, false); // Trigger error rate alert
         }
         // Advance time to avoid cooldown (in real implementation)
@@ -350,7 +350,7 @@ describe('WebhookMonitoringService', () => {
       const unsubscribe2 = monitoringService.subscribeToAlerts(callback2);
 
       // Trigger an alert
-      for (let i = 0; i < 10; i++) => {
+      for (let i = 0; i < 10; i++) {
         monitoringService.recordRequest(100, false);
       }
 
@@ -375,7 +375,7 @@ describe('WebhookMonitoringService', () => {
       monitoringService.subscribeToAlerts(normalCallback);
 
       // Trigger an alert
-      for (let i = 0; i < 10; i++) => {
+      for (let i = 0; i < 10; i++) {
         monitoringService.recordRequest(100, false);
       }
 
@@ -393,7 +393,7 @@ describe('WebhookMonitoringService', () => {
       const unsubscribe = monitoringService.subscribeToAlerts(callback);
 
       // Trigger alert before unsubscribe
-      for (let i = 0; i < 10; i++) => {
+      for (let i = 0; i < 10; i++) {
         monitoringService.recordRequest(100, false);
       }
 
@@ -409,7 +409,7 @@ describe('WebhookMonitoringService', () => {
         rule.lastTriggered = undefined;
       });
 
-      for (let i = 0; i < 10; i++) => {
+      for (let i = 0; i < 10; i++) {
         monitoringService.recordRequest(100, false);
       }
 
@@ -420,7 +420,7 @@ describe('WebhookMonitoringService', () => {
   describe('Circuit Breaker Integration', () => {
     it('should infer circuit breaker state from error patterns', () => {
       // Simulate pattern that would indicate open circuit breaker
-      for (let i = 0; i < 10; i++) => {
+      for (let i = 0; i < 10; i++) {
         monitoringService.recordRequest(100, false); // All failures
       }
 
@@ -446,7 +446,7 @@ describe('WebhookMonitoringService', () => {
 
     it('should show closed circuit breaker for healthy patterns', () => {
       // Simulate healthy request pattern
-      for (let i = 0; i < 10; i++) => {
+      for (let i = 0; i < 10; i++) {
         monitoringService.recordRequest(100, true);
       }
 
@@ -464,7 +464,7 @@ describe('WebhookMonitoringService', () => {
       const unsubscribe = monitoringService.subscribeToAlerts(() => {});
 
       // Trigger an alert
-      for (let i = 0; i < 10; i++) => {
+      for (let i = 0; i < 10; i++) {
         monitoringService.recordRequest(100, false);
       }
 
@@ -487,7 +487,7 @@ describe('WebhookMonitoringService', () => {
       // Simulate concurrent request recording
       const promises = [];
 
-      for (let i = 0; i < 100; i++) => {
+      for (let i = 0; i < 100; i++) {
         promises.push(
           Promise.resolve().then(() => {
             monitoringService.recordRequest(100 + i, i % 10 !== 0);

@@ -67,7 +67,7 @@ export const usePWAInstall = () => {
     // Check initial install status
     checkInstallStatus();
 
-    return () => {
+    return () {
       window.removeEventListener(
         'beforeinstallprompt',
         handleBeforeInstallPrompt
@@ -111,7 +111,7 @@ export const usePWAInstall = () => {
         }));
         return false;
       }
-    } catch {
+    } catch (error) {
       console.error('❌ Install failed:', error);
       setState(prev => ({
         ...prev,

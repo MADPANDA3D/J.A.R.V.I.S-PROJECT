@@ -58,7 +58,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           loading: false,
           initialized: true,
         });
-      } catch (error) => {
+      } catch (error) {
         console.error('Failed to get initial session:', error);
         setAuthState(prev => ({
           ...prev,
@@ -73,7 +73,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
+    } = supabase.auth.onAuthStateChange(async (event, session) {
       console.log('Auth state changed:', event, session?.user?.email);
       
       // Track authentication events
@@ -131,12 +131,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
     });
 
-    return () => {
+    return () {
       subscription.unsubscribe();
     };
   }, []);
 
-  const signIn = async (email: string, password: string): Promise<void> => {
+  const signIn = async (email: string, password: string): Promise<void>  =>  => {
     addBreadcrumb('info', 'user_action', 'Sign in attempt', { email });
     setAuthState(prev => ({ ...prev, loading: true }));
 
@@ -160,7 +160,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       addBreadcrumb('info', 'user_action', 'Sign in successful', { email });
       // AuthContext will be updated via the auth state change event
-    } catch (error) => {
+    } catch (error) {
       setAuthState(prev => ({ ...prev, loading: false }));
 
       if (error instanceof Error) {
@@ -170,7 +170,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const signUp = async (email: string, password: string): Promise<void> => {
+  const signUp = async (email: string, password: string): Promise<void>  =>  => {
     addBreadcrumb('info', 'user_action', 'Sign up attempt', { email });
     setAuthState(prev => ({ ...prev, loading: true }));
 
@@ -195,7 +195,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       addBreadcrumb('info', 'user_action', 'Sign up successful', { email });
       // Note: User might need to confirm their email depending on Supabase settings
       // AuthContext will be updated via the auth state change event if auto-confirm is enabled
-    } catch (error) => {
+    } catch (error) {
       setAuthState(prev => ({ ...prev, loading: false }));
 
       if (error instanceof Error) {
@@ -205,7 +205,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const signOut = async (): Promise<void> => {
+  const signOut = async (): Promise<void>  =>  => {
     const currentUserId = authState.user?.id;
     addBreadcrumb('info', 'user_action', 'Sign out attempt', { 
       userId: currentUserId 
@@ -231,7 +231,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         userId: currentUserId 
       });
       // AuthContext will be updated via the auth state change event
-    } catch (error) => {
+    } catch (error) {
       setAuthState(prev => ({ ...prev, loading: false }));
 
       if (error instanceof Error) {
@@ -241,7 +241,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const resetPassword = async (email: string): Promise<void> => {
+  const resetPassword = async (email: string): Promise<void>  =>  => {
     addBreadcrumb('info', 'user_action', 'Password reset attempt', { email });
     
     try {
@@ -262,7 +262,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
       
       addBreadcrumb('info', 'user_action', 'Password reset email sent', { email });
-    } catch (error) => {
+    } catch (error) {
       if (error instanceof Error) {
         throw new Error(getAuthErrorMessage(error));
       }
@@ -282,7 +282,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 };
 
 // Helper function to convert Supabase auth errors to user-friendly messages
-function getAuthErrorMessage(error: Error): string {
+const getAuthErrorMessage = (error: Error): string => {
   const message = error.message.toLowerCase();
 
   if (message.includes('invalid login credentials')) {

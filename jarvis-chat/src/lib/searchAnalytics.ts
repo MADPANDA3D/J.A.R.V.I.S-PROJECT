@@ -59,7 +59,7 @@ export class SearchAnalyticsCollector {
   private readonly maxEvents = 10000;
   private readonly localStorageKey = 'jarvis-search-analytics';
 
-  constructor(private userId: string) => {
+  constructor(private userId: string) {
     this.loadFromStorage();
   }
 
@@ -88,7 +88,7 @@ export class SearchAnalyticsCollector {
     query: string,
     filters: SearchFilters,
     metrics: QueryPerformanceMetrics
-  ): void {
+  ): void  => {
     this.recordEvent({
       eventType: 'search_completed',
       query,
@@ -152,7 +152,7 @@ export class SearchAnalyticsCollector {
   generatePerformanceReport(
     startDate: Date,
     endDate: Date
-  ): SearchPerformanceReport {
+  ): SearchPerformanceReport  => {
     const periodEvents = this.events.filter(
       event => event.timestamp >= startDate && event.timestamp <= endDate
     );
@@ -252,7 +252,7 @@ export class SearchAnalyticsCollector {
   }
 
   // Get real-time search metrics
-  getRealTimeMetrics() => {
+  getRealTimeMetrics() {
     const recentEvents = this.events.filter(
       event => event.timestamp > new Date(Date.now() - 60 * 60 * 1000) // Last hour
     );
@@ -280,7 +280,7 @@ export class SearchAnalyticsCollector {
   }
 
   // Private helper methods
-  private identifyPerformanceBottlenecks(events: SearchAnalyticsEvent[]) => {
+  private identifyPerformanceBottlenecks(events: SearchAnalyticsEvent[]) {
     const bottlenecks = [];
 
     // Check for slow queries
@@ -308,7 +308,7 @@ export class SearchAnalyticsCollector {
     return bottlenecks;
   }
 
-  private analyzeUserBehavior(events: SearchAnalyticsEvent[]) => {
+  private analyzeUserBehavior(events: SearchAnalyticsEvent[]) {
     // Most active users
     const userStats = new Map<string, number>();
     events.forEach(event => {
@@ -358,7 +358,7 @@ export class SearchAnalyticsCollector {
     };
   }
 
-  private identifyProblematicQueries(events: SearchAnalyticsEvent[]) => {
+  private identifyProblematicQueries(events: SearchAnalyticsEvent[]) {
     const queryProblems = new Map<string, string[]>();
 
     events.forEach(event => {
@@ -414,7 +414,7 @@ export class SearchAnalyticsCollector {
     return improvements;
   }
 
-  private analyzeFilterEffectiveness(events: SearchAnalyticsEvent[]) => {
+  private analyzeFilterEffectiveness(events: SearchAnalyticsEvent[]) {
     const filterStats: Record<string, {
       usage: number;
       averageResultImprovement: number;
@@ -482,7 +482,7 @@ export class SearchAnalyticsCollector {
           timestamp: new Date(event.timestamp as string),
         }));
       }
-    } catch (error) => {
+    } catch (error) {
       console.error('Failed to load analytics from storage:', error);
     }
   }
@@ -494,7 +494,7 @@ export class SearchAnalyticsCollector {
         event => event.timestamp > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) // Last 30 days
       );
       localStorage.setItem(`${this.localStorageKey}-${this.userId}`, JSON.stringify(recentEvents));
-    } catch (error) => {
+    } catch (error) {
       console.error('Failed to save analytics to storage:', error);
     }
   }
@@ -535,7 +535,7 @@ export class SearchAnalyticsCollector {
     this.events = [];
     try {
       localStorage.removeItem(`${this.localStorageKey}-${this.userId}`);
-    } catch (error) => {
+    } catch (error) {
       console.error('Failed to clear analytics data:', error);
     }
   }

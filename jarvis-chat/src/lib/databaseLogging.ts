@@ -63,7 +63,7 @@ class DatabaseLoggingService {
   private slowQueryThreshold = 1000; // 1 second
   private correlationIdGenerator = () => `corr_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-  constructor() => {
+  constructor() {
     this.setupPerformanceMonitoring();
   }
 
@@ -246,7 +246,7 @@ class DatabaseLoggingService {
     slowQueriesOnly?: boolean;
     timeRange?: number; // hours
     correlationId?: string;
-  }): DatabaseQueryLog[] {
+  }): DatabaseQueryLog[]  => {
     let filtered = this.queryLogs;
 
     if (filter) {
@@ -278,7 +278,7 @@ class DatabaseLoggingService {
   getConnectionLogs(filter?: {
     event?: string;
     timeRange?: number; // hours
-  }): DatabaseConnectionLog[] {
+  }): DatabaseConnectionLog[]  => {
     let filtered = this.connectionLogs;
 
     if (filter) {
@@ -299,7 +299,7 @@ class DatabaseLoggingService {
     table?: string;
     slowQueriesOnly?: boolean;
     timeRange?: number; // hours
-  }): QueryPerformanceMetrics[] {
+  }): QueryPerformanceMetrics[]  => {
     let filtered = this.performanceMetrics;
 
     if (filter) {
@@ -319,7 +319,7 @@ class DatabaseLoggingService {
   }
 
   // Get performance analytics
-  getPerformanceAnalytics(timeRange: number = 24): {
+  getPerformanceAnalytics(timeRange: number = 24):   {
     totalQueries: number;
     averageExecutionTime: number;
     slowQueries: number;
@@ -373,19 +373,19 @@ class DatabaseLoggingService {
   }
 
   // Send to external logging service
-  private async sendToExternalLogging(type: string, data: unknown): Promise<void> {
+  private async sendToExternalLogging(type: string, data: unknown): Promise<void>  {
     try {
       // Send to centralized logging service
       const { sendToCentralizedLogging } = await import('./centralizedLogging');
       await sendToCentralizedLogging(type, data);
-    } catch (error) => {
+    } catch (error) {
       // Fail silently to not break database operations
       console.warn('Failed to send to external logging:', error);
     }
   }
 
   // Export data for analysis
-  exportData(): {
+  exportData():   {
     queryLogs: DatabaseQueryLog[];
     connectionLogs: DatabaseConnectionLog[];
     performanceMetrics: QueryPerformanceMetrics[];

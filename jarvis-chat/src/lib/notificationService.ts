@@ -142,7 +142,7 @@ class NotificationService {
   private deliveryHistory: NotificationDeliveryResult[] = [];
   private processingInterval?: NodeJS.Timeout;
 
-  private constructor() => {
+  private constructor() {
     this.initializeDefaultTemplates();
     this.startEmailProcessor();
   }
@@ -164,7 +164,7 @@ class NotificationService {
     newStatus: BugStatus,
     changedBy: string,
     notes?: string
-  ): Promise<NotificationDeliveryResult[]> {
+  ): Promise<NotificationDeliveryResult[]>  => {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -222,7 +222,7 @@ class NotificationService {
 
       return deliveryResults;
 
-    } catch (error) => {
+    } catch (error) {
       centralizedLogging.error(
         'notification-service',
         'system',
@@ -241,7 +241,7 @@ class NotificationService {
     assignedTo: string,
     assignedBy: string,
     notes?: string
-  ): Promise<NotificationDeliveryResult[]> {
+  ): Promise<NotificationDeliveryResult[]>  => {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -297,7 +297,7 @@ class NotificationService {
 
       return deliveryResults;
 
-    } catch (error) => {
+    } catch (error) {
       centralizedLogging.error(
         'notification-service',
         'system',
@@ -315,7 +315,7 @@ class NotificationService {
     bugId: string,
     userId: string,
     requestType: 'verification' | 'satisfaction' | 'more_info'
-  ): Promise<NotificationDeliveryResult[]> {
+  ): Promise<NotificationDeliveryResult[]>  => {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -343,7 +343,7 @@ class NotificationService {
       let message: string;
       let actionText: string;
 
-      switch (requestType) => {
+      switch (requestType) {
         case 'verification':
           title = `Please Verify Bug Fix: ${bugReport.title}`;
           message = 'We believe this bug has been resolved. Please verify that the issue is fixed.';
@@ -394,7 +394,7 @@ class NotificationService {
 
       return deliveryResults;
 
-    } catch (error) => {
+    } catch (error) {
       centralizedLogging.error(
         'notification-service',
         'system',
@@ -413,10 +413,10 @@ class NotificationService {
     priority: BugPriority,
     reason: string,
     recipientIds: string[]
-  ): Promise<NotificationDeliveryResult[]> {
+  ): Promise<NotificationDeliveryResult[]>  => {
     const allResults: NotificationDeliveryResult[] = [];
 
-    for (const userId of recipientIds) => {
+    for (const userId of recipientIds) {
       try {
         const preferences = await this.getUserPreferences(userId);
         if (!preferences.escalationAlerts.enabled || 
@@ -448,7 +448,7 @@ class NotificationService {
         const results = await this.deliverNotification(notification, preferences);
         allResults.push(...results);
 
-      } catch (error) => {
+      } catch (error) {
         centralizedLogging.warn(
           'notification-service',
           'system',
@@ -471,7 +471,7 @@ class NotificationService {
   /**
    * Mark in-app notification as read
    */
-  async markNotificationAsRead(notificationId: string, userId: string): Promise<boolean> {
+  async markNotificationAsRead(notificationId: string, userId: string): Promise<boolean>  {
     const userNotifications = this.inAppNotifications.get(userId) || [];
     const notification = userNotifications.find(n => n.id === notificationId);
     
@@ -494,7 +494,7 @@ class NotificationService {
   /**
    * Get or create user notification preferences
    */
-  async getUserPreferences(userId: string): Promise<UserNotificationPreferences> {
+  async getUserPreferences(userId: string): Promise<UserNotificationPreferences>  {
     let preferences = this.userPreferences.get(userId);
     
     if (!preferences) {
@@ -511,7 +511,7 @@ class NotificationService {
   async updateUserPreferences(
     userId: string, 
     updates: Partial<UserNotificationPreferences>
-  ): Promise<UserNotificationPreferences> {
+  ): Promise<UserNotificationPreferences>  => {
     const currentPreferences = await this.getUserPreferences(userId);
     const updatedPreferences = { ...currentPreferences, ...updates };
     
@@ -530,14 +530,14 @@ class NotificationService {
   // Private helper methods
   private async deliverNotification(
     notification: BaseNotification
-  ): Promise<NotificationDeliveryResult[]> {
+  ): Promise<NotificationDeliveryResult[]>  => {
     const results: NotificationDeliveryResult[] = [];
 
-    for (const channel of notification.channels) => {
+    for (const channel of notification.channels) {
       try {
         let deliveryResult: NotificationDeliveryResult;
 
-        switch (channel) => {
+        switch (channel) {
           case 'in_app':
             deliveryResult = await this.deliverInAppNotification(notification);
             break;
@@ -562,7 +562,7 @@ class NotificationService {
         results.push(deliveryResult);
         this.deliveryHistory.push(deliveryResult);
 
-      } catch (error) => {
+      } catch (error) {
         const deliveryResult: NotificationDeliveryResult = {
           notificationId: notification.id,
           channel,
@@ -582,7 +582,7 @@ class NotificationService {
     return results;
   }
 
-  private async deliverInAppNotification(notification: BaseNotification): Promise<NotificationDeliveryResult> {
+  private async deliverInAppNotification(notification: BaseNotification): Promise<NotificationDeliveryResult>  {
     const inAppNotification: InAppNotification = {
       ...notification,
       read: false,
@@ -610,7 +610,7 @@ class NotificationService {
     };
   }
 
-  private async deliverEmailNotification(notification: BaseNotification): Promise<NotificationDeliveryResult> {
+  private async deliverEmailNotification(notification: BaseNotification): Promise<NotificationDeliveryResult>  {
     const template = this.emailTemplates.get(notification.type);
     if (!template) {
       throw new Error(`No email template found for notification type: ${notification.type}`);
@@ -637,7 +637,7 @@ class NotificationService {
     };
   }
 
-  private async deliverWebhookNotification(notification: BaseNotification): Promise<NotificationDeliveryResult> {
+  private async deliverWebhookNotification(notification: BaseNotification): Promise<NotificationDeliveryResult>  {
     const webhookUrl = this.webhookEndpoints.get(notification.userId);
     if (!webhookUrl) {
       throw new Error('No webhook endpoint configured for user');
@@ -667,7 +667,7 @@ class NotificationService {
     };
   }
 
-  private async deliverSMSNotification(notification: BaseNotification): Promise<NotificationDeliveryResult> {
+  private async deliverSMSNotification(notification: BaseNotification): Promise<NotificationDeliveryResult>  {
     // SMS delivery would be implemented here
     // For now, we'll simulate the delivery
 
@@ -774,12 +774,12 @@ class NotificationService {
     }, 30000); // Process every 30 seconds
   }
 
-  private async processEmailQueue(): Promise<void> {
+  private async processEmailQueue(): Promise<void>  {
     if (this.emailQueue.length === 0) return;
 
     const batch = this.emailQueue.splice(0, 10); // Process 10 emails at a time
 
-    for (const email of batch) => {
+    for (const email of batch) {
       try {
         // TODO: Implement actual email sending
         email.sentAt = new Date().toISOString();
@@ -790,7 +790,7 @@ class NotificationService {
           'Email notification sent',
           { emailId: email.id, to: email.to, subject: email.subject }
         );
-      } catch (error) => {
+      } catch (error) {
         email.error = error instanceof Error ? error.message : 'Unknown error';
         
         centralizedLogging.error(
@@ -824,7 +824,7 @@ class NotificationService {
   }
 
   private determinePriority(status: BugStatus): NotificationPriority {
-    switch (status) => {
+    switch (status) {
       case BugStatus.RESOLVED:
       case BugStatus.CLOSED:
         return 'normal';
@@ -836,7 +836,7 @@ class NotificationService {
   }
 
   private mapSeverityToPriority(severity: string): NotificationPriority {
-    switch (severity) => {
+    switch (severity) {
       case 'critical':
         return 'urgent';
       case 'high':

@@ -50,7 +50,7 @@ export function ProductionDashboard({
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    return () => {
+    return () {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
@@ -67,7 +67,7 @@ export function ProductionDashboard({
       setSystemHealth(health);
       setEnvInfo(env);
       setLastRefresh(new Date());
-    } catch (error) => {
+    } catch (error) {
       console.error('Failed to load system data:', error);
     }
   };
@@ -81,8 +81,7 @@ export function ProductionDashboard({
   }, []);
 
   const getStatusIcon = (status: string) => {
-    switch (status) => {
-    }
+    switch (status) {
       case 'healthy':
         return <CheckCircle className="h-4 w-4 text-green-500" />;
       case 'warning':
@@ -134,7 +133,7 @@ export function ProductionDashboard({
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-    } catch (error) => {
+    } catch (error) {
       console.error('Failed to export diagnostics:', error);
     }
   };

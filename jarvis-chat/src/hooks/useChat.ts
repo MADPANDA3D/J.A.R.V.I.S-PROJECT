@@ -16,7 +16,7 @@ const chatMessageToMessage = (chatMsg: ChatMessage): Message => ({
 // const messageToChatMessage = (
 //   msg: Message,
 //   userId: string
-// ): Omit<ChatMessage, 'id' | 'timestamp'> => ({
+// ): Omit<ChatMessage, 'id' | 'timestamp'> => ( =>  => {
 //   content: msg.content,
 //   role: msg.role,
 //   status: msg.status,
@@ -39,7 +39,7 @@ export const useChat = () => {
         setIsLoadingHistory(true);
         const history = await chatService.loadMessageHistory(user.id);
         setMessages(history.map(chatMessageToMessage));
-      } catch (err) => {
+      } catch (err) {
         console.error('Failed to load message history:', err);
         // Don't set error for history loading failure, just log it
       } finally {
@@ -54,9 +54,7 @@ export const useChat = () => {
   useEffect(() => {
     if (!user?.id) return;
 
-    const unsubscribe = chatService.subscribeToMessages(
-      user.id,
-      chatMessage => {
+    const unsubscribe = chatService.subscribeToMessages($1, chatMessage => {
         const message = chatMessageToMessage(chatMessage);
         setMessages(prev => {
           // Avoid duplicates by checking if message already exists
@@ -108,7 +106,7 @@ export const useChat = () => {
             chatMessageToMessage(aiMsg),
           ];
         });
-      } catch (err) => {
+      } catch (err) {
         console.error('Failed to send message:', err);
 
         // Update temporary message to show error

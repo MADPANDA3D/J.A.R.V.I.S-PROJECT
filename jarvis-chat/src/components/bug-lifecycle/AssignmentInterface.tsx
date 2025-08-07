@@ -83,7 +83,7 @@ export function AssignmentInterface({
       // Load team members (in a real app, this would be from an API)
       const members = Array.from((bugAssignmentSystem as { teamMembers: Map<string, unknown> }).teamMembers.values());
       setTeamMembers(members);
-    } catch (error) => {
+    } catch (error) {
       console.error('Failed to load assignment data:', error);
       toast({
         title: "Error",
@@ -131,7 +131,7 @@ export function AssignmentInterface({
       } else {
         throw new Error(result.error || 'Assignment failed');
       }
-    } catch (error) => {
+    } catch (error) {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to assign bug",
@@ -165,7 +165,7 @@ export function AssignmentInterface({
           variant: "destructive"
         });
       }
-    } catch (assignmentError) => {
+    } catch (assignmentError) {
       console.error('Auto-assignment failed:', assignmentError);
       toast({
         title: "Error",
@@ -187,7 +187,7 @@ export function AssignmentInterface({
   });
 
   const getAvailabilityColor = (availability: string) => {
-    switch (availability) => {
+    switch (availability) {
       case 'available': return 'bg-green-500';
       case 'busy': return 'bg-yellow-500';
       case 'unavailable': return 'bg-red-500';
@@ -197,7 +197,7 @@ export function AssignmentInterface({
   };
 
   const getRoleIcon = (role: string) => {
-    switch (role) => {
+    switch (role) {
       case 'admin': return <Star className="h-4 w-4" />;
       case 'senior_dev': return <TrendingUp className="h-4 w-4" />;
       case 'developer': return <User className="h-4 w-4" />;
@@ -382,7 +382,7 @@ export function AssignmentInterface({
     </div>
   );
 
-  function AssignmentDialog() => {
+  function AssignmentDialog() {
     return (
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden">
         <DialogHeader>

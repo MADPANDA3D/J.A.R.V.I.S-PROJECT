@@ -91,7 +91,7 @@ const defaultState: PersistentSearchState = {
 };
 
 // State migration functions
-function migrateState(savedState: Record<string, unknown>): PersistentSearchState {
+const migrateState = (savedState: Record<string, unknown>): PersistentSearchState => {
   const version = savedState.version as string || '1.0.0';
   
   // Migration from version 1.0.0 to 1.2.0
@@ -120,7 +120,7 @@ function migrateState(savedState: Record<string, unknown>): PersistentSearchStat
   return savedState as PersistentSearchState;
 }
 
-function parseStoredDates(state: PersistentSearchState): PersistentSearchState {
+const parseStoredDates = (state: PersistentSearchState): PersistentSearchState => {
   // Parse date strings back to Date objects
   const parsedState = { ...state };
   
@@ -168,7 +168,7 @@ function parseStoredDates(state: PersistentSearchState): PersistentSearchState {
   return parsedState;
 }
 
-export function useSearchState(userId: string) => {
+export function useSearchState(userId: string) {
   const [searchState, setSearchState] = useState<PersistentSearchState>(defaultState);
 
   // Load persisted state on mount with migration support
@@ -189,7 +189,7 @@ export function useSearchState(userId: string) => {
         
         setSearchState(stateWithDates);
       }
-    } catch {
+    } catch (error) {
       console.error('Failed to load search state:', error);
       // If loading fails, try to preserve any existing state but reset to default
       setSearchState(defaultState);
@@ -208,14 +208,14 @@ export function useSearchState(userId: string) => {
       };
       
       localStorage.setItem(`${STORAGE_KEY}-${userId}`, JSON.stringify(stateToSave));
-    } catch {
+    } catch (error) {
       console.error('Failed to save search state:', error);
       
       // Try to clear corrupted data and reset to default
       try {
         localStorage.removeItem(`${STORAGE_KEY}-${userId}`);
         setSearchState(defaultState);
-      } catch (clearError) => {
+      } catch (clearError) {
         console.error('Failed to clear corrupted search state:', clearError);
       }
     }
@@ -379,7 +379,7 @@ export function useSearchState(userId: string) => {
   }, []);
 
   // Get search suggestions based on history and popular queries
-  const getSearchSuggestions = useCallback((partialQuery: string): string[] => {
+  const getSearchSuggestions = useCallback((partialQuery: string): string[]  => {
     if (!searchState.preferences.enableSearchSuggestions || !partialQuery.trim()) {
       return [];
     }

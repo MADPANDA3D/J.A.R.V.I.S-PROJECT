@@ -104,7 +104,7 @@ class DistributedTracingService {
   private config: TracingConfig;
   private exportTimer?: NodeJS.Timeout;
 
-  constructor() => {
+  constructor() {
     this.config = this.loadConfiguration();
     this.startExportTimer();
     this.setupCleanupTimer();
@@ -153,7 +153,7 @@ class DistributedTracingService {
     serviceName: string,
     tags: Record<string, unknown> = {},
     baggage: Record<string, string> = {}
-  ): TraceContext {
+  ): TraceContext  => {
     if (!this.config.enabled || !this.shouldSample()) {
       // Return a no-op context
       return {
@@ -216,7 +216,7 @@ class DistributedTracingService {
     serviceName: string,
     parentContext?: TraceContext,
     tags: Record<string, unknown> = {}
-  ): TraceContext {
+  ): TraceContext  => {
     if (!this.config.enabled) {
       return { traceId: 'noop', spanId: 'noop' };
     }
@@ -263,7 +263,7 @@ class DistributedTracingService {
     context: TraceContext,
     status: 'completed' | 'error' = 'completed',
     error?: Error
-  ): void {
+  ): void  => {
     if (!this.config.enabled || !context || context.spanId === 'noop') {
       return;
     }
@@ -318,7 +318,7 @@ class DistributedTracingService {
     level: SpanLog['level'],
     message: string,
     fields?: Record<string, unknown>
-  ): void {
+  ): void  => {
     if (!this.config.enabled || !context || context.spanId === 'noop') {
       return;
     }
@@ -385,7 +385,7 @@ class DistributedTracingService {
     targetService: string,
     operation: string,
     metadata: Record<string, unknown> = {}
-  ): string {
+  ): string  => {
     const correlationId = this.generateCorrelationId();
     
     const correlation: ServiceCorrelation = {
@@ -425,7 +425,7 @@ class DistributedTracingService {
     operation: string,
     userId?: string,
     sessionId?: string
-  ): string {
+  ): string  => {
     const flowId = `flow_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     const flow: RequestFlow = {
@@ -473,7 +473,7 @@ class DistributedTracingService {
     endTime?: number,
     error?: string,
     metadata?: Record<string, unknown>
-  ): void {
+  ): void  => {
     const flow = this.requestFlows.get(flowId);
     if (!flow) return;
 
@@ -550,7 +550,7 @@ class DistributedTracingService {
     if (baggageHeader) {
       try {
         baggage = JSON.parse(baggageHeader);
-      } catch (error) => {
+      } catch (error) {
         // Invalid baggage format
       }
     }
@@ -594,7 +594,7 @@ class DistributedTracingService {
     initiatingService?: string;
     targetService?: string;
     timeRange?: number; // hours
-  }): ServiceCorrelation[] {
+  }): ServiceCorrelation[]  => {
     let filtered = [...this.correlations];
 
     if (filter) {
@@ -620,7 +620,7 @@ class DistributedTracingService {
     traceId?: string;
     status?: RequestFlow['status'];
     timeRange?: number; // hours
-  }): RequestFlow[] {
+  }): RequestFlow[]  => {
     let flows = Array.from(this.requestFlows.values());
 
     if (filter) {
@@ -643,7 +643,7 @@ class DistributedTracingService {
   }
 
   // Export spans to external tracing system
-  private async exportSpans(): Promise<void> {
+  private async exportSpans(): Promise<void>  {
     if (!this.config.export.endpoint) return;
 
     const completedSpans = Array.from(this.spans.values()).filter(
@@ -688,7 +688,7 @@ class DistributedTracingService {
       } else {
         console.warn('Failed to export spans:', response.statusText);
       }
-    } catch (error) => {
+    } catch (error) {
       console.warn('Error exporting spans:', error);
     }
   }
@@ -780,7 +780,7 @@ export const withTracing = async <T>(
   operation: (context: TraceContext) => Promise<T>,
   tags: Record<string, unknown> = {},
   parentContext?: TraceContext
-): Promise<T> => {
+): Promise<T>  => {
   const context = parentContext
     ? distributedTracing.startSpan(operationName, serviceName, parentContext, tags)
     : distributedTracing.startTrace(operationName, serviceName, tags);
@@ -789,7 +789,7 @@ export const withTracing = async <T>(
     const result = await operation(context);
     distributedTracing.finishSpan(context, 'completed');
     return result;
-  } catch (error) => {
+  } catch (error) {
     distributedTracing.finishSpan(context, 'error', error as Error);
     throw error;
   }

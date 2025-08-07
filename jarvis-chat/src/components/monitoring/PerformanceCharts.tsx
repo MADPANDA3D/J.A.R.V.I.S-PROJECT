@@ -43,7 +43,7 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({ metrics })
     const now = Date.now();
     const interval = (60 * 60 * 1000) / points; // 1 hour divided by points
     
-    return Array.from({ length: points }, (_, i) => {
+    return Array.from({ length: points }, (_, i) {
       const timestamp = now - (points - 1 - i) * interval;
       const baseSuccessRate = 95 + Math.random() * 4;
       const baseResponseTime = 140 + Math.random() * 60;
@@ -66,7 +66,7 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({ metrics })
     color: string;
     label: string;
     unit?: string;
-  }> = ({ data, color, label, unit = '' }) => {
+  }> = ({ data, color, label, unit = '' }) {
     const maxValue = Math.max(...data.map(d => d.value));
     const minValue = Math.min(...data.map(d => d.value));
     const range = maxValue - minValue;
@@ -118,7 +118,7 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({ metrics })
   const SimpleBarChart: React.FC<{
     data: Array<{ label: string; value: number; color: string }>;
     title: string;
-  }> = ({ data, title }) => {
+  }> = ({ data, title }) {
     const maxValue = Math.max(...data.map(d => d.value));
     
     return (
@@ -156,7 +156,7 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({ metrics })
   const DonutChart: React.FC<{
     data: Array<{ label: string; value: number; color: string }>;
     title: string;
-  }> = ({ data, title }) => {
+  }> = ({ data, title }) {
     const total = data.reduce((sum, item) => sum + item.value, 0);
     let cumulativePercentage = 0;
     
@@ -165,7 +165,7 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({ metrics })
     const normalizedRadius = radius - strokeWidth * 0.5;
     const circumference = normalizedRadius * 2 * Math.PI;
 
-    return (
+    return(
       <div className="space-y-3">
         <h4 className="font-medium text-gray-900">{title}</h4>
         <div className="flex items-center space-x-4">

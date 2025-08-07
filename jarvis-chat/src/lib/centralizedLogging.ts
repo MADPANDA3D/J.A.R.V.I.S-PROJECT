@@ -70,7 +70,7 @@ class CentralizedLoggingService {
   private traceId: string;
   private isProcessing = false;
 
-  constructor() => {
+  constructor() {
     this.traceId = this.generateTraceId();
     this.config = this.loadConfiguration();
     this.startFlushTimer();
@@ -133,7 +133,7 @@ class CentralizedLoggingService {
 
   private setupErrorHandlers(): void {
     // Handle unhandled promise rejections in logging
-    window.addEventListener('unhandledrejection', (event) => {
+    window.addEventListener("unhandledrejection", (event) => {
       if (event.reason?.message?.includes('logging')) {
         // Prevent infinite loops in logging system
         console.warn('Logging system error:', event.reason);
@@ -153,14 +153,14 @@ class CentralizedLoggingService {
   }
 
   // Main logging method
-  log(
+  log = (
     level: LogEntry['level'],
     service: string,
     category: LogEntry['category'],
     message: string,
     metadata: Record<string, unknown> = {},
     correlationId?: string
-  ): string {
+  ): string => {
     if (!this.config.enabled || !this.shouldLog(level)) {
       return '';
     }
@@ -234,7 +234,7 @@ class CentralizedLoggingService {
     const sanitized = { ...metadata };
     const sensitiveKeys = ['password', 'token', 'secret', 'key', 'auth', 'credential', 'apikey'];
 
-    const sanitizeValue = (value: unknown): unknown => {
+    const sanitizeValue = (value: unknown): unknown  =>  => {
       if (typeof value === 'string') {
         // Check if the key or value contains sensitive data
         const lowerValue = value.toLowerCase();
@@ -282,7 +282,7 @@ class CentralizedLoggingService {
   }
 
   // Flush queued logs to destinations
-  private async flushLogs(): Promise<void> {
+  private async flushLogs(): Promise<void>  {
     if (this.isProcessing || this.logQueue.length === 0) {
       return;
     }
@@ -296,22 +296,22 @@ class CentralizedLoggingService {
           this.sendToDestination(destination, batch)
         )
       );
-    } catch (error) => {
+    } catch (error) {
       console.warn('Error flushing logs:', error);
     } finally {
       this.isProcessing = false;
     }
   }
 
-  private async sendToDestination(destination: LogDestination, logs: LogEntry[]): Promise<void> {
+  private async sendToDestination(destination: LogDestination, logs: LogEntry[]): Promise<void>  {
     if (!destination.enabled) return;
 
     let retries = 0;
     const maxRetries = this.config.maxRetries;
 
-    while (retries <= maxRetries) => {
+    while (retries <= maxRetries) {
       try {
-        switch (destination.type) => {
+        switch (destination.type) {
           case 'console':
             this.sendToConsole(logs);
             break;
@@ -332,7 +332,7 @@ class CentralizedLoggingService {
             break;
         }
         break; // Success, exit retry loop
-      } catch (error) => {
+      } catch (error) {
         retries++;
         if (retries > maxRetries) {
           console.warn(`Failed to send logs to ${destination.type} after ${maxRetries} retries:`, error);
@@ -358,7 +358,7 @@ class CentralizedLoggingService {
   }
 
   private getConsoleStyle(level: LogEntry['level']): string {
-    switch (level) => {
+    switch (level) {
       case 'critical':
         return 'background: #ff0000; color: white; font-weight: bold; padding: 2px 4px;';
       case 'error':
@@ -386,12 +386,12 @@ class CentralizedLoggingService {
       const recentLogs = storedLogs.slice(-maxStoredLogs);
       
       localStorage.setItem('jarvis_centralized_logs', JSON.stringify(recentLogs));
-    } catch (error) => {
+    } catch (error) {
       console.warn('Failed to store logs in localStorage:', error);
     }
   }
 
-  private async sendToWebhook(destination: LogDestination, logs: LogEntry[]): Promise<void> {
+  private async sendToWebhook(destination: LogDestination, logs: LogEntry[]): Promise<void>  {
     if (!destination.config.endpoint) {
       throw new Error('Webhook endpoint not configured');
     }
@@ -427,7 +427,7 @@ class CentralizedLoggingService {
     }
   }
 
-  private async sendToElasticsearch(destination: LogDestination, logs: LogEntry[]): Promise<void> {
+  private async sendToElasticsearch(destination: LogDestination, logs: LogEntry[]): Promise<void>  {
     if (!destination.config.endpoint || !destination.config.index) {
       throw new Error('Elasticsearch endpoint or index not configured');
     }
@@ -494,7 +494,7 @@ class CentralizedLoggingService {
     traceId?: string;
     timeRange?: number; // hours
     limit?: number;
-  }): LogEntry[] {
+  }): LogEntry[]  => {
     let filtered = [...this.logs];
 
     if (filter) {
@@ -530,7 +530,7 @@ class CentralizedLoggingService {
     try {
       const stored = localStorage.getItem('jarvis_centralized_logs');
       return stored ? JSON.parse(stored) : [];
-    } catch (error) => {
+    } catch (error) {
       console.warn('Failed to load stored logs:', error);
       return [];
     }

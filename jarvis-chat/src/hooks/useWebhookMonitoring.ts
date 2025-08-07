@@ -130,7 +130,7 @@ export const useWebhookMonitoring = (options: UseWebhookMonitoringOptions = {}) 
           // Add timeout
           signal: AbortSignal.timeout(5000)
         });
-      } catch (fetchError) => {
+      } catch (fetchError) {
         // If webhook server is not available, use mock data
         console.warn('Webhook server not available, using mock data:', fetchError);
         const mockMetrics = generateMockMetrics();
@@ -243,7 +243,7 @@ export const useWebhookMonitoring = (options: UseWebhookMonitoringOptions = {}) 
       });
 
       return transformedMetrics;
-    } catch {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       console.error('Failed to fetch webhook metrics:', error);
       
@@ -289,7 +289,7 @@ export const useWebhookMonitoring = (options: UseWebhookMonitoringOptions = {}) 
 };
 
 // Mock data generator for development/fallback
-const generateMockMetrics = (): WebhookMetrics => {
+const generateMockMetrics = (): WebhookMetrics  =>  => {
   const now = new Date();
   const uptimeMs = Math.floor(Math.random() * 86400000) + 3600000; // 1-24 hours
   
@@ -387,7 +387,7 @@ const generateMockMetrics = (): WebhookMetrics => {
   };
 };
 
-const formatUptime = (milliseconds: number): string => {
+const formatUptime = (milliseconds: number): string  =>  => {
   const seconds = Math.floor(milliseconds / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);

@@ -79,7 +79,7 @@ export function useSearchHistory(
   }, [searchHistory]);
 
   // Generate intelligent search suggestions
-  const generateSuggestions = useCallback((partialQuery: string): SearchSuggestion[] => {
+  const generateSuggestions = useCallback((partialQuery: string): SearchSuggestion[]  => {
     if (!partialQuery.trim()) return [];
 
     const query = partialQuery.toLowerCase();
@@ -203,18 +203,18 @@ export function useSearchHistory(
         const parsed = JSON.parse(savedSuggestions);
         setHistoryState(prev => ({ ...prev, queryCompletions: parsed.completions || [] }));
       }
-    } catch {
+    } catch (error) {
       console.error('Failed to load search suggestions:', error);
     }
   }, [userId]);
 
   // Get suggestions for query input
-  const getSuggestions = useCallback((partialQuery: string): SearchSuggestion[] => {
+  const getSuggestions = useCallback((partialQuery: string): SearchSuggestion[]  => {
     return generateSuggestions(partialQuery);
   }, [generateSuggestions]);
 
   // Get frequent search patterns for analytics
-  const getFrequentPatterns = useCallback((limit = 10): SearchPattern[] => {
+  const getFrequentPatterns = useCallback((limit = 10): SearchPattern[]  => {
     return searchPatterns.slice(0, limit);
   }, [searchPatterns]);
 
@@ -228,7 +228,7 @@ export function useSearchHistory(
   }, [historyState.searchTrends]);
 
   // Get recommended filters based on successful searches
-  const getRecommendedFilters = useCallback((): Partial<SearchFilters>[] => {
+  const getRecommendedFilters = useCallback((): Partial<SearchFilters>[]  => {
     // Analyze successful searches (high result count) to recommend filters
     const successfulSearches = searchHistory.filter(item => item.resultCount > 5);
     const filterRecommendations = new Map<string, number>();
@@ -294,7 +294,7 @@ export function useSearchHistory(
 }
 
 // Helper functions
-function calculateSimilarity(str1: string, str2: string): number {
+const calculateSimilarity = (str1: string, str2: string): number => {
   const longer = str1.length > str2.length ? str1 : str2;
   const shorter = str1.length > str2.length ? str2 : str1;
   
@@ -304,14 +304,14 @@ function calculateSimilarity(str1: string, str2: string): number {
   return (longer.length - distance) / longer.length;
 }
 
-function levenshteinDistance(str1: string, str2: string): number {
+const levenshteinDistance = (str1: string, str2: string): number => {
   const matrix = Array(str2.length + 1).fill(null).map(() => Array(str1.length + 1).fill(null));
   
   for (let i = 0; i <= str1.length; i++) matrix[0][i] = i;
   for (let j = 0; j <= str2.length; j++) matrix[j][0] = j;
   
-  for (let j = 1; j <= str2.length; j++) => {
-    for (let i = 1; i <= str1.length; i++) => {
+  for (let j = 1; j <= str2.length; j++) {
+    for (let i = 1; i <= str1.length; i++) {
       const indicator = str1[i - 1] === str2[j - 1] ? 0 : 1;
       matrix[j][i] = Math.min(
         matrix[j][i - 1] + 1,
@@ -324,7 +324,7 @@ function levenshteinDistance(str1: string, str2: string): number {
   return matrix[str2.length][str1.length];
 }
 
-function generateQueryCompletions(partialQuery: string, history: SearchHistoryItem[]): string[] {
+const generateQueryCompletions = (partialQuery: string, history: SearchHistoryItem[]): string[] => {
   const completions = new Set<string>();
   
   history.forEach(item => {

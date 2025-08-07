@@ -25,7 +25,7 @@ interface TimelineEvent {
 export const SessionTimeline: React.FC<SessionTimelineProps> = ({
   session,
   className = ''
-}) {
+}) => {
   const [selectedEvent, setSelectedEvent] = useState<TimelineEvent | null>(null);
   const [showAllEvents, setShowAllEvents] = useState(false);
 

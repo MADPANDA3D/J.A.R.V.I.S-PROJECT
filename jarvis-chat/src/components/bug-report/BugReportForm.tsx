@@ -175,11 +175,11 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
       try {
         const draftData = JSON.parse(draft);
         updateFormData(draftData);
-      } catch (error) => {
+      } catch (error) {
         console.warn('Failed to load bug report draft:', error);
       }
     }
-  }, []);
+  }, [initialData.title, updateFormData]);
 
   const handleBugTypeSelect = useCallback((typeConfig: BugTypeConfig) => {
     setSelectedBugType(typeConfig);
@@ -217,7 +217,7 @@ export const BugReportForm: React.FC<BugReportFormProps> = ({
       } else {
         setSubmitError(result.message || 'Failed to submit bug report');
       }
-    } catch (error) => {
+    } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'An unexpected error occurred');
     } finally {
       setIsSubmitting(false);

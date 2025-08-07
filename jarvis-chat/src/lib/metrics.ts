@@ -95,7 +95,7 @@ class MetricsService {
     metadata?: Record<string, unknown>;
   }> = [];
 
-  constructor() => {
+  constructor() {
     this.currentSessionId = this.generateSessionId();
     this.sessionStartTime = Date.now();
     this.initializeSession();
@@ -193,7 +193,7 @@ class MetricsService {
 
   private setupActivityTracking(): void {
     // Track page visibility changes
-    document.addEventListener('visibilitychange', () => {
+    document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
         this.trackKPI('user.page_hidden', 1, 'events', 'user');
       } else {
@@ -205,7 +205,7 @@ class MetricsService {
     ['click', 'keydown', 'scroll', 'mousemove'].forEach(eventType => {
       document.addEventListener(
         eventType,
-        this.throttle(() => {
+        this.throttle(() {
           this.trackUserInteraction(eventType);
         }, 1000),
         { passive: true }
@@ -213,7 +213,7 @@ class MetricsService {
     });
 
     // Track page unload
-    window.addEventListener('beforeunload', () => {
+    window.addEventListener("beforeunload", () => {
       this.endCurrentSession();
     });
   }
@@ -222,7 +222,7 @@ class MetricsService {
     let timeoutId: number | undefined;
     let lastExecTime = 0;
 
-    return () => {
+    return () {
       const currentTime = Date.now();
 
       if (currentTime - lastExecTime > delay) {
@@ -230,8 +230,7 @@ class MetricsService {
         lastExecTime = currentTime;
       } else {
         clearTimeout(timeoutId);
-        timeoutId = window.setTimeout(
-          () => {
+        timeoutId = window.setTimeout(() => {
             func();
             lastExecTime = Date.now();
           },
@@ -417,7 +416,7 @@ class MetricsService {
   }
 
   // Analytics and reporting methods
-  public getBusinessMetrics(timeRange?: number): Partial<BusinessMetrics> {
+  public getBusinessMetrics(timeRange?: number): Partial<BusinessMetrics>  => {
     const cutoff = timeRange ? Date.now() - timeRange : 0;
     const relevantKPIs = this.kpis.filter(kpi => kpi.timestamp >= cutoff);
 
@@ -523,7 +522,7 @@ class MetricsService {
     };
   }
 
-  public getSessionAnalytics(timeRange?: number): {
+  public getSessionAnalytics(timeRange?: number):   {
     totalSessions: number;
     averageDuration: number;
     averagePageViews: number;
@@ -615,7 +614,7 @@ class MetricsService {
     return adoptionRates;
   }
 
-  private async collectPerformanceMetrics(): Promise<void> {
+  private async collectPerformanceMetrics(): Promise<void>  {
     try {
       // Collect memory usage if available
       if ('memory' in performance) {
@@ -634,7 +633,7 @@ class MetricsService {
           connection.downlink || 0
         );
       }
-    } catch (error) => {
+    } catch () {
       monitoringService.captureException(
         error instanceof Error
           ? error
@@ -643,7 +642,7 @@ class MetricsService {
     }
   }
 
-  private async collectSystemMetrics(): Promise<void> {
+  private async collectSystemMetrics(): Promise<void>  {
     try {
       // Check system health through health check endpoint
       const healthCheck = await fetch('/api/health');
@@ -657,8 +656,7 @@ class MetricsService {
       );
 
       if (healthData.checks) {
-        Object.entries(healthData.checks).forEach(
-          ([check, result]: [string, { status: string }]) => {
+        Object.entries(healthData.checks).forEach(([check, result]: [string, { status: string }]) => {
             this.trackKPI(
               `system.${check}`,
               result.status === 'up' ? 1 : 0,
@@ -668,12 +666,12 @@ class MetricsService {
           }
         );
       }
-    } catch (error) => {
+    } catch () {
       this.trackKPI('system.health_check_status', 0, 'status', 'technical');
     }
   }
 
-  private async collectBusinessMetrics(): Promise<void> {
+  private async collectBusinessMetrics(): Promise<void>  {
     try {
       // Collect user count from database
       const { count: userCount } = await supabase
@@ -700,7 +698,7 @@ class MetricsService {
           'business'
         );
       }
-    } catch (error) => {
+    } catch () {
       monitoringService.captureException(
         error instanceof Error
           ? error
@@ -709,7 +707,7 @@ class MetricsService {
     }
   }
 
-  private async collectDailyMetrics(): Promise<void> {
+  private async collectDailyMetrics(): Promise<void>  {
     const today = new Date().toISOString().split('T')[0];
 
     // Calculate daily active users
@@ -752,7 +750,7 @@ class MetricsService {
   }
 
   // Health check for metrics service
-  public getMetricsHealth(): {
+  public getMetricsHealth():   {
     status: 'healthy' | 'degraded' | 'unhealthy';
     metrics: {
       totalKPIs: number;

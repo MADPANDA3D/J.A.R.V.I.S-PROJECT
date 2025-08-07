@@ -143,7 +143,7 @@ describe('Real n8n Webhook Integration', () => {
       'Very long message: ' + 'A'.repeat(500), // Test longer content
     ];
 
-    for (let i = 0; i < testMessages.length; i++) => {
+    for (let i = 0; i < testMessages.length; i++) {
       const payload: WebhookPayload = {
         message: testMessages[i],
         userId: 'test_user_formats',

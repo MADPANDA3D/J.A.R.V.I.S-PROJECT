@@ -66,7 +66,7 @@ export function RuntimeErrorMonitor({
   const [showDetails, setShowDetails] = useState(false);
 
   // Error categorization
-  const categorizeError = (error: ErrorEvent | Error): Omit<RuntimeError, 'id' | 'count' | 'lastOccurrence'> => {
+  const categorizeError = (error: ErrorEvent | Error): Omit<RuntimeError, 'id' | 'count' | 'lastOccurrence'>  =>  => {
     let severity: RuntimeError['severity'] = 'medium';
     let errorType: RuntimeError['type'] = 'javascript';
     let source = '';
@@ -259,8 +259,7 @@ export function RuntimeErrorMonitor({
 
   // Utility functions
   const getSeverityIcon = (severity: string) => {
-    switch (severity) => {
-    }
+    switch (severity) {
       case 'critical':
         return <AlertTriangle className="h-4 w-4 text-red-600" />;
       case 'high':
@@ -360,7 +359,7 @@ export function RuntimeErrorMonitor({
     });
   };
 
-  const toggleFilter = (filter: Set<string>, setFilter: (filter: Set<string>) => void, value: string) => {
+  const toggleFilter = (filter: Set<string>, setFilter: (filter: Set<string>) => void, value: string) {
     const newFilter = new Set(filter);
     if (newFilter.has(value)) {
       newFilter.delete(value);
@@ -375,7 +374,7 @@ export function RuntimeErrorMonitor({
     try {
       // This will cause an undefined access error
       (window as Record<string, unknown>).nonExistentFunction.call();
-    } catch (error) => {
+    } catch (error) {
       // This error will be caught by our monitoring
     }
   };

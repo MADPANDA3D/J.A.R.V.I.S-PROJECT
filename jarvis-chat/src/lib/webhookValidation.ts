@@ -160,8 +160,7 @@ export class WebhookValidator {
   /**
    * Validate webhook payload with detailed error reporting
    */
-  static validatePayload(data: unknown):
-    | {
+  static validatePayload(data: unknown): | {
         success: true;
         data: WebhookPayload;
       }
@@ -172,7 +171,7 @@ export class WebhookValidator {
     try {
       const validatedData = WebhookPayloadSchema.parse(data);
       return { success: true, data: validatedData };
-    } catch (error) => {
+    } catch (error) {
       if (error instanceof z.ZodError) {
         const validationError: ValidationError = {
           success: false,
@@ -210,8 +209,7 @@ export class WebhookValidator {
   /**
    * Validate enhanced webhook payload with metadata
    */
-  static validateEnhancedPayload(data: unknown):
-    | {
+  static validateEnhancedPayload(data: unknown): | {
         success: true;
         data: EnhancedWebhookPayload;
       }
@@ -222,7 +220,7 @@ export class WebhookValidator {
     try {
       const validatedData = EnhancedWebhookPayloadSchema.parse(data);
       return { success: true, data: validatedData };
-    } catch (error) => {
+    } catch (error) {
       if (error instanceof z.ZodError) {
         const validationError: ValidationError = {
           success: false,
@@ -259,8 +257,7 @@ export class WebhookValidator {
   /**
    * Validate webhook response
    */
-  static validateResponse(data: unknown):
-    | {
+  static validateResponse(data: unknown): | {
         success: true;
         data: WebhookResponse;
       }
@@ -271,7 +268,7 @@ export class WebhookValidator {
     try {
       const validatedData = WebhookResponseSchema.parse(data);
       return { success: true, data: validatedData };
-    } catch (error) => {
+    } catch (error) {
       if (error instanceof z.ZodError) {
         const validationError: ValidationError = {
           success: false,
@@ -308,8 +305,7 @@ export class WebhookValidator {
   /**
    * Validate health check response
    */
-  static validateHealthCheck(data: unknown):
-    | {
+  static validateHealthCheck(data: unknown): | {
         success: true;
         data: HealthCheckResponse;
       }
@@ -320,7 +316,7 @@ export class WebhookValidator {
     try {
       const validatedData = HealthCheckResponseSchema.parse(data);
       return { success: true, data: validatedData };
-    } catch (error) => {
+    } catch (error) {
       if (error instanceof z.ZodError) {
         const validationError: ValidationError = {
           success: false,
@@ -387,7 +383,7 @@ export class WebhookValidator {
   /**
    * Get validation summary for debugging
    */
-  static getValidationSummary(data: unknown): {
+  static getValidationSummary(data: unknown):   {
     isValid: boolean;
     fieldCount: number;
     missingRequired: string[];
@@ -403,7 +399,7 @@ export class WebhookValidator {
         invalidFields: [],
         extraFields: [],
       };
-    } catch (error) => {
+    } catch (error) {
       if (error instanceof z.ZodError) {
         const missingRequired: string[] = [];
         const invalidFields: string[] = [];

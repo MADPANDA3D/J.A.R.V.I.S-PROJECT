@@ -77,7 +77,7 @@ export class ExternalAPIClient {
   private config: ExternalServiceConfig;
   private baseHeaders: Record<string, string>;
 
-  constructor(config: ExternalServiceConfig) => {
+  constructor(config: ExternalServiceConfig) {
     this.config = {
       timeout: 10000,
       retryPolicy: {
@@ -116,7 +116,7 @@ export class ExternalAPIClient {
   private addAuthenticationHeaders(): void {
     const auth = this.config.authentication!;
     
-    switch (auth.type) => {
+    switch (auth.type) {
       case 'bearer':
         if (auth.token) {
           this.baseHeaders['Authorization'] = `Bearer ${auth.token}`;
@@ -154,7 +154,7 @@ export class ExternalAPIClient {
         retryDelay: 5000,
         backoffMultiplier: 2
       },
-      healthCheck: async (): Promise<boolean> => {
+      healthCheck: async (): Promise<boolean>  => {
         try {
           const response = await this.makeRequest({
             method: healthCheck.method,
@@ -162,7 +162,7 @@ export class ExternalAPIClient {
             timeout: healthCheck.timeout
           });
           return response.status === healthCheck.expectedStatus;
-        } catch (error) => {
+        } catch (error) {
           return false;
         }
       }
@@ -172,7 +172,7 @@ export class ExternalAPIClient {
   }
 
   // Main request method with monitoring
-  async makeRequest<T = unknown>(requestConfig: APIRequestConfig): Promise<APIResponse<T>> {
+  async makeRequest<T = unknown>(requestConfig: APIRequestConfig): Promise<APIResponse<T>>  => {
     const fullUrl = this.buildUrl(requestConfig.endpoint);
     
     return makeMonitoredCall(
@@ -180,7 +180,7 @@ export class ExternalAPIClient {
       'external',
       fullUrl,
       requestConfig.method,
-      async () => {
+      async () {
         return this.executeRequest<T>(requestConfig, fullUrl);
       },
       {
@@ -199,7 +199,7 @@ export class ExternalAPIClient {
   private async executeRequest<T = unknown>(
     requestConfig: APIRequestConfig, 
     fullUrl: string
-  ): Promise<APIResponse<T>> {
+  ): Promise<APIResponse<T>>  => {
     const startTime = performance.now();
     
     const headers = {
@@ -267,7 +267,7 @@ export class ExternalAPIClient {
         timing
       };
 
-    } catch (error) => {
+    } catch (error) {
       // const endTime = performance.now(); // For future timing use
       
       if (error instanceof DOMException && error.name === 'TimeoutError') {
@@ -318,7 +318,7 @@ export class ExternalAPIClient {
   async get<T = unknown>(
     endpoint: string, 
     options: Omit<APIRequestConfig, 'method' | 'endpoint'> = {}
-  ): Promise<APIResponse<T>> {
+  ): Promise<APIResponse<T>>  => {
     return this.makeRequest<T>({
       method: 'GET',
       endpoint,
@@ -330,7 +330,7 @@ export class ExternalAPIClient {
     endpoint: string, 
     body?: unknown,
     options: Omit<APIRequestConfig, 'method' | 'endpoint' | 'body'> = {}
-  ): Promise<APIResponse<T>> {
+  ): Promise<APIResponse<T>>  => {
     return this.makeRequest<T>({
       method: 'POST',
       endpoint,
@@ -343,7 +343,7 @@ export class ExternalAPIClient {
     endpoint: string, 
     body?: unknown,
     options: Omit<APIRequestConfig, 'method' | 'endpoint' | 'body'> = {}
-  ): Promise<APIResponse<T>> {
+  ): Promise<APIResponse<T>>  => {
     return this.makeRequest<T>({
       method: 'PUT',
       endpoint,
@@ -356,7 +356,7 @@ export class ExternalAPIClient {
     endpoint: string, 
     body?: unknown,
     options: Omit<APIRequestConfig, 'method' | 'endpoint' | 'body'> = {}
-  ): Promise<APIResponse<T>> {
+  ): Promise<APIResponse<T>>  => {
     return this.makeRequest<T>({
       method: 'PATCH',
       endpoint,
@@ -368,7 +368,7 @@ export class ExternalAPIClient {
   async delete<T = unknown>(
     endpoint: string, 
     options: Omit<APIRequestConfig, 'method' | 'endpoint'> = {}
-  ): Promise<APIResponse<T>> {
+  ): Promise<APIResponse<T>>  => {
     return this.makeRequest<T>({
       method: 'DELETE',
       endpoint,
@@ -377,7 +377,7 @@ export class ExternalAPIClient {
   }
 
   // Health check method
-  async checkHealth(): Promise<{
+  async checkHealth(): Promise< => {
     healthy: boolean;
     responseTime?: number;
     error?: string;
@@ -401,7 +401,7 @@ export class ExternalAPIClient {
         healthy,
         responseTime
       };
-    } catch (error) => {
+    } catch (error) {
       return {
         healthy: false,
         error: error instanceof Error ? error.message : 'Unknown error'
@@ -446,7 +446,7 @@ export class ExternalAPIClient {
 }
 
 // Pre-configured clients for common services
-export const createOpenAIClient = (apiKey: string): ExternalAPIClient => {
+export const createOpenAIClient = (apiKey: string): ExternalAPIClient  =>  => {
   return new ExternalAPIClient({
     serviceName: 'openai-api',
     baseUrl: 'https://api.openai.com/v1',
@@ -464,7 +464,7 @@ export const createOpenAIClient = (apiKey: string): ExternalAPIClient => {
   });
 };
 
-export const createAnthropicClient = (apiKey: string): ExternalAPIClient => {
+export const createAnthropicClient = (apiKey: string): ExternalAPIClient  =>  => {
   return new ExternalAPIClient({
     serviceName: 'anthropic-api',
     baseUrl: 'https://api.anthropic.com/v1',
@@ -480,7 +480,7 @@ export const createAnthropicClient = (apiKey: string): ExternalAPIClient => {
   });
 };
 
-export const createGitHubClient = (token: string): ExternalAPIClient => {
+export const createGitHubClient = (token: string): ExternalAPIClient  =>  => {
   return new ExternalAPIClient({
     serviceName: 'github-api',
     baseUrl: 'https://api.github.com',
@@ -498,7 +498,7 @@ export const createGitHubClient = (token: string): ExternalAPIClient => {
   });
 };
 
-export const createSlackClient = (token: string): ExternalAPIClient => {
+export const createSlackClient = (token: string): ExternalAPIClient  =>  => {
   return new ExternalAPIClient({
     serviceName: 'slack-api',
     baseUrl: 'https://slack.com/api',
@@ -515,7 +515,7 @@ export const createSlackClient = (token: string): ExternalAPIClient => {
   });
 };
 
-export const createN8NClient = (baseUrl: string, token?: string): ExternalAPIClient => {
+export const createN8NClient = (baseUrl: string, token?: string): ExternalAPIClient  =>  => {
   return new ExternalAPIClient({
     serviceName: 'n8n-api',
     baseUrl: baseUrl,

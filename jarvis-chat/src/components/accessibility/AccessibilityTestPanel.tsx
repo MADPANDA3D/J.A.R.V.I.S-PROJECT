@@ -21,7 +21,7 @@ interface AccessibilityTestPanelProps {
 
 export const AccessibilityTestPanel: React.FC<AccessibilityTestPanelProps> = ({
   className = '',
-}) {
+}) => {
   const [isRunning, setIsRunning] = useState(false);
   const [lastResult, setLastResult] = useState<AccessibilityResult | null>(
     null
@@ -92,7 +92,7 @@ export const AccessibilityTestPanel: React.FC<AccessibilityTestPanelProps> = ({
       setTimeout(() => {
         document.body.removeChild(announcement);
       }, 1000);
-    } catch (error) => {
+    } catch (error) {
       console.error('Accessibility test failed:', error);
 
       // Announce error

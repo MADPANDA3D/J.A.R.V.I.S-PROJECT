@@ -10,7 +10,7 @@ describe('Live Webhook Test', () => {
   it(
     'should test the actual n8n webhook with Hello JARVIS message',
     { timeout: 35000 },
-    async () => {
+    async () {
       console.log('\n🚀 TESTING LIVE WEBHOOK');
       console.log('='.repeat(50));
 
@@ -51,7 +51,7 @@ describe('Live Webhook Test', () => {
 
         expect(response.success).toBe(true);
         expect(response.response).toBeDefined();
-      } catch (error: unknown) => {
+      } catch (error: unknown) {
         const err = error as { message?: string; type?: string; statusCode?: number };
         console.log('❌ Webhook Error:', err.message);
         console.log('   Type:', err.type);

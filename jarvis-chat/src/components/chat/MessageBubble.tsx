@@ -26,10 +26,10 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   highlightedContent,
   searchTerms,
   className = '',
-}) {
+}) => {
   const isUser = message.role === 'user';
 
-  const highlightSearchTerms = (content: string, terms: string[]): string => {
+  const highlightSearchTerms = (content: string, terms: string[]): string  =>  => {
     if (!terms || terms.length === 0) return content;
 
     let highlightedContent = content;
@@ -69,7 +69,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   };
 
   const getStatusIcon = () => {
-    switch (message.status) => {
+    switch (message.status) {
       case 'sending':
         return (
           <Clock

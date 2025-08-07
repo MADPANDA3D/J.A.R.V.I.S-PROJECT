@@ -92,7 +92,7 @@ class TransactionImpl implements Transaction {
   status?: 'ok' | 'error' | 'cancelled';
   metadata?: Record<string, unknown>;
 
-  constructor(name: string, operation: string) => {
+  constructor(name: string, operation: string) {
     this.name = name;
     this.operation = operation;
     this.startTime = performance.now();
@@ -168,7 +168,7 @@ class MonitoringService implements APMService {
   private errorRateThreshold = 10; // errors per minute
   private performanceThreshold = 3000; // 3 seconds
 
-  constructor() => {
+  constructor() {
     this.initialize();
     this.setupDefaultAlertRules();
     this.startRealTimeMonitoring();
@@ -196,7 +196,7 @@ class MonitoringService implements APMService {
         userAgent: navigator.userAgent,
         url: window.location.href,
       });
-    } catch (error) => {
+    } catch () {
       captureError(
         error instanceof Error
           ? error
@@ -252,7 +252,7 @@ class MonitoringService implements APMService {
 
         clsObserver.observe({ entryTypes: ['layout-shift'] });
       }
-    } catch (error) => {
+    } catch () {
       captureWarning('Failed to initialize Core Web Vitals monitoring', {
         error,
       });
@@ -263,7 +263,7 @@ class MonitoringService implements APMService {
     try {
       // Monitor navigation timing
       if ('performance' in window && performance.timing) {
-        window.addEventListener('load', () => {
+        window.addEventListener("load", () => {
           setTimeout(() => {
             const timing = performance.timing;
             const pageLoadTime = timing.loadEventEnd - timing.navigationStart;
@@ -303,7 +303,7 @@ class MonitoringService implements APMService {
 
         paintObserver.observe({ entryTypes: ['paint'] });
       }
-    } catch (error) => {
+    } catch () {
       captureWarning('Failed to initialize performance monitoring', { error });
     }
   }
@@ -312,7 +312,7 @@ class MonitoringService implements APMService {
     try {
       // Enhanced global error handling
       const originalConsoleError = console.error;
-      console.error = (...args) => {
+      console.error = (...args) {
         this.captureMessage(`Console Error: ${args.join(' ')}`, 'error', {
           source: 'console',
           args: args.map(arg =>
@@ -323,7 +323,7 @@ class MonitoringService implements APMService {
       };
 
       // Track uncaught promise rejections
-      window.addEventListener('unhandledrejection', event => {
+      window.addEventListener(\'unhandledrejection\', event => {
         this.captureException(
           new Error(`Unhandled Promise Rejection: ${event.reason}`),
           {
@@ -333,7 +333,7 @@ class MonitoringService implements APMService {
           }
         );
       });
-    } catch (error) => {
+    } catch () {
       captureWarning('Failed to initialize error tracking enhancements', {
         error,
       });
@@ -356,7 +356,7 @@ class MonitoringService implements APMService {
 
         resourceObserver.observe({ entryTypes: ['resource'] });
       }
-    } catch (error) => {
+    } catch () {
       captureWarning('Failed to initialize resource monitoring', { error });
     }
   }
@@ -366,7 +366,7 @@ class MonitoringService implements APMService {
     url: string,
     duration: number,
     metadata?: Record<string, unknown>
-  ): void {
+  ): void  => {
     this.trackCustomMetric('page.load_time', duration, {
       url,
       ...metadata,
@@ -385,7 +385,7 @@ class MonitoringService implements APMService {
     duration: number,
     status: number,
     metadata?: Record<string, unknown>
-  ): void {
+  ): void  => {
     const isSuccess = status >= 200 && status < 300;
     const isError = status >= 400;
     
@@ -454,7 +454,7 @@ class MonitoringService implements APMService {
   trackUserInteraction(
     action: string,
     metadata?: Record<string, unknown>
-  ): void {
+  ): void  => {
     // Add breadcrumb for user interaction
     addBreadcrumb('info', 'user_action', `User interaction: ${action}`, {
       action,
@@ -525,7 +525,7 @@ class MonitoringService implements APMService {
     );
   }
   
-  private async sendCriticalErrorAlert(error: Error, context?: Record<string, unknown>): Promise<void> {
+  private async sendCriticalErrorAlert(error: Error, context?: Record<string, unknown>): Promise<void>  {
     const criticalData = {
       message: error.message,
       name: error.name,
@@ -553,8 +553,8 @@ class MonitoringService implements APMService {
     message: string,
     level: 'info' | 'warning' | 'error',
     context?: Record<string, unknown>
-  ): void {
-    switch (level) => {
+  ): void  => {
+    switch (level) {
       case 'error':
         captureError(message, context);
         break;
@@ -573,7 +573,7 @@ class MonitoringService implements APMService {
     name: string,
     value: number,
     tags?: Record<string, unknown>
-  ): void {
+  ): void  => {
     const metric = {
       timestamp: Date.now(),
       type: 'metric',
@@ -596,7 +596,7 @@ class MonitoringService implements APMService {
   trackBusinessEvent(
     event: string,
     properties?: Record<string, unknown>
-  ): void {
+  ): void  => {
     const eventData = {
       timestamp: Date.now(),
       type: 'event',
@@ -670,7 +670,7 @@ class MonitoringService implements APMService {
   }
 
   // Core Web Vitals getter
-  getCoreWebVitals(): Promise<CoreWebVitals> {
+  getCoreWebVitals(): Promise<CoreWebVitals>  => {
     return new Promise(resolve => {
       const vitals: Partial<CoreWebVitals> = {};
 
@@ -685,7 +685,7 @@ class MonitoringService implements APMService {
             checkComplete();
           });
           lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
-        } catch (error) => {
+        } catch () {
           vitals.lcp = 0;
         }
       }
@@ -728,7 +728,7 @@ class MonitoringService implements APMService {
   }
 
   // Enhanced real-time error reporting
-  private async sendToExternalAPM(type: string, data: unknown): Promise<void> {
+  private async sendToExternalAPM(type: string, data: unknown): Promise<void>  {
     try {
       // Send to external monitoring services
       const promises = [];
@@ -754,13 +754,13 @@ class MonitoringService implements APMService {
       // Send to all services concurrently
       await Promise.allSettled(promises);
       
-    } catch (error) => {
+    } catch () {
       // Log but don't throw - monitoring failures shouldn't break the app
       console.warn('External APM integration failed:', error);
     }
   }
   
-  private async sendToDatadog(type: string, data: unknown): Promise<void> {
+  private async sendToDatadog(type: string, data: unknown): Promise<void>  {
     try {
       if (window.DD_RUM) {
         if (type === 'error' || type === 'critical_error') {
@@ -769,12 +769,12 @@ class MonitoringService implements APMService {
           window.DD_RUM.addAction(type, data);
         }
       }
-    } catch (error) => {
+    } catch () {
       console.warn('DataDog integration failed:', error);
     }
   }
   
-  private async sendToSentry(type: string, data: unknown): Promise<void> {
+  private async sendToSentry(type: string, data: unknown): Promise<void>  {
     try {
       const Sentry = (window as unknown as { __SENTRY__?: unknown }).__SENTRY__;
       if (Sentry) {
@@ -792,12 +792,12 @@ class MonitoringService implements APMService {
           });
         }
       }
-    } catch (error) => {
+    } catch () {
       console.warn('Sentry integration failed:', error);
     }
   }
   
-  private async sendToLogRocket(type: string, data: unknown): Promise<void> {
+  private async sendToLogRocket(type: string, data: unknown): Promise<void>  {
     try {
       const LogRocket = (window as any).__LOGROCKET__;
       if (LogRocket) {
@@ -810,7 +810,7 @@ class MonitoringService implements APMService {
           LogRocket.track(type, data);
         }
       }
-    } catch (error) => {
+    } catch () {
       console.warn('LogRocket integration failed:', error);
     }
   }
@@ -822,7 +822,7 @@ class MonitoringService implements APMService {
     return 'info';
   }
 
-  private async sendToCustomEndpoint(type: string, data: unknown): Promise<void> {
+  private async sendToCustomEndpoint(type: string, data: unknown): Promise<void>  {
     const webhookUrl = import.meta.env.VITE_MONITORING_WEBHOOK_URL;
     if (!webhookUrl) return;
 
@@ -852,7 +852,7 @@ class MonitoringService implements APMService {
       if (!response.ok) {
         console.warn(`Webhook failed with status: ${response.status}`);
       }
-    } catch (error) => {
+    } catch () {
       console.warn('Custom webhook integration failed:', error);
     }
   }
@@ -865,7 +865,7 @@ class MonitoringService implements APMService {
   }
 
   // Health check integration
-  getMonitoringHealth(): {
+  getMonitoringHealth():   {
     status: 'healthy' | 'degraded' | 'unhealthy';
     metrics: {
       totalMetrics: number;
@@ -971,7 +971,7 @@ class MonitoringService implements APMService {
   private checkAlertRules(): void {
     const now = Date.now();
 
-    for (const rule of this.alertRules) => {
+    for (const rule of this.alertRules) {
       if (!rule.enabled) continue;
 
       // Check cooldown
@@ -1009,7 +1009,7 @@ class MonitoringService implements APMService {
     }
 
     // Evaluate condition
-    switch (operator) => {
+    switch (operator) {
       case '>':
         return value > threshold;
       case '<':
@@ -1025,7 +1025,7 @@ class MonitoringService implements APMService {
     }
   }
 
-  private async triggerAlert(rule: AlertRule): Promise<void> {
+  private async triggerAlert(rule: AlertRule): Promise<void>  {
     const notification: AlertNotification = {
       id: `alert_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       ruleId: rule.id,
@@ -1192,8 +1192,8 @@ export const withMonitoring = <T extends (...args: unknown[]) => unknown>(
   fn: T,
   name: string,
   operation: string = 'function'
-): T => {
-  return ((...args: unknown[]) => {
+): T  => {
+  return((...args: unknown[]) => {
     const transaction = startTransaction(name, operation);
     try {
       const result = fn(...args);
@@ -1217,7 +1217,7 @@ export const withMonitoring = <T extends (...args: unknown[]) => unknown>(
         transaction.finish();
         return result;
       }
-    } catch (error) => {
+    } catch () {
       transaction.setStatus('error');
       transaction.setMetadata({
         error: error instanceof Error ? error.message : String(error),
@@ -1242,7 +1242,7 @@ export const trackBugReportSubmission = (bugData: {
   severity: string;
   hasAttachments: boolean;
   processingTime: number;
-}) {
+}) => {
   monitoringService.trackBusinessEvent('bug_report_submitted', {
     bug_type: bugData.bugType,
     severity: bugData.severity,
@@ -1257,21 +1257,21 @@ export const trackBugReportSubmission = (bugData: {
   });
 };
 
-export const trackBugReportError = (error: string, context: Record<string, unknown>): void => {
+export const trackBugReportError = (error: string, context: Record<string, unknown>): void  =>  => {
   monitoringService.trackBusinessEvent('bug_report_error', {
     error,
     context
   });
 };
 
-export const trackBugReportValidationError = (field: string, error: string): void => {
+export const trackBugReportValidationError = (field: string, error: string): void  =>  => {
   monitoringService.trackBusinessEvent('bug_report_validation_error', {
     field,
     error
   });
 };
 
-export const trackBugReportFileUpload = (fileName: string, fileSize: number, success: boolean): void => {
+export const trackBugReportFileUpload = (fileName: string, fileSize: number, success: boolean): void  =>  => {
   monitoringService.trackBusinessEvent('bug_report_file_upload', {
     file_name: fileName,
     file_size: fileSize,

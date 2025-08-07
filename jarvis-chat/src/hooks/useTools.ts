@@ -85,7 +85,7 @@ export function useTools(): UseToolsReturn {
         //   .select('*')
         //   .eq('user_id', user.id)
         //   .single();
-      } catch (err) => {
+      } catch (err) {
         console.error('Error loading tool preferences:', err);
         setError('Failed to load tool preferences');
         initializeDefaultSelections();
@@ -135,15 +135,14 @@ export function useTools(): UseToolsReturn {
         // });
 
         console.log('Tool usage recorded:', { toolId, toolName, sessionId });
-      } catch (err) => {
+      } catch (err) {
         console.error('Error recording tool usage:', err);
       }
     },
     [user?.id, preferences.analytics_enabled]
   );
 
-  const toggleTool = useCallback(
-    (toolId: string) => {
+  const toggleTool = useCallback((toolId: string) => {
       const tool = AVAILABLE_TOOLS.find(t => t.id === toolId);
       if (!tool) return;
 
@@ -189,8 +188,7 @@ export function useTools(): UseToolsReturn {
     return selectedTools.filter(tool => tool.enabled).map(tool => tool.tool_id);
   }, [selectedTools]);
 
-  const isToolSelected = useCallback(
-    (toolId: string) => {
+  const isToolSelected = useCallback((toolId: string) => {
       const tool = selectedTools.find(t => t.tool_id === toolId);
       return tool?.enabled || false;
     },

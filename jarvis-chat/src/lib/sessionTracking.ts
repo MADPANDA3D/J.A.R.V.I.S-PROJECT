@@ -75,7 +75,7 @@ class SessionTracker {
   private pageStartTime?: number;
   private currentPageView?: PageView;
 
-  constructor() => {
+  constructor() {
     this.initializeSession();
     this.setupActivityTracking();
     this.setupNavigationTracking();
@@ -141,7 +141,7 @@ class SessionTracker {
     };
   }
 
-  private parseBrowserInfo(userAgent: string): { name: string; version: string } {
+  private parseBrowserInfo(userAgent: string):   { name: string; version: string } {
     const browsers = [
       { name: 'Chrome', regex: /Chrome\/(\d+)/ },
       { name: 'Firefox', regex: /Firefox\/(\d+)/ },
@@ -150,7 +150,7 @@ class SessionTracker {
       { name: 'Opera', regex: /OPR\/(\d+)/ }
     ];
 
-    for (const browser of browsers) => {
+    for (const browser of browsers) {
       const match = userAgent.match(browser.regex);
       if (match) {
         return { name: browser.name, version: match[1] };
@@ -184,7 +184,7 @@ class SessionTracker {
     this.resetActivityTimer();
 
     // Track when user leaves/returns to page
-    document.addEventListener('visibilitychange', () => {
+    document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
         this.handlePageHidden();
       } else {
@@ -193,7 +193,7 @@ class SessionTracker {
     });
 
     // Track page unload
-    window.addEventListener('beforeunload', () => {
+    window.addEventListener("beforeunload", () => {
       this.endSession();
     });
   }
@@ -211,12 +211,12 @@ class SessionTracker {
     const originalPushState = history.pushState;
     const originalReplaceState = history.replaceState;
 
-    history.pushState = (...args) => {
+    history.pushState = (...args) {
       originalPushState.apply(history, args);
       setTimeout(trackNavigation, 0);
     };
 
-    history.replaceState = (...args) => {
+    history.replaceState = (...args) {
       originalReplaceState.apply(history, args);
       setTimeout(trackNavigation, 0);
     };
@@ -224,7 +224,7 @@ class SessionTracker {
 
   private setupUserActionTracking(): void {
     // Track form submissions
-    document.addEventListener('submit', (event) => {
+    document.addEventListener("submit", (event) => {
       const form = event.target as HTMLFormElement;
       this.trackUserAction('form_submit', {
         elementId: form.id,
@@ -234,7 +234,7 @@ class SessionTracker {
     });
 
     // Track button clicks
-    document.addEventListener('click', (event) => {
+    document.addEventListener("click", (event) => {
       const target = event.target as HTMLElement;
       if (target.tagName === 'BUTTON' || target.type === 'button' || target.type === 'submit') {
         this.trackUserAction('button_click', {
@@ -247,7 +247,7 @@ class SessionTracker {
 
     // Track scroll depth
     let maxScrollDepth = 0;
-    document.addEventListener('scroll', () => {
+    document.addEventListener("scroll", () => {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
@@ -419,7 +419,7 @@ class SessionTracker {
     success: boolean, 
     errorMessage?: string, 
     metadata?: Record<string, unknown>
-  ): void {
+  ): void  => {
     if (!this.currentSession) return;
 
     const authEvent: AuthEvent = {
@@ -504,7 +504,7 @@ class SessionTracker {
     return [...this.sessionStorage, ...(this.currentSession ? [this.currentSession] : [])];
   }
 
-  getSessionAnalytics(): {
+  getSessionAnalytics():   {
     totalSessions: number;
     averageSessionDuration: number;
     totalPageViews: number;
@@ -568,7 +568,7 @@ class SessionTracker {
       };
       
       localStorage.setItem('jarvis_sessions', JSON.stringify(data));
-    } catch (error) => {
+    } catch (error) {
       console.warn('Failed to persist sessions:', error);
     }
   }
@@ -600,7 +600,7 @@ class SessionTracker {
           }
         }
       }
-    } catch (error) => {
+    } catch (error) {
       console.warn('Failed to load persisted sessions:', error);
     }
   }

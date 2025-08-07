@@ -136,7 +136,7 @@ class BugAssignmentSystem {
   private roundRobinIndex: number = 0;
   private escalationTimers: Map<string, NodeJS.Timeout> = new Map();
 
-  private constructor() => {
+  private constructor() {
     this.initializeTeamMembers();
     this.initializeAssignmentRules();
     this.initializeEscalationRules();
@@ -152,14 +152,14 @@ class BugAssignmentSystem {
   /**
    * Assign bug to a team member
    */
-  async assignBug(
+  assignBug = async (
     bugId: string,
     assigneeId: string,
     assignerId: string,
     method: AssignmentMethod = 'manual',
     reason?: string,
     notify: boolean = true
-  ): Promise<{ success: boolean; error?: string; assignment?: AssignmentHistory }> {
+  ): Promise<{ success: boolean; error?: string; assignment?: AssignmentHistory }> => {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -273,7 +273,7 @@ class BugAssignmentSystem {
         assignment
       };
 
-    } catch (error) => {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -293,7 +293,7 @@ class BugAssignmentSystem {
   /**
    * Auto-assign bug using rules and algorithms
    */
-  async autoAssignBug(bugId: string, assignerId: string = 'system'): Promise<string | null> {
+  async autoAssignBug(bugId: string, assignerId: string = 'system'): Promise<string | null>  {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -341,7 +341,7 @@ class BugAssignmentSystem {
 
       return result.success ? bestRecommendation.userId : null;
 
-    } catch (error) => {
+    } catch (error) {
       centralizedLogging.error(
         'assignment-system',
         'system',
@@ -355,7 +355,7 @@ class BugAssignmentSystem {
   /**
    * Get assignment recommendations for a bug
    */
-  async getAssignmentRecommendations(bugReport: any): Promise<AssignmentRecommendation[]> {
+  async getAssignmentRecommendations(bugReport: any): Promise<AssignmentRecommendation[]>  {
     const availableMembers = Array.from(this.teamMembers.values())
       .filter(member => member.availability === 'available' && member.currentWorkload < member.workloadCapacity);
 
@@ -365,7 +365,7 @@ class BugAssignmentSystem {
 
     const recommendations: AssignmentRecommendation[] = [];
 
-    for (const member of availableMembers) => {
+    for (const member of availableMembers) {
       const skillMatch = this.calculateSkillMatch(member, bugReport);
       const workloadImpact = this.calculateWorkloadImpact(member);
       const reasons: string[] = [];
@@ -427,7 +427,7 @@ class BugAssignmentSystem {
     bugId: string,
     reason: string,
     escalatedBy: string = 'system'
-  ): Promise<{ success: boolean; newPriority?: BugPriority; error?: string }> {
+  ): Promise< => { success: boolean; newPriority?: BugPriority; error?: string }> {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -498,7 +498,7 @@ class BugAssignmentSystem {
         newPriority
       };
 
-    } catch (error) => {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -544,7 +544,7 @@ class BugAssignmentSystem {
   /**
    * Balance workload across team members
    */
-  async balanceWorkload(): Promise<AssignmentRecommendation[]> {
+  async balanceWorkload(): Promise<AssignmentRecommendation[]>  {
     const workloadMetrics = this.getWorkloadMetrics();
     const recommendations: AssignmentRecommendation[] = [];
 
@@ -727,12 +727,12 @@ class BugAssignmentSystem {
     ];
   }
 
-  private async applyAssignmentRules(bugReport: any): Promise<string | null> {
+  private async applyAssignmentRules(bugReport: any): Promise<string | null>  {
     const sortedRules = this.assignmentRules
       .filter(rule => rule.enabled)
       .sort((a, b) => a.priority - b.priority);
 
-    for (const rule of sortedRules) => {
+    for (const rule of sortedRules) {
       if (this.evaluateRuleConditions(rule.conditions, bugReport)) {
         if (rule.action.assignTo && rule.action.assignTo !== 'auto' && rule.action.assignTo !== 'round_robin') {
           rule.lastUsed = new Date().toISOString();
@@ -748,7 +748,7 @@ class BugAssignmentSystem {
     return conditions.every(condition => {
       const fieldValue = bugReport[condition.field];
       
-      switch (condition.operator) => {
+      switch (condition.operator) {
         case 'equals':
           return fieldValue === condition.value;
         case 'contains':
@@ -783,7 +783,7 @@ class BugAssignmentSystem {
     return member.currentWorkload / member.workloadCapacity;
   }
 
-  private validateAssignment(assignee: TeamMember, bugReport: any): { isValid: boolean; warnings: string[] } {
+  private validateAssignment(assignee: TeamMember, bugReport: any):   { isValid: boolean; warnings: string[] } {
     // bugReport parameter available for future validation logic
     void bugReport;
     const warnings: string[] = [];
@@ -836,10 +836,10 @@ class BugAssignmentSystem {
     }
   }
 
-  private async handleEscalation(bugId: string, rule: EscalationRule): Promise<void> {
+  private async handleEscalation(bugId: string, rule: EscalationRule): Promise<void>  {
     try {
-      for (const action of rule.actions) => {
-        switch (action.type) => {
+      for (const action of rule.actions) {
+        switch (action.type) {
           case 'increase_priority':
             await this.escalateBugPriority(bugId, `Auto-escalation: ${rule.name}`);
             break;
@@ -850,7 +850,7 @@ class BugAssignmentSystem {
           }
         }
       }
-    } catch (error) => {
+    } catch (error) {
       centralizedLogging.error(
         'assignment-system',
         'system',
@@ -929,7 +929,7 @@ class BugAssignmentSystem {
     return member ? member.averageResolutionTime / 4 : 0; // Rough estimate
   }
 
-  private async getUnassignedBugs(): Promise<any[]> {
+  private async getUnassignedBugs(): Promise<any[]>  {
     // This would query the database for unassigned bugs
     // For now, return empty array as placeholder
     return [];

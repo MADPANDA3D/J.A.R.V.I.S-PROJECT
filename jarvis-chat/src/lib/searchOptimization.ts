@@ -43,7 +43,7 @@ export class SearchQueryOptimizer {
   private config: SearchOptimizationConfig;
   private queryCache = new Map<string, { result: unknown; timestamp: number; hits: number }>();
 
-  constructor(config: Partial<SearchOptimizationConfig> = {}) => {
+  constructor(config: Partial<SearchOptimizationConfig> = {}) {
     this.config = { ...defaultConfig, ...config };
   }
 
@@ -53,7 +53,7 @@ export class SearchQueryOptimizer {
     offset?: number;
     sortBy?: 'relevance' | 'date' | 'conversation';
     includeHighlights?: boolean;
-  } = {}): OptimizedQuery {
+  } = {}): OptimizedQuery  => {
     const { query, dateRange, messageTypes, sessionId, hasErrors } = filters;
     const { limit = this.config.paginationSize, offset = 0, sortBy = 'relevance' } = options;
 
@@ -233,7 +233,7 @@ export class SearchQueryOptimizer {
   }
 
   // Check if query result is cached and still valid
-  getCachedResult<T>(cacheKey: string): T | null {
+  getCachedResult<T>(cacheKey: string): T | null  => {
     if (!this.config.enableResultCaching) return null;
 
     const cached = this.queryCache.get(cacheKey);
@@ -251,7 +251,7 @@ export class SearchQueryOptimizer {
   }
 
   // Cache query result with LRU eviction
-  setCachedResult<T>(cacheKey: string, result: T): void {
+  setCachedResult<T>(cacheKey: string, result: T): void  => {
     if (!this.config.enableResultCaching) return;
 
     // Evict oldest entries if cache is full
@@ -261,7 +261,7 @@ export class SearchQueryOptimizer {
       
       // Remove least recently used entries
       const toRemove = Math.floor(this.config.maxCacheSize * 0.2);
-      for (let i = 0; i < toRemove; i++) => {
+      for (let i = 0; i < toRemove; i++) {
         this.queryCache.delete(entries[i][0]);
       }
     }
@@ -279,7 +279,7 @@ export class SearchQueryOptimizer {
   }
 
   // Get cache statistics
-  getCacheStats() => {
+  getCacheStats() {
     const entries = Array.from(this.queryCache.values());
     return {
       size: this.queryCache.size,
@@ -301,7 +301,7 @@ export function createDebouncedSearch<T extends unknown[], R>(
     reject: (error: unknown) => void;
   }> = [];
 
-  return (...args: T): Promise<R> => {
+  return(...args: T): Promise<R>  => {
     return new Promise<R>((resolve, reject) => {
       pendingResolvers.push({ resolve, reject });
 
@@ -316,7 +316,7 @@ export function createDebouncedSearch<T extends unknown[], R>(
         try {
           const result = await searchFunction(...args);
           resolvers.forEach(({ resolve }) => resolve(result));
-        } catch (error) => {
+        } catch (error) {
           resolvers.forEach(({ reject }) => reject(error));
         }
       }, delayMs);
@@ -333,10 +333,10 @@ export class BatchQueryOptimizer {
   }> = [];
   private batchTimeout: NodeJS.Timeout | null = null;
 
-  constructor(private batchDelayMs: number = 50) => {}
+  constructor(private batchDelayMs: number = 50) {}
 
   // Add query to batch
-  addQuery(query: OptimizedQuery): Promise<unknown> {
+  addQuery(query: OptimizedQuery): Promise<unknown>  => {
     return new Promise((resolve, reject) => {
       this.pendingQueries.push({ query, resolve, reject });
 
@@ -351,7 +351,7 @@ export class BatchQueryOptimizer {
   }
 
   // Execute all pending queries as a batch
-  private async executeBatch(): Promise<void> {
+  private async executeBatch(): Promise<void>  {
     if (this.pendingQueries.length === 0) return;
 
     const batch = [...this.pendingQueries];
@@ -361,7 +361,7 @@ export class BatchQueryOptimizer {
     // Group similar queries for optimization
     const groupedQueries = this.groupSimilarQueries(batch);
 
-    for (const group of groupedQueries) => {
+    for (const group of groupedQueries) {
       try {
         // Execute grouped queries (implementation would depend on actual database client)
         const results = await this.executeQueryGroup(group);
@@ -369,7 +369,7 @@ export class BatchQueryOptimizer {
         group.forEach((item, index) => {
           item.resolve(results[index]);
         });
-      } catch (error) => {
+      } catch (error) {
         group.forEach(item => {
           item.reject(error);
         });
@@ -408,7 +408,7 @@ export class BatchQueryOptimizer {
   }
 
   // Execute a group of similar queries (placeholder implementation)
-  private async executeQueryGroup(): Promise<unknown[]> {
+  private async executeQueryGroup(): Promise<unknown[]>  {
     // This would be implemented based on the actual database client
     // For Supabase, this might involve using batch queries or parallel execution
     throw new Error('executeQueryGroup not implemented - requires database client integration');

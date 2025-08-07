@@ -372,7 +372,7 @@ describe('WebhookService', () => {
       expect(mockFetch).toHaveBeenCalledTimes(3);
     });
 
-    it('should not retry on 4xx client errors (except 408, 429)', async () => {
+    it('should not retry on 4xx client errors (except 408, 429)', async () {
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 400,
@@ -602,7 +602,7 @@ describe('WebhookService', () => {
         'string response',
       ];
 
-      for (const invalidResponse of testCases) => {
+      for (const invalidResponse of testCases) {
         mockFetch.mockResolvedValueOnce({
           ok: true,
           status: 200,
@@ -672,7 +672,7 @@ describe('WebhookService', () => {
 
     it('should calculate percentile response times', async () => {
       // Send multiple requests to get response time data
-      for (let i = 0; i < 10; i++) => {
+      for (let i = 0; i < 10; i++) {
         mockFetch.mockResolvedValueOnce({
           ok: true,
           status: 200,
@@ -759,7 +759,7 @@ describe('WebhookService', () => {
         () => originalDateNow() + timeAdvance
       );
 
-      mockFetch.mockImplementationOnce(async () => {
+      mockFetch.mockImplementationOnce(async () {
         // Simulate 1.5 second delay
         timeAdvance = 1500;
         return {

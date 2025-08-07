@@ -35,8 +35,7 @@ const bugReportSchema = z.object({
 
 const attachmentSchema = z.object({
   size: z.number().max(10 * 1024 * 1024, 'File size must be less than 10MB'),
-  type: z.string().refine(
-    (type) => {
+  type: z.string().refine((type) => {
       const allowedTypes = [
         'image/jpeg', 'image/png', 'image/gif', 'image/webp',
         'text/plain', 'text/csv', 'application/json',
@@ -73,7 +72,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
   });
 
   // Collect browser information
-  const collectBrowserInfo = useCallback((): BrowserInfo => {
+  const collectBrowserInfo = useCallback((): BrowserInfo  => {
     const nav = navigator;
     const screen = window.screen;
     
@@ -101,7 +100,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
   }, []);
 
   // Collect enhanced error context
-  const collectErrorContext = useCallback(async (): Promise<EnhancedErrorContext> => {
+  const collectErrorContext = useCallback(async (): Promise<EnhancedErrorContext>  => {
     try {
       // Get recent errors from error tracking
       const recentErrors = errorTracker.getRecentErrors(10);
@@ -140,7 +139,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
           deviceInfo: collectBrowserInfo()
         }
       };
-    } catch (error) => {
+    } catch (error) {
       centralizedLogging.warn(
         'bug-report-hook',
         'system',
@@ -165,7 +164,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
   }, [collectBrowserInfo]);
 
   // Validate form data
-  const validateForm = useCallback((): boolean => {
+  const validateForm = useCallback((): boolean  => {
     const validation: BugReportFormValidation = {
       title: { isValid: true },
       description: { isValid: true },
@@ -178,7 +177,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
     try {
       // Validate main form data
       bugReportSchema.parse(formState.data);
-    } catch (error) => {
+    } catch (error) {
       if (error instanceof z.ZodError) {
         error.errors.forEach(err => {
           const field = err.path[0] as keyof BugReportFormValidation;
@@ -197,7 +196,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
       formState.data.attachments.forEach((file) => {
         try {
           attachmentSchema.parse(file);
-        } catch (error) => {
+        } catch (error) {
           if (error instanceof z.ZodError) {
             error.errors.forEach(err => {
               attachmentErrors.push(`${file.name}: ${err.message}`);
@@ -239,7 +238,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
   // Submit bug report
   const submitBugReport = useCallback(async (
     formData: BugReportFormData
-  ): Promise<BugSubmissionResult> => {
+  ): Promise<BugSubmissionResult>  => {
     if (!validateForm()) {
       return {
         success: false,
@@ -312,7 +311,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
             }));
 
             return result.data;
-          } catch (error) => {
+          } catch (error) {
             setFormState(prev => ({
               ...prev,
               uploadProgress: prev.uploadProgress.map(p => 
@@ -353,7 +352,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
         message: 'Bug report submitted successfully'
       };
 
-    } catch (error) => {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
       
       centralizedLogging.error(
@@ -407,7 +406,7 @@ export const useBugReport = (initialData: Partial<BugReportFormData> = {}) => {
 };
 
 // Helper functions
-function getBrowserName(): string {
+const getBrowserName = (): string => {
   const userAgent = navigator.userAgent;
   
   if (userAgent.includes('Chrome')) return 'Chrome';
@@ -419,7 +418,7 @@ function getBrowserName(): string {
   return 'Unknown';
 }
 
-function getBrowserVersion(): string {
+const getBrowserVersion = (): string => {
   const userAgent = navigator.userAgent;
   const browserName = getBrowserName();
   
@@ -437,7 +436,7 @@ interface CoreWebVitals {
   ttfb?: number;
 }
 
-async function collectCoreWebVitals(): Promise<CoreWebVitals> {
+const collectCoreWebVitals = async (): Promise<CoreWebVitals> => {
   return new Promise((resolve) => {
     const vitals: CoreWebVitals = {};
     
@@ -478,7 +477,7 @@ async function collectCoreWebVitals(): Promise<CoreWebVitals> {
         setTimeout(() => {
           resolve(vitals);
         }, 1000);
-      } catch {
+      } catch (error) {
         resolve(vitals);
       }
     } else {

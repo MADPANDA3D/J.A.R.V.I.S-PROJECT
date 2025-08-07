@@ -7,7 +7,7 @@ describe('Configuration Templates Validation', () => {
 
   describe('Environment Template Files', () => {
     it('should have .env.template for development', () => {
-      expect(() => {
+      expect(() {
         const template = readFileSync(
           join(templatesDir, '.env.template'),
           'utf8'
@@ -18,7 +18,7 @@ describe('Configuration Templates Validation', () => {
     });
 
     it('should have .env.staging.template for staging', () => {
-      expect(() => {
+      expect(() {
         const template = readFileSync(
           join(templatesDir, '.env.staging.template'),
           'utf8'
@@ -29,7 +29,7 @@ describe('Configuration Templates Validation', () => {
     });
 
     it('should have .env.production.template for production', () => {
-      expect(() => {
+      expect(() {
         const template = readFileSync(
           join(templatesDir, '.env.production.template'),
           'utf8'

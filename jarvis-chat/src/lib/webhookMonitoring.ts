@@ -82,7 +82,7 @@ class WebhookMonitoringService {
   private readonly MAX_HISTORY_SIZE = 1000;
   private readonly TREND_WINDOW_MINUTES = 60;
 
-  constructor() => {
+  constructor() {
     this.initializeDefaultAlertRules();
   }
 
@@ -94,7 +94,7 @@ class WebhookMonitoringService {
     success: boolean,
     statusCode?: number,
     error?: string
-  ): void {
+  ): void  => {
     const entry = {
       timestamp: new Date(),
       responseTime,
@@ -204,7 +204,7 @@ class WebhookMonitoringService {
     const now = new Date();
     const performanceTrends = [];
 
-    for (let i = 12; i >= 0; i--) => {
+    for (let i = 12; i >= 0; i--) {
       const intervalStart = new Date(now.getTime() - i * 5 * 60 * 1000);
       const intervalEnd = new Date(now.getTime() - (i - 1) * 5 * 60 * 1000);
 
@@ -264,7 +264,7 @@ class WebhookMonitoringService {
   subscribeToAlerts(callback: (alert: AlertEvent) => void): () => void {
     this.alertSubscribers.push(callback);
 
-    return () => {
+    return () {
       const index = this.alertSubscribers.indexOf(callback);
       if (index > -1) {
         this.alertSubscribers.splice(index, 1);
@@ -366,7 +366,7 @@ class WebhookMonitoringService {
     const currentMetrics = this.getCurrentMetrics();
     const now = new Date();
 
-    for (const rule of this.alertRules) => {
+    for (const rule of this.alertRules) {
       if (!rule.enabled) continue;
 
       // Check cooldown period
@@ -397,7 +397,7 @@ class WebhookMonitoringService {
         this.alertSubscribers.forEach(subscriber => {
           try {
             subscriber(alertEvent);
-          } catch (error) => {
+          } catch (error) {
             console.error('Error notifying alert subscriber:', error);
           }
         });
@@ -412,7 +412,7 @@ class WebhookMonitoringService {
     rule: AlertRule,
     metrics: WebhookMonitoringMetrics
   ): string {
-    switch (rule.id) => {
+    switch (rule.id) {
       case 'high_error_rate':
         return `Webhook error rate is critically high at ${metrics.errorRate.toFixed(1)}% (${metrics.failedRequests}/${metrics.totalRequests} requests failed)`;
       case 'elevated_error_rate':

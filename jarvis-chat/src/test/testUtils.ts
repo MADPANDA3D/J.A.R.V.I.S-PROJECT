@@ -9,7 +9,7 @@ import { vi } from 'vitest';
 export const createTestError = (message: string, code?: string) => {
   const error = new Error(message);
   if (code) {
-    (error as any).code = code;
+    (error as Error & { code: string }).code = code;
   }
   return error;
 };
@@ -45,7 +45,7 @@ export const mockAssignmentSystem = {
 };
 
 // Common test data factories
-export const createMockBugReport = (overrides: any = {}) => ({
+export const createMockBugReport = (overrides: unknown = {}) => ({
   id: 'test-bug-' + Math.random().toString(36).substr(2, 9),
   title: 'Test Bug Report',
   description: 'This is a test bug report',
@@ -58,7 +58,7 @@ export const createMockBugReport = (overrides: any = {}) => ({
   ...overrides,
 });
 
-export const createMockUser = (overrides: any = {}) => ({
+export const createMockUser = (overrides: unknown = {}) => ({
   id: 'test-user-' + Math.random().toString(36).substr(2, 9),
   email: 'test@example.com',
   name: 'Test User',

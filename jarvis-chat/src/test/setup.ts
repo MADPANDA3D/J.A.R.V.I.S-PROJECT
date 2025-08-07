@@ -3,12 +3,12 @@ import '@testing-library/jest-dom';
 import { createTestError } from './testUtils';
 
 // Global error function for tests
-(global as any).error = (message: string) => {
+(global as unknown as { error: (message: string) => void }).error = (message: string) => {
   throw createTestError(message);
 };
 
 // Define BugStatus enum globally for tests
-(global as any).BugStatus = {
+(global as unknown as { BugStatus: typeof BugStatus }).BugStatus = {
   OPEN: 'open',
   IN_PROGRESS: 'in_progress',
   RESOLVED: 'resolved',
@@ -19,7 +19,7 @@ import { createTestError } from './testUtils';
 } as const;
 
 // Define BugPriority enum globally for tests
-(global as any).BugPriority = {
+(global as unknown as { BugPriority: typeof BugPriority }).BugPriority = {
   LOW: 'low',
   MEDIUM: 'medium',
   HIGH: 'high',

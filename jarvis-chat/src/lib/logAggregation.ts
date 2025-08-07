@@ -104,7 +104,7 @@ class LogAggregationService {
   private aggregationInterval?: number;
   private maxLogsInMemory = 10000;
 
-  constructor() => {
+  constructor() {
     this.initializePatterns();
     this.initializeRetentionPolicies();
     this.setupConsoleInterception();
@@ -236,27 +236,27 @@ class LogAggregationService {
       debug: console.debug.bind(console),
     };
 
-    console.log = (...args) => {
+    console.log = (...args) {
       this.logEntry('info', args.join(' '), 'console', 'general');
       originalConsole.log(...args);
     };
 
-    console.info = (...args) => {
+    console.info = (...args) {
       this.logEntry('info', args.join(' '), 'console', 'general');
       originalConsole.info(...args);
     };
 
-    console.warn = (...args) => {
+    console.warn = (...args) {
       this.logEntry('warn', args.join(' '), 'console', 'general');
       originalConsole.warn(...args);
     };
 
-    console.error = (...args) => {
+    console.error = (...args) {
       this.logEntry('error', args.join(' '), 'console', 'general');
       originalConsole.error(...args);
     };
 
-    console.debug = (...args) => {
+    console.debug = (...args) {
       this.logEntry('debug', args.join(' '), 'console', 'general');
       originalConsole.debug(...args);
     };
@@ -296,7 +296,7 @@ class LogAggregationService {
 
       // Send logs to external systems if configured
       this.sendToExternalSystems(recentLogs);
-    } catch (error) => {
+    } catch () {
       captureError(
         error instanceof Error ? error : new Error('Log processing failed'),
         {
@@ -409,7 +409,7 @@ class LogAggregationService {
     });
   }
 
-  private async sendLogAlert(alert: LogAlert): Promise<void> {
+  private async sendLogAlert(alert: LogAlert): Promise<void>  {
     try {
       const alertWebhook = import.meta.env.VITE_LOG_ALERT_WEBHOOK_URL;
       if (alertWebhook) {
@@ -434,7 +434,7 @@ class LogAggregationService {
           metadata: alert.metadata,
         });
       }
-    } catch (error) => {
+    } catch () {
       captureWarning('Failed to send log alert', {
         alert_id: alert.id,
         error: error instanceof Error ? error.message : 'Unknown error',
@@ -475,7 +475,7 @@ class LogAggregationService {
           (a, b) => a.timestamp - b.timestamp
         );
       }
-    } catch (error) => {
+    } catch () {
       captureWarning('Failed to enforce log retention policies', { error });
     }
   }
@@ -495,7 +495,7 @@ class LogAggregationService {
 
       // Business insights
       this.analyzeBusinessMetrics(recentLogs);
-    } catch (error) => {
+    } catch () {
       captureWarning('Failed to perform log analysis', { error });
     }
   }
@@ -607,7 +607,7 @@ class LogAggregationService {
     });
   }
 
-  private async sendToExternalSystems(logs: LogEntry[]): Promise<void> {
+  private async sendToExternalSystems(logs: LogEntry[]): Promise<void>  {
     try {
       // Send to external log aggregation service if configured
       const logEndpoint = import.meta.env.VITE_LOG_AGGREGATION_ENDPOINT;
@@ -624,7 +624,7 @@ class LogAggregationService {
           }),
         });
       }
-    } catch (error) => {
+    } catch () {
       // Silently fail external log shipping
     }
   }
@@ -719,24 +719,21 @@ class LogAggregationService {
     const cutoff = timeRange ? Date.now() - timeRange : 0;
     const logs = this.logs.filter(log => log.timestamp >= cutoff);
 
-    const logsByLevel = logs.reduce(
-      (acc, log) => {
+    const logsByLevel = logs.reduce((acc, log) => {
         acc[log.level] = (acc[log.level] || 0) + 1;
         return acc;
       },
       {} as Record<string, number>
     );
 
-    const logsBySource = logs.reduce(
-      (acc, log) => {
+    const logsBySource = logs.reduce((acc, log) => {
         acc[log.source] = (acc[log.source] || 0) + 1;
         return acc;
       },
       {} as Record<string, number>
     );
 
-    const logsByCategory = logs.reduce(
-      (acc, log) => {
+    const logsByCategory = logs.reduce((acc, log) => {
         acc[log.category] = (acc[log.category] || 0) + 1;
         return acc;
       },
@@ -1006,7 +1003,7 @@ class LogAggregationService {
   }
 
   // Health check for log aggregation service
-  public getLogAggregationHealth(): {
+  public getLogAggregationHealth():   {
     status: 'healthy' | 'degraded' | 'unhealthy';
     metrics: {
       isAggregating: boolean;

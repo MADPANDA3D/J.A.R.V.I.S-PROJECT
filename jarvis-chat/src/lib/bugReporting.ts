@@ -18,7 +18,7 @@ import type {
 class BugReportingService {
   private static instance: BugReportingService;
   
-  private constructor() => {}
+  private constructor() {}
 
   static getInstance(): BugReportingService {
     if (!BugReportingService.instance) {
@@ -30,7 +30,7 @@ class BugReportingService {
   /**
    * Create a new bug report with enhanced error context
    */
-  async createBugReport(bugData: BugReportData): Promise<BugSubmissionResult> {
+  async createBugReport(bugData: BugReportData): Promise<BugSubmissionResult>  {
     const correlationId = this.generateCorrelationId();
     
     try {
@@ -88,7 +88,7 @@ class BugReportingService {
 
       return result;
 
-    } catch (error) => {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -113,7 +113,7 @@ class BugReportingService {
   /**
    * Collect enhanced error context from existing error tracking systems
    */
-  private async collectErrorContext(): Promise<EnhancedErrorContext> {
+  private async collectErrorContext(): Promise<EnhancedErrorContext>  {
     try {
       // Get recent errors from error tracking
       const recentErrors = errorTracker.getRecentErrors(10);
@@ -143,7 +143,7 @@ class BugReportingService {
         userSession,
         componentStack
       };
-    } catch (error) => {
+    } catch (error) {
       centralizedLogging.warn(
         'bug-reporting',
         'system',
@@ -163,7 +163,7 @@ class BugReportingService {
   /**
    * Collect monitoring data from performance metrics
    */
-  private async collectMonitoringData(): Promise<any> {
+  private async collectMonitoringData(): Promise<any>  {
     try {
       const currentMetrics = performanceMetrics.getCurrentMetrics();
       // const resourceUtilization = performanceMetrics.getResourceUtilization(); // For future use
@@ -204,7 +204,7 @@ class BugReportingService {
           timestamp: alert.timestamp
         }))
       };
-    } catch (error) => {
+    } catch (error) {
       centralizedLogging.warn(
         'bug-reporting',
         'system',
@@ -248,7 +248,7 @@ class BugReportingService {
   /**
    * Store bug report in database
    */
-  private async storeBugReport(enhancedBugData: any): Promise<BugSubmissionResult> {
+  private async storeBugReport(enhancedBugData: any): Promise<BugSubmissionResult>  {
     try {
       const { data, error } = await bugReportOperations.createBugReport({
         title: enhancedBugData.title,
@@ -283,7 +283,7 @@ class BugReportingService {
         message: 'Bug report created successfully'
       };
 
-    } catch (error) => {
+    } catch (error) {
       throw new Error(`Database storage failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
@@ -311,7 +311,7 @@ class BugReportingService {
           correlatedErrors: recentErrors.length 
         }
       );
-    } catch (error) => {
+    } catch (error) {
       centralizedLogging.warn(
         'bug-reporting',
         'system',
@@ -332,7 +332,7 @@ class BugReportingService {
         `Bug reporting event: ${event}`,
         data
       );
-    } catch (error) => {
+    } catch (error) {
       // Silently fail - metrics are not critical
     }
   }
@@ -371,7 +371,7 @@ class BugReportingService {
     };
   }
 
-  private async getErrorPatterns(): Promise<any[]> {
+  private async getErrorPatterns(): Promise<any[]>  {
     // Integration with advanced error tracking would go here
     return [];
   }
@@ -389,7 +389,7 @@ class BugReportingService {
 
   private extractComponentStack(errors: unknown[]): string | undefined {
     // Look for React component stacks in recent errors
-    for (const error of errors) => {
+    for (const error of errors) {
       if (error.metadata?.componentStack) {
         return error.metadata.componentStack;
       }

@@ -67,7 +67,7 @@ export class SecretsManager {
     operation: string;
   }> = [];
 
-  constructor() => {
+  constructor() {
     this.initializeSecrets();
     this.setupRotationConfigs();
   }
@@ -238,7 +238,7 @@ export class SecretsManager {
     const environment = import.meta.env.VITE_APP_ENV || 'development';
 
     // Validate each secret
-    for (const secret of secrets) => {
+    for (const secret of secrets) {
       this.validateSecret(secret, errors, warnings, environment);
     }
 
@@ -341,7 +341,7 @@ export class SecretsManager {
    * Check rotation needs for secrets
    */
   private checkRotationNeeds(warnings: SecretWarning[]): void {
-    for (const [secretName, rotationConfig] of this.rotationConfigs) => {
+    for (const [secretName, rotationConfig] of this.rotationConfigs) {
       const secret = this.secrets.get(secretName);
       if (!secret || !secret.value) continue;
 
@@ -541,7 +541,7 @@ export class SecretsManager {
   /**
    * Get audit log for security monitoring
    */
-  public getAuditLog(): Array<{
+  public getAuditLog(): Array< {
     secret: string;
     timestamp: Date;
     operation: string;
@@ -571,7 +571,7 @@ export class SecretsManager {
   /**
    * Get rotation status for all secrets
    */
-  public getRotationStatus(): Array<{
+  public getRotationStatus(): Array< {
     secret: string;
     daysSinceRotation: number;
     daysUntilRotation: number;
@@ -579,7 +579,7 @@ export class SecretsManager {
   }> {
     const status = [];
 
-    for (const [secretName, rotationConfig] of this.rotationConfigs) => {
+    for (const [secretName, rotationConfig] of this.rotationConfigs) {
       const secret = this.secrets.get(secretName);
       if (!secret) continue;
 
@@ -621,14 +621,14 @@ export const secretsManager = new SecretsManager();
 /**
  * Validate secrets and log results
  */
-export function validateSecrets(): SecretValidationResult {
+export function validateSecrets(): SecretValidationResult  => {
   return secretsManager.validateSecrets();
 }
 
 /**
  * Log secrets validation results
  */
-export function logSecretsStatus(result: SecretValidationResult): void {
+export function logSecretsStatus(result: SecretValidationResult): void  => {
   console.log('🔐 Secrets Management Status:');
   console.log('==============================');
   console.log(`Validated at: ${result.timestamp.toISOString()}`);
@@ -659,7 +659,7 @@ export function logSecretsStatus(result: SecretValidationResult): void {
     'monitoring',
     'security',
   ] as const;
-  for (const category of categories) => {
+  for (const category of categories) {
     const categorySecrets = result.secrets.filter(s => s.category === category);
     if (categorySecrets.length > 0) {
       console.log(
@@ -773,7 +773,7 @@ export function logSecretsStatus(result: SecretValidationResult): void {
 /**
  * Get secrets health status for monitoring
  */
-export function getSecretsHealthStatus() => {
+export function getSecretsHealthStatus() {
   const result = validateSecrets();
   const rotationStatus = secretsManager.getRotationStatus();
 

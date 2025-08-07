@@ -24,7 +24,7 @@ const createLoggedSupabaseClient = (url: string, key: string, options: Record<st
     ...options,
     global: {
       ...options.global,
-      fetch: async (input: RequestInfo | URL, init?: RequestInit) => {
+      fetch: async (input: RequestInfo | URL, init?: RequestInit) {
         const startTime = performance.now();
         const correlationId = generateCorrelationId();
         const sessionId = getSessionId();
@@ -69,7 +69,7 @@ const createLoggedSupabaseClient = (url: string, key: string, options: Record<st
                 rowCount = responseData.data.length;
               }
             }
-          } catch (error) => {
+          } catch () {
             // Response body couldn't be parsed as JSON
           }
           
@@ -97,7 +97,7 @@ const createLoggedSupabaseClient = (url: string, key: string, options: Record<st
           
           return response;
           
-        } catch (error) => {
+        } catch () {
           const endTime = performance.now();
           const executionTime = endTime - startTime;
           
@@ -132,7 +132,7 @@ const createLoggedSupabaseClient = (url: string, key: string, options: Record<st
 };
 
 // Parse Supabase request to extract operation and table info
-function parseSupabaseRequest(url: string, method: string): {
+function parseSupabaseRequest(url: string, method: string):   => {
   operation: 'select' | 'insert' | 'update' | 'delete' | 'rpc' | 'auth' | 'unknown';
   table: string;
 } {
@@ -175,17 +175,17 @@ function parseSupabaseRequest(url: string, method: string): {
     }
     
     return { operation: 'unknown', table: 'unknown' };
-  } catch (error) => {
+  } catch () {
     return { operation: 'unknown', table: 'unknown' };
   }
 }
 
 // Get current user ID from client
-async function getCurrentUserId(client: SupabaseClient): Promise<string | undefined> {
+async function getCurrentUserId(client: SupabaseClient): Promise<string | undefined>  => {
   try {
     const { data } = await client.auth.getUser();
     return data.user?.id;
-  } catch (error) => {
+  } catch () {
     return undefined;
   }
 }
@@ -293,7 +293,7 @@ export const bugReportOperations = {
   },
 
   // Get bug report by ID
-  async getBugReportById(bugId: string) => {
+  async getBugReportById(bugId: string) {
     const { data, error } = await supabase
       .from('bug_reports')
       .select(`
@@ -382,7 +382,7 @@ export const bugReportOperations = {
   },
 
   // Get bug report statistics
-  async getBugReportStats(userId?: string) => {
+  async getBugReportStats(userId?: string) {
     const { data, error } = await supabase
       .rpc('get_user_bug_summary', userId ? { target_user_id: userId } : {});
 

@@ -179,7 +179,7 @@ class AlertingSystemService {
   private escalationTimer?: NodeJS.Timeout;
   private maintenanceWindows: Map<string, MaintenanceWindow> = new Map();
 
-  constructor() => {
+  constructor() {
     this.config = this.loadConfiguration();
     
     if (this.config.enabled) {
@@ -409,7 +409,7 @@ class AlertingSystemService {
     this.evaluateRules();
   }
 
-  private async evaluateRules(): Promise<void> {
+  private async evaluateRules(): Promise<void>  {
     if (this.isInMaintenanceWindow()) {
       return;
     }
@@ -419,7 +419,7 @@ class AlertingSystemService {
 
       try {
         await this.evaluateRule(rule);
-      } catch (error) => {
+      } catch (error) {
         centralizedLogging.error(
           'alerting-system',
           'system',
@@ -430,7 +430,7 @@ class AlertingSystemService {
     }
   }
 
-  private async evaluateRule(rule: AlertRule): Promise<void> {
+  private async evaluateRule(rule: AlertRule): Promise<void>  {
     const conditionResults = await Promise.all(
       rule.conditions.map(condition => this.evaluateCondition(condition))
     );
@@ -452,7 +452,7 @@ class AlertingSystemService {
     }
   }
 
-  private async evaluateCondition(condition: AlertCondition): Promise<boolean> {
+  private async evaluateCondition(condition: AlertCondition): Promise<boolean>  {
     try {
       // Get recent performance metrics
       const recentMetrics = performanceMetrics.getMetricsHistory(condition.timeWindow / 60);
@@ -472,7 +472,7 @@ class AlertingSystemService {
 
       // Apply aggregation
       let aggregatedValue: number;
-      switch (condition.aggregation) => {
+      switch (condition.aggregation) {
         case 'avg':
           aggregatedValue = values.reduce((sum, val) => sum + val, 0) / values.length;
           break;
@@ -497,7 +497,7 @@ class AlertingSystemService {
         ? parseFloat(condition.threshold) 
         : condition.threshold;
 
-      switch (condition.operator) => {
+      switch (condition.operator) {
         case 'gt': return aggregatedValue > threshold;
         case 'gte': return aggregatedValue >= threshold;
         case 'lt': return aggregatedValue < threshold;
@@ -510,7 +510,7 @@ class AlertingSystemService {
         default:
           return false;
       }
-    } catch (error) => {
+    } catch (error) {
       centralizedLogging.warn(
         'alerting-system',
         'system',
@@ -525,14 +525,14 @@ class AlertingSystemService {
     const parts = metricPath.split('.');
     let value = metrics;
     
-    for (const part of parts) => {
+    for (const part of parts) {
       value = value?.[part];
     }
     
     return typeof value === 'number' ? value : undefined;
   }
 
-  private async triggerAlert(rule: AlertRule): Promise<void> {
+  private async triggerAlert(rule: AlertRule): Promise<void>  {
     const alertId = this.generateAlertId();
     const correlationId = this.generateCorrelationId();
     const fingerprint = this.generateFingerprint(rule);
@@ -652,13 +652,13 @@ class AlertingSystemService {
     });
   }
 
-  private async sendNotifications(alert: AlertInstance, channels: NotificationChannel[]): Promise<void> {
-    for (const channel of channels) => {
+  private async sendNotifications(alert: AlertInstance, channels: NotificationChannel[]): Promise<void>  {
+    for (const channel of channels) {
       if (!channel.enabled) continue;
 
       try {
         await this.sendNotification(alert, channel);
-      } catch (error) => {
+      } catch (error) {
         centralizedLogging.error(
           'alerting-system',
           'system',
@@ -670,7 +670,7 @@ class AlertingSystemService {
         if (channel.failover) {
           try {
             await this.sendNotification(alert, channel.failover);
-          } catch (failoverError) => {
+          } catch (failoverError) {
             centralizedLogging.error(
               'alerting-system',
               'system',
@@ -683,7 +683,7 @@ class AlertingSystemService {
     }
   }
 
-  private async sendNotification(alert: AlertInstance, channel: NotificationChannel): Promise<void> {
+  private async sendNotification(alert: AlertInstance, channel: NotificationChannel): Promise<void>  {
     const attemptId = `attempt_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
     
     const attempt: NotificationAttempt = {
@@ -698,7 +698,7 @@ class AlertingSystemService {
     alert.notificationsSent.push(attempt);
 
     try {
-      switch (channel.type) => {
+      switch (channel.type) {
         case 'email':
           await this.sendEmailNotification(alert, channel.configuration.email!);
           break;
@@ -730,14 +730,14 @@ class AlertingSystemService {
         { alertId: alert.alertId, channelId: channel.channelId, attemptId }
       );
 
-    } catch (error) => {
+    } catch (error) {
       attempt.status = 'failed';
       attempt.error = error instanceof Error ? error.message : 'Unknown error';
       throw error;
     }
   }
 
-  private async sendEmailNotification(alert: AlertInstance, config: NonNullable<ChannelConfiguration['email']>): Promise<void> {
+  private async sendEmailNotification(alert: AlertInstance, config: NonNullable<ChannelConfiguration['email']>): Promise<void>  {
     // Email sending would be implemented with a service like SendGrid, AWS SES, etc.
     // For now, we'll simulate the call
     
@@ -759,7 +759,7 @@ class AlertingSystemService {
     await new Promise(resolve => setTimeout(resolve, 100));
   }
 
-  private async sendSlackNotification(alert: AlertInstance, config: NonNullable<ChannelConfiguration['slack']>): Promise<void> {
+  private async sendSlackNotification(alert: AlertInstance, config: NonNullable<ChannelConfiguration['slack']>): Promise<void>  {
     const payload = {
       channel: config.channel,
       username: config.username || 'JARVIS Alerts',
@@ -803,7 +803,7 @@ class AlertingSystemService {
     }
   }
 
-  private async sendWebhookNotification(alert: AlertInstance, config: NonNullable<ChannelConfiguration['webhook']>): Promise<void> {
+  private async sendWebhookNotification(alert: AlertInstance, config: NonNullable<ChannelConfiguration['webhook']>): Promise<void>  {
     const payload = this.renderWebhookPayload(config.payload, { alert, timestamp: new Date().toISOString() });
 
     const response = await fetch(config.url, {
@@ -817,7 +817,7 @@ class AlertingSystemService {
     }
   }
 
-  private async sendDiscordNotification(alert: AlertInstance, config: NonNullable<ChannelConfiguration['discord']>): Promise<void> {
+  private async sendDiscordNotification(alert: AlertInstance, config: NonNullable<ChannelConfiguration['discord']>): Promise<void>  {
     const payload = {
       username: config.username || 'JARVIS Alerts',
       avatar_url: config.avatarUrl,
@@ -857,7 +857,7 @@ class AlertingSystemService {
     }
   }
 
-  private async sendTeamsNotification(alert: AlertInstance, config: NonNullable<ChannelConfiguration['teams']>): Promise<void> {
+  private async sendTeamsNotification(alert: AlertInstance, config: NonNullable<ChannelConfiguration['teams']>): Promise<void>  {
     const payload = {
       '@type': 'MessageCard',
       '@context': 'http://schema.org/extensions',
@@ -896,7 +896,7 @@ class AlertingSystemService {
     }
   }
 
-  private async sendInAppNotification(alert: AlertInstance): Promise<void> {
+  private async sendInAppNotification(alert: AlertInstance): Promise<void>  {
     // Store in-app notification
     const notification = {
       id: `notif_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
@@ -923,7 +923,7 @@ class AlertingSystemService {
   }
 
   private getSeverityColor(severity: AlertSeverity): string {
-    switch (severity) => {
+    switch (severity) {
       case 'emergency': return '#8B0000'; // Dark red
       case 'critical': return '#DC143C'; // Crimson
       case 'warning': return '#FFA500'; // Orange
@@ -933,11 +933,11 @@ class AlertingSystemService {
   }
 
   private renderTemplate(template: string, context: Record<string, unknown>): string {
-    return template.replace(/\{\{([^}]+)\}\}/g, (match, key) => {
+    return template.replace($1, (match, key) => {
       const keys = key.trim().split('.');
       let value = context;
       
-      for (const k of keys) => {
+      for (const k of keys) {
         value = value?.[k];
       }
       
@@ -979,7 +979,7 @@ class AlertingSystemService {
     }, 60000); // Check every minute
   }
 
-  private async processEscalations(): Promise<void> {
+  private async processEscalations(): Promise<void>  {
     for (const alert of this.activeAlerts.values()) {
       if (alert.status !== 'triggered' && alert.status !== 'escalated') continue;
 
@@ -1008,7 +1008,7 @@ class AlertingSystemService {
     }
   }
 
-  private async escalateAlert(alert: AlertInstance, escalationLevel: EscalationLevel, rule: AlertRule): Promise<void> {
+  private async escalateAlert(alert: AlertInstance, escalationLevel: EscalationLevel, rule: AlertRule): Promise<void>  {
     alert.escalationLevel = escalationLevel.level;
     alert.status = 'escalated';
 
@@ -1268,7 +1268,7 @@ class AlertingSystemService {
   }
 
   // Export data for analysis
-  exportAlertingData(): {
+  exportAlertingData():   {
     rules: AlertRule[];
     activeAlerts: AlertInstance[];
     alertHistory: AlertInstance[];

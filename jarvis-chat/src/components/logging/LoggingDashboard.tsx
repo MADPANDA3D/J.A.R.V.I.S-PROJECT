@@ -28,7 +28,7 @@ interface LogFilter {
 export const LoggingDashboard: React.FC<LoggingDashboardProps> = ({
   className = '',
   refreshInterval = 30000 // 30 seconds
-}) {
+}) => {
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [filter, setFilter] = useState<LogFilter>({
     timeRange: 1,
@@ -74,7 +74,7 @@ export const LoggingDashboard: React.FC<LoggingDashboardProps> = ({
         setServiceAnalytics(getServiceAnalytics(undefined, filter.timeRange));
         setDbAnalytics(getPerformanceAnalytics(filter.timeRange));
 
-      } catch (error) => {
+      } catch (error) {
         console.error('Failed to refresh logging data:', error);
       } finally {
         setIsLoading(false);
@@ -119,8 +119,8 @@ export const LoggingDashboard: React.FC<LoggingDashboardProps> = ({
     setSelectedLog(log);
   };
 
-  const getLogLevelColor = (level: LogEntry['level']): string => {
-    switch (level) => {
+  const getLogLevelColor = (level: LogEntry['level']): string  =>  => {
+    switch (level) {
       case 'critical': return 'text-red-800 bg-red-100';
       case 'error': return 'text-red-600 bg-red-50';
       case 'warn': return 'text-yellow-600 bg-yellow-50';
@@ -130,9 +130,8 @@ export const LoggingDashboard: React.FC<LoggingDashboardProps> = ({
     }
   };
 
-  const getCategoryIcon = (category: LogEntry['category']): string => {
-    switch (category) => {
-    }
+  const getCategoryIcon = (category: LogEntry['category']): string  =>  => {
+    switch (category) {
       case 'api': return '🌐';
       case 'database': return '🗄️';
       case 'auth': return '🔐';

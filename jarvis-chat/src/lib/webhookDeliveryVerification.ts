@@ -60,7 +60,7 @@ export class WebhookDeliveryVerificationService {
   private deploymentStatuses = new Map<string, DeploymentStatus>();
   private verificationCallbacks = new Map<string, (result: VerificationResult) => void>();
 
-  constructor(config: Partial<DeliveryVerificationConfig> = {}) => {
+  constructor(config: Partial<DeliveryVerificationConfig> = {}) {
     this.config = {
       verificationTimeout: 30000, // 30 seconds
       retryAttempts: 3,
@@ -77,7 +77,7 @@ export class WebhookDeliveryVerificationService {
   /**
    * Start verification process for a webhook delivery
    */
-  async startVerification(request: VerificationRequest): Promise<string> {
+  async startVerification(request: VerificationRequest): Promise<string>  {
     const verificationId = request.requestId;
     
     this.pendingVerifications.set(verificationId, request);
@@ -110,7 +110,7 @@ export class WebhookDeliveryVerificationService {
   /**
    * Perform webhook delivery verification
    */
-  private async performVerification(verificationId: string) => {
+  private async performVerification(verificationId: string) {
     const startTime = Date.now();
     const request = this.pendingVerifications.get(verificationId);
     const result = this.verificationResults.get(verificationId);
@@ -157,7 +157,7 @@ export class WebhookDeliveryVerificationService {
 
       this.completeVerification(verificationId, allVerified);
 
-    } catch (error) => {
+    } catch (error) {
       result.error = error instanceof Error ? error.message : 'Unknown verification error';
       result.verificationTime = Date.now() - startTime;
       this.completeVerification(verificationId, false);
@@ -167,7 +167,7 @@ export class WebhookDeliveryVerificationService {
   /**
    * Verify webhook payload delivery
    */
-  private async verifyPayloadDelivery(request: VerificationRequest): Promise<{
+  private async verifyPayloadDelivery(request: VerificationRequest): Promise< {
     delivered: boolean;
     responseReceived: boolean;
     responseValid: boolean;
@@ -206,7 +206,7 @@ export class WebhookDeliveryVerificationService {
         };
       }
 
-    } catch (error) => {
+    } catch (error) {
       this.log(`[VERIFICATION] Payload delivery check failed: ${error}`);
       
       // Fallback: Check webhook server health and assume delivery if healthy
@@ -228,7 +228,7 @@ export class WebhookDeliveryVerificationService {
             responseValid: true
           };
         }
-      } catch (healthError) => {
+      } catch (healthError) {
         this.log(`[VERIFICATION] Health check also failed: ${healthError}`);
       }
 
@@ -246,7 +246,7 @@ export class WebhookDeliveryVerificationService {
   private async verifyDeploymentTrigger(
     verificationId: string, 
     expectedDeployment: string
-  ): Promise<{
+  ): Promise< {
     started: boolean;
     completed: boolean;
     verificationTime: number;
@@ -289,7 +289,7 @@ export class WebhookDeliveryVerificationService {
               verificationTime: elapsed
             });
           }
-        } catch (error) => {
+        } catch (error) {
           this.log(`[VERIFICATION] Deployment check error: ${error}`);
         }
       }, this.config.deploymentCheckInterval);
@@ -299,7 +299,7 @@ export class WebhookDeliveryVerificationService {
   /**
    * Check deployment status via GitHub API or webhook server
    */
-  private async checkDeploymentStatus(deploymentId: string): Promise<DeploymentStatus> {
+  private async checkDeploymentStatus(deploymentId: string): Promise<DeploymentStatus>  {
     try {
       // This would integrate with GitHub API to check workflow status
       // For now, we'll simulate by checking webhook server metrics
@@ -324,7 +324,7 @@ export class WebhookDeliveryVerificationService {
       }
 
       return { status: 'unknown' };
-    } catch (error) => {
+    } catch (error) {
       this.log(`[VERIFICATION] Deployment status check failed: ${error}`);
       return { status: 'unknown' };
     }
@@ -343,7 +343,7 @@ export class WebhookDeliveryVerificationService {
   /**
    * Complete verification process
    */
-  private completeVerification(verificationId: string, success: boolean) => {
+  private completeVerification(verificationId: string, success: boolean) {
     const result = this.verificationResults.get(verificationId);
     
     if (result) {
@@ -375,7 +375,7 @@ export class WebhookDeliveryVerificationService {
   onVerificationComplete(
     verificationId: string, 
     callback: (result: VerificationResult) => void
-  ): void {
+  ): void  => {
     this.verificationCallbacks.set(verificationId, callback);
   }
 
@@ -389,7 +389,7 @@ export class WebhookDeliveryVerificationService {
   /**
    * Get verification statistics
    */
-  getVerificationStats(): {
+  getVerificationStats():   {
     totalVerifications: number;
     successfulVerifications: number;
     failedVerifications: number;
@@ -415,7 +415,7 @@ export class WebhookDeliveryVerificationService {
   /**
    * Start verification monitoring loop
    */
-  private startVerificationMonitoring() => {
+  private startVerificationMonitoring() {
     // Clean up old pending verifications
     setInterval(() => {
       const now = Date.now();
@@ -431,7 +431,7 @@ export class WebhookDeliveryVerificationService {
   /**
    * Logging utility
    */
-  private log(message: string) => {
+  private log(message: string) {
     if (this.config.enableLogging) {
       console.log(`${new Date().toISOString()} ${message}`);
     }

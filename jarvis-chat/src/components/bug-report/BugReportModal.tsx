@@ -21,7 +21,7 @@ export const BugReportModal: React.FC<BugReportModalProps> = ({
   onSubmitSuccess,
   initialData,
   className = ''
-}) {
+}) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const previouslyFocusedElement = useRef<HTMLElement | null>(null);
 
@@ -48,7 +48,7 @@ export const BugReportModal: React.FC<BugReportModalProps> = ({
       }
     }
 
-    return () => {
+    return () {
       document.body.style.overflow = '';
     };
   }, [isOpen]);

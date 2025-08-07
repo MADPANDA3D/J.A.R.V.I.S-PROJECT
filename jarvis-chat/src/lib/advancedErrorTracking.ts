@@ -107,7 +107,7 @@ class AdvancedErrorTracker {
   private isMonitoring = false;
   private monitoringInterval?: number;
 
-  constructor() => {
+  constructor() {
     this.initializeThresholds();
     this.initializeRecoveryStrategies();
     this.startMonitoring();
@@ -159,12 +159,12 @@ class AdvancedErrorTracker {
     // Network error recovery
     this.recoveryStrategies.set('NetworkError', {
       errorType: 'NetworkError',
-      recoveryAction: async () => {
+      recoveryAction: async () {
         // Attempt to reconnect or switch to offline mode
         try {
           const response = await fetch('/api/health');
           return response.ok;
-        } catch (error) => {
+        } catch (error) {
           // Enable offline mode
           this.enableOfflineMode();
           return false;
@@ -178,7 +178,7 @@ class AdvancedErrorTracker {
     // Database connection recovery
     this.recoveryStrategies.set('DatabaseError', {
       errorType: 'DatabaseError',
-      recoveryAction: async () => {
+      recoveryAction: async () {
         // Clear connection pools and retry
         try {
           // This would typically involve reconnecting to Supabase
@@ -186,7 +186,7 @@ class AdvancedErrorTracker {
             m.supabase.from('messages').select('id').limit(1).single()
           );
           return !error || error.code === 'PGRST116';
-        } catch (error) => {
+        } catch (error) {
           return false;
         }
       },
@@ -198,14 +198,14 @@ class AdvancedErrorTracker {
     // Authentication error recovery
     this.recoveryStrategies.set('AuthenticationError', {
       errorType: 'AuthenticationError',
-      recoveryAction: async () => {
+      recoveryAction: async () {
         // Attempt to refresh authentication
         try {
           const { error } = await import('./supabase').then(m =>
             m.supabase.auth.refreshSession()
           );
           return !error;
-        } catch (error) => {
+        } catch (error) {
           return false;
         }
       },
@@ -236,7 +236,7 @@ class AdvancedErrorTracker {
     // Intercept and enhance existing error tracking
     const originalCaptureError = errorTracker.captureError.bind(errorTracker);
 
-    errorTracker.captureError = (error, level = 'error', context = {}) => {
+    errorTracker.captureError = (error, level = 'error', context = {}) {
       const errorId = originalCaptureError(error, level, context);
 
       // Enhanced error processing
@@ -419,7 +419,7 @@ class AdvancedErrorTracker {
 
       let value = 0;
 
-      switch (threshold.metric) => {
+      switch (threshold.metric) {
         case 'count':
           value = recentErrors.length;
           break;
@@ -564,7 +564,7 @@ class AdvancedErrorTracker {
             );
           }
         }
-      } catch (error) => {
+      } catch (error) {
         recovery.retryCount++;
         captureError(
           error instanceof Error
@@ -685,7 +685,7 @@ class AdvancedErrorTracker {
     });
   }
 
-  private async sendAlert(alert: ErrorAlert): Promise<void> {
+  private async sendAlert(alert: ErrorAlert): Promise<void>  {
     try {
       // Send to external alerting systems
       const alertWebhook = import.meta.env.VITE_ERROR_ALERT_WEBHOOK_URL;
@@ -712,7 +712,7 @@ class AdvancedErrorTracker {
           metadata: alert.metadata,
         });
       }
-    } catch (error) => {
+    } catch (error) {
       captureWarning('Failed to send error alert', {
         alert_id: alert.id,
         error: error instanceof Error ? error.message : 'Unknown error',
@@ -772,16 +772,14 @@ class AdvancedErrorTracker {
       .getErrors()
       .filter(error => new Date(error.timestamp).getTime() >= cutoff);
 
-    const errorsByLevel = errors.reduce(
-      (acc, error) => {
+    const errorsByLevel = errors.reduce((acc, error) => {
         acc[error.level] = (acc[error.level] || 0) + 1;
         return acc;
       },
       {} as Record<'error' | 'warning' | 'info', number>
     );
 
-    const errorsByType = errors.reduce(
-      (acc, error) => {
+    const errorsByType = errors.reduce((acc, error) => {
         const type = this.categorizeError(error.message);
         acc[type] = (acc[type] || 0) + 1;
         return acc;
@@ -789,8 +787,7 @@ class AdvancedErrorTracker {
       {} as Record<string, number>
     );
 
-    const errorsByUser = errors.reduce(
-      (acc, error) => {
+    const errorsByUser = errors.reduce((acc, error) => {
         if (error.userId) {
           acc[error.userId] = (acc[error.userId] || 0) + 1;
         }
@@ -996,7 +993,7 @@ class AdvancedErrorTracker {
   }
 
   // Health check for error tracking service
-  public getErrorTrackingHealth(): {
+  public getErrorTrackingHealth():   {
     status: 'healthy' | 'degraded' | 'unhealthy';
     metrics: {
       isMonitoring: boolean;

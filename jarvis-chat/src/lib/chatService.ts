@@ -90,7 +90,7 @@ class ChatService {
     userId: string,
     conversationId?: string,
     selectedTools?: string[]
-  ): Promise<string> {
+  ): Promise<string>  => {
     if (!this.n8nWebhookUrl) {
       // Fallback for development/testing
       return this.getFallbackResponse(message);
@@ -140,7 +140,7 @@ class ChatService {
    */
   async saveMessage(
     message: Omit<ChatMessage, 'id' | 'timestamp'>
-  ): Promise<ChatMessage> {
+  ): Promise<ChatMessage>  => {
     try {
       const { data, error } = await supabase
         .from('chat_messages')
@@ -182,7 +182,7 @@ class ChatService {
   async loadMessageHistory(
     userId: string,
     limit: number = 50
-  ): Promise<ChatMessage[]> {
+  ): Promise<ChatMessage[]>  => {
     try {
       const { data, error } = await supabase
         .from('chat_messages')
@@ -227,7 +227,7 @@ class ChatService {
           table: 'chat_messages',
           filter: `user_id=eq.${userId}`,
         },
-        payload => {
+        payload {
           const newMessage: ChatMessage = {
             id: payload.new.id,
             content: payload.new.content,
@@ -242,7 +242,7 @@ class ChatService {
       )
       .subscribe();
 
-    return () => {
+    return () {
       supabase.removeChannel(subscription);
     };
   }
@@ -255,7 +255,7 @@ class ChatService {
     userId: string,
     conversationId?: string,
     selectedTools?: string[]
-  ): Promise<{ userMsg: ChatMessage; aiMsg: ChatMessage }> {
+  ): Promise< => { userMsg: ChatMessage; aiMsg: ChatMessage }> {
     try {
       // Save user message
       const userMsg = await this.saveMessage({
@@ -300,7 +300,7 @@ class ChatService {
       limit?: number;
       offset?: number;
     }
-  ): Promise<{ results: SearchResult[]; total: number; hasMore: boolean }> {
+  ): Promise< => { results: SearchResult[]; total: number; hasMore: boolean }> {
     const startTime = performance.now();
     const analytics = this.getAnalyticsCollector(userId);
     
@@ -506,7 +506,7 @@ class ChatService {
   /**
    * Get conversation sessions for a user
    */
-  async getConversationSessions(userId: string): Promise<ConversationSession[]> {
+  async getConversationSessions(userId: string): Promise<ConversationSession[]>  {
     try {
       const { data, error } = await supabase
         .from('conversation_sessions')
@@ -540,7 +540,7 @@ class ChatService {
   async createConversationSession(
     userId: string,
     title: string = 'New Conversation'
-  ): Promise<ConversationSession> {
+  ): Promise<ConversationSession>  => {
     try {
       const { data, error } = await supabase
         .from('conversation_sessions')
@@ -608,7 +608,7 @@ class ChatService {
       sessionOffset?: number;
       messagesPerSession?: number;
     }
-  ): Promise<GroupedSearchResponse> {
+  ): Promise<GroupedSearchResponse>  => {
     try {
       const { sessionLimit = 10, sessionOffset = 0, messagesPerSession = 5 } = options || {};
       
@@ -792,7 +792,7 @@ class ChatService {
     sessionId: string,
     userId: string,
     previewCount: number = 3
-  ): Promise<ConversationSessionGroup | null> {
+  ): Promise<ConversationSessionGroup | null>  => {
     try {
       // Get session data
       const { data: sessionData, error: sessionError } = await supabase
@@ -853,7 +853,7 @@ class ChatService {
   /**
    * Fallback response for development/testing
    */
-  private async getFallbackResponse(message: string): Promise<string> {
+  private async getFallbackResponse(message: string): Promise<string>  {
     // Simulate network delay
     await new Promise(resolve =>
       setTimeout(resolve, 1000 + Math.random() * 2000)

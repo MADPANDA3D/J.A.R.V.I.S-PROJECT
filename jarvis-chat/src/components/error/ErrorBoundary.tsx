@@ -20,7 +20,7 @@ export class ErrorBoundary extends Component<
 > {
   private componentName: string;
   
-  constructor(props: ErrorBoundaryProps) => {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.componentName = props.name || 'ErrorBoundary';
     this.state = {
@@ -51,7 +51,7 @@ export class ErrorBoundary extends Component<
     };
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) => {
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     // Add breadcrumb before capturing error
     errorTracker.addBreadcrumb('error', 'error', `Error boundary caught error: ${error.message}`, {
       component: this.componentName,
@@ -78,7 +78,7 @@ export class ErrorBoundary extends Component<
     errorTracker.captureReactError(error, errorInfo);
   }
 
-  resetError = () => {
+  resetError = () {
     // Add breadcrumb for error reset
     errorTracker.addBreadcrumb('info', 'user_action', 'Error boundary reset', {
       component: this.componentName,
@@ -91,7 +91,7 @@ export class ErrorBoundary extends Component<
     });
   };
 
-  reportBug = () => {
+  reportBug = () {
     // This will be used by the ErrorFallback component to open bug report modal
     errorTracker.addBreadcrumb('info', 'user_action', 'Bug report initiated from error boundary', {
       component: this.componentName,
@@ -99,7 +99,7 @@ export class ErrorBoundary extends Component<
     });
   };
 
-  render() => {
+  render() {
     if (this.state.hasError && this.state.error) {
       const FallbackComponent = this.props.fallback || ErrorFallback;
 

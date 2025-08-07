@@ -182,7 +182,7 @@ class PerformanceMetricsService {
     this.collectMetrics();
   }
 
-  private async collectMetrics(): Promise<void> {
+  private async collectMetrics(): Promise<void>  {
     try {
       const timestamp = new Date().toISOString();
 
@@ -236,7 +236,7 @@ class PerformanceMetricsService {
         }
       );
 
-    } catch (error) => {
+    } catch () {
       centralizedLogging.error(
         'performance-metrics',
         'system',
@@ -325,7 +325,7 @@ class PerformanceMetricsService {
     };
   }
 
-  private async getCPUUsage(): Promise<number> {
+  private async getCPUUsage(): Promise<number>  {
     // Use Performance API to estimate CPU usage
     const start = performance.now();
     
@@ -345,7 +345,7 @@ class PerformanceMetricsService {
     return Math.round(usage);
   }
 
-  private async getMemoryUsage(): Promise<number> {
+  private async getMemoryUsage(): Promise<number>  {
     if ('memory' in performance) {
       const memInfo = (performance as unknown as { memory: { usedJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
       return Math.round((memInfo.usedJSHeapSize / memInfo.jsHeapSizeLimit) * 100);
@@ -355,7 +355,7 @@ class PerformanceMetricsService {
     return Math.random() * 20 + 40; // 40-60% random for demo
   }
 
-  private async getDiskUsage(): Promise<number> {
+  private async getDiskUsage(): Promise<number>  {
     // Client-side can't directly measure disk usage
     // Return estimated based on localStorage usage
     try {
@@ -369,12 +369,12 @@ class PerformanceMetricsService {
       // Rough estimation (localStorage is typically limited to ~5-10MB)
       const maxStorage = 10 * 1024 * 1024; // 10MB
       return Math.round((totalSize / maxStorage) * 100);
-    } catch (error) => {
+    } catch () {
       return 0;
     }
   }
 
-  private async getNetworkTraffic(): Promise<number> {
+  private async getNetworkTraffic(): Promise<number>  {
     // Use Navigation Timing API for network metrics
     if ('connection' in navigator) {
       const connection = (navigator as unknown as { connection?: { downlink?: number } }).connection;
@@ -432,7 +432,7 @@ class PerformanceMetricsService {
         averageSessionDuration: stats.averageSessionDuration,
         bounceRate: this.calculateBounceRate(activeSessions as unknown[])
       };
-    } catch (error) => {
+    } catch () {
       // Fallback if activity tracking not available
       return {
         activeUsers: 0,
@@ -466,7 +466,7 @@ class PerformanceMetricsService {
       this.observer.observe({ 
         entryTypes: ['navigation', 'paint', 'largest-contentful-paint', 'first-input', 'layout-shift']
       });
-    } catch (error) => {
+    } catch () {
       centralizedLogging.warn(
         'performance-metrics',
         'system',
@@ -867,13 +867,13 @@ class PerformanceMetricsService {
   }
 
   // Manual metrics collection
-  async collectMetricsNow(): Promise<PerformanceMetrics> {
+  async collectMetricsNow(): Promise<PerformanceMetrics>  {
     await this.collectMetrics();
     return this.getCurrentMetrics()!;
   }
 
   // Export data for analysis
-  exportMetricsData(): {
+  exportMetricsData():   {
     metrics: PerformanceMetrics[];
     trends: PerformanceTrend[];
     alerts: PerformanceAlert[];

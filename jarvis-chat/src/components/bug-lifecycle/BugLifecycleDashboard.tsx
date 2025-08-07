@@ -63,9 +63,9 @@ interface MetricCardProps {
   description?: string;
 }
 
-function MetricCard({ title, value, change, changeType = 'neutral', icon, description }: MetricCardProps) => {
+function MetricCard({ title, value, change, changeType = 'neutral', icon, description }: MetricCardProps) {
   const getChangeColor = (type: typeof changeType) => {
-    switch (type) => {
+    switch (type) {
       case 'positive': return 'text-green-600';
       case 'negative': return 'text-red-600';
       default: return 'text-gray-600';
@@ -73,7 +73,7 @@ function MetricCard({ title, value, change, changeType = 'neutral', icon, descri
   };
 
   const getChangeIcon = (type: typeof changeType) => {
-    switch (type) => {
+    switch (type) {
       case 'positive': return <TrendingUp className="h-3 w-3" />;
       case 'negative': return <TrendingDown className="h-3 w-3" />;
       default: return null;
@@ -108,7 +108,7 @@ function MetricCard({ title, value, change, changeType = 'neutral', icon, descri
   );
 }
 
-export function BugLifecycleDashboard({ dateRange, teamFilter }: DashboardProps) => {
+export function BugLifecycleDashboard({ dateRange, teamFilter }: DashboardProps) {
   const { toast } = useToast();
   const { stats, loading: statsLoading } = useBugLifecycleStats();
   const { bugs, loading: bugsLoading, refreshBugs } = useBugList();
@@ -131,7 +131,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter }: DashboardProps)
       setFeedbackAnalytics(analytics);
 
       await refreshBugs();
-    } catch (loadError) => {
+    } catch (loadError) {
       console.error('Failed to load dashboard data:', loadError);
       toast({
         title: "Error",
@@ -184,7 +184,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter }: DashboardProps)
     color: getPriorityColor(priority as BugPriority)
   }));
 
-  function getStatusColor(status: BugStatus): string {
+  const getStatusColor = (status: BugStatus): string => {
     const colors = {
       [BugStatus.OPEN]: '#ef4444',
       [BugStatus.TRIAGED]: '#f97316',
@@ -197,7 +197,7 @@ export function BugLifecycleDashboard({ dateRange, teamFilter }: DashboardProps)
     return colors[status] || '#6b7280';
   }
 
-  function getPriorityColor(priority: BugPriority): string {
+  const getPriorityColor = (priority: BugPriority): string => {
     const colors = {
       [BugPriority.LOW]: '#10b981',
       [BugPriority.MEDIUM]: '#f59e0b',

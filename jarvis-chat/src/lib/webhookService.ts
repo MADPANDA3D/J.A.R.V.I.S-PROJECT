@@ -120,7 +120,7 @@ export class WebhookService {
   private responseTimes: number[] = [];
   private readonly maxResponseTimeSamples = 100;
 
-  constructor(config: Partial<WebhookServiceConfig> = {}) => {
+  constructor(config: Partial<WebhookServiceConfig> = {}) {
     this.config = {
       webhookUrl: import.meta.env.VITE_N8N_WEBHOOK_URL || '',
       timeout: parseInt(import.meta.env.WEBHOOK_TIMEOUT || '15000'),
@@ -167,13 +167,13 @@ export class WebhookService {
   /**
    * Send message to webhook with comprehensive error handling and retry logic
    */
-  async sendMessage(payload: WebhookPayload): Promise<WebhookResponse> {
+  async sendMessage(payload: WebhookPayload): Promise<WebhookResponse>  {
     return makeMonitoredCall(
       'n8n-webhook',
       'webhook',
       this.config.webhookUrl,
       'POST',
-      async () => {
+      async () {
         // Check circuit breaker state
         if (this.circuitState === CircuitState.OPEN) {
           if (!this.shouldAttemptRecovery()) {
@@ -203,7 +203,7 @@ export class WebhookService {
             this.recordSuccess(Date.now() - startTime);
 
             return response;
-          } catch (error) => {
+          } catch () {
             lastError =
               error instanceof WebhookError ? error : this.classifyError(error);
 
@@ -248,7 +248,7 @@ export class WebhookService {
    */
   private async makeWebhookRequest(
     payload: WebhookPayload
-  ): Promise<WebhookResponse> {
+  ): Promise<WebhookResponse>  => {
     if (!this.config.webhookUrl) {
       throw new WebhookError(
         'Webhook URL not configured',
@@ -292,7 +292,7 @@ export class WebhookService {
               errorMessage = `n8n Webhook Error: ${errorData.message}. ${errorData.hint || ''}`;
             }
           }
-        } catch (error) => {
+        } catch () {
           // If we can't parse the error response, use the original message
         }
 
@@ -319,7 +319,7 @@ export class WebhookService {
       let data;
       try {
         data = JSON.parse(responseText);
-      } catch (error) => {
+      } catch () {
         throw new WebhookError(
           `Webhook returned invalid JSON: ${responseText.substring(0, 100)}${responseText.length > 100 ? '...' : ''}`,
           WebhookErrorType.VALIDATION_ERROR,
@@ -348,7 +348,7 @@ export class WebhookService {
       }
 
       return data;
-    } catch (error) => {
+    } catch () {
       clearTimeout(timeoutId);
 
       if (error.name === 'AbortError') {
@@ -377,7 +377,7 @@ export class WebhookService {
   /**
    * Health check for the webhook endpoint
    */
-  async healthCheck(): Promise<{
+  async healthCheck(): Promise< => {
     status: 'healthy' | 'unhealthy' | 'degraded';
     responseTime?: number;
     error?: string;
@@ -401,7 +401,7 @@ export class WebhookService {
         status: responseTime < 1000 ? 'healthy' : 'degraded',
         responseTime,
       };
-    } catch (error) => {
+    } catch () {
       return {
         status: 'unhealthy',
         error: error instanceof Error ? error.message : 'Unknown error',
@@ -592,7 +592,7 @@ export class WebhookService {
     return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private sleep(ms: number): Promise<void> {
+  private sleep(ms: number): Promise<void>  => {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 }

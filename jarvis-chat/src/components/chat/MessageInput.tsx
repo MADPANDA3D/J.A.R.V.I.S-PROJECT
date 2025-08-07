@@ -23,7 +23,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   placeholder = 'Type your message...',
   className = '',
   showToolsSelector = true,
-}) {
+}) => {
   const { getSelectedToolIds } = useTools();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -91,7 +91,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
               minHeight: '44px',
               maxHeight: '128px',
             }}
-            onInput={e => {
+            onInput={e {
               const target = e.target as HTMLTextAreaElement;
               target.style.height = 'auto';
               target.style.height = Math.min(target.scrollHeight, 128) + 'px';

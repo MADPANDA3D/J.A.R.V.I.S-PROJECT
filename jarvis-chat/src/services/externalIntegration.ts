@@ -12,7 +12,7 @@ interface WebhookConfig {
   events: string[];
   authentication?: {
     type: 'none' | 'bearer' | 'basic' | 'api_key';
-    credentials?: Record<string, any>;
+    credentials?: Record<string, unknown>;
   };
   filters?: {
     status?: string[];
@@ -26,9 +26,9 @@ interface WebhookConfig {
 }
 
 class ExternalIntegrationService {
-  private integrations: Map<string, any> = new Map();
+  private integrations: Map<string, unknown> = new Map();
 
-  async createWebhook(req: Request, res: Response): Promise<void> {
+  async createWebhook(req: Request, res: Response): Promise<void>  {
     try {
       const config: WebhookConfig = req.body;
       
@@ -41,7 +41,7 @@ class ExternalIntegrationService {
       // Validate URL
       try {
         new URL(config.url);
-      } catch {
+      } catch () {
         res.status(400).json({ error: 'Invalid URL format' });
         return;
       }
@@ -77,13 +77,13 @@ class ExternalIntegrationService {
         webhook,
         integrationStatus: 'active'
       });
-    } catch (error) => {
+    } catch () {
       centralizedLogging.error('Failed to create webhook', { error });
       res.status(500).json({ error: 'Internal server error' });
     }
   }
 
-  async analyzeWithClaudeCode(req: Request, res: Response): Promise<void> {
+  async analyzeWithClaudeCode(req: Request, res: Response): Promise<void>  {
     try {
       const { bugId } = req.params;
       
@@ -107,13 +107,13 @@ class ExternalIntegrationService {
       };
 
       res.status(200).json({ analysis });
-    } catch (error) => {
+    } catch () {
       centralizedLogging.error('Failed to analyze with Claude Code', { error });
       res.status(500).json({ error: 'Internal server error' });
     }
   }
 
-  async integrateWithSentry(req: Request, res: Response): Promise<void> {
+  async integrateWithSentry(req: Request, res: Response): Promise<void>  {
     try {
       const { projectId, dsn, environment } = req.body;
       
@@ -136,13 +136,13 @@ class ExternalIntegrationService {
       this.integrations.set(integrationId, integration);
 
       res.status(201).json({ integration });
-    } catch (error) => {
+    } catch () {
       centralizedLogging.error('Failed to integrate with Sentry', { error });
       res.status(500).json({ error: 'Internal server error' });
     }
   }
 
-  async integrateWithDataDog(req: Request, res: Response): Promise<void> {
+  async integrateWithDataDog(req: Request, res: Response): Promise<void>  {
     try {
       const { apiKey, appKey, site } = req.body;
       
@@ -165,13 +165,13 @@ class ExternalIntegrationService {
       this.integrations.set(integrationId, integration);
 
       res.status(201).json({ integration });
-    } catch (error) => {
+    } catch () {
       centralizedLogging.error('Failed to integrate with DataDog', { error });
       res.status(500).json({ error: 'Internal server error' });
     }
   }
 
-  async getIntegrationStatus(req: Request, res: Response): Promise<void> {
+  async getIntegrationStatus(req: Request, res: Response): Promise<void>  {
     try {
       const { id } = req.params;
       const integration = this.integrations.get(id);
@@ -186,13 +186,13 @@ class ExternalIntegrationService {
         status: integration.status,
         lastActivity: new Date().toISOString()
       });
-    } catch (error) => {
+    } catch () {
       centralizedLogging.error('Failed to get integration status', { error });
       res.status(500).json({ error: 'Internal server error' });
     }
   }
 
-  async listIntegrations(req: Request, res: Response): Promise<void> {
+  async listIntegrations(req: Request, res: Response): Promise<void>  {
     try {
       const integrations = Array.from(this.integrations.values());
       
@@ -200,7 +200,7 @@ class ExternalIntegrationService {
         integrations,
         total: integrations.length
       });
-    } catch (error) => {
+    } catch () {
       centralizedLogging.error('Failed to list integrations', { error });
       res.status(500).json({ error: 'Internal server error' });
     }

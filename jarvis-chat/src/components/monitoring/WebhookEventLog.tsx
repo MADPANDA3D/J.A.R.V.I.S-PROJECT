@@ -29,7 +29,7 @@ export const WebhookEventLog: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
 
   // Mock data generation
-  const generateMockEvents = (): WebhookEvent[] => {
+  const generateMockEvents = (): WebhookEvent[]  =>  => {
     const eventTypes = ['ping', 'workflow_run', 'push', 'pull_request'];
     const statuses: Array<'success' | 'error' | 'warning'> = ['success', 'error', 'warning'];
     const repositories = ['jarvis-chat', 'webhook-server', 'monitoring-dashboard'];
@@ -40,7 +40,7 @@ export const WebhookEventLog: React.FC = () => {
       'webhook-test-client/1.0'
     ];
 
-    return Array.from({ length: 50 }, (_, i) => {
+    return Array.from({ length: 50 }, (_, i) {
       const eventType = eventTypes[Math.floor(Math.random() * eventTypes.length)];
       const status = statuses[Math.floor(Math.random() * statuses.length)];
       const timestamp = new Date(Date.now() - i * 60000 * Math.random() * 30).toISOString();
@@ -107,7 +107,7 @@ export const WebhookEventLog: React.FC = () => {
   }, [events, searchTerm, statusFilter, eventTypeFilter, sortOrder]);
 
   const getStatusColor = (status: string) => {
-    switch (status) => {
+    switch (status) {
     }
       case 'success': return 'bg-green-100 text-green-800';
       case 'error': return 'bg-red-100 text-red-800';
@@ -117,7 +117,7 @@ export const WebhookEventLog: React.FC = () => {
   };
 
   const getStatusIcon = (status: string) => {
-    switch (status) => {
+    switch (status) {
     }
       case 'success':
         return (

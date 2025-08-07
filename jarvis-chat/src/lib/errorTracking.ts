@@ -78,7 +78,7 @@ class ErrorTracker {
   private userId?: string;
   private currentTags: Record<string, string> = {};
 
-  constructor() => {
+  constructor() {
     this.sessionId = this.generateSessionId();
     this.setupGlobalErrorHandlers();
     this.addBreadcrumb('info', 'session', 'Error tracking initialized', {
@@ -91,7 +91,7 @@ class ErrorTracker {
     return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private setupGlobalErrorHandlers() => {
+  private setupGlobalErrorHandlers() {
     // Handle unhandled promise rejections
     window.addEventListener('unhandledrejection', event => {
       this.addBreadcrumb('error', 'error', `Unhandled Promise Rejection: ${event.reason}`, {
@@ -109,7 +109,7 @@ class ErrorTracker {
     });
 
     // Handle global JavaScript errors
-    window.addEventListener('error', event => {
+    window.addEventListener(\'error\', event => {
       this.addBreadcrumb('error', 'error', `Global JS Error: ${event.message}`, {
         filename: event.filename,
         lineno: event.lineno,
@@ -129,7 +129,7 @@ class ErrorTracker {
     error: Error | string,
     level: 'error' | 'warning' | 'info' = 'error',
     context: Record<string, unknown> = {}
-  ): string {
+  ): string  => {
     const errorReport: EnhancedErrorReport = {
       id: `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       timestamp: new Date().toISOString(),
@@ -177,7 +177,7 @@ class ErrorTracker {
         
         const { captureExternalError } = await import('./externalMonitoring');
         captureExternalError(errorReport);
-      } catch (error) => {
+      } catch (error) {
         // External services not available
       }
     }, 0);
@@ -225,11 +225,11 @@ class ErrorTracker {
     message: string,
     level: 'error' | 'warning' | 'info' = 'info',
     context: Record<string, unknown> = {}
-  ): string {
+  ): string  => {
     return this.captureError(message, level, context);
   }
 
-  setUser(userId: string, metadata?: Record<string, unknown>) => {
+  setUser(userId: string, metadata?: Record<string, unknown>) {
     this.userId = userId;
     this.addBreadcrumb('info', 'user_action', 'User identified', {
       userId,
@@ -249,7 +249,7 @@ class ErrorTracker {
     category: 'navigation' | 'user_action' | 'http' | 'error' | 'info',
     message: string,
     data?: Record<string, unknown>
-  ): void {
+  ): void  => {
     const breadcrumb: ErrorBreadcrumb = {
       timestamp: new Date().toISOString(),
       category,
@@ -270,7 +270,7 @@ class ErrorTracker {
       try {
         const { captureExternalBreadcrumb } = await import('./externalMonitoring');
         captureExternalBreadcrumb(breadcrumb);
-      } catch (error) => {
+      } catch (error) {
         // External monitoring not available
       }
     }, 0);
@@ -328,7 +328,7 @@ class ErrorTracker {
       
       // Also persist breadcrumbs
       localStorage.setItem('jarvis_breadcrumbs', JSON.stringify(this.breadcrumbs));
-    } catch (e) => {
+    } catch (e) {
       // Ignore localStorage errors
       console.warn('Failed to persist error to localStorage:', e);
     }
@@ -357,7 +357,7 @@ class ErrorTracker {
         this.breadcrumbs = [...this.breadcrumbs, ...breadcrumbs];
         this.breadcrumbs = this.breadcrumbs.slice(-this.maxBreadcrumbs);
       }
-    } catch (e) => {
+    } catch (e) {
       console.warn('Failed to load persisted data:', e);
     }
   }
@@ -409,7 +409,7 @@ class ErrorTracker {
   private extractSourceFromStack(stack?: string): string | undefined {
     if (!stack) return undefined;
     const lines = stack.split('\n');
-    for (const line of lines) => {
+    for (const line of lines) {
       const match = line.match(/at .* \((.+):\d+:\d+\)/);
       if (match) return match[1];
     }
@@ -419,7 +419,7 @@ class ErrorTracker {
   private extractLineFromStack(stack?: string): number | undefined {
     if (!stack) return undefined;
     const lines = stack.split('\n');
-    for (const line of lines) => {
+    for (const line of lines) {
       const match = line.match(/:(\d+):\d+\)?$/);
       if (match) return parseInt(match[1], 10);
     }
@@ -429,7 +429,7 @@ class ErrorTracker {
   private extractColumnFromStack(stack?: string): number | undefined {
     if (!stack) return undefined;
     const lines = stack.split('\n');
-    for (const line of lines) => {
+    for (const line of lines) {
       const match = line.match(/:(\d+)\)?$/);
       if (match) return parseInt(match[1], 10);
     }
@@ -437,7 +437,7 @@ class ErrorTracker {
   }
 
   private mapLevelToSeverity(level: string): 'low' | 'medium' | 'high' | 'critical' {
-    switch (level) => {
+    switch (level) {
       case 'info': return 'low';
       case 'warning': return 'medium';
       case 'error': return 'high';
@@ -461,7 +461,7 @@ class ErrorTracker {
   captureReactError(
     error: Error,
     errorInfo: { componentStack: string }
-  ): string {
+  ): string  => {
     this.addBreadcrumb('error', 'error', `React Error: ${error.message}`, {
       componentStack: errorInfo.componentStack
     });
@@ -487,7 +487,7 @@ class ErrorTracker {
   captureAPIFailure(
     context: APIFailureContext,
     error?: Error
-  ): string {
+  ): string  => {
     this.addBreadcrumb('error', 'http', `API Failure: ${context.method} ${context.endpoint}`, {
       statusCode: context.statusCode,
       responseTime: context.responseTime,
@@ -513,7 +513,7 @@ class ErrorTracker {
   captureAuthError(
     context: AuthErrorContext,
     error?: Error
-  ): string {
+  ): string  => {
     this.addBreadcrumb('error', 'user_action', `Auth Error: ${context.authEvent}`, {
       supabaseError: context.supabaseError,
       userId: context.userId
@@ -533,7 +533,7 @@ class ErrorTracker {
   // User action tracking
   trackUserAction(
     context: UserActionContext
-  ): void {
+  ): void  => {
     this.addBreadcrumb('info', 'user_action', `User Action: ${context.actionType}`, {
       elementId: context.elementId,
       elementText: context.elementText,

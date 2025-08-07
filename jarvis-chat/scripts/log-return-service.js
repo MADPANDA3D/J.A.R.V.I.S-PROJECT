@@ -40,7 +40,7 @@ class LogReturnService {
         this.isUploading = false;
     }
 
-    async initialize() {
+    initialize = async () => {
         console.log('🚀 Initializing Log Return Service...');
         
         // Create logs directory if it doesn't exist
@@ -65,7 +65,7 @@ class LogReturnService {
         console.log('✅ Log Return Service initialized successfully');
     }
 
-    startLogMonitoring() {
+    startLogMonitoring = () => {
         console.log('📡 Starting log monitoring...');
         
         // Monitor Docker container logs
@@ -78,7 +78,7 @@ class LogReturnService {
         this.monitorSystemLogs();
     }
 
-    async monitorDockerLogs() {
+    monitorDockerLogs = async () => {
         try {
             const { stdout } = await execAsync('docker ps --format "{{.Names}}" | grep jarvis');
             const containerName = stdout.trim();
@@ -88,11 +88,11 @@ class LogReturnService {
                 
                 const dockerLogProcess = exec(`docker logs -f ${containerName}`);
                 
-                dockerLogProcess.stdout.on('data', (data) => {
+                dockerLogProcess.stdout.on("data", (data) => {
                     this.addLogEntry('docker', 'info', data.toString().trim());
                 });
 
-                dockerLogProcess.stderr.on('data', (data) => {
+                dockerLogProcess.stderr.on("data", (data) => {
                     this.addLogEntry('docker', 'error', data.toString().trim());
                 });
             }
@@ -101,7 +101,7 @@ class LogReturnService {
         }
     }
 
-    async monitorApplicationLogs() {
+    monitorApplicationLogs = async () => {
         try {
             // Monitor webhook server logs
             const webhookLogFile = path.join(this.config.logDir, 'webhook.log');
@@ -135,12 +135,12 @@ class LogReturnService {
         }
     }
 
-    async monitorSystemLogs() {
+    monitorSystemLogs = async () => {
         try {
             // Monitor system journal for JARVIS-related entries
             const journalProcess = exec('journalctl -u jarvis-webhook -f --output=json');
             
-            journalProcess.stdout.on('data', (data) => {
+            journalProcess.stdout.on("data", (data) => {
                 try {
                     const logEntry = JSON.parse(data.toString().trim());
                     this.addLogEntry('system', 'info', logEntry.MESSAGE || logEntry);
@@ -155,7 +155,7 @@ class LogReturnService {
         }
     }
 
-    addLogEntry(source, level, message) {
+    addLogEntry = (source, level, message) => {
         const logEntry = {
             timestamp: new Date().toISOString(),
             source,
@@ -176,17 +176,17 @@ class LogReturnService {
         console.log(`[${timestamp}] ${source.toUpperCase()}/${level.toUpperCase()}: ${logEntry.message}`);
     }
 
-    startPeriodicUpload() {
+    startPeriodicUpload = () => {
         console.log(`⏰ Starting periodic log upload (every ${this.config.uploadInterval / 1000} seconds)`);
         
-        setInterval(async () => {
+        setInterval(async () {
             if (!this.isUploading && this.logBuffer.length > 0) {
                 await this.uploadLogs();
             }
         }, this.config.uploadInterval);
     }
 
-    async uploadLogs() {
+    uploadLogs = async () => {
         if (this.isUploading || this.logBuffer.length === 0) {
             return;
         }
@@ -220,7 +220,7 @@ class LogReturnService {
         }
     }
 
-    formatLogsForUpload() {
+    formatLogsForUpload = () => {
         const timestamp = new Date().toISOString();
         const hostname = process.env.HOSTNAME || 'vps';
         
@@ -262,7 +262,7 @@ class LogReturnService {
         return content;
     }
 
-    async uploadToGitHub(content) {
+    uploadToGitHub = async (content) => {
         const [owner, repo] = this.config.repository.split('/');
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
         const filename = `vps-logs-${timestamp}.md`;
@@ -312,7 +312,7 @@ class LogReturnService {
         }
     }
 
-    async cleanupOldLogs(owner, repo) {
+    cleanupOldLogs = async (owner, repo) => {
         try {
             const { data: files } = await this.octokit.rest.repos.getContent({
                 owner,
@@ -351,7 +351,7 @@ class LogReturnService {
         }
     }
 
-    async stop() {
+    stop = async () => {
         console.log('🛑 Stopping Log Return Service...');
         
         // Upload any remaining logs
@@ -369,7 +369,7 @@ if (require.main === module) {
     const service = new LogReturnService();
     
     // Graceful shutdown
-    process.on('SIGTERM', async () => {
+    process.on("SIGTERM", async () => {
         await service.stop();
         process.exit(0);
     });

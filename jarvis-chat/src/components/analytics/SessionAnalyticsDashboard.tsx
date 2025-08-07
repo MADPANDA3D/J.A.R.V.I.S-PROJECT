@@ -32,7 +32,7 @@ interface SessionAnalyticsDashboardProps {
 export const SessionAnalyticsDashboard: React.FC<SessionAnalyticsDashboardProps> = ({
   className = '',
   refreshInterval = 30000 // 30 seconds
-}) {
+}) => {
   const [currentSession, setCurrentSession] = useState(getCurrentSession());
   const [sessionHistory, setSessionHistory] = useState(getSessionHistory());
   const [analytics, setAnalytics] = useState(getSessionAnalytics());
@@ -54,7 +54,7 @@ export const SessionAnalyticsDashboard: React.FC<SessionAnalyticsDashboardProps>
         setRecentErrors(getRecentErrors(20));
         setActiveAlerts(getActiveAlerts());
         setBreadcrumbs(getBreadcrumbs().slice(-50)); // Last 50 breadcrumbs
-      } catch (error) => {
+      } catch (error) {
         console.error('Failed to refresh analytics data:', error);
       } finally {
         setIsRefreshing(false);
@@ -95,7 +95,7 @@ export const SessionAnalyticsDashboard: React.FC<SessionAnalyticsDashboardProps>
   };
 
   const getErrorSeverityColor = (level: 'error' | 'warning' | 'info'): string => {
-    switch (level) => {
+    switch (level) {
       case 'error': return 'text-red-600 bg-red-50';
       case 'warning': return 'text-yellow-600 bg-yellow-50';
       case 'info': return 'text-blue-600 bg-blue-50';
@@ -105,7 +105,7 @@ export const SessionAnalyticsDashboard: React.FC<SessionAnalyticsDashboardProps>
 
   // Alert severity color utility function (currently unused)
   // const getAlertSeverityColor = (severity: 'low' | 'medium' | 'high' | 'critical'): string => {
-  //   switch (severity) => {
+  //   switch (severity) {
   //     case 'critical': return 'text-red-800 bg-red-100 border-red-200';
   //     case 'high': return 'text-red-700 bg-red-50 border-red-200';
   //     case 'medium': return 'text-yellow-700 bg-yellow-50 border-yellow-200';

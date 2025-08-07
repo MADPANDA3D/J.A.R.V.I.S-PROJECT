@@ -107,7 +107,7 @@ class HealthMonitoringService {
   private monitoringInterval?: number;
   private dependencies: Map<string, () => Promise<ServiceHealth>> = new Map();
 
-  constructor() => {
+  constructor() {
     this.initializeThresholds();
     this.initializeDependencies();
     this.startMonitoring();
@@ -133,7 +133,7 @@ class HealthMonitoringService {
 
   private initializeDependencies(): void {
     // Database dependency
-    this.dependencies.set('database', async () => {
+    this.dependencies.set('database', async () {
       const startTime = Date.now();
       try {
         const { error } = await supabase
@@ -153,7 +153,7 @@ class HealthMonitoringService {
           dependencies: ['supabase'],
           metadata: { error: error?.message },
         };
-      } catch (dbError) => {
+      } catch (dbError) {
         return {
           name: 'database',
           status: 'down',
@@ -172,7 +172,7 @@ class HealthMonitoringService {
     });
 
     // API dependency
-    this.dependencies.set('api', async () => {
+    this.dependencies.set('api', async () {
       const startTime = Date.now();
       try {
         const response = await fetch('/api/health', { method: 'GET' });
@@ -187,7 +187,7 @@ class HealthMonitoringService {
           dependencies: ['server'],
           metadata: { status: response.status },
         };
-      } catch (apiError) => {
+      } catch (apiError) {
         return {
           name: 'api',
           status: 'down',
@@ -206,7 +206,7 @@ class HealthMonitoringService {
     });
 
     // N8N webhook dependency
-    this.dependencies.set('webhook', async () => {
+    this.dependencies.set('webhook', async () {
       const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL;
       if (!webhookUrl) {
         return {
@@ -238,7 +238,7 @@ class HealthMonitoringService {
           dependencies: ['n8n'],
           metadata: { status: response.status },
         };
-      } catch (webhookError) => {
+      } catch (webhookError) {
         return {
           name: 'webhook',
           status: 'down',
@@ -257,7 +257,7 @@ class HealthMonitoringService {
     });
 
     // Monitoring service dependency
-    this.dependencies.set('monitoring', async () => {
+    this.dependencies.set('monitoring', async () {
       try {
         const monitoringHealth = monitoringService.getMonitoringHealth();
 
@@ -274,7 +274,7 @@ class HealthMonitoringService {
           dependencies: [],
           metadata: monitoringHealth.metrics,
         };
-      } catch (error) => {
+      } catch (error) {
         return {
           name: 'monitoring',
           status: 'down',
@@ -330,7 +330,7 @@ class HealthMonitoringService {
     });
   }
 
-  private async performComprehensiveHealthCheck(): Promise<void> {
+  private async performComprehensiveHealthCheck(): Promise<void>  {
     try {
       // Perform basic health check
       const basicHealth = await performHealthCheck();
@@ -346,7 +346,7 @@ class HealthMonitoringService {
         Array.from(this.dependencies.entries()).map(async ([name, checker]) => {
           try {
             return await checker();
-          } catch (error) => {
+          } catch (error) {
             return {
               name,
               status: 'down' as const,
@@ -379,7 +379,7 @@ class HealthMonitoringService {
 
       // Check overall system health
       this.checkSystemThresholds();
-    } catch (error) => {
+    } catch (error) {
       captureError(
         error instanceof Error ? error : new Error('Health monitoring failed'),
         {
@@ -455,7 +455,7 @@ class HealthMonitoringService {
           }
         );
       }
-    } catch (error) => {
+    } catch (error) {
       captureWarning('Failed to check system thresholds', { error });
     }
   }
@@ -473,7 +473,7 @@ class HealthMonitoringService {
     let exceedsWarning = false;
     let exceedsCritical = false;
 
-    switch (comparison) => {
+    switch (comparison) {
       case 'greater':
         exceedsWarning = value > warning;
         exceedsCritical = value > critical;
@@ -554,7 +554,7 @@ class HealthMonitoringService {
     }
   }
 
-  private async sendCriticalAlert(alert: HealthAlert): Promise<void> {
+  private async sendCriticalAlert(alert: HealthAlert): Promise<void>  {
     try {
       // Send to webhook if configured
       const alertWebhook = import.meta.env.VITE_ALERT_WEBHOOK_URL;
@@ -577,7 +577,7 @@ class HealthMonitoringService {
         message: alert.message,
         metadata: alert.metadata,
       });
-    } catch (error) => {
+    } catch (error) {
       captureWarning('Failed to send critical alert', {
         alert_id: alert.id,
         error: error instanceof Error ? error.message : 'Unknown error',
@@ -586,7 +586,7 @@ class HealthMonitoringService {
   }
 
   // Public API methods
-  public async getDashboard(): Promise<HealthDashboard> {
+  public async getDashboard(): Promise<HealthDashboard>  {
     const latestHealth = this.healthHistory[this.healthHistory.length - 1];
     const uptime = this.calculateUptime();
     const recentKPIs = metricsService.getKPIs({ timeRange: 5 * 60 * 1000 });
@@ -677,7 +677,7 @@ class HealthMonitoringService {
     };
   }
 
-  private async getAllServiceHealth(): Promise<ServiceHealth[]> {
+  private async getAllServiceHealth(): Promise<ServiceHealth[]>  {
     const results = await Promise.allSettled(
       Array.from(this.dependencies.values()).map(checker => checker())
     );
@@ -836,7 +836,7 @@ class HealthMonitoringService {
   }
 
   // Health check for the health monitoring service itself
-  public getHealthMonitoringStatus(): {
+  public getHealthMonitoringStatus():   {
     status: 'healthy' | 'degraded' | 'unhealthy';
     metrics: {
       isMonitoring: boolean;

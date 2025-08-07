@@ -193,7 +193,7 @@ class ExternalIntegrationService {
   private readonly MAX_CONCURRENT_DELIVERIES = 10;
   private readonly DELIVERY_TIMEOUT = 30000; // 30 seconds
 
-  private constructor() => {
+  private constructor() {
     this.initializeDefaultIntegrations();
     this.startDeliveryProcessor();
     this.startHealthChecks();
@@ -209,7 +209,7 @@ class ExternalIntegrationService {
   /**
    * Create webhook configuration
    */
-  async createWebhook(req: Request, res: Response, next: NextFunction) => {
+  async createWebhook(req: Request, res: Response, next: NextFunction) {
     const startTime = performance.now();
     const correlationId = this.generateCorrelationId();
 
@@ -310,7 +310,7 @@ class ExternalIntegrationService {
         integrationStatus
       });
 
-    } catch {
+    } catch () {
       centralizedLogging.error(
         'external-integration',
         'system',
@@ -325,7 +325,7 @@ class ExternalIntegrationService {
   /**
    * Claude Code AI analysis endpoint
    */
-  async analyzeWithClaudeCode(req: Request, res: Response, next: NextFunction) => {
+  async analyzeWithClaudeCode(req: Request, res: Response, next: NextFunction) {
     const startTime = performance.now();
     const correlationId = this.generateCorrelationId();
 
@@ -365,7 +365,7 @@ class ExternalIntegrationService {
 
       // Perform AI analysis based on type
       let analysisResult;
-      switch (analysisRequest.analysisType) => {
+      switch (analysisRequest.analysisType) {
         case 'pattern':
           analysisResult = await this.analyzeErrorPatterns(bugContext, analysisRequest.context);
           break;
@@ -404,7 +404,7 @@ class ExternalIntegrationService {
         }
       });
 
-    } catch {
+    } catch () {
       centralizedLogging.error(
         'external-integration',
         'system',
@@ -419,7 +419,7 @@ class ExternalIntegrationService {
   /**
    * Sentry integration endpoint
    */
-  async integrateWithSentry(req: Request, res: Response, next: NextFunction) => {
+  async integrateWithSentry(req: Request, res: Response, next: NextFunction) {
     const startTime = performance.now();
     const correlationId = this.generateCorrelationId();
 
@@ -501,7 +501,7 @@ class ExternalIntegrationService {
         autoForwardEnabled: autoForward
       });
 
-    } catch {
+    } catch () {
       centralizedLogging.error(
         'external-integration',
         'system',
@@ -516,7 +516,7 @@ class ExternalIntegrationService {
   /**
    * DataDog integration endpoint
    */
-  async integrateWithDataDog(req: Request, res: Response, next: NextFunction) => {
+  async integrateWithDataDog(req: Request, res: Response, next: NextFunction) {
     const startTime = performance.now();
     const correlationId = this.generateCorrelationId();
 
@@ -607,7 +607,7 @@ class ExternalIntegrationService {
         autoForwardEnabled: autoForward
       });
 
-    } catch {
+    } catch () {
       centralizedLogging.error(
         'external-integration',
         'system',
@@ -622,7 +622,7 @@ class ExternalIntegrationService {
   /**
    * Get integration status
    */
-  async getIntegrationStatus(req: Request, res: Response, next: NextFunction) => {
+  async getIntegrationStatus(req: Request, res: Response, next: NextFunction) {
     try {
       const apiKeyValidation = await validateAPIKey(req.headers.authorization);
       if (!apiKeyValidation.valid) {
@@ -643,7 +643,7 @@ class ExternalIntegrationService {
 
       res.json(this.integrationStatus.get(integrationId));
 
-    } catch {
+    } catch () {
       next(error);
     }
   }
@@ -651,7 +651,7 @@ class ExternalIntegrationService {
   /**
    * List all integrations
    */
-  async listIntegrations(req: Request, res: Response, next: NextFunction) => {
+  async listIntegrations(req: Request, res: Response, next: NextFunction) {
     try {
       const apiKeyValidation = await validateAPIKey(req.headers.authorization);
       if (!apiKeyValidation.valid) {
@@ -673,14 +673,14 @@ class ExternalIntegrationService {
         }
       });
 
-    } catch {
+    } catch () {
       next(error);
     }
   }
 
   // Private helper methods
 
-  private async gatherBugContext(request: ClaudeCodeAnalysisRequest) => {
+  private async gatherBugContext(request: ClaudeCodeAnalysisRequest) {
     const { bugId, context } = request;
 
     // Get basic bug data
@@ -719,7 +719,7 @@ class ExternalIntegrationService {
     return bugContext;
   }
 
-  private async analyzeErrorPatterns(bugContext: Record<string, unknown>, context?: Record<string, unknown>): Promise<PatternAnalysisResponse> {
+  private async analyzeErrorPatterns(bugContext: Record<string, unknown>, context?: Record<string, unknown>): Promise<PatternAnalysisResponse>  {
     // Mock implementation - in real scenario, this would use AI/ML models
     const patterns: DetectedErrorPattern[] = [
       {
@@ -773,7 +773,7 @@ class ExternalIntegrationService {
     };
   }
 
-  private async suggestResolutions() => {
+  private async suggestResolutions() {
     // Mock resolution suggestions
     return {
       suggestedActions: [
@@ -791,7 +791,7 @@ class ExternalIntegrationService {
     };
   }
 
-  private async classifyBugSeverity() => {
+  private async classifyBugSeverity() {
     // Mock severity classification
     return {
       suggestedSeverity: 'high',
@@ -801,7 +801,7 @@ class ExternalIntegrationService {
     };
   }
 
-  private async detectDuplicates() => {
+  private async detectDuplicates() {
     // Mock duplicate detection
     return {
       isDuplicate: false,
@@ -811,7 +811,7 @@ class ExternalIntegrationService {
     };
   }
 
-  private async analyzeUserImpact() => {
+  private async analyzeUserImpact() {
     // Mock user impact analysis
     return {
       affectedUserCount: 50,
@@ -826,14 +826,14 @@ class ExternalIntegrationService {
     };
   }
 
-  private validateWebhookConfig(config: Record<string, unknown>): { valid: boolean; error?: string } {
+  private validateWebhookConfig(config: Record<string, unknown>):   { valid: boolean; error?: string } {
     if (!config.name || !config.url || !config.events || !Array.isArray(config.events)) {
       return { valid: false, error: 'Missing required webhook configuration' };
     }
 
     try {
       new URL(config.url);
-    } catch {
+    } catch () {
       return { valid: false, error: 'Invalid webhook URL' };
     }
 
@@ -850,7 +850,7 @@ class ExternalIntegrationService {
     return { valid: true };
   }
 
-  private async testWebhookConnectivity(config: WebhookConfig): Promise<void> {
+  private async testWebhookConnectivity(config: WebhookConfig): Promise<void>  {
     // Mock webhook test - in real implementation, would send test payload
     centralizedLogging.info(
       'external-integration',
@@ -860,14 +860,14 @@ class ExternalIntegrationService {
     );
   }
 
-  private async testSentryConnection(): Promise<{ success: boolean; error?: string; responseTime?: number }> {
+  private async testSentryConnection(): Promise< { success: boolean; error?: string; responseTime?: number }> {
     const startTime = performance.now();
     
     try {
       // Mock Sentry connection test
       const responseTime = performance.now() - startTime;
       return { success: true, responseTime };
-    } catch {
+    } catch () {
       return { 
         success: false, 
         error: error instanceof Error ? error.message : 'Connection test failed' 
@@ -875,14 +875,14 @@ class ExternalIntegrationService {
     }
   }
 
-  private async testDataDogConnection(): Promise<{ success: boolean; error?: string; responseTime?: number }> {
+  private async testDataDogConnection(): Promise< { success: boolean; error?: string; responseTime?: number }> {
     const startTime = performance.now();
     
     try {
       // Mock DataDog connection test
       const responseTime = performance.now() - startTime;
       return { success: true, responseTime };
-    } catch {
+    } catch () {
       return { 
         success: false, 
         error: error instanceof Error ? error.message : 'Connection test failed' 
@@ -890,7 +890,7 @@ class ExternalIntegrationService {
     }
   }
 
-  private async setupSentryAutoForwarding(integrationId: string, config: Record<string, unknown>): Promise<void> {
+  private async setupSentryAutoForwarding(integrationId: string, config: Record<string, unknown>): Promise<void>  {
     centralizedLogging.info(
       'external-integration',
       'system',
@@ -899,7 +899,7 @@ class ExternalIntegrationService {
     );
   }
 
-  private async setupDataDogAutoForwarding(integrationId: string, config: Record<string, unknown>): Promise<void> {
+  private async setupDataDogAutoForwarding(integrationId: string, config: Record<string, unknown>): Promise<void>  {
     centralizedLogging.info(
       'external-integration',
       'system',
@@ -908,7 +908,7 @@ class ExternalIntegrationService {
     );
   }
 
-  private async performHealthCheck(integrationId: string): Promise<void> {
+  private async performHealthCheck(integrationId: string): Promise<void>  {
     const integration = this.integrationStatus.get(integrationId);
     if (!integration) return;
 
@@ -923,7 +923,7 @@ class ExternalIntegrationService {
       };
       
       this.integrationStatus.set(integrationId, integration);
-    } catch {
+    } catch () {
       integration.healthCheck = {
         status: 'unhealthy',
         lastChecked: new Date().toISOString()
@@ -957,7 +957,7 @@ class ExternalIntegrationService {
     }, 300000); // Every 5 minutes
   }
 
-  private async processWebhookQueue(): Promise<void> {
+  private async processWebhookQueue(): Promise<void>  {
     if (this.deliveryQueue.length === 0 || this.processingQueue.size >= this.MAX_CONCURRENT_DELIVERIES) {
       return;
     }
@@ -969,7 +969,7 @@ class ExternalIntegrationService {
 
     try {
       await this.deliverWebhookPayload(payload);
-    } catch {
+    } catch () {
       centralizedLogging.error(
         'external-integration',
         'system',
@@ -981,7 +981,7 @@ class ExternalIntegrationService {
     }
   }
 
-  private async deliverWebhookPayload(payload: WebhookPayload): Promise<void> {
+  private async deliverWebhookPayload(payload: WebhookPayload): Promise<void>  {
     // Find matching webhook configurations
     const matchingWebhooks = Array.from(this.webhookConfigs.values())
       .filter(config => 
@@ -991,7 +991,7 @@ class ExternalIntegrationService {
       );
 
     // Deliver to each matching webhook
-    for (const webhook of matchingWebhooks) => {
+    for (const webhook of matchingWebhooks) {
       try {
         await this.sendWebhookPayload(webhook, payload);
         
@@ -1002,7 +1002,7 @@ class ExternalIntegrationService {
           status.lastActivity = new Date().toISOString();
           this.integrationStatus.set(webhook.id, status);
         }
-      } catch {
+      } catch () {
         // Update failure metrics
         const status = this.integrationStatus.get(webhook.id);
         if (status) {
@@ -1014,7 +1014,7 @@ class ExternalIntegrationService {
     }
   }
 
-  private async sendWebhookPayload(config: WebhookConfig, payload: WebhookPayload): Promise<void> {
+  private async sendWebhookPayload(config: WebhookConfig, payload: WebhookPayload): Promise<void>  {
     // Mock webhook delivery - in real implementation, would use HTTP client
     centralizedLogging.info(
       'external-integration',
@@ -1044,10 +1044,10 @@ class ExternalIntegrationService {
     return true;
   }
 
-  private async performAllHealthChecks(): Promise<void> {
+  private async performAllHealthChecks(): Promise<void>  {
     const integrations = Array.from(this.integrationStatus.keys());
     
-    for (const integrationId of integrations) => {
+    for (const integrationId of integrations) {
       await this.performHealthCheck(integrationId);
     }
   }

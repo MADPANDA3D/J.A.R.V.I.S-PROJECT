@@ -114,7 +114,7 @@ class UserActivityTrackingService {
   private heartbeatTimer?: NodeJS.Timeout;
   private currentSessionId: string;
 
-  constructor() => {
+  constructor() {
     this.config = this.loadConfiguration();
     this.currentSessionId = this.generateSessionId();
     this.websocket = {
@@ -206,7 +206,7 @@ class UserActivityTrackingService {
         this.handleWebSocketMessage(event.data);
       };
 
-    } catch (error) => {
+    } catch (error) {
       centralizedLogging.error(
         'activity-tracking',
         'system',
@@ -245,7 +245,7 @@ class UserActivityTrackingService {
     if (this.websocket.isConnected && this.websocket.connection) {
       try {
         this.websocket.connection.send(JSON.stringify(data));
-      } catch (error) => {
+      } catch (error) {
         centralizedLogging.warn(
           'activity-tracking',
           'system',
@@ -260,7 +260,7 @@ class UserActivityTrackingService {
     try {
       const message = JSON.parse(data);
       
-      switch (message.type) => {
+      switch (message.type) {
         case 'activity_broadcast':
           // Handle activity updates from other users
           this.handleActivityBroadcast(message.data);
@@ -277,7 +277,7 @@ class UserActivityTrackingService {
             { messageType: message.type }
           );
       }
-    } catch (error) => {
+    } catch (error) {
       centralizedLogging.warn(
         'activity-tracking',
         'system',
@@ -289,7 +289,7 @@ class UserActivityTrackingService {
 
   private setupEventListeners(): void {
     // Page visibility change
-    document.addEventListener('visibilitychange', () => {
+    document.addEventListener("visibilitychange", () => {
       this.trackEvent('page_view', {
         visibility: document.visibilityState,
         hidden: document.hidden
@@ -297,7 +297,7 @@ class UserActivityTrackingService {
     });
 
     // Navigation events
-    window.addEventListener('beforeunload', () => {
+    window.addEventListener("beforeunload", () => {
       this.trackEvent('navigation', {
         eventType: 'page_unload',
         url: window.location.href
@@ -307,7 +307,7 @@ class UserActivityTrackingService {
 
     // User interaction events
     ['click', 'keydown', 'scroll', 'touchstart'].forEach(eventType => {
-      document.addEventListener(eventType, (event) => {
+      document.addEventListener(eventType, (event) {
         this.handleUserInteraction(eventType, event);
       }, { passive: true });
     });
@@ -367,7 +367,7 @@ class UserActivityTrackingService {
       });
 
       observer.observe({ entryTypes: ['navigation', 'paint', 'measure'] });
-    } catch (error) => {
+    } catch (error) {
       centralizedLogging.warn(
         'activity-tracking',
         'system',
@@ -410,7 +410,7 @@ class UserActivityTrackingService {
     }
   }
 
-  private getDeviceInfo() => {
+  private getDeviceInfo() {
     return {
       userAgent: navigator.userAgent,
       platform: navigator.platform,
@@ -420,7 +420,7 @@ class UserActivityTrackingService {
     };
   }
 
-  private getLocationInfo() => {
+  private getLocationInfo() {
     return {
       url: window.location.href,
       path: window.location.pathname,
@@ -446,7 +446,7 @@ class UserActivityTrackingService {
     eventType: UserActivityEvent['eventType'],
     metadata: Record<string, unknown> = {},
     userId?: string
-  ): void {
+  ): void  => {
     if (!this.config.enabled) return;
 
     // Check if URL should be excluded
@@ -525,7 +525,7 @@ class UserActivityTrackingService {
     const sanitized = { ...metadata };
     const sensitiveKeys = ['password', 'token', 'email', 'phone', 'ssn', 'creditcard'];
 
-    const sanitizeValue = (value: unknown): unknown => {
+    const sanitizeValue = (value: unknown): unknown  =>  => {
       if (typeof value === 'string') {
         const lowerValue = value.toLowerCase();
         if (sensitiveKeys.some(key => lowerValue.includes(key))) {
@@ -791,7 +791,7 @@ class UserActivityTrackingService {
     );
   }
 
-  getActivityStatistics(timeRange: number = 1): {
+  getActivityStatistics(timeRange: number = 1):   {
     totalEvents: number;
     uniqueUsers: number;
     averageSessionDuration: number;

@@ -80,7 +80,7 @@ class APISecurityService {
   private blockedIPs: Set<string> = new Set();
   private suspiciousActivity: Map<string, number> = new Map();
 
-  private constructor() => {
+  private constructor() {
     this.initializeDefaultKeys();
     this.startCleanupTasks();
   }
@@ -100,7 +100,7 @@ class APISecurityService {
     name: string,
     permissions: APIPermissions,
     expiresIn?: number // days
-  ): Promise<{ success: boolean; apiKey?: APIKey; error?: string }> {
+  ): Promise< => { success: boolean; apiKey?: APIKey; error?: string }> {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -172,7 +172,7 @@ class APISecurityService {
         apiKey
       };
 
-    } catch (error) => {
+    } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       centralizedLogging.error(
@@ -192,7 +192,7 @@ class APISecurityService {
   /**
    * Validate API key
    */
-  async validateAPIKey(authHeader?: string): Promise<APIKeyValidation> {
+  async validateAPIKey(authHeader?: string): Promise<APIKeyValidation>  {
     if (!authHeader) {
       return { valid: false, error: 'No authorization header provided' };
     }
@@ -235,7 +235,7 @@ class APISecurityService {
         permissions: storedKey.permissions
       };
 
-    } catch (error) => {
+    } catch (error) {
       centralizedLogging.error(
         'api-security',
         'system',
@@ -250,7 +250,7 @@ class APISecurityService {
   /**
    * Check rate limits
    */
-  async checkRateLimit(apiKey: string, endpoint: string): Promise<RateLimitStatus> {
+  async checkRateLimit(apiKey: string, endpoint: string): Promise<RateLimitStatus>  {
     const storedKey = this.apiKeys.get(apiKey);
     if (!storedKey) {
       return { allowed: false, remaining: 0, resetTime: new Date().toISOString() };
@@ -273,7 +273,7 @@ class APISecurityService {
       { name: 'day', limit: limits.requestsPerDay, duration: 24 * 60 * 60 * 1000 }
     ];
 
-    for (const window of windows) => {
+    for (const window of windows) {
       const bucketKey = `${endpoint}:${window.name}`;
       let bucket = keyBuckets.get(bucketKey);
 
@@ -324,12 +324,12 @@ class APISecurityService {
   /**
    * Apply rate limit (increment counters)
    */
-  async applyRateLimit(apiKey: string, endpoint: string): Promise<void> {
+  async applyRateLimit(apiKey: string, endpoint: string): Promise<void>  {
     const keyBuckets = this.rateLimitBuckets.get(apiKey);
     if (!keyBuckets) return;
 
     const windows = ['minute', 'hour', 'day'];
-    for (const window of windows) => {
+    for (const window of windows) {
       const bucketKey = `${endpoint}:${window}`;
       const bucket = keyBuckets.get(bucketKey);
       if (bucket) {
@@ -342,7 +342,7 @@ class APISecurityService {
   /**
    * Revoke API key
    */
-  async revokeAPIKey(keyId: string, revokedBy: string): Promise<boolean> {
+  async revokeAPIKey(keyId: string, revokedBy: string): Promise<boolean>  {
     try {
       // Find API key by ID
       let targetKey: APIKey | undefined;
@@ -397,7 +397,7 @@ class APISecurityService {
 
       return true;
 
-    } catch (error) => {
+    } catch (error) {
       centralizedLogging.error(
         'api-security',
         'system',
@@ -423,7 +423,7 @@ class APISecurityService {
     responseStatus: number,
     responseTime: number,
     metadata?: Record<string, unknown>
-  ): void {
+  ): void  => {
     const auditEntry: AuditLogEntry = {
       id: this.generateAuditId(),
       apiKeyId,
@@ -452,7 +452,7 @@ class APISecurityService {
     dateRange?: { start: string; end: string };
     limit?: number;
     offset?: number;
-  } = {}): { logs: AuditLogEntry[]; total: number } {
+  } = {}):   => { logs: AuditLogEntry[]; total: number } {
     let filteredLogs = [...this.auditLogs];
 
     // Apply filters

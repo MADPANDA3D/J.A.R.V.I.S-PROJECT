@@ -25,14 +25,14 @@ export const ErrorTrendChart: React.FC<ErrorTrendChartProps> = ({
   errors,
   className = '',
   timeWindow = 24 // 24 hours
-}) {
+}) => {
   const chartData = useMemo(() => {
     const now = Date.now();
     const windowStart = now - (timeWindow * 60 * 60 * 1000);
     
     // Create hourly buckets
     const buckets: Record<string, DataPoint> = {};
-    for (let i = timeWindow - 1; i >= 0; i--) => {
+    for (let i = timeWindow - 1; i >= 0; i--) {
       const bucketTime = now - (i * 60 * 60 * 1000);
       const hour = new Date(bucketTime).toLocaleTimeString('en-US', { 
         hour: '2-digit', 
@@ -60,7 +60,7 @@ export const ErrorTrendChart: React.FC<ErrorTrendChartProps> = ({
         if (buckets[bucketKey]) {
           const bucket = buckets[bucketKey];
           
-          switch (error.level) => {
+          switch (error.level) {
             case 'error':
               bucket.errorCount++;
               if (error.context?.critical || error.tags.severity === 'critical') {

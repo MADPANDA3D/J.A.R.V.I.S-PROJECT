@@ -53,8 +53,7 @@ export function ToolsSelector({
   const selectedCount = getSelectedToolIds().length;
 
   // Group tools by category
-  const toolsByCategory = availableTools.reduce(
-    (acc, tool) => {
+  const toolsByCategory = availableTools.reduce((acc, tool) => {
       if (!acc[tool.category]) {
         acc[tool.category] = [];
       }

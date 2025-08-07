@@ -129,7 +129,7 @@ function CommentEditor({
       } else {
         throw new Error(result.error || 'Failed to add comment');
       }
-    } catch (error) => {
+    } catch (error) {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to add comment",
@@ -344,8 +344,7 @@ function CommentItem({
   const [editContent, setEditContent] = useState(comment.content);
 
   const getCommentTypeIcon = (type: CommentType) => {
-    switch (type) => {
-    }
+    switch (type) {
       case 'note': return <MessageSquare className="h-4 w-4 text-blue-600" />;
       case 'status_change': return <CheckCircle className="h-4 w-4 text-green-600" />;
       case 'resolution': return <CheckCircle className="h-4 w-4 text-green-600" />;
@@ -356,8 +355,7 @@ function CommentItem({
   };
 
   const getVisibilityIcon = (visibility: CommentVisibility) => {
-    switch (visibility) => {
-    }
+    switch (visibility) {
       case 'internal': return <Eye className="h-3 w-3 text-red-500" />;
       case 'team_only': return <Users className="h-3 w-3 text-yellow-500" />;
       case 'public': return <Eye className="h-3 w-3 text-green-500" />;
@@ -375,7 +373,7 @@ function CommentItem({
       if (onReaction) {
         onReaction(comment, emoji);
       }
-    } catch (error) => {
+    } catch (error) {
       toast({
         title: "Error",
         description: "Failed to add reaction",
@@ -404,7 +402,7 @@ function CommentItem({
       } else {
         throw new Error(result.error);
       }
-    } catch (error) => {
+    } catch (error) {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to edit comment",
@@ -432,7 +430,7 @@ function CommentItem({
       } else {
         throw new Error(result.error);
       }
-    } catch (error) => {
+    } catch (error) {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to delete comment",
@@ -678,7 +676,7 @@ export function InternalComments({
         : loadedComments.filter(c => !c.isPrivate);
       
       setComments(filteredComments);
-    } catch (error) => {
+    } catch (error) {
       toast({
         title: "Error",
         description: "Failed to load comments",

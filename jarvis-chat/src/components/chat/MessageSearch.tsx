@@ -160,7 +160,7 @@ export function MessageSearch({
           const executionTime = performance.now() - searchStartTime;
           addToHistory(searchQuery, searchResponse.total, executionTime, 'regular');
         }
-      } catch (error) => {
+      } catch (error) {
         console.error('Search failed:', error);
         if (!isLoadingMoreResults) {
           setResults([]);
@@ -222,7 +222,7 @@ export function MessageSearch({
           const executionTime = performance.now() - searchStartTime;
           addToHistory(searchQuery, sessionResponse.totalMessages, executionTime, 'session-grouped');
         }
-      } catch (error) => {
+      } catch (error) {
         console.error('Session grouped search failed:', error);
         if (!isLoadingMoreSessions) {
           setSessionGroups([]);
@@ -254,7 +254,7 @@ export function MessageSearch({
       try {
         const sessions = await chatService.getConversationSessions(userId);
         setConversationSessions(sessions);
-      } catch (error) => {
+      } catch (error) {
         console.error('Failed to load conversation sessions:', error);
       } finally {
         setLoadingSessions(false);

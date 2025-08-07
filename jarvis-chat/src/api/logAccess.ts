@@ -112,7 +112,7 @@ class LogAccessService {
   private rateLimitBuckets: Map<string, { count: number; resetTime: number }> = new Map();
   private activeStreams: Map<string, WebSocket> = new Map();
 
-  constructor() => {
+  constructor() {
     this.setupDefaultApiKeys();
     this.setupCleanupTimer();
   }
@@ -145,7 +145,7 @@ class LogAccessService {
   }
 
   // Authentication and authorization
-  async authenticateApiKey(apiKey: string): Promise<ApiKey | null> {
+  async authenticateApiKey(apiKey: string): Promise<ApiKey | null>  {
     const key = this.apiKeys.get(apiKey);
     
     if (!key || !key.isActive) {
@@ -163,11 +163,11 @@ class LogAccessService {
     return key;
   }
 
-  async authorizeAction(
+  authorizeAction = async (
     apiKey: ApiKey, 
     action: LogAccessPermission['permission'], 
     query: LogQuery
-  ): Promise<boolean> {
+  ): Promise<boolean> => {
     const permission = apiKey.permissions.find(p => p.permission === action || p.permission === 'admin_logs');
     
     if (!permission) {
@@ -212,7 +212,7 @@ class LogAccessService {
   }
 
   // Rate limiting
-  async checkRateLimit(apiKey: ApiKey, ipAddress: string): Promise<{ allowed: boolean; info: RateLimitInfo }> {
+  checkRateLimit = async (apiKey: ApiKey, ipAddress: string): Promise<{ allowed: boolean; info: RateLimitInfo }> => {
     const bucketKey = `${apiKey.keyId}_${ipAddress}`;
     const now = Date.now();
     const windowMs = 60 * 1000; // 1 minute
@@ -249,7 +249,7 @@ class LogAccessService {
     apiKey: ApiKey,
     ipAddress: string,
     userAgent: string
-  ): Promise<LogSearchResult> {
+  ): Promise<LogSearchResult>  => {
     const startTime = performance.now();
     
     try {
@@ -299,7 +299,7 @@ class LogAccessService {
         query: scopedQuery
       };
 
-    } catch {
+    } catch (error) {
       const searchTime = performance.now() - startTime;
       
       // Audit failed request
@@ -499,7 +499,7 @@ class LogAccessService {
     logs.sort((a, b) => {
       let aValue: string | number, bValue: string | number;
       
-      switch (query.sortBy) => {
+      switch (query.sortBy) {
         case 'level': {
           const levelOrder = ['debug', 'info', 'warn', 'error', 'critical'];
           aValue = levelOrder.indexOf(a.level);
@@ -582,7 +582,7 @@ class LogAccessService {
     return 'other';
   }
 
-  private generateTimeDistribution(logs: LogEntry[], query: LogQuery): Array<{ timestamp: string; count: number }> {
+  private generateTimeDistribution(logs: LogEntry[], query: LogQuery): Array< { timestamp: string; count: number }> {
     if (logs.length === 0) return [];
 
     // Determine time bucket size based on time range
@@ -624,7 +624,7 @@ class LogAccessService {
     apiKey: ApiKey,
     ipAddress: string,
     userAgent: string
-  ): Promise<{ data: string; contentType: string; filename: string }> {
+  ): Promise<{ data: string; contentType: string; filename: string }> => {
     const startTime = performance.now();
     
     try {
@@ -640,7 +640,7 @@ class LogAccessService {
       let contentType: string;
       let filename: string;
 
-      switch (request.format) => {
+      switch (request.format) {
         case 'json':
           data = JSON.stringify(searchResult.logs, null, 2);
           contentType = 'application/json';
@@ -693,7 +693,7 @@ class LogAccessService {
 
       return { data, contentType, filename };
 
-    } catch {
+    } catch (error) {
       const duration = performance.now() - startTime;
       
       await this.auditLogAccess({
@@ -802,7 +802,7 @@ class LogAccessService {
     request: LogStreamRequest,
     apiKey: ApiKey,
     websocket: WebSocket
-  ): Promise<string> {
+  ): Promise<string>  => {
     const streamId = `stream_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     this.activeStreams.set(streamId, websocket);
@@ -864,7 +864,7 @@ class LogAccessService {
         if (buffer.length > bufferSize * 2) {
           buffer = buffer.slice(-bufferSize);
         }
-      } catch {
+      } catch (error) {
         console.warn('Error in log stream listener:', error);
       }
     }, 2000); // Check every 2 seconds
@@ -898,7 +898,7 @@ class LogAccessService {
       rateLimits?: Partial<ApiKey['rateLimits']>;
       ipWhitelist?: string[];
     } = {}
-  ): Promise<ApiKey> {
+  ): Promise<ApiKey>  => {
     const keyId = `key_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const key = `lak_${Date.now()}_${Math.random().toString(36).substr(2, 32)}`;
 
@@ -937,7 +937,7 @@ class LogAccessService {
     return apiKey;
   }
 
-  async revokeApiKey(keyId: string, revokedBy: string): Promise<boolean> {
+  async revokeApiKey(keyId: string, revokedBy: string): Promise<boolean>  {
     const apiKey = Array.from(this.apiKeys.values()).find(key => key.keyId === keyId);
     
     if (!apiKey) {
@@ -959,7 +959,7 @@ class LogAccessService {
   }
 
   // Audit logging
-  private async auditLogAccess(entry: Omit<AuditLogEntry, 'auditId' | 'timestamp'>): Promise<void> {
+  private async auditLogAccess(entry: Omit<AuditLogEntry, 'auditId' | 'timestamp'>): Promise<void>  {
     const auditEntry: AuditLogEntry = {
       auditId: `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       timestamp: new Date().toISOString(),
@@ -997,7 +997,7 @@ class LogAccessService {
     return limit ? sorted.slice(0, limit) : sorted;
   }
 
-  getActiveStreams(): Array<{ streamId: string; connected: boolean }> {
+  getActiveStreams(): Array< { streamId: string; connected: boolean }> {
     return Array.from(this.activeStreams.entries()).map(([streamId, ws]) => ({
       streamId,
       connected: ws.readyState === WebSocket.OPEN
@@ -1056,7 +1056,7 @@ export const searchLogsEndpoint = async (
   apiKey: ApiKey,
   ipAddress: string,
   userAgent: string
-) {
+) => {
   // Check authorization
   const authorized = await logAccessService.authorizeAction(apiKey, 'read_logs', query);
   if (!authorized) {
@@ -1071,7 +1071,7 @@ export const exportLogsEndpoint = async (
   apiKey: ApiKey,
   ipAddress: string,
   userAgent: string
-) {
+) => {
   // Check authorization
   const authorized = await logAccessService.authorizeAction(apiKey, 'export_logs', request.query);
   if (!authorized) {
@@ -1085,7 +1085,7 @@ export const createLogStreamEndpoint = async (
   request: LogStreamRequest,
   apiKey: ApiKey,
   websocket: WebSocket
-) {
+) => {
   // Check authorization
   const authorized = await logAccessService.authorizeAction(apiKey, 'stream_logs', request.query);
   if (!authorized) {

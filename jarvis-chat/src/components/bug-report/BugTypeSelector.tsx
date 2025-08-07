@@ -18,7 +18,7 @@ export const BugTypeSelector: React.FC<BugTypeSelectorProps> = ({
   selectedType,
   onSelect,
   className = ''
-}) {
+}) => {
   return (
     <div className={`bug-type-selector ${className}`}>
       <div className="mb-4">

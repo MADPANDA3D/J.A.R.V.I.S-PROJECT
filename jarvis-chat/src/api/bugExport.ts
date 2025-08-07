@@ -175,7 +175,7 @@ class BugExportService {
   private readonly MAX_CONCURRENT_EXPORTS = 5;
   private readonly EXPORT_RETENTION_HOURS = 24;
 
-  private constructor() => {
+  private constructor() {
     this.initializeDefaultTemplates();
     this.startScheduledExportProcessor();
     this.startCleanupTask();
@@ -191,7 +191,7 @@ class BugExportService {
   /**
    * Create new export request
    */
-  async createExport(req: Request, res: Response, next: NextFunction) => {
+  async createExport(req: Request, res: Response, next: NextFunction) {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -309,7 +309,7 @@ class BugExportService {
 
       res.status(202).json(exportResponse);
 
-    } catch {
+    } catch () {
       centralizedLogging.error(
         'bug-export',
         'system',
@@ -324,7 +324,7 @@ class BugExportService {
   /**
    * Get export status
    */
-  async getExportStatus(req: Request, res: Response, next: NextFunction) => {
+  async getExportStatus(req: Request, res: Response, next: NextFunction) {
     const exportId = req.params.id;
     const correlationId = this.generateCorrelationId();
 
@@ -349,7 +349,7 @@ class BugExportService {
 
       res.json(exportResponse);
 
-    } catch {
+    } catch () {
       centralizedLogging.error(
         'bug-export',
         'system',
@@ -364,7 +364,7 @@ class BugExportService {
   /**
    * Download export file
    */
-  async downloadExport(req: Request, res: Response, next: NextFunction) => {
+  async downloadExport(req: Request, res: Response, next: NextFunction) {
     const exportId = req.params.id;
     const correlationId = this.generateCorrelationId();
 
@@ -391,7 +391,7 @@ class BugExportService {
       const filePath = this.getExportFilePath(exportId, exportResponse.format);
       try {
         await fs.access(filePath);
-      } catch {
+      } catch () {
         return res.status(404).json({ error: 'Export file not found' });
       }
 
@@ -419,7 +419,7 @@ class BugExportService {
         { correlationId, exportId, userId: apiKeyValidation.userId }
       );
 
-    } catch {
+    } catch () {
       centralizedLogging.error(
         'bug-export',
         'system',
@@ -434,7 +434,7 @@ class BugExportService {
   /**
    * Create scheduled export
    */
-  async createScheduledExport(req: Request, res: Response, next: NextFunction) => {
+  async createScheduledExport(req: Request, res: Response, next: NextFunction) {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -470,7 +470,7 @@ class BugExportService {
         nextExecution: this.calculateNextExecution(config.schedule)
       });
 
-    } catch {
+    } catch () {
       centralizedLogging.error(
         'bug-export',
         'system',
@@ -485,7 +485,7 @@ class BugExportService {
   /**
    * Get available export templates
    */
-  async getExportTemplates(req: Request, res: Response, next: NextFunction) => {
+  async getExportTemplates(req: Request, res: Response, next: NextFunction) {
     try {
       const apiKeyValidation = await validateAPIKey(req.headers.authorization);
       if (!apiKeyValidation.valid) {
@@ -497,13 +497,13 @@ class BugExportService {
 
       res.json({ templates });
 
-    } catch {
+    } catch () {
       next(error);
     }
   }
 
   // Private methods for export processing
-  private async processExportAsync(request: ExportRequest): Promise<void> {
+  private async processExportAsync(request: ExportRequest): Promise<void>  {
     const exportId = request.id;
     
     try {
@@ -574,7 +574,7 @@ class BugExportService {
         { exportId, recordCount: processedData.length, fileSize: fileStats.size }
       );
 
-    } catch {
+    } catch () {
       const errorMessage = error instanceof Error ? error.message : 'Export processing failed';
       
       this.updateExportStatus(exportId, 'failed', {
@@ -635,7 +635,7 @@ class BugExportService {
   ): Promise<Record<string, unknown>[]> {
     const processed = [];
 
-    for (let i = 0; i < data.length; i++) => {
+    for (let i = 0; i < data.length; i++) {
       const record = data[i];
       
       // Apply field selection if specified
@@ -666,7 +666,7 @@ class BugExportService {
         // Handle nested fields
         const parts = field.split('.');
         let value = record;
-        for (const part of parts) => {
+        for (const part of parts) {
           value = value?.[part];
         }
         this.setNestedValue(selected, field, value);
@@ -682,7 +682,7 @@ class BugExportService {
     const parts = path.split('.');
     let current = obj;
     
-    for (let i = 0; i < parts.length - 1; i++) => {
+    for (let i = 0; i < parts.length - 1; i++) {
       const part = parts[i];
       if (!(part in current)) {
         current[part] = {};
@@ -711,12 +711,12 @@ class BugExportService {
     return record;
   }
 
-  private async formatExportData(
+  private formatExportData = async (
     data: Record<string, unknown>[], 
     format: ExportFormat, 
     options: Record<string, unknown>
-  ): Promise<string | Buffer> {
-    switch (format) => {
+  ): Promise<string | Buffer> => {
+    switch (format) {
       case 'json':
         return JSON.stringify(data, null, options.prettyPrint ? 2 : 0);
       
@@ -769,7 +769,7 @@ class BugExportService {
     return Buffer.from(textData, 'utf8');
   }
 
-  private async saveExportFile(exportId: string, data: string | Buffer, format: ExportFormat): Promise<string> {
+  private async saveExportFile(exportId: string, data: string | Buffer, format: ExportFormat): Promise<string>  {
     const filePath = this.getExportFilePath(exportId, format);
     
     // Ensure export directory exists
@@ -796,7 +796,7 @@ class BugExportService {
     return contentTypes[format] || 'application/octet-stream';
   }
 
-  private async estimateExport(request: ExportRequest): Promise<{ size: number; time: number }> {
+  private async estimateExport(request: ExportRequest): Promise< { size: number; time: number }> {
     // Get approximate record count
     const { count } = await bugReportOperations.searchBugReports({
       ...request.filters,
@@ -841,7 +841,7 @@ class BugExportService {
     }
   }
 
-  private validateScheduleConfig(config: ScheduledExportConfig): { valid: boolean; error?: string } {
+  private validateScheduleConfig(config: ScheduledExportConfig):   { valid: boolean; error?: string } {
     if (!config.name || !config.format || !config.schedule) {
       return { valid: false, error: 'Missing required configuration' };
     }
@@ -870,7 +870,7 @@ class BugExportService {
     const nextExecution = new Date(now);
     nextExecution.setHours(hours, minutes, 0, 0);
 
-    switch (schedule.frequency) => {
+    switch (schedule.frequency) {
       case 'daily':
         if (nextExecution <= now) {
           nextExecution.setDate(nextExecution.getDate() + 1);
@@ -918,7 +918,7 @@ class BugExportService {
   private flattenObject(obj: Record<string, unknown>, prefix = ''): Record<string, unknown> {
     const flattened: Record<string, unknown> = {};
     
-    for (const key in obj) => {
+    for (const key in obj) {
       const newKey = prefix ? `${prefix}.${key}` : key;
       
       if (obj[key] && typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
@@ -973,7 +973,7 @@ class BugExportService {
     }, 5 * 60 * 1000);
   }
 
-  private async processScheduledExports(): Promise<void> {
+  private async processScheduledExports(): Promise<void>  {
     const now = new Date();
 
     for (const [scheduleId, config] of this.scheduledExports.entries()) {
@@ -1007,7 +1007,7 @@ class BugExportService {
             { scheduleId, exportId: exportRequest.id }
           );
 
-        } catch {
+        } catch () {
           centralizedLogging.error(
             'bug-export',
             'system',
@@ -1026,7 +1026,7 @@ class BugExportService {
     }, 60 * 60 * 1000);
   }
 
-  private async cleanupExpiredExports(): Promise<void> {
+  private async cleanupExpiredExports(): Promise<void>  {
     const now = Date.now();
     const expiredExports: string[] = [];
 
@@ -1038,7 +1038,7 @@ class BugExportService {
         try {
           const filePath = this.getExportFilePath(exportId, exportResponse.format);
           await fs.unlink(filePath);
-        } catch {
+        } catch () {
           // File might not exist, ignore error
         }
       }

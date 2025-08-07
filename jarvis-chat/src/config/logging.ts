@@ -24,7 +24,7 @@ export interface LoggingDestinations {
 }
 
 // Get current environment
-const getCurrentEnvironment = (): 'development' | 'staging' | 'production' => {
+const getCurrentEnvironment = (): 'development' | 'staging' | 'production'  =>  => {
   const mode = import.meta.env.MODE || 'development';
   
   if (mode === 'production') return 'production';
@@ -33,7 +33,7 @@ const getCurrentEnvironment = (): 'development' | 'staging' | 'production' => {
 };
 
 // Build logging destinations based on environment
-const buildLoggingDestinations = (env: string): LogDestination[] => {
+const buildLoggingDestinations = (env: string): LogDestination[]  =>  => {
   const destinations: LogDestination[] = [];
 
   // Console logging (always enabled in development)
@@ -59,7 +59,7 @@ const buildLoggingDestinations = (env: string): LogDestination[] => {
         endpoint: import.meta.env.VITE_LOG_WEBHOOK_URL,
         apiKey: import.meta.env.VITE_LOG_WEBHOOK_KEY,
         headers: import.meta.env.VITE_LOG_WEBHOOK_HEADERS ? 
-          JSON.parse(import.meta.env.VITE_LOG_WEBHOOK_HEADERS) : {
+          JSON.parse(import.meta.env.VITE_LOG_WEBHOOK_HEADERS):   => {
             'Content-Type': 'application/json',
             'User-Agent': 'JARVIS-Chat-Logger/1.0'
           }
@@ -186,11 +186,11 @@ export const getLoggingConfig = (): LoggingConfig => {
 };
 
 // Validate logging configuration
-export const validateLoggingConfig = (config: LoggingConfig): {
+export const validateLoggingConfig = (config: LoggingConfig): boolean => {
   valid: boolean;
   errors: string[];
   warnings: string[];
-} => {
+} {
   const errors: string[] = [];
   const warnings: string[] = [];
 
@@ -254,7 +254,7 @@ export const validateLoggingConfig = (config: LoggingConfig): {
 };
 
 // Test logging configuration
-export const testLoggingConfiguration = async (): Promise<{
+export const testLoggingConfiguration = async (): Promise< =>  => {
   success: boolean;
   results: Array<{
     destination: string;
@@ -262,7 +262,7 @@ export const testLoggingConfiguration = async (): Promise<{
     responseTime?: number;
     error?: string;
   }>;
-}> => {
+}> {
   const config = getLoggingConfig();
   const results: Array<{
     destination: string;
@@ -271,7 +271,7 @@ export const testLoggingConfiguration = async (): Promise<{
     error?: string;
   }> = [];
 
-  for (const destination of config.destinations) => {
+  for (const destination of config.destinations) {
     if (!destination.enabled) {
       results.push({
         destination: destination.type,
@@ -283,7 +283,7 @@ export const testLoggingConfiguration = async (): Promise<{
     const startTime = performance.now();
     
     try {
-      switch (destination.type) => {
+      switch (destination.type) {
         case 'console':
           // Console always works
           console.log('🧪 Testing console logging destination');
@@ -400,7 +400,7 @@ export const testLoggingConfiguration = async (): Promise<{
             error: 'Unknown destination type'
           });
       }
-    } catch {
+    } catch (error) {
       results.push({
         destination: destination.type,
         success: false,

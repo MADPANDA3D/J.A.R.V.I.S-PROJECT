@@ -14,17 +14,17 @@ import { getLoggingConfig, validateLoggingConfig, testLoggingConfiguration } fro
 
 // Service Worker Registration
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
+  window.addEventListener("load", () => {
     navigator.serviceWorker
       .register('/sw.js')
       .then(registration => {
         console.log('✅ SW registered: ', registration);
 
         // Handle service worker updates
-        registration.addEventListener('updatefound', () => {
+        registration.addEventListener("updatefound", () => {
           const newWorker = registration.installing;
           if (newWorker) {
-            newWorker.addEventListener('statechange', () => {
+            newWorker.addEventListener("statechange", () => {
               if (
                 newWorker.state === 'installed' &&
                 navigator.serviceWorker.controller
@@ -83,7 +83,7 @@ const initializeLogging = async () => {
         }
       );
     }
-  } catch (error) => {
+  } catch (error) {
     console.error('❌ Failed to initialize logging:', error);
   }
 };
@@ -102,7 +102,7 @@ if (!envResult.isValid && import.meta.env.DEV) {
 }
 
 // Ensure page loads at the top
-window.addEventListener('load', () => {
+window.addEventListener("load", () => {
   window.scrollTo(0, 0);
 });
 
