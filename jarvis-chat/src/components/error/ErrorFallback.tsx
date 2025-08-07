@@ -15,7 +15,7 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
   error,
   resetError,
   reportBug,
-}) {
+}) => {
   const [showBugReport, setShowBugReport] = useState(false);
 
   const handleReportError = () => {

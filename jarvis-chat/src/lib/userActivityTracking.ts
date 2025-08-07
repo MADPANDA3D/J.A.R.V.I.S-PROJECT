@@ -525,7 +525,7 @@ class UserActivityTrackingService {
     const sanitized = { ...metadata };
     const sensitiveKeys = ['password', 'token', 'email', 'phone', 'ssn', 'creditcard'];
 
-    const sanitizeValue = (value: unknown): unknown  =>  => {
+    const sanitizeValue = (value: unknown): unknown => {
       if (typeof value === 'string') {
         const lowerValue = value.toLowerCase();
         if (sensitiveKeys.some(key => lowerValue.includes(key))) {

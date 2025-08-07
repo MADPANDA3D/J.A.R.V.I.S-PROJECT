@@ -446,7 +446,7 @@ export class ExternalAPIClient {
 }
 
 // Pre-configured clients for common services
-export const createOpenAIClient = (apiKey: string): ExternalAPIClient  =>  => {
+export const createOpenAIClient = (apiKey: string): ExternalAPIClient => {
   return new ExternalAPIClient({
     serviceName: 'openai-api',
     baseUrl: 'https://api.openai.com/v1',
@@ -464,7 +464,7 @@ export const createOpenAIClient = (apiKey: string): ExternalAPIClient  =>  => {
   });
 };
 
-export const createAnthropicClient = (apiKey: string): ExternalAPIClient  =>  => {
+export const createAnthropicClient = (apiKey: string): ExternalAPIClient => {
   return new ExternalAPIClient({
     serviceName: 'anthropic-api',
     baseUrl: 'https://api.anthropic.com/v1',
@@ -480,7 +480,7 @@ export const createAnthropicClient = (apiKey: string): ExternalAPIClient  =>  =>
   });
 };
 
-export const createGitHubClient = (token: string): ExternalAPIClient  =>  => {
+export const createGitHubClient = (token: string): ExternalAPIClient => {
   return new ExternalAPIClient({
     serviceName: 'github-api',
     baseUrl: 'https://api.github.com',
@@ -498,7 +498,7 @@ export const createGitHubClient = (token: string): ExternalAPIClient  =>  => {
   });
 };
 
-export const createSlackClient = (token: string): ExternalAPIClient  =>  => {
+export const createSlackClient = (token: string): ExternalAPIClient => {
   return new ExternalAPIClient({
     serviceName: 'slack-api',
     baseUrl: 'https://slack.com/api',
@@ -515,7 +515,7 @@ export const createSlackClient = (token: string): ExternalAPIClient  =>  => {
   });
 };
 
-export const createN8NClient = (baseUrl: string, token?: string): ExternalAPIClient  =>  => {
+export const createN8NClient = (baseUrl: string, token?: string): ExternalAPIClient => {
   return new ExternalAPIClient({
     serviceName: 'n8n-api',
     baseUrl: baseUrl,

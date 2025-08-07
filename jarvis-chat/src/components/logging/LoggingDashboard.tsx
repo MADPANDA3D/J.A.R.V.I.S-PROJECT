@@ -119,7 +119,7 @@ export const LoggingDashboard: React.FC<LoggingDashboardProps> = ({
     setSelectedLog(log);
   };
 
-  const getLogLevelColor = (level: LogEntry['level']): string  =>  => {
+  const getLogLevelColor = (level: LogEntry['level']): string => {
     switch (level) {
       case 'critical': return 'text-red-800 bg-red-100';
       case 'error': return 'text-red-600 bg-red-50';
@@ -130,7 +130,7 @@ export const LoggingDashboard: React.FC<LoggingDashboardProps> = ({
     }
   };
 
-  const getCategoryIcon = (category: LogEntry['category']): string  =>  => {
+  const getCategoryIcon = (category: LogEntry['category']): string => {
     switch (category) {
       case 'api': return '🌐';
       case 'database': return '🗄️';

@@ -87,7 +87,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
   };
 
   // Test Supabase configuration
-  const testSupabaseConfig = async (): Promise<AuthTest>  =>  => {
+  const testSupabaseConfig = async (): Promise<AuthTest> => {
     const test: AuthTest = {
       name: 'Supabase Configuration',
       status: 'running',
@@ -177,7 +177,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
   };
 
   // Test authentication endpoints
-  const testAuthEndpoints = async (): Promise<AuthTest>  =>  => {
+  const testAuthEndpoints = async (): Promise<AuthTest> => {
     const test: AuthTest = {
       name: 'Authentication Endpoints',
       status: 'running',
@@ -220,7 +220,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
   };
 
   // Test RLS policies
-  const testRLSPolicies = async (): Promise<AuthTest>  =>  => {
+  const testRLSPolicies = async (): Promise<AuthTest> => {
     const test: AuthTest = {
       name: 'Row Level Security (RLS)',
       status: 'running',
@@ -274,7 +274,7 @@ export function AuthenticationDebugger({ className = '' }: AuthenticationDebugge
   };
 
   // Test user authentication flow
-  const testAuthFlow = async (): Promise<AuthTest>  =>  => {
+  const testAuthFlow = async (): Promise<AuthTest> => {
     const test: AuthTest = {
       name: 'Authentication Flow',
       status: 'running',

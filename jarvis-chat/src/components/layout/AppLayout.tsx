@@ -16,7 +16,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     // Register global keyboard shortcuts
     keyboardNav.registerShortcut(
       'alt+m',
-      () {
+      () => {
         const mainContent = document.querySelector('main');
         if (mainContent) {
           focusManager.setFocus(

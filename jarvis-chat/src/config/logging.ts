@@ -24,7 +24,7 @@ export interface LoggingDestinations {
 }
 
 // Get current environment
-const getCurrentEnvironment = (): 'development' | 'staging' | 'production'  =>  => {
+const getCurrentEnvironment = (): 'development' | 'staging' | 'production' => {
   const mode = import.meta.env.MODE || 'development';
   
   if (mode === 'production') return 'production';
@@ -33,7 +33,7 @@ const getCurrentEnvironment = (): 'development' | 'staging' | 'production'  =>  
 };
 
 // Build logging destinations based on environment
-const buildLoggingDestinations = (env: string): LogDestination[]  =>  => {
+const buildLoggingDestinations = (env: string): LogDestination[] => {
   const destinations: LogDestination[] = [];
 
   // Console logging (always enabled in development)
@@ -254,7 +254,7 @@ export const validateLoggingConfig = (config: LoggingConfig): boolean => {
 };
 
 // Test logging configuration
-export const testLoggingConfiguration = async (): Promise< =>  => {
+export const testLoggingConfiguration = async (): Promise<{
   success: boolean;
   results: Array<{
     destination: string;

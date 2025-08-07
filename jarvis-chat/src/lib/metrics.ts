@@ -205,7 +205,7 @@ class MetricsService {
     ['click', 'keydown', 'scroll', 'mousemove'].forEach(eventType => {
       document.addEventListener(
         eventType,
-        this.throttle(() {
+        this.throttle(() => {
           this.trackUserInteraction(eventType);
         }, 1000),
         { passive: true }
@@ -222,7 +222,7 @@ class MetricsService {
     let timeoutId: number | undefined;
     let lastExecTime = 0;
 
-    return () {
+    return () => {
       const currentTime = Date.now();
 
       if (currentTime - lastExecTime > delay) {
@@ -633,7 +633,7 @@ class MetricsService {
           connection.downlink || 0
         );
       }
-    } catch () {
+    } catch (error) {
       monitoringService.captureException(
         error instanceof Error
           ? error
@@ -666,7 +666,7 @@ class MetricsService {
           }
         );
       }
-    } catch () {
+    } catch (error) {
       this.trackKPI('system.health_check_status', 0, 'status', 'technical');
     }
   }
@@ -698,7 +698,7 @@ class MetricsService {
           'business'
         );
       }
-    } catch () {
+    } catch (error) {
       monitoringService.captureException(
         error instanceof Error
           ? error

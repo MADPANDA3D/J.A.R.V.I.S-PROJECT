@@ -66,7 +66,7 @@ export function RuntimeErrorMonitor({
   const [showDetails, setShowDetails] = useState(false);
 
   // Error categorization
-  const categorizeError = (error: ErrorEvent | Error): Omit<RuntimeError, 'id' | 'count' | 'lastOccurrence'>  =>  => {
+  const categorizeError = (error: ErrorEvent | Error): Omit<RuntimeError, 'id' | 'count' | 'lastOccurrence'> => {
     let severity: RuntimeError['severity'] = 'medium';
     let errorType: RuntimeError['type'] = 'javascript';
     let source = '';

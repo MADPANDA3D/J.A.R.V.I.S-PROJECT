@@ -289,7 +289,7 @@ export const useWebhookMonitoring = (options: UseWebhookMonitoringOptions = {}) 
 };
 
 // Mock data generator for development/fallback
-const generateMockMetrics = (): WebhookMetrics  =>  => {
+const generateMockMetrics = (): WebhookMetrics => {
   const now = new Date();
   const uptimeMs = Math.floor(Math.random() * 86400000) + 3600000; // 1-24 hours
   
@@ -387,7 +387,7 @@ const generateMockMetrics = (): WebhookMetrics  =>  => {
   };
 };
 
-const formatUptime = (milliseconds: number): string  =>  => {
+const formatUptime = (milliseconds: number): string => {
   const seconds = Math.floor(milliseconds / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);

@@ -222,20 +222,20 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     }
   };
 
-  const formatNumber = (num: number, decimals: number = 0): string  =>  => {
+  const formatNumber = (num: number, decimals: number = 0): string => {
     return num.toLocaleString(undefined, { 
       minimumFractionDigits: decimals, 
       maximumFractionDigits: decimals 
     });
   };
 
-  const formatDuration = (ms: number): string  =>  => {
+  const formatDuration = (ms: number): string => {
     if (ms < 1000) return `${ms.toFixed(0)}ms`;
     if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
     return `${(ms / 60000).toFixed(1)}m`;
   };
 
-  const getAlertSeverityColor = (severity: string): string  =>  => {
+  const getAlertSeverityColor = (severity: string): string => {
     switch (severity) {
       case 'critical': return 'text-red-800 bg-red-100 border-red-200';
       case 'warning': return 'text-yellow-800 bg-yellow-100 border-yellow-200';
@@ -243,13 +243,13 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     }
   };
 
-  const getResourceUsageColor = (percentage: number): string  =>  => {
+  const getResourceUsageColor = (percentage: number): string => {
     if (percentage >= 85) return 'bg-red-500';
     if (percentage >= 70) return 'bg-yellow-500';
     return 'bg-green-500';
   };
 
-  const getMetricStatusIcon = (value: number, threshold: number, inverse: boolean = false): string  =>  => {
+  const getMetricStatusIcon = (value: number, threshold: number, inverse: boolean = false): string => {
     const isGood = inverse ? value < threshold : value >= threshold;
     return isGood ? '✅' : '⚠️';
   };

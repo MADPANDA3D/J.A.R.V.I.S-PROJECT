@@ -16,7 +16,7 @@ const chatMessageToMessage = (chatMsg: ChatMessage): Message => ({
 // const messageToChatMessage = (
 //   msg: Message,
 //   userId: string
-// ): Omit<ChatMessage, 'id' | 'timestamp'> => ( =>  => {
+// ): Omit<ChatMessage, 'id' | 'timestamp'> => {
 //   content: msg.content,
 //   role: msg.role,
 //   status: msg.status,

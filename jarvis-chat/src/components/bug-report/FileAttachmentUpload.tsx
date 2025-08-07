@@ -145,7 +145,7 @@ export const FileAttachmentUpload: React.FC<FileAttachmentUploadProps> = ({
     return '📎';
   };
 
-  const getUploadProgress = (fileName: string): FileUploadProgress | undefined  =>  => {
+  const getUploadProgress = (fileName: string): FileUploadProgress | undefined => {
     return uploadProgress.find(p => p.filename === fileName);
   };
 

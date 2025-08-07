@@ -170,7 +170,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const signUp = async (email: string, password: string): Promise<void>  =>  => {
+  const signUp = async (email: string, password: string): Promise<void> => {
     addBreadcrumb('info', 'user_action', 'Sign up attempt', { email });
     setAuthState(prev => ({ ...prev, loading: true }));
 
@@ -205,7 +205,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const signOut = async (): Promise<void>  =>  => {
+  const signOut = async (): Promise<void> => {
     const currentUserId = authState.user?.id;
     addBreadcrumb('info', 'user_action', 'Sign out attempt', { 
       userId: currentUserId 
@@ -241,7 +241,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const resetPassword = async (email: string): Promise<void>  =>  => {
+  const resetPassword = async (email: string): Promise<void> => {
     addBreadcrumb('info', 'user_action', 'Password reset attempt', { email });
     
     try {

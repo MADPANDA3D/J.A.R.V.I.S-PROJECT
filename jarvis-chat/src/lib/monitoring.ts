@@ -1257,21 +1257,21 @@ export const trackBugReportSubmission = (bugData: {
   });
 };
 
-export const trackBugReportError = (error: string, context: Record<string, unknown>): void  =>  => {
+export const trackBugReportError = (error: string, context: Record<string, unknown>): void => {
   monitoringService.trackBusinessEvent('bug_report_error', {
     error,
     context
   });
 };
 
-export const trackBugReportValidationError = (field: string, error: string): void  =>  => {
+export const trackBugReportValidationError = (field: string, error: string): void => {
   monitoringService.trackBusinessEvent('bug_report_validation_error', {
     field,
     error
   });
 };
 
-export const trackBugReportFileUpload = (fileName: string, fileSize: number, success: boolean): void  =>  => {
+export const trackBugReportFileUpload = (fileName: string, fileSize: number, success: boolean): void => {
   monitoringService.trackBusinessEvent('bug_report_file_upload', {
     file_name: fileName,
     file_size: fileSize,

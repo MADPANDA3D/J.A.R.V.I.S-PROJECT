@@ -24,7 +24,7 @@ export interface HealthCheckResult {
   };
 }
 
-export const performHealthCheck = async (): Promise<HealthCheckResult>  =>  => {
+export const performHealthCheck = async (): Promise<HealthCheckResult> => {
   const timestamp = new Date().toISOString();
   const version = '1.0.0'; // You can replace this with actual version from package.json
   const environment = import.meta.env.PROD ? 'production' : 'development';
@@ -104,7 +104,7 @@ export const performHealthCheck = async (): Promise<HealthCheckResult>  =>  => {
 };
 
 // Utility function for simple health check endpoint
-export const getHealthStatus = async (): Promise< =>  => {
+export const getHealthStatus = async (): Promise<{
   status: string;
   timestamp: string;
 }> {

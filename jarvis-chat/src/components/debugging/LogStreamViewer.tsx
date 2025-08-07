@@ -135,7 +135,7 @@ export function LogStreamViewer({
   useEffect(() => {
     connectWebSocket();
 
-    return () {
+    return () => {
       if (wsRef.current) {
         wsRef.current.close();
         wsRef.current = null;

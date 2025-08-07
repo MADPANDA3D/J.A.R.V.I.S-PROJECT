@@ -242,7 +242,7 @@ class ChatService {
       )
       .subscribe();
 
-    return () {
+    return () => {
       supabase.removeChannel(subscription);
     };
   }

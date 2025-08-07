@@ -29,7 +29,7 @@ export const WebhookEventLog: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
 
   // Mock data generation
-  const generateMockEvents = (): WebhookEvent[]  =>  => {
+  const generateMockEvents = (): WebhookEvent[] => {
     const eventTypes = ['ping', 'workflow_run', 'push', 'pull_request'];
     const statuses: Array<'success' | 'error' | 'warning'> = ['success', 'error', 'warning'];
     const repositories = ['jarvis-chat', 'webhook-server', 'monitoring-dashboard'];

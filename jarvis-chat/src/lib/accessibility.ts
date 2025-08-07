@@ -153,7 +153,7 @@ export class FocusManager {
     container.addEventListener('keydown', handleKeyDown);
 
     // Store cleanup function
-    (container as HTMLElement & { _focusTrapCleanup?: () => void })._focusTrapCleanup = () {
+    (container as HTMLElement & { _focusTrapCleanup?: () => void })._focusTrapCleanup = () => {
       container.removeEventListener('keydown', handleKeyDown);
     };
 
@@ -798,7 +798,7 @@ export function initializeAccessibility(): void  => {
   // Register common keyboard shortcuts
   keyboardNav.registerShortcut(
     'alt+h',
-    () {
+    () => {
       const heading = document.querySelector('h1, h2');
       if (heading) {
         focusManager.setFocus(
@@ -812,7 +812,7 @@ export function initializeAccessibility(): void  => {
 
   keyboardNav.registerShortcut(
     'alt+m',
-    () {
+    () => {
       const main =
         document.getElementById('main-content') ||
         document.querySelector('main');
@@ -825,7 +825,7 @@ export function initializeAccessibility(): void  => {
 
   keyboardNav.registerShortcut(
     'alt+/',
-    () {
+    () => {
       // Toggle shortcuts help
       const help = document.getElementById('keyboard-shortcuts-help');
       if (help) {

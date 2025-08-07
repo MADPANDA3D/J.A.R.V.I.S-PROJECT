@@ -380,7 +380,7 @@ export class AccessibilityTester {
     setTimeout(runPeriodicTest, 60000);
 
     // Return cleanup function
-    return () {
+    return () => {
       isRunning = false;
     };
   }
