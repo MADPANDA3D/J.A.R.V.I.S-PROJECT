@@ -164,7 +164,7 @@ class AdvancedErrorTracker {
         try {
           const response = await fetch('/api/health');
           return response.ok;
-        } catch (error) {
+        } catch {
           // Enable offline mode
           this.enableOfflineMode();
           return false;
@@ -186,7 +186,7 @@ class AdvancedErrorTracker {
             m.supabase.from('messages').select('id').limit(1).single()
           );
           return !error || error.code === 'PGRST116';
-        } catch (error) {
+        } catch {
           return false;
         }
       },
@@ -205,7 +205,7 @@ class AdvancedErrorTracker {
             m.supabase.auth.refreshSession()
           );
           return !error;
-        } catch (error) {
+        } catch {
           return false;
         }
       },

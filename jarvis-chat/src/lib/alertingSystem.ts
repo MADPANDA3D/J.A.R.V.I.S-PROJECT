@@ -742,7 +742,7 @@ class AlertingSystemService {
     // For now, we'll simulate the call
     
     const subject = this.renderTemplate(config.subject, { alert });
-    const body = this.renderEmailTemplate(alert, config.template);
+    this.renderEmailTemplate(alert, config.template);
 
     centralizedLogging.info(
       'alerting-system',

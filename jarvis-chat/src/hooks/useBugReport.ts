@@ -477,7 +477,7 @@ const collectCoreWebVitals = async (): Promise<CoreWebVitals> => {
         setTimeout(() => {
           resolve(vitals);
         }, 1000);
-      } catch (error) {
+      } catch {
         resolve(vitals);
       }
     } else {
