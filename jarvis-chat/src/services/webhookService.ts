@@ -297,7 +297,7 @@ class WebhookDeliveryService {
     config: WebhookConfig, 
     payload: WebhookPayload, 
     attempt: number
-  ): Promise<AxiosResponse>  => {
+  ): Promise<AxiosResponse> {
     // Prepare headers
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -478,7 +478,7 @@ class WebhookDeliveryService {
     success?: boolean;
     dateRange?: { start: string; end: string };
     limit?: number;
-  } = {}): WebhookDeliveryLog[]  => {
+  } = {}): WebhookDeliveryLog[] {
     let logs = Array.from(this.deliveryLogs.values());
 
     // Apply filters
