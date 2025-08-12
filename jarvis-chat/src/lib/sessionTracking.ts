@@ -211,12 +211,12 @@ class SessionTracker {
     const originalPushState = history.pushState;
     const originalReplaceState = history.replaceState;
 
-    history.pushState = (...args) {
+    history.pushState = (...args) => {
       originalPushState.apply(history, args);
       setTimeout(trackNavigation, 0);
     };
 
-    history.replaceState = (...args) {
+    history.replaceState = (...args) => {
       originalReplaceState.apply(history, args);
       setTimeout(trackNavigation, 0);
     };

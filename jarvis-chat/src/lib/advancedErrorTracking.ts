@@ -159,7 +159,7 @@ class AdvancedErrorTracker {
     // Network error recovery
     this.recoveryStrategies.set('NetworkError', {
       errorType: 'NetworkError',
-      recoveryAction: async () {
+      recoveryAction: async () => {
         // Attempt to reconnect or switch to offline mode
         try {
           const response = await fetch('/api/health');
@@ -178,7 +178,7 @@ class AdvancedErrorTracker {
     // Database connection recovery
     this.recoveryStrategies.set('DatabaseError', {
       errorType: 'DatabaseError',
-      recoveryAction: async () {
+      recoveryAction: async () => {
         // Clear connection pools and retry
         try {
           // This would typically involve reconnecting to Supabase
@@ -198,7 +198,7 @@ class AdvancedErrorTracker {
     // Authentication error recovery
     this.recoveryStrategies.set('AuthenticationError', {
       errorType: 'AuthenticationError',
-      recoveryAction: async () {
+      recoveryAction: async () => {
         // Attempt to refresh authentication
         try {
           const { error } = await import('./supabase').then(m =>
@@ -236,7 +236,7 @@ class AdvancedErrorTracker {
     // Intercept and enhance existing error tracking
     const originalCaptureError = errorTracker.captureError.bind(errorTracker);
 
-    errorTracker.captureError = (error, level = 'error', context = {}) {
+    errorTracker.captureError = (error, level = 'error', context = {}) => {
       const errorId = originalCaptureError(error, level, context);
 
       // Enhanced error processing

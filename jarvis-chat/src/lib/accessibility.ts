@@ -309,7 +309,7 @@ export class KeyboardNavigationManager {
     keys: string,
     callback: () => void,
     description?: string
-  ): void  => {
+  ): void {
     this.shortcuts.set(keys.toLowerCase(), callback);
 
     // Add to global shortcuts registry for help

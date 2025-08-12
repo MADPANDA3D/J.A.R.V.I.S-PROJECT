@@ -338,7 +338,7 @@ class BugSubmissionProcessor {
   private async submitToDatabase(
     bugData: BugReportData, 
     submissionId: string
-  ): Promise<BugSubmissionResult>  => {
+  ): Promise<BugSubmissionResult> {
     try {
       const { data, error } = await bugReportOperations.createBugReport({
         title: bugData.title,

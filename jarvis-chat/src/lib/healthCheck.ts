@@ -107,7 +107,7 @@ export const performHealthCheck = async (): Promise<HealthCheckResult> => {
 export const getHealthStatus = async (): Promise<{
   status: string;
   timestamp: string;
-}> {
+}> => {
   try {
     const healthCheck = await performHealthCheck();
     return {

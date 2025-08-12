@@ -236,12 +236,12 @@ class LogAggregationService {
       debug: console.debug.bind(console),
     };
 
-    console.log = (...args) {
+    console.log = (...args) => {
       this.logEntry('info', args.join(' '), 'console', 'general');
       originalConsole.log(...args);
     };
 
-    console.info = (...args) {
+    console.info = (...args) => {
       this.logEntry('info', args.join(' '), 'console', 'general');
       originalConsole.info(...args);
     };

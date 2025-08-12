@@ -381,7 +381,7 @@ class BugLifecycleService {
     currentStatus: BugStatus, 
     newStatus: BugStatus, 
     bugReport?: any
-  ): LifecycleValidation  => {
+  ): LifecycleValidation {
     const validation: LifecycleValidation = {
       isValid: true,
       errors: [],

@@ -173,7 +173,7 @@ export class WebhookService {
       'webhook',
       this.config.webhookUrl,
       'POST',
-      async () {
+      async () => {
         // Check circuit breaker state
         if (this.circuitState === CircuitState.OPEN) {
           if (!this.shouldAttemptRecovery()) {

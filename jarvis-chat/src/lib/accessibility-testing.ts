@@ -201,7 +201,7 @@ export class AccessibilityTester {
    */
   public async runSpecificTests(
     testSuite: string
-  ): Promise<AccessibilityResult>  => {
+  ): Promise<AccessibilityResult> {
     const configs: Record<string, AccessibilityTestConfig> = {
       'wcag-aa': {
         includeTags: ['wcag2a', 'wcag2aa'],

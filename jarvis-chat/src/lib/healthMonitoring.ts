@@ -133,7 +133,7 @@ class HealthMonitoringService {
 
   private initializeDependencies(): void {
     // Database dependency
-    this.dependencies.set('database', async () {
+    this.dependencies.set('database', async () => {
       const startTime = Date.now();
       try {
         const { error } = await supabase
@@ -172,7 +172,7 @@ class HealthMonitoringService {
     });
 
     // API dependency
-    this.dependencies.set('api', async () {
+    this.dependencies.set('api', async () => {
       const startTime = Date.now();
       try {
         const response = await fetch('/api/health', { method: 'GET' });
@@ -206,7 +206,7 @@ class HealthMonitoringService {
     });
 
     // N8N webhook dependency
-    this.dependencies.set('webhook', async () {
+    this.dependencies.set('webhook', async () => {
       const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL;
       if (!webhookUrl) {
         return {
@@ -257,7 +257,7 @@ class HealthMonitoringService {
     });
 
     // Monitoring service dependency
-    this.dependencies.set('monitoring', async () {
+    this.dependencies.set('monitoring', async () => {
       try {
         const monitoringHealth = monitoringService.getMonitoringHealth();
 

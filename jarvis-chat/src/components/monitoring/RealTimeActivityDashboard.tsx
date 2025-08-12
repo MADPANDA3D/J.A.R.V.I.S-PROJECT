@@ -6,7 +6,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   getCurrentPerformanceMetrics, 
-  getPerformanceHistory,
   getPerformanceAlerts,
   getResourceUtilizationData,
   type PerformanceMetrics,

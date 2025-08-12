@@ -5,9 +5,8 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { centralizedLogging, type LogEntry } from '@/lib/centralizedLogging';
-import { getServiceCalls, getServiceHealth, getServiceAnalytics } from '@/lib/serviceMonitoring';
-import { distributedTracing } from '@/lib/distributedTracing';
-import { getQueryLogs, getPerformanceAnalytics } from '@/lib/databaseLogging';
+import { getServiceHealth, getServiceAnalytics } from '@/lib/serviceMonitoring';
+import { getPerformanceAnalytics } from '@/lib/databaseLogging';
 
 interface LoggingDashboardProps {
   className?: string;

@@ -162,7 +162,7 @@ export function SystemHealthMonitor({
           try {
             const healthData = await response.json();
             details = { ...details, ...healthData };
-          } catch (error) {
+          } catch {
             // Ignore JSON parsing errors
           }
         }

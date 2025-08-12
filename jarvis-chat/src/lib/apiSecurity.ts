@@ -100,7 +100,7 @@ class APISecurityService {
     name: string,
     permissions: APIPermissions,
     expiresIn?: number // days
-  ): Promise< => { success: boolean; apiKey?: APIKey; error?: string }> {
+  ): Promise<{ success: boolean; apiKey?: APIKey; error?: string }> {
     const correlationId = this.generateCorrelationId();
 
     try {
