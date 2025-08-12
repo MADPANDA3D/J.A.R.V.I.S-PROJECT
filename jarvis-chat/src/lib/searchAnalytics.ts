@@ -88,7 +88,7 @@ export class SearchAnalyticsCollector {
     query: string,
     filters: SearchFilters,
     metrics: QueryPerformanceMetrics
-  ): void  => {
+  ): void {
     this.recordEvent({
       eventType: 'search_completed',
       query,
@@ -152,7 +152,7 @@ export class SearchAnalyticsCollector {
   generatePerformanceReport(
     startDate: Date,
     endDate: Date
-  ): SearchPerformanceReport  => {
+  ): SearchPerformanceReport {
     const periodEvents = this.events.filter(
       event => event.timestamp >= startDate && event.timestamp <= endDate
     );

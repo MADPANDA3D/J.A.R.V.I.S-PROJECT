@@ -391,7 +391,7 @@ class ChatService {
       try {
         countQuery = applyFilters(countQuery);
         query = applyFilters(query);
-      } catch (_error) {
+      } catch {
         // Fallback to basic ILIKE search if full-text search fails
         if (filters.query.trim()) {
           countQuery = countQuery.ilike('content', `%${filters.query.trim()}%`);

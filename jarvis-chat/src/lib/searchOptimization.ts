@@ -53,7 +53,7 @@ export class SearchQueryOptimizer {
     offset?: number;
     sortBy?: 'relevance' | 'date' | 'conversation';
     includeHighlights?: boolean;
-  } = {}): OptimizedQuery => {
+  } = {}): OptimizedQuery {
     const { query, dateRange, messageTypes, sessionId, hasErrors } = filters;
     const { limit = this.config.paginationSize, offset = 0, sortBy = 'relevance' } = options;
 
@@ -233,7 +233,7 @@ export class SearchQueryOptimizer {
   }
 
   // Check if query result is cached and still valid
-  getCachedResult<T>(cacheKey: string): T | null  => {
+  getCachedResult<T>(cacheKey: string): T | null {
     if (!this.config.enableResultCaching) return null;
 
     const cached = this.queryCache.get(cacheKey);
@@ -251,7 +251,7 @@ export class SearchQueryOptimizer {
   }
 
   // Cache query result with LRU eviction
-  setCachedResult<T>(cacheKey: string, result: T): void  => {
+  setCachedResult<T>(cacheKey: string, result: T): void {
     if (!this.config.enableResultCaching) return;
 
     // Evict oldest entries if cache is full
