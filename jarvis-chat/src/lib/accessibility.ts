@@ -634,7 +634,7 @@ export class AccessibilityTester {
   /**
    * Run basic accessibility audit
    */
-  async audit(): Promise< => {
+  async audit(): Promise<{
     issues: Array<{
       type: string;
       severity: 'error' | 'warning' | 'info';

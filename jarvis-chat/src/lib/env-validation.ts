@@ -610,7 +610,7 @@ function validateWebhookConfig(
   config: Partial<EnvConfig>,
   errors: ValidationError[],
   warnings: ValidationWarning[]
-): void  => {
+): void {
   const webhookTimeout = import.meta.env.WEBHOOK_TIMEOUT;
   const webhookRetryAttempts = import.meta.env.WEBHOOK_RETRY_ATTEMPTS;
   const circuitBreakerThreshold = import.meta.env
