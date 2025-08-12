@@ -84,14 +84,14 @@ describe('BugAssignmentSystem', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Reset internal state between tests
-    (bugAssignmentSystem as any).assignmentHistory.clear();
-    (bugAssignmentSystem as any).initializeTeamMembers();
+    (bugAssignmentSystem as unknown as { assignmentHistory: Map<string, unknown>; initializeTeamMembers: () => void }).assignmentHistory.clear();
+    (bugAssignmentSystem as unknown as { assignmentHistory: Map<string, unknown>; initializeTeamMembers: () => void }).initializeTeamMembers();
   });
 
   afterEach(() => {
     vi.clearAllMocks();
-    (bugAssignmentSystem as any).assignmentHistory.clear();
-    (bugAssignmentSystem as any).initializeTeamMembers();
+    (bugAssignmentSystem as unknown as { assignmentHistory: Map<string, unknown>; initializeTeamMembers: () => void }).assignmentHistory.clear();
+    (bugAssignmentSystem as unknown as { assignmentHistory: Map<string, unknown>; initializeTeamMembers: () => void }).initializeTeamMembers();
   });
 
   describe('Manual Assignment', () => {
@@ -180,7 +180,7 @@ describe('BugAssignmentSystem', () => {
         data: {
           ...mockBugReport,
           assigned_to: 'user_1'
-        } as any,
+        },
         error: null
       });
 

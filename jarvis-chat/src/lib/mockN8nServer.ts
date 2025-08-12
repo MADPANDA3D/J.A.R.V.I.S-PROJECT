@@ -77,7 +77,7 @@ export class MockN8nServer {
       const response = await this.processDefaultRequest(payload);
       this.recordRequest(payload, response, Date.now() - startTime);
       return response;
-    } catch () {
+    } catch (error) {
       const processingTime = Date.now() - startTime;
       this.recordRequest(payload, error as Error, processingTime);
       throw error;

@@ -236,7 +236,7 @@ class PerformanceMetricsService {
         }
       );
 
-    } catch () {
+    } catch (error) {
       centralizedLogging.error(
         'performance-metrics',
         'system',

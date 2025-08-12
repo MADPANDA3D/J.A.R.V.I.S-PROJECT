@@ -53,7 +53,7 @@ export class SearchQueryOptimizer {
     offset?: number;
     sortBy?: 'relevance' | 'date' | 'conversation';
     includeHighlights?: boolean;
-  } = {}): OptimizedQuery  => {
+  } = {}): OptimizedQuery => {
     const { query, dateRange, messageTypes, sessionId, hasErrors } = filters;
     const { limit = this.config.paginationSize, offset = 0, sortBy = 'relevance' } = options;
 

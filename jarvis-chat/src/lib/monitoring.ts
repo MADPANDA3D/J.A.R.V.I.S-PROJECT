@@ -196,7 +196,7 @@ class MonitoringService implements APMService {
         userAgent: navigator.userAgent,
         url: window.location.href,
       });
-    } catch () {
+    } catch (error) {
       captureError(
         error instanceof Error
           ? error
