@@ -49,7 +49,6 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     heatmap: []
   });
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedMetric, setSelectedMetric] = useState<string>('overview');
   const [timeRange, setTimeRange] = useState<number>(1); // hours
   const [isConnected, setIsConnected] = useState(false);
   
@@ -158,7 +157,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
       switch (message.type) {
         case 'activity_event':
           // Handle real-time activity updates
-          updateActivityData(message.event);
+          updateActivityData();
           break;
         case 'performance_update':
           // Handle real-time performance updates
@@ -176,7 +175,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     }
   };
 
-  const updateActivityData = (event: any) => {
+  const updateActivityData = () => {
     // Update activity statistics in real-time
     setData(prev => ({
       ...prev,

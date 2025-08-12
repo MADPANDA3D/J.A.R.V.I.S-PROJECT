@@ -106,7 +106,7 @@ vi.mock('../env-validation', async () => {
     try {
       new URL(string);
       return true;
-    } catch (error) {
+    } catch {
       return false;
     }
   }
