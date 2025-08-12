@@ -473,7 +473,7 @@ class DistributedTracingService {
     endTime?: number,
     error?: string,
     metadata?: Record<string, unknown>
-  ): void  => {
+  ): void {
     const flow = this.requestFlows.get(flowId);
     if (!flow) return;
 
@@ -594,7 +594,7 @@ class DistributedTracingService {
     initiatingService?: string;
     targetService?: string;
     timeRange?: number; // hours
-  }): ServiceCorrelation[]  => {
+  }): ServiceCorrelation[] {
     let filtered = [...this.correlations];
 
     if (filter) {
@@ -620,7 +620,7 @@ class DistributedTracingService {
     traceId?: string;
     status?: RequestFlow['status'];
     timeRange?: number; // hours
-  }): RequestFlow[]  => {
+  }): RequestFlow[] {
     let flows = Array.from(this.requestFlows.values());
 
     if (filter) {
@@ -780,7 +780,7 @@ export const withTracing = async <T>(
   operation: (context: TraceContext) => Promise<T>,
   tags: Record<string, unknown> = {},
   parentContext?: TraceContext
-): Promise<T>  => {
+): Promise<T> => {
   const context = parentContext
     ? distributedTracing.startSpan(operationName, serviceName, parentContext, tags)
     : distributedTracing.startTrace(operationName, serviceName, tags);

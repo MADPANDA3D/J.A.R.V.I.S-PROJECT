@@ -154,7 +154,7 @@ export class ExternalAPIClient {
         retryDelay: 5000,
         backoffMultiplier: 2
       },
-      healthCheck: async (): Promise<boolean>  => {
+      healthCheck: async (): Promise<boolean> => {
         try {
           const response = await this.makeRequest({
             method: healthCheck.method,
@@ -199,7 +199,7 @@ export class ExternalAPIClient {
   private async executeRequest<T = unknown>(
     requestConfig: APIRequestConfig, 
     fullUrl: string
-  ): Promise<APIResponse<T>>  => {
+  ): Promise<APIResponse<T>> {
     const startTime = performance.now();
     
     const headers = {
@@ -377,7 +377,7 @@ export class ExternalAPIClient {
   }
 
   // Health check method
-  async checkHealth(): Promise< => {
+  async checkHealth(): Promise<{
     healthy: boolean;
     responseTime?: number;
     error?: string;

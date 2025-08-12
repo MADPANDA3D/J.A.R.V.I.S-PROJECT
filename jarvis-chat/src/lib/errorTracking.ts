@@ -487,7 +487,7 @@ class ErrorTracker {
   captureAPIFailure(
     context: APIFailureContext,
     error?: Error
-  ): string  => {
+  ): string {
     this.addBreadcrumb('error', 'http', `API Failure: ${context.method} ${context.endpoint}`, {
       statusCode: context.statusCode,
       responseTime: context.responseTime,
@@ -513,7 +513,7 @@ class ErrorTracker {
   captureAuthError(
     context: AuthErrorContext,
     error?: Error
-  ): string  => {
+  ): string {
     this.addBreadcrumb('error', 'user_action', `Auth Error: ${context.authEvent}`, {
       supabaseError: context.supabaseError,
       userId: context.userId

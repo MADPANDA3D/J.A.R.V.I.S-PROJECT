@@ -381,7 +381,7 @@ function validateMonitoringConfig(
   config: Partial<EnvConfig>,
   errors: ValidationError[],
   warnings: ValidationWarning[]
-): void  => {
+): void {
   const sentryDsn = import.meta.env.VITE_SENTRY_DSN;
   const datadogApiKey = import.meta.env.DATADOG_API_KEY;
   const logLevel = import.meta.env.LOG_LEVEL;
@@ -443,7 +443,7 @@ function validatePerformanceConfig(
   config: Partial<EnvConfig>,
   errors: ValidationError[],
   warnings: ValidationWarning[]
-): void  => {
+): void {
   const enableCaching = import.meta.env.ENABLE_CACHING;
   const cacheTtl = import.meta.env.CACHE_TTL;
   const compressionEnabled = import.meta.env.COMPRESSION_ENABLED;
@@ -512,7 +512,7 @@ function validateSecurityConfig(
   config: Partial<EnvConfig>,
   errors: ValidationError[],
   warnings: ValidationWarning[]
-): void  => {
+): void {
   const cspEnabled = import.meta.env.CSP_ENABLED;
   const appEnv = import.meta.env.VITE_APP_ENV;
 
@@ -538,7 +538,7 @@ function validateFeatureFlags(
   config: Partial<EnvConfig>,
   errors: ValidationError[],
   warnings: ValidationWarning[]
-): void  => {
+): void {
   const enableDebugTools = import.meta.env.ENABLE_DEBUG_TOOLS;
   const enableExperimental = import.meta.env.ENABLE_EXPERIMENTAL_FEATURES;
   const mockN8nResponses = import.meta.env.MOCK_N8N_RESPONSES;
@@ -671,7 +671,7 @@ function validateWebhookConfig(
 /**
  * Simple URL validation
  */
-function isValidUrl(string: string): boolean  => {
+function isValidUrl(string: string): boolean {
   try {
     new URL(string);
     return true;
@@ -683,7 +683,7 @@ function isValidUrl(string: string): boolean  => {
 /**
  * Domain validation (supports domain:port format)
  */
-function isValidDomain(domain: string): boolean  => {
+function isValidDomain(domain: string): boolean {
   // Allow localhost:port format
   if (domain.startsWith('localhost:')) {
     const port = domain.split(':')[1];

@@ -628,7 +628,7 @@ export function validateSecrets(): SecretValidationResult {
 /**
  * Log secrets validation results
  */
-export function logSecretsStatus(result: SecretValidationResult): void  => {
+export function logSecretsStatus(result: SecretValidationResult): void {
   console.log('🔐 Secrets Management Status:');
   console.log('==============================');
   console.log(`Validated at: ${result.timestamp.toISOString()}`);

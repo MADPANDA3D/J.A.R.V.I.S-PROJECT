@@ -388,10 +388,10 @@ export class AccessibilityTester {
   /**
    * Test specific component accessibility
    */
-  public async testComponent(selector: string): Promise<AccessibilityResult>  {
+  public async testComponent(selector: string): Promise<AccessibilityResult> {
     await this.loadAxeCore();
 
-    if (!(window as typeof window & { axe?: { run: (options?: unknown) => { Promise<unknown> } }).axe) {
+    if (!(window as typeof window & { axe?: { run: (options?: unknown) => Promise<unknown> } }).axe) {
       throw new Error('Axe-core not available');
     }
 

@@ -452,7 +452,7 @@ class APISecurityService {
     dateRange?: { start: string; end: string };
     limit?: number;
     offset?: number;
-  } = {}):   => { logs: AuditLogEntry[]; total: number } {
+  } = {}): { logs: AuditLogEntry[]; total: number } {
     let filteredLogs = [...this.auditLogs];
 
     // Apply filters

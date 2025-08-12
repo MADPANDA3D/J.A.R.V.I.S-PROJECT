@@ -19,8 +19,17 @@ class ScreenReaderManager {
   }
 
   /**
-   * Create ARIA live regions for screen reader announcements
-   */
+   * Create ARIA live regions for screen reader announceme    const reducedMotionQuery = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    );
+    reducedMotionQuery.addEventListener('change', e => {
+      this.preferences.reducedMotion = e.matches;
+      this.applyPreferences();
+    });
+
+    // Listen for high contrast changes
+    const highContrastQuery = window.matchMedia('(prefers-contrast: high)');
+    highContrastQuery.addEventListener('change', e => {
   private createLiveRegions(): void {
     // Polite announcements (non-interrupting)
     this.politeRegion = document.createElement('div');
@@ -555,14 +564,14 @@ export class AccessibilityPreferencesManager {
     const reducedMotionQuery = window.matchMedia(
       '(prefers-reduced-motion: reduce)'
     );
-    reducedMotionQuery.addEventListener(\'change\', e => {
+    reducedMotionQuery.addEventListener('change', e => {
       this.preferences.reducedMotion = e.matches;
       this.applyPreferences();
     });
 
     // Listen for high contrast changes
     const highContrastQuery = window.matchMedia('(prefers-contrast: high)');
-    highContrastQuery.addEventListener(\'change\', e => {
+    highContrastQuery.addEventListener('change', e => {
       this.preferences.highContrast = e.matches;
       this.applyPreferences();
     });
@@ -582,7 +591,7 @@ export class AccessibilityPreferencesManager {
   setPreference<K extends keyof AccessibilityPreferences>(
     key: K,
     value: AccessibilityPreferences[K]
-  ): void  => {
+  ): void {
     this.preferences[key] = value;
     this.savePreferences();
     this.applyPreferences();

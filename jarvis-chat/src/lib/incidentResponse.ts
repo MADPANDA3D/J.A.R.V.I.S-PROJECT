@@ -901,7 +901,7 @@ class IncidentResponseService {
   private async executePlaybookStep(
     incident: Incident,
     step: PlaybookStep
-  ): Promise<AutomatedAction>  => {
+  ): Promise<AutomatedAction> {
     const action: AutomatedAction = {
       id: `action_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       type: this.mapStepTypeToActionType(step.type),

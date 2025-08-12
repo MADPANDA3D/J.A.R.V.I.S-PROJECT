@@ -453,7 +453,7 @@ class ExternalMonitoringService {
     if (!config) return;
 
     const payload = config.formatPayload ? 
-      config.formatPayload(errorReport):   => {
+      config.formatPayload(errorReport) : {
         type: 'error',
         data: errorReport,
         user: this.currentUser,
@@ -489,7 +489,7 @@ class ExternalMonitoringService {
     if (!config) return;
 
     const payload = config.formatPayload ? 
-      config.formatPayload(session):   => {
+      config.formatPayload(session) : {
         type: 'session',
         data: session,
         timestamp: new Date().toISOString()
@@ -540,7 +540,7 @@ class ExternalMonitoringService {
     if (!config) return;
 
     const payload = config.formatPayload ? 
-      config.formatPayload(breadcrumb):   => {
+      config.formatPayload(breadcrumb) : {
         type: 'breadcrumb',
         data: breadcrumb,
         user: this.currentUser,

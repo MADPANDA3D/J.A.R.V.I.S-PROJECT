@@ -442,7 +442,7 @@ class BugLifecycleService {
       limit?: number;
       offset?: number;
     } = {}
-  ): Promise< => { data: unknown[]; count: number; error?: any }> {
+  ): Promise<{ data: unknown[]; count: number; error?: any }> {
     try {
       const statusArray = Array.isArray(status) ? status : [status];
       
@@ -564,7 +564,7 @@ class BugLifecycleService {
   private async handleAutomaticTransition(
     bugId: string, 
     transition: NonNullable<BugLifecycleState['automaticTransitions']>[0]
-  ): Promise<void>  => {
+  ): Promise<void> {
     try {
       const result = await this.changeStatus(
         bugId,
