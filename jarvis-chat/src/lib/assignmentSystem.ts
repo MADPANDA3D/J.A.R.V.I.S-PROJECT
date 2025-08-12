@@ -8,6 +8,7 @@ import { bugReportOperations } from './supabase';
 import { trackBugReportEvent } from './monitoring';
 import { sendAssignmentNotification, sendEscalationAlert } from './notificationService';
 import { BugStatus, BugPriority } from './bugLifecycle';
+import { BugReport } from '@/types/bugReport';
 
 // Assignment types
 export type AssignmentMethod = 'manual' | 'auto' | 'round_robin' | 'skill_based' | 'workload_balanced';
@@ -369,7 +370,7 @@ class BugAssignmentSystem {
   /**
    * Get assignment recommendations for a bug
    */
-  async getAssignmentRecommendations(bugReport: any): Promise<AssignmentRecommendation[]>  {
+  async getAssignmentRecommendations(bugReport: BugReport): Promise<AssignmentRecommendation[]>  {
     const availableMembers = Array.from(this.teamMembers.values())
       .filter(member => member.availability === 'available' && member.currentWorkload < member.workloadCapacity);
 
@@ -741,7 +742,7 @@ class BugAssignmentSystem {
     ];
   }
 
-  private async applyAssignmentRules(bugReport: any): Promise<string | null>  {
+  private async applyAssignmentRules(bugReport: BugReport): Promise<string | null>  {
     const sortedRules = this.assignmentRules
       .filter(rule => rule.enabled)
       .sort((a, b) => a.priority - b.priority);
@@ -758,7 +759,7 @@ class BugAssignmentSystem {
     return null;
   }
 
-  private evaluateRuleConditions(conditions: AssignmentCondition[], bugReport: any): boolean {
+  private evaluateRuleConditions(conditions: AssignmentCondition[], bugReport: BugReport): boolean {
     return conditions.every(condition => {
       const fieldValue = bugReport[condition.field];
       
@@ -777,7 +778,7 @@ class BugAssignmentSystem {
     });
   }
 
-  private calculateSkillMatch(member: TeamMember, bugReport: any): number {
+  private calculateSkillMatch(member: TeamMember, bugReport: BugReport): number {
     const bugKeywords = [
       bugReport.bug_type,
       bugReport.severity,
@@ -797,7 +798,7 @@ class BugAssignmentSystem {
     return member.currentWorkload / member.workloadCapacity;
   }
 
-  private validateAssignment(assignee: TeamMember, bugReport: any):   { isValid: boolean; warnings: string[] } {
+  private validateAssignment(assignee: TeamMember, bugReport: BugReport): { isValid: boolean; warnings: string[] } {
     // bugReport parameter available for future validation logic
     void bugReport;
     const warnings: string[] = [];
@@ -943,7 +944,7 @@ class BugAssignmentSystem {
     return member ? member.averageResolutionTime / 4 : 0; // Rough estimate
   }
 
-  private async getUnassignedBugs(): Promise<any[]>  {
+  private async getUnassignedBugs(): Promise<BugReport[]> {
     // This would query the database for unassigned bugs
     // For now, return empty array as placeholder
     return [];
@@ -980,7 +981,7 @@ export const assignBug = (
 export const autoAssignBug = (bugId: string, assignerId?: string) =>
   bugAssignmentSystem.autoAssignBug(bugId, assignerId);
 
-export const getAssignmentRecommendations = (bugReport: any) =>
+export const getAssignmentRecommendations = (bugReport: BugReport) =>
   bugAssignmentSystem.getAssignmentRecommendations(bugReport);
 
 export const escalateBugPriority = (bugId: string, reason: string, escalatedBy?: string) =>
