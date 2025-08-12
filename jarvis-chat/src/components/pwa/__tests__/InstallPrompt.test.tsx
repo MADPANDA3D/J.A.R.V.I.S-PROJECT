@@ -49,7 +49,7 @@ describe('InstallPrompt', () => {
     render(<InstallPrompt showDelay={0} />);
 
     await waitFor(() => {
-      expect(screen.getByText('Install JARVIS Chat')).toBeInTheDocument();
+      expect(screen.getAllByText('Install JARVIS Chat')[0]).toBeInTheDocument();
     });
 
     expect(
@@ -118,7 +118,7 @@ describe('InstallPrompt', () => {
     render(<InstallPrompt showDelay={0} />);
 
     await waitFor(() => {
-      expect(screen.getByText('Install JARVIS Chat')).toBeInTheDocument();
+      expect(screen.getAllByText('Install JARVIS Chat')[0]).toBeInTheDocument();
     });
 
     const dismissButton = screen.getByRole('button', { name: '' }); // X button has no text

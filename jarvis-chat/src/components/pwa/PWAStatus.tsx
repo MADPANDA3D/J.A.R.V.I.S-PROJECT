@@ -16,7 +16,11 @@ export const PWAStatus: React.FC<PWAStatusProps> = ({
     usePWAInstall();
 
   // Detect display mode
-  const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+  const standaloneQuery =
+    typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+      ? window.matchMedia('(display-mode: standalone)')
+      : null;
+  const isStandalone = standaloneQuery ? standaloneQuery.matches : false;
   const isMobile =
     /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent

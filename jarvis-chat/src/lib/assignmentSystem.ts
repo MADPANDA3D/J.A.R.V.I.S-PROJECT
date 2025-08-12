@@ -240,9 +240,23 @@ class BugAssignmentSystem {
       // Setup escalation monitoring
       this.setupEscalationMonitoring(bugId, assigneeId);
 
-      // Send notification
+      // Send notification (non-blocking)
       if (notify) {
-        await sendAssignmentNotification(bugId, assigneeId, assignerId, reason);
+        try {
+          await sendAssignmentNotification(bugId, assigneeId, assignerId, reason);
+        } catch (notifyError) {
+          centralizedLogging.warn(
+            'assignment-system',
+            'system',
+            'Failed to send assignment notification',
+            {
+              correlationId,
+              bugId,
+              assigneeId,
+              error: notifyError instanceof Error ? notifyError.message : notifyError,
+            }
+          );
+        }
       }
 
       // Track assignment event

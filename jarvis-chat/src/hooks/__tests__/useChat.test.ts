@@ -125,7 +125,9 @@ describe('useChat', () => {
 
     expect(mockChatService.processChatMessage).toHaveBeenCalledWith(
       'Hello',
-      mockUser.id
+      mockUser.id,
+      undefined,
+      undefined
     );
     expect(result.current.messages).toHaveLength(2);
     expect(result.current.messages[0].content).toBe('Hello');
@@ -150,7 +152,9 @@ describe('useChat', () => {
     expect(result.current.isLoading).toBe(false);
 
     // Should have temp user message with error status and error AI message
-    expect(result.current.messages).toHaveLength(2);
+    await waitFor(() => {
+      expect(result.current.messages).toHaveLength(2);
+    });
     expect(result.current.messages[0].status).toBe('error');
     expect(result.current.messages[1].role).toBe('assistant');
     expect(result.current.messages[1].status).toBe('error');

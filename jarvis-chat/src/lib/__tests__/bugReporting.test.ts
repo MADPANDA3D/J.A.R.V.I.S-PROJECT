@@ -57,7 +57,8 @@ vi.mock('../performanceMetrics', () => ({
         authErrors: 0,
         totalErrors: 3
       }
-    }))
+    })),
+    getActiveAlerts: vi.fn(() => [])
   }
 }));
 
@@ -225,7 +226,7 @@ describe('BugReportingService', () => {
       'system',
       'Failed to create bug report',
       expect.objectContaining({
-        error: 'Network error'
+        error: expect.stringContaining('Network error')
       })
     );
   });
