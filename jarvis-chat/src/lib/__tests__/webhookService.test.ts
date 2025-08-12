@@ -372,7 +372,7 @@ describe('WebhookService', () => {
       expect(mockFetch).toHaveBeenCalledTimes(3);
     });
 
-    it('should not retry on 4xx client errors (except 408, 429)', async () {
+    it('should not retry on 4xx client errors (except 408, 429)', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 400,

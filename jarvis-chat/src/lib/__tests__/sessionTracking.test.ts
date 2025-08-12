@@ -215,7 +215,7 @@ describe('Session Tracking', () => {
       });
 
       // Should not throw error
-      expect(() {
+      expect(() => {
         setSessionUser('test-user');
       }).not.toThrow();
     });

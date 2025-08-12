@@ -79,7 +79,7 @@ export class AccessibilityTester {
    */
   public async auditPage(
     config: AccessibilityTestConfig = {}
-  ): Promise<AccessibilityResult>  => {
+  ): Promise<AccessibilityResult> {
     await this.loadAxeCore();
 
     if (!(window as typeof window & { axe?: { run: (options?: unknown) => { Promise<unknown> } }).axe) {
