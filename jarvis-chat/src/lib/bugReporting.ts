@@ -8,11 +8,15 @@ import { errorTracker } from './errorTracking';
 import { performanceMetrics } from './performanceMetrics';
 import { bugReportOperations } from './supabase';
 import type { 
+  BugReport,
   BugReportData, 
   BugSubmissionResult,
   EnhancedErrorContext,
   ErrorReport,
-  BrowserInfo
+  BrowserInfo,
+  APMMetrics,
+  UserSessionInfo,
+  DetectedPattern
 } from '@/types/bugReport';
 
 class BugReportingService {
@@ -163,7 +167,7 @@ class BugReportingService {
   /**
    * Collect monitoring data from performance metrics
    */
-  private async collectMonitoringData(): Promise<any>  {
+  private async collectMonitoringData(): Promise<APMMetrics>  {
     try {
       const currentMetrics = performanceMetrics.getCurrentMetrics();
       // const resourceUtilization = performanceMetrics.getResourceUtilization(); // For future use
@@ -248,7 +252,7 @@ class BugReportingService {
   /**
    * Store bug report in database
    */
-  private async storeBugReport(enhancedBugData: any): Promise<BugSubmissionResult>  {
+  private async storeBugReport(enhancedBugData: BugReportData): Promise<BugSubmissionResult>  {
     try {
       const { data, error } = await bugReportOperations.createBugReport({
         title: enhancedBugData.title,
@@ -256,7 +260,7 @@ class BugReportingService {
         bugType: enhancedBugData.bugType,
         severity: enhancedBugData.severity,
         browserInfo: enhancedBugData.browserInfo,
-        errorStack: this.extractErrorStack(enhancedBugData.errorContext),
+        errorStack: this.extractErrorStack(enhancedBugData.errorContext || []),
         userAgent: enhancedBugData.userAgent,
         url: enhancedBugData.currentUrl,
         reproductionSteps: enhancedBugData.reproductionSteps,
@@ -324,7 +328,7 @@ class BugReportingService {
   /**
    * Update performance metrics for bug reporting
    */
-  private updatePerformanceMetrics(event: string, data: any): void {
+  private updatePerformanceMetrics(event: string, data: Record<string, unknown>): void {
     try {
       centralizedLogging.info(
         'bug-reporting',
@@ -342,7 +346,13 @@ class BugReportingService {
     return `bug_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private sanitizeBugData(bugData: BugReportData): any {
+  private sanitizeBugData(bugData: BugReportData): {
+    title: string;
+    bugType: BugReport['bugType'];
+    severity: BugReport['severity'];
+    hasAttachments: boolean;
+    attachmentCount: number;
+  } {
     return {
       title: bugData.title,
       bugType: bugData.bugType,
@@ -352,31 +362,32 @@ class BugReportingService {
     };
   }
 
-  private transformErrorReport(error: any): ErrorReport {
+  private transformErrorReport(error: unknown): ErrorReport {
+    const errorData = error as Partial<ErrorReport>;
     return {
-      errorId: error.errorId,
-      timestamp: error.timestamp,
-      message: error.message,
-      stack: error.stack,
-      source: error.source,
-      line: error.line,
-      column: error.column,
-      userAgent: error.userAgent,
-      url: error.url,
-      userId: error.userId,
-      sessionId: error.sessionId,
-      severity: error.severity,
-      category: error.category,
-      metadata: error.metadata
+      errorId: errorData.errorId || 'unknown',
+      timestamp: errorData.timestamp || new Date().toISOString(),
+      message: errorData.message || 'Unknown error',
+      stack: errorData.stack,
+      source: errorData.source,
+      line: errorData.line,
+      column: errorData.column,
+      userAgent: errorData.userAgent || navigator.userAgent,
+      url: errorData.url || window.location.href,
+      userId: errorData.userId,
+      sessionId: errorData.sessionId || 'unknown',
+      severity: errorData.severity || 'medium',
+      category: errorData.category || 'javascript',
+      metadata: errorData.metadata
     };
   }
 
-  private async getErrorPatterns(): Promise<any[]>  {
+  private async getErrorPatterns(): Promise<DetectedPattern[]>  {
     // Integration with advanced error tracking would go here
     return [];
   }
 
-  private getCurrentUserSession(): any {
+  private getCurrentUserSession(): UserSessionInfo {
     return {
       sessionId: errorTracker.getSessionId(),
       startTime: new Date().toISOString(),
@@ -460,10 +471,16 @@ class BugReportingService {
     return 0;
   }
 
-  private getResourceTimingData(): unknown[] {
+  private getResourceTimingData(): Array<{
+    name: string;
+    type: string;
+    startTime: number;
+    duration: number;
+    size: number;
+  }> {
     if ('getEntriesByType' in performance) {
-      const resourceEntries = performance.getEntriesByType('resource');
-      return resourceEntries.slice(0, 10).map((entry: any) => ({
+      const resourceEntries = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
+      return resourceEntries.slice(0, 10).map((entry: PerformanceResourceTiming) => ({
         name: entry.name,
         type: this.getResourceType(entry),
         startTime: entry.startTime,
@@ -474,7 +491,7 @@ class BugReportingService {
     return [];
   }
 
-  private getResourceType(entry: any): string {
+  private getResourceType(entry: PerformanceResourceTiming): string {
     if (entry.initiatorType) return entry.initiatorType;
     if (entry.name.includes('.js')) return 'script';
     if (entry.name.includes('.css')) return 'stylesheet';
@@ -482,16 +499,22 @@ class BugReportingService {
     return 'other';
   }
 
-  private getNetworkInfo(): any {
+  private getNetworkInfo(): {
+    effectiveType: string;
+    downlink: number;
+    rtt: number;
+  } | undefined {
     if ('connection' in navigator) {
-      const connection = (navigator as any).connection;
-      return {
-        effectiveType: connection.effectiveType || 'unknown',
-        downlink: connection.downlink || 0,
-        rtt: connection.rtt || 0
-      };
+      const connection = (navigator as Navigator & { connection?: { effectiveType?: string; downlink?: number; rtt?: number } }).connection;
+      if (connection) {
+        return {
+          effectiveType: connection.effectiveType || 'unknown',
+          downlink: connection.downlink || 0,
+          rtt: connection.rtt || 0
+        };
+      }
     }
-    return {};
+    return undefined;
   }
 }
 
