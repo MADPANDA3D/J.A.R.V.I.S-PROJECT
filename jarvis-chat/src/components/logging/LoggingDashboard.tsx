@@ -38,9 +38,9 @@ export const LoggingDashboard: React.FC<LoggingDashboardProps> = ({
   const [selectedTab, setSelectedTab] = useState<'logs' | 'services' | 'database' | 'traces'>('logs');
   const [isLoading, setIsLoading] = useState(false);
   const [selectedLog, setSelectedLog] = useState<LogEntry | null>(null);
-  const [serviceHealth, setServiceHealth] = useState<any[]>([]);
-  const [dbAnalytics, setDbAnalytics] = useState<any>(null);
-  const [serviceAnalytics, setServiceAnalytics] = useState<any>(null);
+  const [serviceHealth, setServiceHealth] = useState<unknown[]>([]);
+  const [dbAnalytics, setDbAnalytics] = useState<unknown>(null);
+  const [serviceAnalytics, setServiceAnalytics] = useState<unknown>(null);
 
   // Refresh data
   useEffect(() => {
@@ -284,7 +284,7 @@ export const LoggingDashboard: React.FC<LoggingDashboardProps> = ({
           ].map(({ key, label, count }) => (
             <button
               key={key}
-              onClick={() => setSelectedTab(key as any)}
+              onClick={() => setSelectedTab(key as 'logs' | 'services' | 'database' | 'traces')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 selectedTab === key
                   ? 'border-blue-500 text-blue-600'
@@ -431,7 +431,7 @@ export const LoggingDashboard: React.FC<LoggingDashboardProps> = ({
                   <div>
                     <h4 className="font-medium text-gray-900 mb-3">Slowest Tables</h4>
                     <div className="space-y-2">
-                      {dbAnalytics.topSlowTables.slice(0, 5).map((table: any, index: number) => (
+                      {dbAnalytics.topSlowTables.slice(0, 5).map((table: { table: string; avgTime: number; count: number }, index: number) => (
                         <div key={table.table} className="flex justify-between items-center py-2 px-3 bg-gray-50 rounded">
                           <div className="flex items-center space-x-2">
                             <span className="text-sm font-medium text-gray-500">#{index + 1}</span>

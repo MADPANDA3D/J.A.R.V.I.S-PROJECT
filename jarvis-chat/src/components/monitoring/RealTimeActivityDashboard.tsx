@@ -32,7 +32,7 @@ interface DashboardData {
   alerts: PerformanceAlert[];
   resources: ResourceUtilization[];
   userSessions: UserSession[];
-  activityStats: any;
+  activityStats: { totalEvents?: number; concurrentUsers?: number; uniqueUsers?: number };
   heatmap: ActivityHeatmap[];
 }
 
@@ -46,7 +46,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     alerts: [],
     resources: [],
     userSessions: [],
-    activityStats: null,
+    activityStats: {},
     heatmap: []
   });
   const [isLoading, setIsLoading] = useState(true);

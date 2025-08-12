@@ -59,7 +59,7 @@ const buildLoggingDestinations = (env: string): LogDestination[] => {
         endpoint: import.meta.env.VITE_LOG_WEBHOOK_URL,
         apiKey: import.meta.env.VITE_LOG_WEBHOOK_KEY,
         headers: import.meta.env.VITE_LOG_WEBHOOK_HEADERS ? 
-          JSON.parse(import.meta.env.VITE_LOG_WEBHOOK_HEADERS):   => {
+          JSON.parse(import.meta.env.VITE_LOG_WEBHOOK_HEADERS) : {
             'Content-Type': 'application/json',
             'User-Agent': 'JARVIS-Chat-Logger/1.0'
           }

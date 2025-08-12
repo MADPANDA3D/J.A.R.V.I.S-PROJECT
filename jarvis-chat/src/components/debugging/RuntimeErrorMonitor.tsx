@@ -359,7 +359,7 @@ export function RuntimeErrorMonitor({
     });
   };
 
-  const toggleFilter = (filter: Set<string>, setFilter: (filter: Set<string>) => void, value: string) {
+  const toggleFilter = (filter: Set<string>, setFilter: (filter: Set<string>) => void, value: string) => {
     const newFilter = new Set(filter);
     if (newFilter.has(value)) {
       newFilter.delete(value);

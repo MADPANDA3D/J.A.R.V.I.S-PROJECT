@@ -108,7 +108,6 @@ export const WebhookEventLog: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    }
       case 'success': return 'bg-green-100 text-green-800';
       case 'error': return 'bg-red-100 text-red-800';
       case 'warning': return 'bg-yellow-100 text-yellow-800';
@@ -118,7 +117,6 @@ export const WebhookEventLog: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    }
       case 'success':
         return (
           <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">

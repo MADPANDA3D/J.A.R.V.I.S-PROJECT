@@ -30,7 +30,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
 
     keyboardNav.registerShortcut(
       'alt+n',
-      () {
+      () => {
         setSidebarOpen(!sidebarOpen);
         screenReader.announce({
           message: sidebarOpen
