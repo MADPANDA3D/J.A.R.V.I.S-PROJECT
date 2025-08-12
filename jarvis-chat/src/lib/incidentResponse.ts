@@ -867,7 +867,7 @@ class IncidentResponseService {
   private async executePlaybook(
     incident: Incident,
     playbook: ResponsePlaybook
-  ): Promise<void>  => {
+  ): Promise<void> {
     this.addTimelineEntry(incident, {
       type: 'action',
       actor: 'system',
@@ -957,7 +957,7 @@ class IncidentResponseService {
   private async executeAction(
     action: string,
     parameters?: Record<string, unknown>
-  ): Promise<string>  => {
+  ): Promise<string> { {
     // Simulate action execution - in real implementation, these would call actual services
     switch (action) {
       case 'check_database_connectivity':
@@ -991,7 +991,7 @@ class IncidentResponseService {
 
   private async sendNotification(
     parameters?: Record<string, unknown>
-  ): Promise<string>  => {
+  ): Promise<string> { {
     // Simulate notification sending
     const team = parameters?.team || 'default';
     const severity = parameters?.severity || 'medium';
@@ -1154,7 +1154,7 @@ class IncidentResponseService {
   private async executeEscalationAction(
     incident: Incident,
     action: EscalationAction
-  ): Promise<void>  => {
+  ): Promise<void> { {
     try {
       switch (action.type) {
         case 'notify':
@@ -1186,7 +1186,7 @@ class IncidentResponseService {
   private async sendEscalationNotification(
     incident: Incident,
     target: string
-  ): Promise<void>  => {
+  ): Promise<void> { {
     const communication: IncidentCommunication = {
       id: `comm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       type: 'slack', // or email, sms based on target
@@ -1221,7 +1221,7 @@ class IncidentResponseService {
   private async createWarRoom(
     incident: Incident,
     roomName: string
-  ): Promise<void>  => {
+  ): Promise<void> { {
     // Simulate war room creation
     this.addTimelineEntry(incident, {
       type: 'action',
@@ -1234,7 +1234,7 @@ class IncidentResponseService {
   private async updateStatusPage(
     incident: Incident,
     status: string
-  ): Promise<void>  => {
+  ): Promise<void> { {
     // Simulate status page update
     this.addTimelineEntry(incident, {
       type: 'communication',
@@ -1247,7 +1247,7 @@ class IncidentResponseService {
   private async executeRunbook(
     incident: Incident,
     runbookId: string
-  ): Promise<void>  => {
+  ): Promise<void> { {
     // Simulate runbook execution
     this.addTimelineEntry(incident, {
       type: 'action',

@@ -423,7 +423,7 @@ class APISecurityService {
     responseStatus: number,
     responseTime: number,
     metadata?: Record<string, unknown>
-  ): void  => {
+  ): void {
     const auditEntry: AuditLogEntry = {
       id: this.generateAuditId(),
       apiKeyId,

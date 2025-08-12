@@ -425,7 +425,7 @@ class DistributedTracingService {
     operation: string,
     userId?: string,
     sessionId?: string
-  ): string  => {
+  ): string {
     const flowId = `flow_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     const flow: RequestFlow = {

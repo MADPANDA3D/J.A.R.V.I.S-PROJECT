@@ -621,7 +621,7 @@ export const secretsManager = new SecretsManager();
 /**
  * Validate secrets and log results
  */
-export function validateSecrets(): SecretValidationResult  => {
+export function validateSecrets(): SecretValidationResult {
   return secretsManager.validateSecrets();
 }
 

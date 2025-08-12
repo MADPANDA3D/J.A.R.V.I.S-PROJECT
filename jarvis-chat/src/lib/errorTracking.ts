@@ -461,7 +461,7 @@ class ErrorTracker {
   captureReactError(
     error: Error,
     errorInfo: { componentStack: string }
-  ): string  => {
+  ): string {
     this.addBreadcrumb('error', 'error', `React Error: ${error.message}`, {
       componentStack: errorInfo.componentStack
     });

@@ -386,7 +386,7 @@ class BugSubmissionProcessor {
   private async processAttachments(
     bugId: string,
     attachments: File[]
-  ): Promise<AttachmentUploadResult[]>  => {
+  ): Promise<AttachmentUploadResult[]> {
     const results: AttachmentUploadResult[] = [];
 
     for (const file of attachments) {

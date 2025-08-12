@@ -312,7 +312,7 @@ function validateIntegrationsConfig(
   config: Partial<EnvConfig>,
   errors: ValidationError[],
   warnings: ValidationWarning[]
-): void  => {
+): void {
   const n8nWebhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL;
   const n8nWebhookSecret = import.meta.env.N8N_WEBHOOK_SECRET;
   const n8nApiKey = import.meta.env.N8N_API_KEY;

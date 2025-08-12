@@ -397,7 +397,7 @@ export class AriaManager {
   setAria(
     element: HTMLElement,
     properties: Record<string, string | boolean | number>
-  ): void  => {
+  ): void {
     Object.entries(properties).forEach(([key, value]) => {
       const ariaKey = key.startsWith('aria-') ? key : `aria-${key}`;
       element.setAttribute(ariaKey, String(value));
