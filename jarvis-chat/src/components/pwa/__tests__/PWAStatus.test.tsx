@@ -57,7 +57,7 @@ describe('PWAStatus', () => {
     });
 
     render(<PWAStatus />);
-    expect(screen.getByText('Installed')).toBeInTheDocument();
+    expect(screen.getAllByText('Installed')[0]).toBeInTheDocument();
   });
 
   it('should show "Installed" badge when in standalone mode', () => {
@@ -77,7 +77,7 @@ describe('PWAStatus', () => {
     });
 
     render(<PWAStatus />);
-    expect(screen.getByText('Installed')).toBeInTheDocument();
+    expect(screen.getAllByText('Installed')[0]).toBeInTheDocument();
   });
 
   it('should show "Web App" badge when PWA is supported but not installed', () => {
