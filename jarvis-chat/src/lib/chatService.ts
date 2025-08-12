@@ -3,7 +3,6 @@ import { webhookService, WebhookPayload } from './webhookService';
 import { searchOptimizer, SearchQueryOptimizer } from './searchOptimization';
 import { createSearchAnalytics } from './searchAnalytics';
 import { SearchFilters } from '@/hooks/useSearchState';
-import type { DateRange } from 'react-day-picker';
 
 export interface ChatMessage {
   id: string;
@@ -25,14 +24,7 @@ export interface SearchResult {
   messageId: string;
   content: string;
   role: 'user' | 'assistant';
-  ti  /**
-   * Get session with message preview
-   */
-  async getSessionWithPreview(
-    sessionId: string,
-    userId: string,
-    previewCount: number = 3
-  ): Promise<ConversationSessionGroup | null> { Date;
+  timestamp: Date;
   highlightedContent: string;
   matchScore: number;
 }
@@ -234,7 +226,7 @@ class ChatService {
           table: 'chat_messages',
           filter: `user_id=eq.${userId}`,
         },
-        payload {
+        (payload) => {
           const newMessage: ChatMessage = {
             id: payload.new.id,
             content: payload.new.content,
@@ -399,7 +391,7 @@ class ChatService {
       try {
         countQuery = applyFilters(countQuery);
         query = applyFilters(query);
-      } catch (error) {
+      } catch (_error) {
         // Fallback to basic ILIKE search if full-text search fails
         if (filters.query.trim()) {
           countQuery = countQuery.ilike('content', `%${filters.query.trim()}%`);
@@ -799,7 +791,7 @@ class ChatService {
     sessionId: string,
     userId: string,
     previewCount: number = 3
-  ): Promise<ConversationSessionGroup | null>  => {
+  ): Promise<ConversationSessionGroup | null> {
     try {
       // Get session data
       const { data: sessionData, error: sessionError } = await supabase
@@ -860,7 +852,7 @@ class ChatService {
   /**
    * Fallback response for development/testing
    */
-  private async getFallbackResponse(message: string): Promise<string>  {
+  private async getFallbackResponse(message: string): Promise<string> {
     // Simulate network delay
     await new Promise(resolve =>
       setTimeout(resolve, 1000 + Math.random() * 2000)

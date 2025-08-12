@@ -464,9 +464,10 @@ const collectCoreWebVitals = async (): Promise<CoreWebVitals> => {
         const clsObserver = new PerformanceObserver((list) => {
           let clsValue = 0;
           const entries = list.getEntries();
-          entries.forEach((entry: any) => {
-            if (!entry.hadRecentInput) {
-              clsValue += entry.value;
+          entries.forEach((entry) => {
+            const layoutShiftEntry = entry as PerformanceEntry & { hadRecentInput?: boolean; value: number };
+            if (!layoutShiftEntry.hadRecentInput) {
+              clsValue += layoutShiftEntry.value;
             }
           });
           vitals.cls = clsValue;

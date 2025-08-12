@@ -21,7 +21,7 @@ const localStorageMock = {
   removeItem: vi.fn(),
   clear: vi.fn(),
 };
-global.localStorage = localStorageMock as any;
+global.localStorage = localStorageMock as Storage;
 
 // Mock navigation APIs
 Object.defineProperty(window, 'location', {
@@ -66,10 +66,11 @@ Object.defineProperty(screen, 'colorDepth', { value: 24 });
 
 // Mock Intl
 global.Intl = {
-  DateTimeFormat: () => ({
+  ...global.Intl,
+  DateTimeFormat: (() => ({
     resolvedOptions: () => ({ timeZone: 'UTC' })
-  })
-} as any;
+  })) as unknown as Intl.DateTimeFormatConstructor
+};
 
 describe('Session Tracking', () => {
   beforeEach(() => {
