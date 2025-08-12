@@ -3,7 +3,7 @@
  * Interactive form for collecting user feedback on bug resolution and satisfaction
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -104,17 +104,16 @@ export function FeedbackCollectionForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    loadFeedbackData();
-  }, [feedbackId, loadFeedbackData]);
-
-  const loadFeedbackData = async () => {
+  const loadFeedbackData = useCallback(async () => {
     try {
       setIsLoading(true);
       
       // In a real implementation, this would fetch from an API
       // For now, we'll get it from the service directly
-      const allFeedback = Array.from((feedbackCollectionService as any).feedbackStorage.values());
+      const service = feedbackCollectionService as {
+        feedbackStorage: Map<string, BugFeedback>;
+      };
+      const allFeedback = Array.from(service.feedbackStorage.values());
       const feedbackData = allFeedback.find((f: BugFeedback) => f.id === feedbackId);
       
       if (!feedbackData) {
@@ -152,10 +151,14 @@ export function FeedbackCollectionForm({
         description: error instanceof Error ? error.message : "Failed to load feedback form",
         variant: "destructive"
       });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  } finally {
+    setIsLoading(false);
+  }
+}, [feedbackId, toast]);
+
+  useEffect(() => {
+    loadFeedbackData();
+  }, [loadFeedbackData]);
 
   const validateForm = (): boolean => {
     if (!template) return false;
@@ -220,11 +223,11 @@ export function FeedbackCollectionForm({
     setIsSubmitting(true);
     try {
       // Convert form data to feedback format
-      const feedbackData: Partial<BugFeedback> = {};
+        const feedbackData: Partial<BugFeedback> & Record<string, unknown> = {};
       
       Object.entries(formData).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== '') {
-          (feedbackData as any)[key] = value;
+            feedbackData[key] = value;
         }
       });
 

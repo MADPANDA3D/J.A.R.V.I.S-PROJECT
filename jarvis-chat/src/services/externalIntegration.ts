@@ -41,7 +41,7 @@ class ExternalIntegrationService {
       // Validate URL
       try {
         new URL(config.url);
-      } catch () {
+      } catch {
         res.status(400).json({ error: 'Invalid URL format' });
         return;
       }
@@ -77,7 +77,7 @@ class ExternalIntegrationService {
         webhook,
         integrationStatus: 'active'
       });
-    } catch () {
+    } catch (error: unknown) {
       centralizedLogging.error('Failed to create webhook', { error });
       res.status(500).json({ error: 'Internal server error' });
     }
@@ -107,7 +107,7 @@ class ExternalIntegrationService {
       };
 
       res.status(200).json({ analysis });
-    } catch () {
+    } catch (error: unknown) {
       centralizedLogging.error('Failed to analyze with Claude Code', { error });
       res.status(500).json({ error: 'Internal server error' });
     }
@@ -136,7 +136,7 @@ class ExternalIntegrationService {
       this.integrations.set(integrationId, integration);
 
       res.status(201).json({ integration });
-    } catch () {
+    } catch (error: unknown) {
       centralizedLogging.error('Failed to integrate with Sentry', { error });
       res.status(500).json({ error: 'Internal server error' });
     }
@@ -165,7 +165,7 @@ class ExternalIntegrationService {
       this.integrations.set(integrationId, integration);
 
       res.status(201).json({ integration });
-    } catch () {
+    } catch (error: unknown) {
       centralizedLogging.error('Failed to integrate with DataDog', { error });
       res.status(500).json({ error: 'Internal server error' });
     }
@@ -186,7 +186,7 @@ class ExternalIntegrationService {
         status: integration.status,
         lastActivity: new Date().toISOString()
       });
-    } catch () {
+    } catch (error: unknown) {
       centralizedLogging.error('Failed to get integration status', { error });
       res.status(500).json({ error: 'Internal server error' });
     }
@@ -200,7 +200,7 @@ class ExternalIntegrationService {
         integrations,
         total: integrations.length
       });
-    } catch () {
+    } catch (error: unknown) {
       centralizedLogging.error('Failed to list integrations', { error });
       res.status(500).json({ error: 'Internal server error' });
     }

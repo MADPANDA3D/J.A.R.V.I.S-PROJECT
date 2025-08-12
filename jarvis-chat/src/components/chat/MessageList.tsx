@@ -19,7 +19,7 @@ export const MessageList: React.FC<MessageListProps> = ({
   searchTerms,
   highlightedMessageId,
   className = '',
-) => {
+}): React.ReactElement => {
   return (
     <div
       className={`overflow-y-auto p-4 space-y-4 ${className}`}

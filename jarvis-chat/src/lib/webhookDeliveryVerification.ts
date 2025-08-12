@@ -373,9 +373,9 @@ export class WebhookDeliveryVerificationService {
    * Register callback for verification completion
    */
   onVerificationComplete(
-    verificationId: string, 
+    verificationId: string,
     callback: (result: VerificationResult) => void
-  ): void  => {
+  ): void {
     this.verificationCallbacks.set(verificationId, callback);
   }
 

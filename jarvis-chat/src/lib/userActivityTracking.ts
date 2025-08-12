@@ -446,7 +446,7 @@ class UserActivityTrackingService {
     eventType: UserActivityEvent['eventType'],
     metadata: Record<string, unknown> = {},
     userId?: string
-  ): void  => {
+  ): void {
     if (!this.config.enabled) return;
 
     // Check if URL should be excluded
