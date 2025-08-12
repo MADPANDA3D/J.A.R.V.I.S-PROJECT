@@ -231,7 +231,7 @@ function validateDatabaseConfig(
   config: Partial<EnvConfig>,
   errors: ValidationError[],
   warnings: ValidationWarning[]
-): void  => {
+): void {
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
   const serviceRoleKey = import.meta.env.SUPABASE_SERVICE_ROLE_KEY;

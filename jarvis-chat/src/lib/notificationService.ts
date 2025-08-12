@@ -6,7 +6,7 @@
 import { centralizedLogging } from './centralizedLogging';
 import { bugReportOperations } from './supabase';
 import { trackBugReportEvent } from './monitoring';
-import type { BugStatus, BugPriority } from './bugLifecycle';
+import { BugStatus, BugPriority } from './bugLifecycle';
 
 // Notification types
 export type NotificationType = 
@@ -164,7 +164,7 @@ class NotificationService {
     newStatus: BugStatus,
     changedBy: string,
     notes?: string
-  ): Promise<NotificationDeliveryResult[]>  => {
+  ): Promise<NotificationDeliveryResult[]> {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -241,7 +241,7 @@ class NotificationService {
     assignedTo: string,
     assignedBy: string,
     notes?: string
-  ): Promise<NotificationDeliveryResult[]>  => {
+  ): Promise<NotificationDeliveryResult[]> {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -315,7 +315,7 @@ class NotificationService {
     bugId: string,
     userId: string,
     requestType: 'verification' | 'satisfaction' | 'more_info'
-  ): Promise<NotificationDeliveryResult[]>  => {
+  ): Promise<NotificationDeliveryResult[]> {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -413,7 +413,7 @@ class NotificationService {
     priority: BugPriority,
     reason: string,
     recipientIds: string[]
-  ): Promise<NotificationDeliveryResult[]>  => {
+  ): Promise<NotificationDeliveryResult[]> {
     const allResults: NotificationDeliveryResult[] = [];
 
     for (const userId of recipientIds) {
@@ -511,7 +511,7 @@ class NotificationService {
   async updateUserPreferences(
     userId: string, 
     updates: Partial<UserNotificationPreferences>
-  ): Promise<UserNotificationPreferences>  => {
+  ): Promise<UserNotificationPreferences> {
     const currentPreferences = await this.getUserPreferences(userId);
     const updatedPreferences = { ...currentPreferences, ...updates };
     
@@ -530,7 +530,7 @@ class NotificationService {
   // Private helper methods
   private async deliverNotification(
     notification: BaseNotification
-  ): Promise<NotificationDeliveryResult[]>  => {
+  ): Promise<NotificationDeliveryResult[]> {
     const results: NotificationDeliveryResult[] = [];
 
     for (const channel of notification.channels) {

@@ -262,7 +262,7 @@ class ServiceMonitoringService {
       retryPolicy?: Partial<ServiceMonitoringConfig['retryPolicy']>;
       metadata?: Record<string, unknown>;
     } = {}
-  ): Promise<T>  => {
+  ): Promise<T> {
     const correlationId = options.correlationId || this.generateCorrelationId();
     const serviceId = `${serviceType}_${serviceName}`;
 
@@ -371,13 +371,13 @@ class ServiceMonitoringService {
     throw lastError || new Error('Max retries exceeded');
   }
 
-  private timeoutPromise(timeout: number): Promise<never>  => {
+  private timeoutPromise(timeout: number): Promise<never> {
     return new Promise((_, reject) => {
       setTimeout(() => reject(new Error('Operation timeout')), timeout);
     });
   }
 
-  private delay(ms: number): Promise<void>  => {
+  private delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
@@ -645,7 +645,7 @@ class ServiceMonitoringService {
     success?: boolean;
     timeRange?: number; // hours
     correlationId?: string;
-  }): ServiceCall[]  => {
+  }): ServiceCall[] {
     let filtered = [...this.serviceCalls];
 
     if (filter) {
@@ -695,7 +695,7 @@ class ServiceMonitoringService {
     serviceName?: string;
     correlationId?: string;
     timeRange?: number; // hours
-  }): RetryAttempt[]  => {
+  }): RetryAttempt[] {
     let filtered = [...this.retryAttempts];
 
     if (filter) {

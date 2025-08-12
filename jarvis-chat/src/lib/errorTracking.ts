@@ -225,7 +225,7 @@ class ErrorTracker {
     message: string,
     level: 'error' | 'warning' | 'info' = 'info',
     context: Record<string, unknown> = {}
-  ): string  => {
+  ): string {
     return this.captureError(message, level, context);
   }
 
@@ -249,7 +249,7 @@ class ErrorTracker {
     category: 'navigation' | 'user_action' | 'http' | 'error' | 'info',
     message: string,
     data?: Record<string, unknown>
-  ): void  => {
+  ): void {
     const breadcrumb: ErrorBreadcrumb = {
       timestamp: new Date().toISOString(),
       category,

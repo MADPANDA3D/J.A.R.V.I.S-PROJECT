@@ -385,7 +385,7 @@ class DistributedTracingService {
     targetService: string,
     operation: string,
     metadata: Record<string, unknown> = {}
-  ): string  => {
+  ): string {
     const correlationId = this.generateCorrelationId();
     
     const correlation: ServiceCorrelation = {

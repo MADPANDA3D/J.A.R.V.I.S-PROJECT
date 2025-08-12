@@ -494,7 +494,7 @@ class CentralizedLoggingService {
     traceId?: string;
     timeRange?: number; // hours
     limit?: number;
-  }): LogEntry[]  => {
+  }): LogEntry[] {
     let filtered = [...this.logs];
 
     if (filter) {
