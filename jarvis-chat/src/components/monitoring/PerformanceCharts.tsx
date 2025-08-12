@@ -43,7 +43,7 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({ metrics })
     const now = Date.now();
     const interval = (60 * 60 * 1000) / points; // 1 hour divided by points
     
-    return Array.from({ length: points }, (_, i) {
+    return Array.from({ length: points }, (_, i) => {
       const timestamp = now - (points - 1 - i) * interval;
       const baseSuccessRate = 95 + Math.random() * 4;
       const baseResponseTime = 140 + Math.random() * 60;

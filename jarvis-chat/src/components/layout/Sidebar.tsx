@@ -52,7 +52,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isOpen = false,
   onClose,
   className,
-}) {
+}) => {
   const sidebarRef = useRef<HTMLElement>(null);
   const firstFocusableRef = useRef<HTMLButtonElement>(null);
 
