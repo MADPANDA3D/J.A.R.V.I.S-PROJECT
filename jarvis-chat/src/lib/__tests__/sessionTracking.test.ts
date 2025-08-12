@@ -9,6 +9,7 @@ import {
   getSessionHistory, 
   getSessionAnalytics,
   setSessionUser,
+  incrementSessionErrors,
   logSessionAuthEvent,
   clearAllSessions
 } from '../sessionTracking';
@@ -131,7 +132,7 @@ describe('Session Tracking', () => {
       const currentSession = getCurrentSession();
       expect(currentSession?.authEvents).toHaveLength(2); // session_start + sign_in
       
-      const signInEvent = currentSession?.authEvents.find(e => e.type === 'sign_in');
+      const signInEvent = currentSession?.authEvents.find((e: any) => e.type === 'sign_in');
       expect(signInEvent).toBeDefined();
       expect(signInEvent?.success).toBe(true);
       expect(signInEvent?.metadata).toEqual({ method: 'password' });
@@ -141,7 +142,7 @@ describe('Session Tracking', () => {
       logSessionAuthEvent('sign_in', false, 'Invalid credentials', { attempt: 1 });
       
       const currentSession = getCurrentSession();
-      const signInEvent = currentSession?.authEvents.find(e => e.type === 'sign_in');
+      const signInEvent = currentSession?.authEvents.find((e: any) => e.type === 'sign_in');
       
       expect(signInEvent?.success).toBe(false);
       expect(signInEvent?.errorMessage).toBe('Invalid credentials');
@@ -188,8 +189,6 @@ describe('Session Tracking', () => {
 
   describe('Error Integration', () => {
     it('should increment error count', () => {
-      const { incrementSessionErrors } = require('../sessionTracking');
-      
       const initialSession = getCurrentSession();
       const initialErrorCount = initialSession?.errorCount || 0;
       

@@ -332,7 +332,7 @@ class BugReportingService {
         `Bug reporting event: ${event}`,
         data
       );
-    } catch (error) {
+    } catch {
       // Silently fail - metrics are not critical
     }
   }

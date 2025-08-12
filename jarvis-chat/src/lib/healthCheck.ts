@@ -114,7 +114,7 @@ export const getHealthStatus = async (): Promise<{
       status: healthCheck.status,
       timestamp: healthCheck.timestamp,
     };
-  } catch (error) {
+  } catch {
     return {
       status: 'unhealthy',
       timestamp: new Date().toISOString(),
