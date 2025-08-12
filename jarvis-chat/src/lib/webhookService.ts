@@ -248,7 +248,7 @@ export class WebhookService {
    */
   private async makeWebhookRequest(
     payload: WebhookPayload
-  ): Promise<WebhookResponse>  => {
+  ): Promise<WebhookResponse> {
     if (!this.config.webhookUrl) {
       throw new WebhookError(
         'Webhook URL not configured',
@@ -377,7 +377,7 @@ export class WebhookService {
   /**
    * Health check for the webhook endpoint
    */
-  async healthCheck(): Promise< => {
+  async healthCheck(): Promise<{
     status: 'healthy' | 'unhealthy' | 'degraded';
     responseTime?: number;
     error?: string;
@@ -401,7 +401,7 @@ export class WebhookService {
         status: responseTime < 1000 ? 'healthy' : 'degraded',
         responseTime,
       };
-    } catch () {
+    } catch (error) {
       return {
         status: 'unhealthy',
         error: error instanceof Error ? error.message : 'Unknown error',
@@ -592,7 +592,7 @@ export class WebhookService {
     return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private sleep(ms: number): Promise<void>  => {
+  private sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 }

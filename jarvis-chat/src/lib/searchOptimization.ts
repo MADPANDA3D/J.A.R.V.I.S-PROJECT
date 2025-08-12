@@ -336,7 +336,7 @@ export class BatchQueryOptimizer {
   constructor(private batchDelayMs: number = 50) {}
 
   // Add query to batch
-  addQuery(query: OptimizedQuery): Promise<unknown>  => {
+  addQuery(query: OptimizedQuery): Promise<unknown> {
     return new Promise((resolve, reject) => {
       this.pendingQueries.push({ query, resolve, reject });
 

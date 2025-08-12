@@ -246,7 +246,7 @@ class LogAggregationService {
       originalConsole.info(...args);
     };
 
-    console.warn = (...args) {
+    console.warn = (...args) => {
       this.logEntry('warn', args.join(' '), 'console', 'general');
       originalConsole.warn(...args);
     };
