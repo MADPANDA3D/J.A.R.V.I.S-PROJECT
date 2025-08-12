@@ -171,7 +171,7 @@ describe('BugReportingService', () => {
     };
 
     // Should still create the bug report but collect browser info automatically
-    const result = await bugReportingService.createBugReport(bugDataWithoutBrowser as any);
+    const result = await bugReportingService.createBugReport(bugDataWithoutBrowser);
     expect(result.success).toBe(true);
   });
 

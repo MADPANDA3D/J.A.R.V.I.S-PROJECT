@@ -272,8 +272,8 @@ describe('Bug Lifecycle Integration Tests', () => {
 
       // Step 8: Simulate user feedback (positive verification)
       const feedbackId = feedbackResult.requestId!;
-      const pendingFeedback = Array.from((feedbackCollectionService as any).feedbackStorage.values())
-        .find((f: any) => f.metadata?.requestId === feedbackId);
+      const pendingFeedback = Array.from((feedbackCollectionService as unknown as { feedbackStorage: Map<string, { id: string; metadata?: { requestId?: string } }> }).feedbackStorage.values())
+        .find((f) => f.metadata?.requestId === feedbackId);
       
       if (pendingFeedback) {
         const submitResult = await feedbackCollectionService.submitFeedback(
@@ -319,8 +319,8 @@ describe('Bug Lifecycle Integration Tests', () => {
 
       // Step 11: Simulate satisfaction rating
       const satisfactionFeedbackId = satisfactionResult.requestId!;
-      const satisfactionFeedback = Array.from((feedbackCollectionService as any).feedbackStorage.values())
-        .find((f: any) => f.metadata?.requestId === satisfactionFeedbackId);
+      const satisfactionFeedback = Array.from((feedbackCollectionService as unknown as { feedbackStorage: Map<string, { id: string; metadata?: { requestId?: string } }> }).feedbackStorage.values())
+        .find((f) => f.metadata?.requestId === satisfactionFeedbackId);
       
       if (satisfactionFeedback) {
         const ratingResult = await feedbackCollectionService.submitFeedback(
