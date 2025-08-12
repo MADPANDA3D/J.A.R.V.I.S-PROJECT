@@ -94,7 +94,7 @@ class WebhookMonitoringService {
     success: boolean,
     statusCode?: number,
     error?: string
-  ): void  => {
+  ): void {
     const entry = {
       timestamp: new Date(),
       responseTime,

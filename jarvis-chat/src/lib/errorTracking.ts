@@ -129,7 +129,7 @@ class ErrorTracker {
     error: Error | string,
     level: 'error' | 'warning' | 'info' = 'error',
     context: Record<string, unknown> = {}
-  ): string  => {
+  ): string {
     const errorReport: EnhancedErrorReport = {
       id: `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       timestamp: new Date().toISOString(),

@@ -153,7 +153,7 @@ class DistributedTracingService {
     serviceName: string,
     tags: Record<string, unknown> = {},
     baggage: Record<string, string> = {}
-  ): TraceContext  => {
+  ): TraceContext {
     if (!this.config.enabled || !this.shouldSample()) {
       // Return a no-op context
       return {
@@ -216,7 +216,7 @@ class DistributedTracingService {
     serviceName: string,
     parentContext?: TraceContext,
     tags: Record<string, unknown> = {}
-  ): TraceContext  => {
+  ): TraceContext {
     if (!this.config.enabled) {
       return { traceId: 'noop', spanId: 'noop' };
     }
@@ -263,7 +263,7 @@ class DistributedTracingService {
     context: TraceContext,
     status: 'completed' | 'error' = 'completed',
     error?: Error
-  ): void  => {
+  ): void {
     if (!this.config.enabled || !context || context.spanId === 'noop') {
       return;
     }
@@ -318,7 +318,7 @@ class DistributedTracingService {
     level: SpanLog['level'],
     message: string,
     fields?: Record<string, unknown>
-  ): void  => {
+  ): void {
     if (!this.config.enabled || !context || context.spanId === 'noop') {
       return;
     }

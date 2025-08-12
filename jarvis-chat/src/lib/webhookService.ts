@@ -203,7 +203,7 @@ export class WebhookService {
             this.recordSuccess(Date.now() - startTime);
 
             return response;
-          } catch () {
+          } catch (error) {
             lastError =
               error instanceof WebhookError ? error : this.classifyError(error);
 

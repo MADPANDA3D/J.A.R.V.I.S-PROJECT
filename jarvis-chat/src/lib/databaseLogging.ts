@@ -246,7 +246,7 @@ class DatabaseLoggingService {
     slowQueriesOnly?: boolean;
     timeRange?: number; // hours
     correlationId?: string;
-  }): DatabaseQueryLog[]  => {
+  }): DatabaseQueryLog[] {
     let filtered = this.queryLogs;
 
     if (filter) {
@@ -278,7 +278,7 @@ class DatabaseLoggingService {
   getConnectionLogs(filter?: {
     event?: string;
     timeRange?: number; // hours
-  }): DatabaseConnectionLog[]  => {
+  }): DatabaseConnectionLog[] {
     let filtered = this.connectionLogs;
 
     if (filter) {
@@ -299,7 +299,7 @@ class DatabaseLoggingService {
     table?: string;
     slowQueriesOnly?: boolean;
     timeRange?: number; // hours
-  }): QueryPerformanceMetrics[]  => {
+  }): QueryPerformanceMetrics[] {
     let filtered = this.performanceMetrics;
 
     if (filter) {

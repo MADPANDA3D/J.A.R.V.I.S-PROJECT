@@ -25,7 +25,14 @@ export interface SearchResult {
   messageId: string;
   content: string;
   role: 'user' | 'assistant';
-  timestamp: Date;
+  ti  /**
+   * Get session with message preview
+   */
+  async getSessionWithPreview(
+    sessionId: string,
+    userId: string,
+    previewCount: number = 3
+  ): Promise<ConversationSessionGroup | null> { Date;
   highlightedContent: string;
   matchScore: number;
 }
@@ -140,7 +147,7 @@ class ChatService {
    */
   async saveMessage(
     message: Omit<ChatMessage, 'id' | 'timestamp'>
-  ): Promise<ChatMessage>  => {
+  ): Promise<ChatMessage> {
     try {
       const { data, error } = await supabase
         .from('chat_messages')
@@ -182,7 +189,7 @@ class ChatService {
   async loadMessageHistory(
     userId: string,
     limit: number = 50
-  ): Promise<ChatMessage[]>  => {
+  ): Promise<ChatMessage[]> {
     try {
       const { data, error } = await supabase
         .from('chat_messages')
@@ -255,7 +262,7 @@ class ChatService {
     userId: string,
     conversationId?: string,
     selectedTools?: string[]
-  ): Promise< => { userMsg: ChatMessage; aiMsg: ChatMessage }> {
+  ): Promise<{ userMsg: ChatMessage; aiMsg: ChatMessage }> {
     try {
       // Save user message
       const userMsg = await this.saveMessage({
@@ -300,7 +307,7 @@ class ChatService {
       limit?: number;
       offset?: number;
     }
-  ): Promise< => { results: SearchResult[]; total: number; hasMore: boolean }> {
+  ): Promise<{ results: SearchResult[]; total: number; hasMore: boolean }> {
     const startTime = performance.now();
     const analytics = this.getAnalyticsCollector(userId);
     
@@ -540,7 +547,7 @@ class ChatService {
   async createConversationSession(
     userId: string,
     title: string = 'New Conversation'
-  ): Promise<ConversationSession>  => {
+  ): Promise<ConversationSession> {
     try {
       const { data, error } = await supabase
         .from('conversation_sessions')
@@ -608,7 +615,7 @@ class ChatService {
       sessionOffset?: number;
       messagesPerSession?: number;
     }
-  ): Promise<GroupedSearchResponse>  => {
+  ): Promise<GroupedSearchResponse> {
     try {
       const { sessionLimit = 10, sessionOffset = 0, messagesPerSession = 5 } = options || {};
       

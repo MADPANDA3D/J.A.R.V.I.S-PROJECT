@@ -419,7 +419,7 @@ class SessionTracker {
     success: boolean, 
     errorMessage?: string, 
     metadata?: Record<string, unknown>
-  ): void  => {
+  ): void {
     if (!this.currentSession) return;
 
     const authEvent: AuthEvent = {

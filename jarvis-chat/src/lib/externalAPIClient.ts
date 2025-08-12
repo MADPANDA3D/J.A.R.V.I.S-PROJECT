@@ -172,7 +172,7 @@ export class ExternalAPIClient {
   }
 
   // Main request method with monitoring
-  async makeRequest<T = unknown>(requestConfig: APIRequestConfig): Promise<APIResponse<T>>  => {
+  async makeRequest<T = unknown>(requestConfig: APIRequestConfig): Promise<APIResponse<T>> {
     const fullUrl = this.buildUrl(requestConfig.endpoint);
     
     return makeMonitoredCall(

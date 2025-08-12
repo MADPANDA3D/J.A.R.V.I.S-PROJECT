@@ -153,7 +153,7 @@ function validateApplicationConfig(
   config: Partial<EnvConfig>,
   errors: ValidationError[],
   warnings: ValidationWarning[]
-): void  => {
+): void {
   const appEnv = import.meta.env.VITE_APP_ENV;
   const appVersion = import.meta.env.VITE_APP_VERSION;
   const appDomain = import.meta.env.VITE_APP_DOMAIN;
