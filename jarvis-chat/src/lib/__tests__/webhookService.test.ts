@@ -759,7 +759,7 @@ describe('WebhookService', () => {
         () => originalDateNow() + timeAdvance
       );
 
-      mockFetch.mockImplementationOnce(async () {
+      mockFetch.mockImplementationOnce(async () => {
         // Simulate 1.5 second delay
         timeAdvance = 1500;
         return {

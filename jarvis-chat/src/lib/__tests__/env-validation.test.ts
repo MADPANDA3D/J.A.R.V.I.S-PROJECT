@@ -102,7 +102,7 @@ vi.mock('../env-validation', async () => {
     };
   };
 
-  function isValidUrl(string: string): boolean  => {
+  const isValidUrl = (string: string): boolean => {
     try {
       new URL(string);
       return true;

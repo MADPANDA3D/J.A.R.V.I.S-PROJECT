@@ -82,7 +82,7 @@ export class AccessibilityTester {
   ): Promise<AccessibilityResult> {
     await this.loadAxeCore();
 
-    if (!(window as typeof window & { axe?: { run: (options?: unknown) => { Promise<unknown> } }).axe) {
+    if (!(window as typeof window & { axe?: { run: (options?: unknown) => Promise<unknown> } }).axe) {
       throw new Error('Axe-core not available');
     }
 

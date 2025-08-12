@@ -258,7 +258,7 @@ export class ColorContrastValidator {
     foreground: string,
     background: string,
     level: 'AA' | 'AAA' = 'AA'
-  ):   => {
+  ): {
     isCompliant: boolean;
     ratio: number;
     requiredRatio: number;

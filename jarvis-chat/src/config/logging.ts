@@ -262,7 +262,7 @@ export const testLoggingConfiguration = async (): Promise<{
     responseTime?: number;
     error?: string;
   }>;
-}> {
+}> => {
   const config = getLoggingConfig();
   const results: Array<{
     destination: string;
