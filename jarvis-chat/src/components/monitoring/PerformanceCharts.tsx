@@ -118,7 +118,7 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({ metrics })
   const SimpleBarChart: React.FC<{
     data: Array<{ label: string; value: number; color: string }>;
     title: string;
-  }> = ({ data, title }) {
+  }> = ({ data, title }) => {
     const maxValue = Math.max(...data.map(d => d.value));
     
     return (

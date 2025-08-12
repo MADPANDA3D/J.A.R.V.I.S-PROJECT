@@ -35,7 +35,7 @@ interface BugLifecycleActions {
   markNotificationAsRead: (notificationId: string) => Promise<boolean>;
 }
 
-export function useBugLifecycle(
+export const useBugLifecycle = (
   bugId: string, 
   options: UseBugLifecycleOptions = {}
 ): BugLifecycleState & BugLifecycleActions  => {
