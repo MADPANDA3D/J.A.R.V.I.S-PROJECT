@@ -631,7 +631,7 @@ class FeedbackCollectionService {
     // Validate required fields
     for (const field of template.fields) {
       if (field.required) {
-        const value = (data as any)[field.id];
+        const value = (data as Record<string, unknown>)[field.id];
         if (value === undefined || value === null || value === '') {
           errors.push(`${field.label} is required`);
         }
@@ -640,7 +640,7 @@ class FeedbackCollectionService {
 
     // Validate field formats and constraints
     for (const field of template.fields) {
-      const value = (data as any)[field.id];
+      const value = (data as Record<string, unknown>)[field.id];
       if (value !== undefined && value !== null && field.validation) {
         const validation = field.validation;
 
@@ -662,8 +662,8 @@ class FeedbackCollectionService {
     if (feedback.feedbackType === 'satisfaction_rating') {
       const ratings = ['satisfactionRating', 'resolutionQuality', 'responseTime'];
       ratings.forEach(ratingField => {
-        const rating = (data as any)[ratingField];
-        if (rating !== undefined && (rating < 1 || rating > 5)) {
+        const rating = (data as Record<string, unknown>)[ratingField];
+        if (rating !== undefined && rating !== null && typeof rating === 'number' && (rating < 1 || rating > 5)) {
           errors.push(`${ratingField} must be between 1 and 5`);
         }
       });
