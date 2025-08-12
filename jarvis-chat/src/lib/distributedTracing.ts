@@ -550,7 +550,7 @@ class DistributedTracingService {
     if (baggageHeader) {
       try {
         baggage = JSON.parse(baggageHeader);
-      } catch (error) {
+      } catch {
         // Invalid baggage format
       }
     }

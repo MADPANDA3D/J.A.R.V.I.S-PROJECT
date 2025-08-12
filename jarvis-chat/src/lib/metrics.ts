@@ -666,7 +666,7 @@ class MetricsService {
           }
         );
       }
-    } catch (error) {
+    } catch {
       this.trackKPI('system.health_check_status', 0, 'status', 'technical');
     }
   }

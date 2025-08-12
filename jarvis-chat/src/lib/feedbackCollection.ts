@@ -153,7 +153,7 @@ class FeedbackCollectionService {
     feedbackType: FeedbackType,
     customMessage?: string,
     priority: 'low' | 'normal' | 'high' = 'normal'
-  ): Promise< => { success: boolean; requestId?: string; error?: string }> {
+  ): Promise<{ success: boolean; requestId?: string; error?: string }> {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -284,7 +284,7 @@ class FeedbackCollectionService {
   async submitFeedback(
     feedbackId: string,
     feedbackData: Partial<BugFeedback>
-  ): Promise< => { success: boolean; error?: string }> {
+  ): Promise<{ success: boolean; error?: string }> {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -618,7 +618,7 @@ class FeedbackCollectionService {
   private async validateFeedbackSubmission(
     feedback: BugFeedback,
     data: Partial<BugFeedback>
-  ): Promise< { isValid: boolean; errors: string[]; warnings: string[] }> {
+  ): Promise<{ isValid: boolean; errors: string[]; warnings: string[] }> {
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -910,7 +910,7 @@ class FeedbackCollectionService {
     return ratings.length > 0 ? ratings.reduce((a, b) => a + b, 0) / ratings.length : 0;
   }
 
-  private analyzeCommonIssues(feedback: BugFeedback[]): Array< { issue: string; frequency: number; category: string }> {
+  private analyzeCommonIssues(feedback: BugFeedback[]): Array<{ issue: string; frequency: number; category: string }> {
     // Analyze common issues from feedback content
     const issueKeywords = new Map<string, number>();
 
@@ -940,7 +940,7 @@ class FeedbackCollectionService {
       }));
   }
 
-  private generateTrendData(feedback: BugFeedback[]): Array< {
+  private generateTrendData(feedback: BugFeedback[]): Array<{
     date: string;
     feedbackCount: number;
     averageRating: number;

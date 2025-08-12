@@ -136,7 +136,7 @@ class APISecurityService {
       this.apiKeys.set(hashedKey, apiKey);
 
       // Initialize rate limit buckets
-      this.initializeRateLimits(hashedKey, permissions.rateLimits);
+      this.initializeRateLimits(hashedKey);
 
       // Log API key creation
       this.logAuditEvent({
@@ -546,7 +546,7 @@ class APISecurityService {
     this.createAPIKey('system', 'Default Admin Key', adminPermissions);
   }
 
-  private initializeRateLimits(apiKey: string, limits: APIPermissions['rateLimits']): void {
+  private initializeRateLimits(apiKey: string): void {
     const keyBuckets = new Map<string, RateLimitBucket>();
     this.rateLimitBuckets.set(apiKey, keyBuckets);
   }

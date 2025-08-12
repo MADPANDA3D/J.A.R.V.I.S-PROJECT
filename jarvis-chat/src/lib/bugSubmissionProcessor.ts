@@ -487,7 +487,7 @@ class BugSubmissionProcessor {
       } else {
         // Track failed submissions
       }
-    } catch (error) {
+    } catch {
       // Silently fail - metrics are not critical
     }
   }
