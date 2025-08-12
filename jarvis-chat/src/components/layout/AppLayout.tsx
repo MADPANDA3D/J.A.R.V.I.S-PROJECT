@@ -44,7 +44,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
 
     keyboardNav.registerShortcut(
       'escape',
-      () {
+      () => {
         if (sidebarOpen) {
           setSidebarOpen(false);
           screenReader.announce({

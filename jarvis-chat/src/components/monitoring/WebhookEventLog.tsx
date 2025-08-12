@@ -40,7 +40,7 @@ export const WebhookEventLog: React.FC = () => {
       'webhook-test-client/1.0'
     ];
 
-    return Array.from({ length: 50 }, (_, i) {
+    return Array.from({ length: 50 }, (_, i) => {
       const eventType = eventTypes[Math.floor(Math.random() * eventTypes.length)];
       const status = statuses[Math.floor(Math.random() * statuses.length)];
       const timestamp = new Date(Date.now() - i * 60000 * Math.random() * 30).toISOString();

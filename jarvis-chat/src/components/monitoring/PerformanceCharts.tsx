@@ -66,7 +66,7 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({ metrics })
     color: string;
     label: string;
     unit?: string;
-  }> = ({ data, color, label, unit = '' }) {
+  }> = ({ data, color, label, unit = '' }) => {
     const maxValue = Math.max(...data.map(d => d.value));
     const minValue = Math.min(...data.map(d => d.value));
     const range = maxValue - minValue;

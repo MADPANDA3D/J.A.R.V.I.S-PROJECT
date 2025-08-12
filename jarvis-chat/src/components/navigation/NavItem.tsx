@@ -20,7 +20,7 @@ export const NavItem: React.FC<NavItemProps> = ({
   badge,
   onClick,
   className,
-}) {
+}) => {
   const location = useLocation();
   const isActive = location.pathname === to;
 
