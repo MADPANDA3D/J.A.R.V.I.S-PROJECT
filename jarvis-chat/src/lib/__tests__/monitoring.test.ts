@@ -303,7 +303,7 @@ describe('MonitoringService', () => {
       delete (window as typeof window & { DD_RUM?: unknown }).DD_RUM;
       delete (window as typeof window & { Sentry?: unknown }).Sentry;
 
-      expect(() {
+      expect(() => {
         monitoringService.trackCustomMetric('test.metric', 1);
       }).not.toThrow();
     });

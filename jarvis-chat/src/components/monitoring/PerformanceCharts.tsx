@@ -156,7 +156,7 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({ metrics })
   const DonutChart: React.FC<{
     data: Array<{ label: string; value: number; color: string }>;
     title: string;
-  }> = ({ data, title }) {
+  }> = ({ data, title }) => {
     const total = data.reduce((sum, item) => sum + item.value, 0);
     let cumulativePercentage = 0;
     

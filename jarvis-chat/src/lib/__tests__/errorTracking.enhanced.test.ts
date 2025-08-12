@@ -394,7 +394,7 @@ describe('Enhanced Error Tracking', () => {
       });
       
       // Should not throw error
-      expect(() {
+      expect(() => {
         captureError(new Error('Test error'));
       }).not.toThrow();
     });

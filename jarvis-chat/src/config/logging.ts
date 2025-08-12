@@ -186,11 +186,11 @@ export const getLoggingConfig = (): LoggingConfig => {
 };
 
 // Validate logging configuration
-export const validateLoggingConfig = (config: LoggingConfig): boolean => {
+export const validateLoggingConfig = (config: LoggingConfig): {
   valid: boolean;
   errors: string[];
   warnings: string[];
-} {
+} => {
   const errors: string[] = [];
   const warnings: string[] = [];
 
