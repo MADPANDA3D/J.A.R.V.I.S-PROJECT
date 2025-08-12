@@ -13,6 +13,23 @@ import type {
   AttachmentUploadResult
 } from '@/types/bugReport';
 
+interface SubmissionMetricsData {
+  bugType?: string;
+  severity?: string;
+  processingTime?: number;
+  error?: string;
+}
+
+interface SanitizedBugData {
+  title: string;
+  bugType: string;
+  severity: string;
+  hasAttachments: boolean;
+  attachmentCount: number;
+  hasErrorContext: boolean;
+  hasMonitoringData: boolean;
+}
+
 export interface BugSubmissionConfig {
   maxFileSize: number; // bytes
   maxFiles: number;
@@ -472,7 +489,7 @@ class BugSubmissionProcessor {
   /**
    * Update submission metrics
    */
-  private updateSubmissionMetrics(result: 'success' | 'error', data: any): void {
+  private updateSubmissionMetrics(result: 'success' | 'error', data: SubmissionMetricsData): void {
     try {
       centralizedLogging.info(
         'bug-submission-processor',
@@ -497,7 +514,7 @@ class BugSubmissionProcessor {
     return `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private sanitizeBugDataForLogging(bugData: BugReportData): any {
+  private sanitizeBugDataForLogging(bugData: BugReportData): SanitizedBugData {
     return {
       title: bugData.title,
       bugType: bugData.bugType,
