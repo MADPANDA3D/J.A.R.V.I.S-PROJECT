@@ -109,14 +109,7 @@ export const useChat = () => {
       } catch (err) {
         console.error('Failed to send message:', err);
 
-        // Update temporary message to show error
-        setMessages(prev =>
-          prev.map(m =>
-            m.id === tempUserMessage.id ? { ...m, status: 'error' as const } : m
-          )
-        );
-
-        // Add error message from AI
+        // Add error message from AI and mark user message as error
         const errorMessage: Message = {
           id: `error-${Date.now()}`,
           content:
@@ -126,7 +119,11 @@ export const useChat = () => {
           status: 'error',
         };
 
-        setMessages(prev => [...prev, errorMessage]);
+        setMessages(prev => [
+          ...prev.filter(m => m.id !== tempUserMessage.id),
+          { ...tempUserMessage, status: 'error' as const },
+          errorMessage,
+        ]);
         setError(err instanceof Error ? err.message : 'Failed to send message');
       } finally {
         setIsLoading(false);

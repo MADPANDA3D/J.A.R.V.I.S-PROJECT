@@ -83,10 +83,15 @@ describe('BugAssignmentSystem', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // Reset internal state between tests
+    (bugAssignmentSystem as any).assignmentHistory.clear();
+    (bugAssignmentSystem as any).initializeTeamMembers();
   });
 
   afterEach(() => {
     vi.clearAllMocks();
+    (bugAssignmentSystem as any).assignmentHistory.clear();
+    (bugAssignmentSystem as any).initializeTeamMembers();
   });
 
   describe('Manual Assignment', () => {
