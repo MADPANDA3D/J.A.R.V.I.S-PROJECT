@@ -416,7 +416,7 @@ class MetricsService {
   }
 
   // Analytics and reporting methods
-  public getBusinessMetrics(timeRange?: number): Partial<BusinessMetrics>  => {
+  public getBusinessMetrics(timeRange?: number): Partial<BusinessMetrics> {
     const cutoff = timeRange ? Date.now() - timeRange : 0;
     const relevantKPIs = this.kpis.filter(kpi => kpi.timestamp >= cutoff);
 
