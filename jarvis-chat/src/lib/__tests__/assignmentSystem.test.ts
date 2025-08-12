@@ -217,7 +217,7 @@ describe('BugAssignmentSystem', () => {
 
     it('returns null when no suitable assignee found', async () => {
       // Mock all team members as unavailable
-      const teamMembers = (bugAssignmentSystem as any).teamMembers;
+      const teamMembers = (bugAssignmentSystem as unknown as { teamMembers: Map<string, TeamMember> }).teamMembers;
       const originalMembers = new Map(teamMembers);
       
       teamMembers.forEach((member: TeamMember) => {
@@ -230,12 +230,12 @@ describe('BugAssignmentSystem', () => {
       expect(assignedTo).toBeNull();
 
       // Restore original team members
-      (bugAssignmentSystem as any).teamMembers = originalMembers;
+      (bugAssignmentSystem as unknown as { teamMembers: Map<string, TeamMember> }).teamMembers = originalMembers;
     });
 
     it('considers workload when auto-assigning', async () => {
       // Set one team member with lower workload
-      const teamMembers = (bugAssignmentSystem as any).teamMembers;
+      const teamMembers = (bugAssignmentSystem as unknown as { teamMembers: Map<string, TeamMember> }).teamMembers;
       const user1 = teamMembers.get('user_1');
       const user2 = teamMembers.get('user_2');
       
@@ -333,7 +333,7 @@ describe('BugAssignmentSystem', () => {
         data: {
           ...mockBugReport,
           priority: 'urgent'
-        } as any,
+        },
         error: null
       });
 
@@ -375,7 +375,7 @@ describe('BugAssignmentSystem', () => {
 
     it('identifies workload imbalances', async () => {
       // Set up imbalanced workload
-      const teamMembers = (bugAssignmentSystem as any).teamMembers;
+      const teamMembers = (bugAssignmentSystem as unknown as { teamMembers: Map<string, TeamMember> }).teamMembers;
       const user1 = teamMembers.get('user_1');
       const user2 = teamMembers.get('user_2');
       
@@ -429,7 +429,7 @@ describe('BugAssignmentSystem', () => {
 
       const { bugReportOperations } = await import('../supabase');
       vi.mocked(bugReportOperations.getBugReportById).mockResolvedValueOnce({
-        data: frontendBug as any,
+        data: frontendBug,
         error: null
       });
 
@@ -448,7 +448,7 @@ describe('BugAssignmentSystem', () => {
 
       const { bugReportOperations } = await import('../supabase');
       vi.mocked(bugReportOperations.getBugReportById).mockResolvedValueOnce({
-        data: genericBug as any,
+        data: genericBug,
         error: null
       });
 
