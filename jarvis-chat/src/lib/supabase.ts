@@ -24,7 +24,7 @@ const createLoggedSupabaseClient = (url: string, key: string, options: Record<st
     ...options,
     global: {
       ...options.global,
-      fetch: async (input: RequestInfo | URL, init?: RequestInit) {
+        fetch: async (input: RequestInfo | URL, init?: RequestInit) => {
         const startTime = performance.now();
         const correlationId = generateCorrelationId();
         const sessionId = getSessionId();
@@ -35,7 +35,7 @@ const createLoggedSupabaseClient = (url: string, key: string, options: Record<st
         const headers = init?.headers as Record<string, string> || {};
         
         // Determine operation type and table from URL
-        const { operation, table } = parseSupabaseRequest(url, method, init?.body);
+        const { operation, table } = parseSupabaseRequest(url, method);
         
         try {
           // Make the actual request
@@ -69,9 +69,9 @@ const createLoggedSupabaseClient = (url: string, key: string, options: Record<st
                 rowCount = responseData.data.length;
               }
             }
-          } catch () {
-            // Response body couldn't be parsed as JSON
-          }
+            } catch {
+              // Response body couldn't be parsed as JSON
+            }
           
           // Log the database query
           logDatabaseQuery({
@@ -97,9 +97,9 @@ const createLoggedSupabaseClient = (url: string, key: string, options: Record<st
           
           return response;
           
-        } catch () {
-          const endTime = performance.now();
-          const executionTime = endTime - startTime;
+          } catch (error: unknown) {
+            const endTime = performance.now();
+            const executionTime = endTime - startTime;
           
           // Log the failed request
           logDatabaseQuery({
@@ -122,8 +122,8 @@ const createLoggedSupabaseClient = (url: string, key: string, options: Record<st
             }
           });
           
-          throw error;
-        }
+            throw error;
+          }
       }
     }
   });
@@ -132,10 +132,13 @@ const createLoggedSupabaseClient = (url: string, key: string, options: Record<st
 };
 
 // Parse Supabase request to extract operation and table info
-function parseSupabaseRequest(url: string, method: string):   => {
-  operation: 'select' | 'insert' | 'update' | 'delete' | 'rpc' | 'auth' | 'unknown';
-  table: string;
-} {
+  function parseSupabaseRequest(
+    url: string,
+    method: string
+  ): {
+    operation: 'select' | 'insert' | 'update' | 'delete' | 'rpc' | 'auth' | 'unknown';
+    table: string;
+  } {
   try {
     const urlObj = new URL(url);
     const pathSegments = urlObj.pathname.split('/').filter(Boolean);
@@ -175,17 +178,19 @@ function parseSupabaseRequest(url: string, method: string):   => {
     }
     
     return { operation: 'unknown', table: 'unknown' };
-  } catch () {
+  } catch {
     return { operation: 'unknown', table: 'unknown' };
   }
 }
 
 // Get current user ID from client
-async function getCurrentUserId(client: SupabaseClient): Promise<string | undefined>  => {
+async function getCurrentUserId(
+  client: SupabaseClient
+): Promise<string | undefined> {
   try {
     const { data } = await client.auth.getUser();
     return data.user?.id;
-  } catch () {
+  } catch {
     return undefined;
   }
 }

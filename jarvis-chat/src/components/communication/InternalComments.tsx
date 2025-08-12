@@ -3,7 +3,7 @@
  * Team collaboration interface with threaded discussions, mentions, and rich text support
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -35,12 +35,11 @@ import {
   Search
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { 
+import {
   internalCommunicationService,
   type InternalComment,
   type CommentType,
-  type CommentVisibility,
-  type CommentSearchCriteria
+  type CommentVisibility
 } from '@/lib/internalCommunication';
 
 interface InternalCommentsProps {
@@ -123,7 +122,7 @@ function CommentEditor({
       } else {
         throw new Error(result.error || 'Failed to add comment');
       }
-    } catch (error) {
+    } catch (error: unknown) {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to add comment",
@@ -367,7 +366,7 @@ function CommentItem({
       if (onReaction) {
         onReaction(comment, emoji);
       }
-    } catch (error) {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to add reaction",
@@ -396,7 +395,7 @@ function CommentItem({
       } else {
         throw new Error(result.error);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to edit comment",
@@ -424,7 +423,7 @@ function CommentItem({
       } else {
         throw new Error(result.error);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to delete comment",
@@ -652,25 +651,21 @@ export function InternalComments({
   const [filterVisibility, setFilterVisibility] = useState<CommentVisibility | 'all'>('all');
   const [showFilters, setShowFilters] = useState(false);
 
-  useEffect(() => {
-    loadComments();
-  }, [bugId, showPrivateComments]);
-
-  const loadComments = async () => {
+  const loadComments = useCallback(async () => {
     try {
       setLoading(true);
       const loadedComments = internalCommunicationService.getBugComments(bugId, {
         includeDeleted: false,
         sortBy: 'date_asc'
       });
-      
+
       // Filter out private comments if user doesn't have access
       const filteredComments = showPrivateComments 
         ? loadedComments 
         : loadedComments.filter(c => !c.isPrivate);
-      
+
       setComments(filteredComments);
-    } catch (error) {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to load comments",
@@ -679,7 +674,11 @@ export function InternalComments({
     } finally {
       setLoading(false);
     }
-  };
+  }, [bugId, showPrivateComments, toast]);
+
+  useEffect(() => {
+    loadComments();
+  }, [loadComments]);
 
   const handleCommentAdded = (newComment: InternalComment) => {
     setComments(prev => [...prev, newComment]);
