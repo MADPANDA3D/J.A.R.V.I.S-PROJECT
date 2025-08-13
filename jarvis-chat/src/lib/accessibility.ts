@@ -19,17 +19,8 @@ class ScreenReaderManager {
   }
 
   /**
-   * Create ARIA live regions for screen reader announceme    const reducedMotionQuery = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    );
-    reducedMotionQuery.addEventListener('change', e => {
-      this.preferences.reducedMotion = e.matches;
-      this.applyPreferences();
-    });
-
-    // Listen for high contrast changes
-    const highContrastQuery = window.matchMedia('(prefers-contrast: high)');
-    highContrastQuery.addEventListener('change', e => {
+   * Create ARIA live regions for screen reader announcements
+   */
   private createLiveRegions(): void {
     // Polite announcements (non-interrupting)
     this.politeRegion = document.createElement('div');
@@ -225,7 +216,7 @@ export class ColorContrastValidator {
     const rgb = this.hexToRgb(color);
     if (!rgb) return 0;
 
-    const [r, g, b] = [rgb.r, rgb.g, rgb.b].map(c => {
+    const [r, g, b] = [rgb.r, rgb.g, rgb.b].map((c: number) => {
       c = c / 255;
       return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
     });
@@ -236,7 +227,7 @@ export class ColorContrastValidator {
   /**
    * Convert hex color to RGB
    */
-  private hexToRgb(hex: string):   { r: number; g: number; b: number } | null {
+  private hexToRgb(hex: string): { r: number; g: number; b: number } | null {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result
       ? {
@@ -407,7 +398,7 @@ export class AriaManager {
     element: HTMLElement,
     properties: Record<string, string | boolean | number>
   ): void {
-    Object.entries(properties).forEach(([key, value]) => {
+    Object.entries(properties).forEach(([key, value]: [string, string | boolean | number]) => {
       const ariaKey = key.startsWith('aria-') ? key : `aria-${key}`;
       element.setAttribute(ariaKey, String(value));
     });
@@ -564,21 +555,21 @@ export class AccessibilityPreferencesManager {
     const reducedMotionQuery = window.matchMedia(
       '(prefers-reduced-motion: reduce)'
     );
-    reducedMotionQuery.addEventListener('change', e => {
+    reducedMotionQuery.addEventListener('change', (e: MediaQueryListEvent) => {
       this.preferences.reducedMotion = e.matches;
       this.applyPreferences();
     });
 
     // Listen for high contrast changes
     const highContrastQuery = window.matchMedia('(prefers-contrast: high)');
-    highContrastQuery.addEventListener('change', e => {
+    highContrastQuery.addEventListener('change', (e: MediaQueryListEvent) => {
       this.preferences.highContrast = e.matches;
       this.applyPreferences();
     });
 
     // Listen for color scheme changes
     const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    darkModeQuery.addEventListener("change", () => {
+    darkModeQuery.addEventListener('change', () => {
       if (this.preferences.colorScheme === 'auto') {
         this.applyPreferences();
       }
@@ -652,7 +643,7 @@ export class AccessibilityTester {
 
     // Check for missing alt text
     const images = document.querySelectorAll('img');
-    images.forEach(img => {
+    images.forEach((img: Element) => {
       if (!img.alt && !img.getAttribute('aria-label')) {
         issues.push({
           type: 'missing-alt-text',
@@ -665,7 +656,7 @@ export class AccessibilityTester {
 
     // Check for missing form labels
     const inputs = document.querySelectorAll('input, textarea, select');
-    inputs.forEach(input => {
+    inputs.forEach((input: Element) => {
       const hasLabel =
         input.getAttribute('aria-label') ||
         input.getAttribute('aria-labelledby') ||
@@ -684,7 +675,7 @@ export class AccessibilityTester {
     // Check heading hierarchy
     const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
     let lastLevel = 0;
-    headings.forEach(heading => {
+    headings.forEach((heading: Element) => {
       const level = parseInt(heading.tagName.substring(1));
       if (level > lastLevel + 1) {
         issues.push({
@@ -701,7 +692,7 @@ export class AccessibilityTester {
     const textElements = document.querySelectorAll(
       'p, span, div, a, button, label'
     );
-    textElements.forEach(element => {
+    textElements.forEach((element: Element) => {
       const styles = window.getComputedStyle(element);
       const color = styles.color;
       const backgroundColor = styles.backgroundColor;
@@ -754,7 +745,7 @@ export class AccessibilityTester {
 
       report += `## Detailed Issues\n\n`;
 
-      audit.issues.forEach((issue, index) => {
+      audit.issues.forEach((issue, index: number) => {
         report += `### ${index + 1}. ${issue.type} (${issue.severity})\n`;
         report += `${issue.message}\n\n`;
       });
@@ -773,7 +764,7 @@ export const accessibilityTester = new AccessibilityTester();
  */
 export function initializeAccessibility(): void {
   // Setup global keyboard navigation
-  document.addEventListener('keydown', event => {
+  document.addEventListener('keydown', (event: KeyboardEvent) => {
     keyboardNav.handleKeyDown(event);
   });
 
@@ -794,11 +785,11 @@ export function initializeAccessibility(): void {
     border-radius: 4px;
   `;
 
-  skipLink.addEventListener("focus", () => {
+  skipLink.addEventListener('focus', () => {
     skipLink.style.top = '6px';
   });
 
-  skipLink.addEventListener("blur", () => {
+  skipLink.addEventListener('blur', () => {
     skipLink.style.top = '-40px';
   });
 
