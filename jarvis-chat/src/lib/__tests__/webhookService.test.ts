@@ -821,7 +821,7 @@ describe('WebhookService', () => {
     });
 
     it('should handle mixed success/failure in concurrent requests', async () => {
-      const { service, mockFetch } = makeWebhook();
+      const { service, mockFetch } = makeWebhook({ retryConfig: { maxAttempts: 1, baseDelay: 50, maxDelay: 200, backoffFactor: 2.0, jitter: false } });
       let callCount = 0;
       mockFetch.mockImplementation(() => {
         callCount++;
@@ -872,16 +872,7 @@ describe('WebhookService', () => {
 
   describe('Authentication and Security', () => {
     it('should include authorization header when secret is provided', async () => {
-      // Mock environment variable
-      const originalEnv = import.meta.env.N8N_WEBHOOK_SECRET;
-      vi.stubGlobal('import.meta', {
-        env: {
-          ...import.meta.env,
-          N8N_WEBHOOK_SECRET: 'test-secret-token',
-        },
-      });
-
-      const { service: serviceWithAuth, mockFetch } = makeWebhook();
+      const { service: serviceWithAuth, mockFetch } = makeWebhook({ webhookSecret: 'test-secret-token' });
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -905,10 +896,7 @@ describe('WebhookService', () => {
         'Bearer test-secret-token'
       );
 
-      // Restore original environment
-      vi.stubGlobal('import.meta', {
-        env: { ...import.meta.env, N8N_WEBHOOK_SECRET: originalEnv },
-      });
+      // No need to restore environment since we're using config
 
       serviceWithAuth.destroy();
     });
