@@ -180,7 +180,8 @@ class BugAssignmentSystem {
       // Validate assignee
       const assignee = this.teamMembers.get(assigneeId);
       if (!assignee) {
-        throw new Error(`Assignee not found: ${assigneeId}`);
+        const availableMembers = Array.from(this.teamMembers.keys());
+        throw new Error(`Assignee not found: ${assigneeId}. Available members: ${availableMembers.join(', ')}`);
       }
 
       // Check assignee availability and workload
@@ -469,7 +470,7 @@ class BugAssignmentSystem {
       
       // Check if escalation is allowed from current status
       const currentStatus = bugReport.status as BugStatus;
-      const allowedStatuses = [BugStatus.OPEN, BugStatus.IN_PROGRESS, BugStatus.REOPENED];
+      const allowedStatuses = [BugStatus.OPEN, BugStatus.TRIAGED, BugStatus.IN_PROGRESS, BugStatus.REOPENED];
       
       if (!allowedStatuses.includes(currentStatus)) {
         return {
@@ -512,7 +513,16 @@ class BugAssignmentSystem {
       // Send escalation alerts
       const managerIds = this.getManagerIds();
       if (managerIds.length > 0) {
-        await sendEscalationAlert(bugId, newPriority, reason, managerIds);
+        try {
+          await sendEscalationAlert(bugId, newPriority, reason, managerIds);
+        } catch (alertError) {
+          centralizedLogging.warn(
+            'assignment-system',
+            'system',
+            'Failed to send escalation alert, continuing with escalation',
+            { correlationId, bugId, error: alertError }
+          );
+        }
       }
 
       // Track escalation event
@@ -631,6 +641,38 @@ class BugAssignmentSystem {
   updateTeamMember(userId: string, updates: Partial<TeamMember>): boolean {
     const member = this.teamMembers.get(userId);
     if (!member) {
+      // If member doesn't exist and we have enough data, create them
+      if (updates.name && updates.email && updates.role) {
+        const newMember: TeamMember = {
+          id: userId,
+          name: updates.name,
+          email: updates.email,
+          role: updates.role,
+          availability: updates.availability || 'available',
+          specializationAreas: updates.specializationAreas || [],
+          workloadCapacity: updates.workloadCapacity || 5,
+          currentWorkload: updates.currentWorkload || 0,
+          averageResolutionTime: updates.averageResolutionTime || 24,
+          performanceRating: updates.performanceRating || 3,
+          timezone: updates.timezone || 'UTC',
+          workingHours: updates.workingHours || {
+            start: '09:00',
+            end: '17:00',
+            daysOfWeek: [1, 2, 3, 4, 5]
+          },
+          lastActivity: updates.lastActivity || new Date().toISOString()
+        };
+        this.teamMembers.set(userId, newMember);
+        
+        centralizedLogging.info(
+          'assignment-system',
+          'system',
+          'Team member created',
+          { userId, member: newMember }
+        );
+        
+        return true;
+      }
       return false;
     }
 
@@ -992,6 +1034,14 @@ class BugAssignmentSystem {
   destroy(): void {
     // Clear all escalation timers
     this.escalationTimers.forEach(timer => clearTimeout(timer));
+    this.escalationTimers.clear();
+  }
+
+  // Reset method for testing
+  reset(): void {
+    this.teamMembers.clear();
+    this.assignmentHistory.clear();
+    this.assignmentRules = [];
     this.escalationTimers.clear();
   }
 }

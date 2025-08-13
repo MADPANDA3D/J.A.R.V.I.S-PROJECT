@@ -80,7 +80,7 @@ class CentralizedLoggingService {
   private loadConfiguration(): LoggingConfig {
     return {
       enabled: true,
-      level: (import.meta.env.VITE_LOG_LEVEL as LogLevel) || 'info',
+      level: (import.meta.env.VITE_LOG_LEVEL as LogEntry['level']) || 'info',
       retentionDays: parseInt(import.meta.env.VITE_LOG_RETENTION_DAYS || '7'),
       batchSize: parseInt(import.meta.env.VITE_LOG_BATCH_SIZE || '10'),
       flushInterval: parseInt(import.meta.env.VITE_LOG_FLUSH_INTERVAL || '5000'),

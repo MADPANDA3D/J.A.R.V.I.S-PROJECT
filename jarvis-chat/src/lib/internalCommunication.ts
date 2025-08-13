@@ -1098,6 +1098,16 @@ class InternalCommunicationService {
     this.auditTrail.clear();
     this.mentionNotificationQueue.clear();
   }
+
+  // Reset method for testing
+  reset(): void {
+    this.commentsStorage.clear();
+    this.commentsIndex.clear();
+    this.threadsStorage.clear();
+    this.collaborationSessions.clear();
+    this.auditTrail.clear();
+    this.mentionNotificationQueue.clear();
+  }
 }
 
 // Export singleton instance
