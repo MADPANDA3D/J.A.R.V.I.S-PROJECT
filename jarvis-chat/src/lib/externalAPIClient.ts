@@ -162,7 +162,7 @@ export class ExternalAPIClient {
             timeout: healthCheck.timeout
           });
           return response.status === healthCheck.expectedStatus;
-        } catch (error) {
+        } catch {
           return false;
         }
       }
@@ -180,7 +180,7 @@ export class ExternalAPIClient {
       'external',
       fullUrl,
       requestConfig.method,
-      async () {
+      async () => {
         return this.executeRequest<T>(requestConfig, fullUrl);
       },
       {
@@ -318,7 +318,7 @@ export class ExternalAPIClient {
   async get<T = unknown>(
     endpoint: string, 
     options: Omit<APIRequestConfig, 'method' | 'endpoint'> = {}
-  ): Promise<APIResponse<T>>  => {
+  ): Promise<APIResponse<T>> {
     return this.makeRequest<T>({
       method: 'GET',
       endpoint,
@@ -330,7 +330,7 @@ export class ExternalAPIClient {
     endpoint: string, 
     body?: unknown,
     options: Omit<APIRequestConfig, 'method' | 'endpoint' | 'body'> = {}
-  ): Promise<APIResponse<T>>  => {
+  ): Promise<APIResponse<T>> {
     return this.makeRequest<T>({
       method: 'POST',
       endpoint,
@@ -343,7 +343,7 @@ export class ExternalAPIClient {
     endpoint: string, 
     body?: unknown,
     options: Omit<APIRequestConfig, 'method' | 'endpoint' | 'body'> = {}
-  ): Promise<APIResponse<T>>  => {
+  ): Promise<APIResponse<T>> {
     return this.makeRequest<T>({
       method: 'PUT',
       endpoint,
@@ -356,7 +356,7 @@ export class ExternalAPIClient {
     endpoint: string, 
     body?: unknown,
     options: Omit<APIRequestConfig, 'method' | 'endpoint' | 'body'> = {}
-  ): Promise<APIResponse<T>>  => {
+  ): Promise<APIResponse<T>> {
     return this.makeRequest<T>({
       method: 'PATCH',
       endpoint,
@@ -368,7 +368,7 @@ export class ExternalAPIClient {
   async delete<T = unknown>(
     endpoint: string, 
     options: Omit<APIRequestConfig, 'method' | 'endpoint'> = {}
-  ): Promise<APIResponse<T>>  => {
+  ): Promise<APIResponse<T>> {
     return this.makeRequest<T>({
       method: 'DELETE',
       endpoint,
