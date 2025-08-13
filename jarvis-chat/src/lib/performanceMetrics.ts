@@ -466,7 +466,7 @@ class PerformanceMetricsService {
       this.observer.observe({ 
         entryTypes: ['navigation', 'paint', 'largest-contentful-paint', 'first-input', 'layout-shift']
       });
-    } catch () {
+    } catch (error) {
       centralizedLogging.warn(
         'performance-metrics',
         'system',

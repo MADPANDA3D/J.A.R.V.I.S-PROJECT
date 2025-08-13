@@ -366,7 +366,7 @@ class MonitoringService implements APMService {
     url: string,
     duration: number,
     metadata?: Record<string, unknown>
-  ): void  => {
+  ): void {
     this.trackCustomMetric('page.load_time', duration, {
       url,
       ...metadata,
@@ -385,7 +385,7 @@ class MonitoringService implements APMService {
     duration: number,
     status: number,
     metadata?: Record<string, unknown>
-  ): void  => {
+  ): void {
     const isSuccess = status >= 200 && status < 300;
     const isError = status >= 400;
     
@@ -454,7 +454,7 @@ class MonitoringService implements APMService {
   trackUserInteraction(
     action: string,
     metadata?: Record<string, unknown>
-  ): void  => {
+  ): void {
     // Add breadcrumb for user interaction
     addBreadcrumb('info', 'user_action', `User interaction: ${action}`, {
       action,

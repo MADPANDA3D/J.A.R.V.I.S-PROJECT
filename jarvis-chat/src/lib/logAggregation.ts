@@ -495,7 +495,7 @@ class LogAggregationService {
 
       // Business insights
       this.analyzeBusinessMetrics(recentLogs);
-    } catch () {
+    } catch (error) {
       captureWarning('Failed to perform log analysis', { error });
     }
   }

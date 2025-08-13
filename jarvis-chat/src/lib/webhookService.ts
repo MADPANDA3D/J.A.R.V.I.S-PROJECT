@@ -348,7 +348,7 @@ export class WebhookService {
       }
 
       return data;
-    } catch () {
+    } catch (error) {
       clearTimeout(timeoutId);
 
       if (error.name === 'AbortError') {
