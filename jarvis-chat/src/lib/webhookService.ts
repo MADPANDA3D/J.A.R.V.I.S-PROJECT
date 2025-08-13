@@ -262,12 +262,23 @@ export class WebhookService {
    * Now supports AbortSignal for cancellation
    */
   async sendMessage(payload: WebhookPayload, signal?: AbortSignal): Promise<WebhookResponse>  {
+    // IMMEDIATE VALIDATION FIRST - prevent double retry logic
+    if (!this.config.webhookUrl) {
+      throw new WebhookError(
+        'Webhook URL not configured',
+        WebhookErrorType.VALIDATION_ERROR,
+        undefined,
+        false
+      );
+    }
+
     return makeMonitoredCall(
       'n8n-webhook',
       'webhook',
       this.config.webhookUrl,
       'POST',
       async () => {
+
         // Check if operation was already aborted
         if (signal?.aborted) {
           throw new DOMException('Operation was aborted', 'AbortError');
@@ -354,14 +365,7 @@ export class WebhookService {
     payload: WebhookPayload,
     parentSignal?: AbortSignal
   ): Promise<WebhookResponse> {
-    if (!this.config.webhookUrl) {
-      throw new WebhookError(
-        'Webhook URL not configured',
-        WebhookErrorType.VALIDATION_ERROR,
-        undefined,
-        false
-      );
-    }
+    // URL validation now happens at the top level
 
     try {
       const response = await timeout(

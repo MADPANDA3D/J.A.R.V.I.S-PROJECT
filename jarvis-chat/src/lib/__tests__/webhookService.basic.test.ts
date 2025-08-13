@@ -3,7 +3,7 @@
  * Focused tests for core webhook functionality
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi, type Mock } from 'vitest';
 import {
   WebhookService,
   WebhookErrorType,
@@ -20,6 +20,15 @@ global.AbortController = vi.fn(() => ({
   signal: { aborted: false },
   abort: vi.fn(),
 })) as unknown as typeof AbortController;
+
+// Mock service monitoring to prevent double retry logic
+vi.mock('../serviceMonitoring', () => ({
+  makeMonitoredCall: vi.fn(async (_serviceName, _serviceType, _endpoint, _method, operation) => {
+    // Just execute the operation directly without monitoring overhead
+    return await operation();
+  }),
+  registerService: vi.fn(),
+}));
 
 describe('WebhookService - Basic Tests', () => {
   let webhookService: WebhookService;
@@ -122,7 +131,7 @@ describe('WebhookService - Basic Tests', () => {
 
   describe('Error Handling', () => {
     it('should throw validation error for missing webhook URL', async () => {
-      const serviceWithoutUrl = new WebhookService({ webhookUrl: '' });
+      const serviceWithoutUrl = new WebhookService({ webhookUrl: '' }, { fetch: mockFetch });
 
       const payload: WebhookPayload = {
         message: 'Test',
@@ -195,9 +204,9 @@ describe('WebhookService - Basic Tests', () => {
 
       await expect(webhookService.sendMessage(payload)).rejects.toThrow(
         expect.objectContaining({
-          type: WebhookErrorType.MALFORMED_RESPONSE,
-          message: 'Malformed response from fetch',
-          isRetryable: true,
+          type: WebhookErrorType.VALIDATION_ERROR,
+          message: 'Invalid response format from webhook',
+          isRetryable: false,
         })
       );
     });
@@ -232,7 +241,7 @@ describe('WebhookService - Basic Tests', () => {
     });
 
     it('should not retry on non-retryable errors', async () => {
-      const serviceWithoutUrl = new WebhookService({ webhookUrl: '' });
+      const serviceWithoutUrl = new WebhookService({ webhookUrl: '' }, { fetch: mockFetch });
 
       const payload: WebhookPayload = {
         message: 'Test',

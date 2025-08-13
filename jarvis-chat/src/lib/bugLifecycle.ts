@@ -6,6 +6,7 @@
 import { centralizedLogging } from './centralizedLogging';
 import { bugReportOperations } from './supabase';
 import { trackBugReportEvent } from './monitoring';
+import { clampDelay, safeSetTimeout } from './time';
 
 // Bug status enumeration
 export enum BugStatus {
@@ -89,7 +90,7 @@ const BUG_LIFECYCLE_RULES: Record<BugStatus, BugLifecycleState> = {
     automaticTransitions: [{
       condition: 'no_activity_7_days',
       targetStatus: BugStatus.CLOSED,
-      delay: 7 * 24 * 60 * 60 * 1000 // 7 days
+      delay: clampDelay(7 * 24 * 60 * 60 * 1000) // 7 days clamped
     }]
   },
   [BugStatus.TRIAGED]: {
@@ -104,7 +105,7 @@ const BUG_LIFECYCLE_RULES: Record<BugStatus, BugLifecycleState> = {
     automaticTransitions: [{
       condition: 'no_activity_14_days',
       targetStatus: BugStatus.OPEN,
-      delay: 14 * 24 * 60 * 60 * 1000 // 14 days
+      delay: clampDelay(14 * 24 * 60 * 60 * 1000) // 14 days clamped
     }]
   },
   [BugStatus.PENDING_VERIFICATION]: {
@@ -113,7 +114,7 @@ const BUG_LIFECYCLE_RULES: Record<BugStatus, BugLifecycleState> = {
     automaticTransitions: [{
       condition: 'no_feedback_3_days',
       targetStatus: BugStatus.RESOLVED,
-      delay: 3 * 24 * 60 * 60 * 1000 // 3 days
+      delay: clampDelay(3 * 24 * 60 * 60 * 1000) // 3 days clamped
     }]
   },
   [BugStatus.RESOLVED]: {
@@ -122,7 +123,7 @@ const BUG_LIFECYCLE_RULES: Record<BugStatus, BugLifecycleState> = {
     automaticTransitions: [{
       condition: 'no_activity_30_days',
       targetStatus: BugStatus.CLOSED,
-      delay: 30 * 24 * 60 * 60 * 1000 // 30 days
+      delay: clampDelay(30 * 24 * 60 * 60 * 1000) // 30 days clamped to prevent overflow
     }]
   },
   [BugStatus.VERIFICATION_REQUESTED]: {
@@ -131,7 +132,7 @@ const BUG_LIFECYCLE_RULES: Record<BugStatus, BugLifecycleState> = {
     automaticTransitions: [{
       condition: 'no_feedback_7_days',
       targetStatus: BugStatus.CLOSED,
-      delay: 7 * 24 * 60 * 60 * 1000 // 7 days
+      delay: clampDelay(7 * 24 * 60 * 60 * 1000) // 7 days clamped
     }]
   },
   [BugStatus.CLOSED]: {
@@ -642,7 +643,7 @@ class BugLifecycleService {
 
     state.automaticTransitions.forEach(transition => {
       if (transition.delay && transition.delay > 0) {
-        const timer = setTimeout(() => {
+        const timer = safeSetTimeout(() => {
           this.handleAutomaticTransition(bugId, transition);
         }, transition.delay);
 

@@ -400,6 +400,11 @@ class ServiceMonitoringService {
     };
 
     this.retryAttempts.push(retryAttempt);
+    
+    // Limit retry attempts array to prevent memory bloat
+    if (this.retryAttempts.length > 1000) {
+      this.retryAttempts = this.retryAttempts.slice(-1000);
+    }
 
     centralizedLogging.warn(
       'service-monitoring',
@@ -807,6 +812,20 @@ class ServiceMonitoringService {
       clearInterval(this.healthCheckTimer);
     }
   }
+
+  // Reset state for tests
+  reset(): void {
+    this.serviceCalls = [];
+    this.serviceHealth.clear();
+    this.serviceDependencies.clear();
+    this.retryAttempts = [];
+    this.circuitBreakers.clear();
+    
+    if (this.healthCheckTimer) {
+      clearInterval(this.healthCheckTimer);
+      this.healthCheckTimer = undefined;
+    }
+  }
 }
 
 // Singleton instance
@@ -848,3 +867,6 @@ export const updateServiceMonitoringConfig = (updates: Partial<ServiceMonitoring
 
 export const exportServiceMonitoringData = () => 
   serviceMonitoring.exportData();
+
+export const resetServiceMonitoring = () => 
+  serviceMonitoring.reset();
