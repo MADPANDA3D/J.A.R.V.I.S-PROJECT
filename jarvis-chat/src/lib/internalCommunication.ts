@@ -1044,7 +1044,10 @@ class InternalCommunicationService {
     const usernameMap: Record<string, string> = {
       'alice': 'user_1',
       'bob': 'user_2',
-      'carol': 'user_3'
+      'carol': 'user_3',
+      'user_1': 'user_1',
+      'user_2': 'user_2',
+      'user_3': 'user_3'
     };
     return usernameMap[username.toLowerCase()] || null;
   }
