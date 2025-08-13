@@ -23,9 +23,10 @@ export default defineConfig({
         singleFork: true,
       },
     },
-    // Timeout configurations
-    testTimeout: 30000,
-    hookTimeout: 30000,
+    // Timeout configurations - reduced for faster failure detection
+    testTimeout: 10000, // 10s instead of 30s - fake timers should make tests fast
+    hookTimeout: 10000,
+    teardownTimeout: 5000, // Ensure cleanup doesn't hang
     // Reduce memory usage
     isolate: true,
     cache: false,
@@ -33,11 +34,16 @@ export default defineConfig({
     clearMocks: true,
     restoreMocks: true,
     mockReset: true,
-    // Limit concurrent tests
+    // Limit concurrent tests to prevent memory issues
     maxConcurrency: 1,
     // Disable type checking during tests for speed
     typecheck: {
       enabled: false,
+    },
+    // Environment variables for test optimization
+    env: {
+      NODE_ENV: 'test',
+      VITEST: 'true',
     },
   },
   resolve: {

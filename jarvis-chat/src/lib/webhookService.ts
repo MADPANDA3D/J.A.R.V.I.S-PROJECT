@@ -8,15 +8,17 @@
  * - Fixed error classification order to match test expectations
  * - Added safeSetTimeout for timer overflow prevention
  * - Improved error serialization to prevent OOM issues
+ * - Added fetch injection for clean testing
+ * - Made retry/backoff cancelable with AbortSignal
+ * - Replaced custom utilities with centralized time/logger modules
  */
 
 import { 
   makeMonitoredCall, 
   registerService
 } from './serviceMonitoring';
-
-// Constants
-const MAX_INT_31 = 2147483647; // Maximum 32-bit signed integer for setTimeout
+import { sleep, safeSetTimeout, clampDelay } from './time';
+import { safeStringify, minimalError, isTestEnvironment } from './logger';
 
 // Response-like interface for broader compatibility
 interface ResponseLike {
@@ -29,62 +31,61 @@ interface ResponseLike {
   statusText?: string;
 }
 
-/**
- * Safe setTimeout that prevents timer overflow warnings
- */
-function safeSetTimeout(callback: () => void, ms: number): ReturnType<typeof setTimeout> {
-  const clampedMs = Math.min(ms, MAX_INT_31);
-  return setTimeout(callback, clampedMs);
+// Fetch function type for dependency injection
+type FetchFunction = typeof fetch;
+
+// Dependencies interface for testing
+interface WebhookServiceDependencies {
+  fetch: FetchFunction;
 }
 
 /**
  * Timeout wrapper that preserves return values and handles AbortController properly
+ * Now supports parent AbortSignal for cancellation chains
  */
 async function timeout<T>(
   fn: (signal?: AbortSignal) => Promise<T>, 
   ms: number, 
-  label?: string
+  label?: string,
+  parentSignal?: AbortSignal
 ): Promise<T> {
   const controller = new AbortController();
+  const clampedMs = clampDelay(ms);
   const timeoutId = safeSetTimeout(() => {
     controller.abort();
-  }, ms);
+  }, clampedMs);
+
+  // Chain parent signal if provided
+  const onParentAbort = () => {
+    clearTimeout(timeoutId);
+    controller.abort();
+  };
+  if (parentSignal?.aborted) {
+    clearTimeout(timeoutId);
+    throw new DOMException('Parent operation was aborted', 'AbortError');
+  }
+  parentSignal?.addEventListener('abort', onParentAbort, { once: true });
 
   try {
     // Always await and return the function result
     const result = await fn(controller.signal);
     clearTimeout(timeoutId);
+    parentSignal?.removeEventListener('abort', onParentAbort);
     return result;
   } catch (error) {
     clearTimeout(timeoutId);
+    parentSignal?.removeEventListener('abort', onParentAbort);
     
     // If it's an abort error and we caused it, throw timeout error
     if ((error as Error)?.name === 'AbortError') {
       // Create a basic timeout error object that will be reclassified later
-      const timeoutError = new Error(`Request timed out after ${ms}ms${label ? ` (${label})` : ''}`);
+      const timeoutError = new Error(`Request timed out after ${clampedMs}ms${label ? ` (${label})` : ''}`);
       (timeoutError as unknown as { name: string; isTimeout: boolean }).name = 'TimeoutError';
       (timeoutError as unknown as { name: string; isTimeout: boolean }).isTimeout = true;
       throw timeoutError;
     }
     throw error;
   }
-}
-
-/**
- * Create minimal error object to prevent circular references and OOM
- */
-function minimalError(error: unknown): Record<string, unknown> {
-  if (!error || typeof error !== 'object') {
-    return { message: String(error) };
-  }
-  
-  const err = error as Record<string, unknown>;
-  return {
-    name: err.name,
-    message: err.message,
-    code: err.code,
-    ...(err.status && { status: err.status })
-  };
 }
 
 export interface WebhookPayload {
@@ -208,8 +209,11 @@ export class WebhookService {
   private metrics: WebhookMetrics;
   private responseTimes: number[] = [];
   private readonly maxResponseTimeSamples = 100;
+  private readonly fetch: FetchFunction;
+  private _recoveryCheckInterval?: ReturnType<typeof setTimeout>;
 
-  constructor(config: Partial<WebhookServiceConfig> = {}) {
+  constructor(config: Partial<WebhookServiceConfig> = {}, dependencies: WebhookServiceDependencies = { fetch: globalThis.fetch }) {
+    this.fetch = dependencies.fetch;
     this.config = {
       webhookUrl: import.meta.env.VITE_N8N_WEBHOOK_URL || '',
       timeout: parseInt(import.meta.env.WEBHOOK_TIMEOUT || '15000'),
@@ -255,14 +259,20 @@ export class WebhookService {
 
   /**
    * Send message to webhook with comprehensive error handling and retry logic
+   * Now supports AbortSignal for cancellation
    */
-  async sendMessage(payload: WebhookPayload): Promise<WebhookResponse>  {
+  async sendMessage(payload: WebhookPayload, signal?: AbortSignal): Promise<WebhookResponse>  {
     return makeMonitoredCall(
       'n8n-webhook',
       'webhook',
       this.config.webhookUrl,
       'POST',
       async () => {
+        // Check if operation was already aborted
+        if (signal?.aborted) {
+          throw new DOMException('Operation was aborted', 'AbortError');
+        }
+
         // Check circuit breaker state
         if (this.circuitState === CircuitState.OPEN) {
           if (!this.shouldAttemptRecovery()) {
@@ -286,7 +296,7 @@ export class WebhookService {
           attempt++
         ) {
           try {
-            const response = await this.makeWebhookRequest(payload);
+            const response = await this.makeWebhookRequest(payload, signal);
 
             // Success - update metrics and circuit breaker
             this.recordSuccess(Date.now() - startTime);
@@ -310,12 +320,16 @@ export class WebhookService {
 
             // Calculate delay with exponential backoff and jitter
             const delay = this.calculateRetryDelay(attempt);
-            await this.sleep(delay);
+            
+            // Use cancelable sleep that respects AbortSignal
+            await sleep(delay, signal);
 
-            console.warn(
-              `Webhook attempt ${attempt} failed, retrying in ${delay}ms:`,
-              lastError.message
-            );
+            if (!isTestEnvironment()) {
+              console.warn(
+                `Webhook attempt ${attempt} failed, retrying in ${delay}ms:`,
+                lastError.message
+              );
+            }
           }
         }
 
@@ -334,9 +348,11 @@ export class WebhookService {
 
   /**
    * Make the actual HTTP request to the webhook
+   * Now supports parent AbortSignal for cancellation chains
    */
   private async makeWebhookRequest(
-    payload: WebhookPayload
+    payload: WebhookPayload,
+    parentSignal?: AbortSignal
   ): Promise<WebhookResponse> {
     if (!this.config.webhookUrl) {
       throw new WebhookError(
@@ -350,7 +366,7 @@ export class WebhookService {
     try {
       const response = await timeout(
         async (signal) => {
-          return await fetch(this.config.webhookUrl, {
+          return await this.fetch(this.config.webhookUrl, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -368,7 +384,8 @@ export class WebhookService {
           });
         },
         this.config.timeout,
-        'webhook-request'
+        'webhook-request',
+        parentSignal
       ) as ResponseLike;
 
       // Improved response guard - accept Response-like objects
@@ -665,18 +682,35 @@ export class WebhookService {
   }
 
   private checkCircuitBreakerRecovery(): void {
-    // Use a simple interval that can be cleared for testing
-    const intervalId = safeSetTimeout(() => {
+    // Clear any existing interval
+    if (this._recoveryCheckInterval) {
+      clearTimeout(this._recoveryCheckInterval);
+    }
+    
+    // Use clamped timeout to prevent overflow
+    const recoveryTimeout = clampDelay(this.config.circuitBreakerOptions.recoveryTimeout);
+    this._recoveryCheckInterval = safeSetTimeout(() => {
       if (
         this.circuitState === CircuitState.OPEN &&
         this.shouldAttemptRecovery()
       ) {
-        console.log('Circuit breaker recovery attempt available');
+        if (!isTestEnvironment()) {
+          console.log('Circuit breaker recovery attempt available');
+        }
       }
-    }, this.config.circuitBreakerOptions.recoveryTimeout);
-    
-    // Store the interval ID so tests can clear it
-    (this as unknown as { _recoveryCheckInterval: ReturnType<typeof setTimeout> })._recoveryCheckInterval = intervalId;
+      // Schedule next check
+      this.checkCircuitBreakerRecovery();
+    }, recoveryTimeout);
+  }
+
+  /**
+   * Clean up resources (for testing and proper shutdown)
+   */
+  destroy(): void {
+    if (this._recoveryCheckInterval) {
+      clearTimeout(this._recoveryCheckInterval);
+      this._recoveryCheckInterval = undefined;
+    }
   }
 
   private calculateRetryDelay(attempt: number): number {
@@ -750,9 +784,7 @@ export class WebhookService {
     return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private sleep(ms: number): Promise<void> {
-    return new Promise(resolve => safeSetTimeout(resolve, ms));
-  }
+  // Remove old sleep method - now using imported sleep function from time.ts
 }
 
 // Default webhook service instance
