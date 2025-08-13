@@ -392,22 +392,21 @@ class ServiceMonitoringService {
 
   private timeoutPromise(timeout: number) {
     let id: ReturnType<typeof setTimeout> | null = null;
-    let rejecter: ((e: unknown) => void) | null = null;
+    let canceled = false;
 
     const promise = new Promise<never>((_, reject) => {
-      rejecter = reject;
       id = setTimeout(() => {
-        // Throw the typed error your tests assert against
+        if (canceled) return;
         reject(new WebhookError('Operation timeout', WebhookErrorType.TIMEOUT_ERROR));
       }, timeout);
     });
 
     const cancel = () => {
-      if (id) clearTimeout(id);
-      // prevent later reject from surfacing
-      // @ts-expect-error
-      rejecter = null;
-      id = null;
+      canceled = true;
+      if (id) {
+        clearTimeout(id);
+        id = null;
+      }
     };
 
     return { promise, cancel };

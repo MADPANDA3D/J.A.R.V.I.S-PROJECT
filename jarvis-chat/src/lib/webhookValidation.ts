@@ -176,10 +176,10 @@ export class WebhookValidator {
         const validationError: ValidationError = {
           success: false,
           error: 'Webhook payload validation failed',
-          validation_errors: (error.errors || []).map(err => ({
-            field: (err.path || []).join('.'),
-            message: err.message || 'Validation error',
-            received: (err.path || []).reduce(
+          validation_errors: error.issues.map(err => ({
+            field: err.path.join('.') || '(root)',
+            message: err.message,
+            received: err.path.reduce(
               (obj: unknown, key) => (obj as Record<string, unknown>)?.[key],
               data
             ),
@@ -225,10 +225,10 @@ export class WebhookValidator {
         const validationError: ValidationError = {
           success: false,
           error: 'Enhanced webhook payload validation failed',
-          validation_errors: (error.errors || []).map(err => ({
-            field: (err.path || []).join('.'),
-            message: err.message || 'Validation error',
-            received: (err.path || []).reduce(
+          validation_errors: error.issues.map(err => ({
+            field: err.path.join('.') || '(root)',
+            message: err.message,
+            received: err.path.reduce(
               (obj: unknown, key) => (obj as Record<string, unknown>)?.[key],
               data
             ),
@@ -273,10 +273,10 @@ export class WebhookValidator {
         const validationError: ValidationError = {
           success: false,
           error: 'Webhook response validation failed',
-          validation_errors: (error.errors || []).map(err => ({
-            field: (err.path || []).join('.'),
-            message: err.message || 'Validation error',
-            received: (err.path || []).reduce(
+          validation_errors: error.issues.map(err => ({
+            field: err.path.join('.') || '(root)',
+            message: err.message,
+            received: err.path.reduce(
               (obj: unknown, key) => (obj as Record<string, unknown>)?.[key],
               data
             ),
@@ -321,10 +321,10 @@ export class WebhookValidator {
         const validationError: ValidationError = {
           success: false,
           error: 'Health check response validation failed',
-          validation_errors: (error.errors || []).map(err => ({
-            field: (err.path || []).join('.'),
-            message: err.message || 'Validation error',
-            received: (err.path || []).reduce(
+          validation_errors: error.issues.map(err => ({
+            field: err.path.join('.') || '(root)',
+            message: err.message,
+            received: err.path.reduce(
               (obj: unknown, key) => (obj as Record<string, unknown>)?.[key],
               data
             ),
@@ -405,13 +405,13 @@ export class WebhookValidator {
         const invalidFields: string[] = [];
         const extraFields: string[] = [];
 
-        (error.errors || []).forEach(err => {
+        error.issues.forEach(err => {
           if (err.code === 'invalid_type' && err.received === 'undefined') {
-            missingRequired.push((err.path || []).join('.'));
+            missingRequired.push(err.path.join('.'));
           } else if (err.code === 'unrecognized_keys') {
             extraFields.push(...(err.keys || []));
           } else {
-            invalidFields.push((err.path || []).join('.'));
+            invalidFields.push(err.path.join('.'));
           }
         });
 

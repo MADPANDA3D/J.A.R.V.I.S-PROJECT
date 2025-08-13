@@ -14,8 +14,8 @@ import {
 import { makeWebhook } from './test-utils/webhookFactory';
 import { resetServiceMonitoring } from '../serviceMonitoring';
 
-// Helper for microtask flushing
-const flushMicrotasks = async () => await Promise.resolve();
+// Helper for microtask flushing - commented out as currently unused
+// const flushMicrotasks = async () => await Promise.resolve();
 
 describe('WebhookService', () => {
   // Blow up if anything accidentally uses real global fetch in tests

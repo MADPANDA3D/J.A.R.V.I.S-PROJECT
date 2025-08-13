@@ -4,9 +4,9 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll, beforeEach, vi } from 'vitest';
-// import request from 'supertest'; // Commented out - supertest not available in CI
-import express from 'express';
-import { bugDashboardAPI } from '../bugDashboard';
+import request from 'supertest';
+import { app } from '../server';
+// import { bugDashboardAPI } from '../bugDashboard'; // Import from server.ts instead
 import { apiSecurityService } from '../../lib/apiSecurity';
 import { bugReportOperations } from '../../lib/supabase';
 import { bugLifecycleService } from '../../lib/bugLifecycle';
@@ -19,16 +19,7 @@ vi.mock('../../lib/assignmentSystem');
 vi.mock('../../lib/centralizedLogging');
 vi.mock('../../lib/monitoring');
 
-const app = express();
-app.use(express.json());
-
-// Set up routes
-app.get('/api/bugs', bugDashboardAPI.getBugs.bind(bugDashboardAPI));
-app.get('/api/bugs/:id', bugDashboardAPI.getBugById.bind(bugDashboardAPI));
-app.put('/api/bugs/:id/status', bugDashboardAPI.updateBugStatus.bind(bugDashboardAPI));
-app.post('/api/bugs/:id/assign', bugDashboardAPI.assignBug.bind(bugDashboardAPI));
-app.post('/api/bugs/search', bugDashboardAPI.searchBugs.bind(bugDashboardAPI));
-app.get('/api/bugs/analytics', bugDashboardAPI.getBugAnalytics.bind(bugDashboardAPI));
+// Using imported Express app from server.ts
 
 describe('Bug Dashboard API', () => {
   let validApiKey: string;

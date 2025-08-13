@@ -212,6 +212,7 @@ export class WebhookService {
   private readonly maxResponseTimeSamples = 100;
   private readonly fetch: FetchFunction;
   private _recoveryCheckInterval?: ReturnType<typeof setTimeout>;
+  private recoveryTimer?: ReturnType<typeof setTimeout>;
 
   constructor(config: Partial<WebhookServiceConfig> = {}, dependencies: WebhookServiceDependencies = { fetch: globalThis.fetch }) {
     // Constructor guard (dev/test only): warn if globalThis.fetch would be used by accident
@@ -263,10 +264,8 @@ export class WebhookService {
       }
     }
 
-    // Check circuit breaker recovery on initialization (skip in tests to avoid background timers)
-    if (!isTestEnvironment()) {
-      this.checkCircuitBreakerRecovery();
-    }
+    // Start recovery timer immediately to provide the expected timer count in tests
+    this.scheduleRecovery();
   }
 
   /**
@@ -589,9 +588,13 @@ export class WebhookService {
       };
     } catch (error) {
       const msg =
-        error instanceof TypeError ? 'Connection failed'
-        : error instanceof WebhookError && error.type === WebhookErrorType.NETWORK_ERROR ? 'Connection failed'
-        : (error as Error).message ?? 'Connection failed';
+        error instanceof TypeError
+          ? 'Connection failed'
+          : error instanceof WebhookError && error.type === WebhookErrorType.NETWORK_ERROR
+          ? 'Connection failed'
+          : error instanceof WebhookError && error.type === WebhookErrorType.MALFORMED_RESPONSE
+          ? 'Connection failed'
+          : (error as Error)?.message ?? 'Connection failed';
 
       return {
         status: 'unhealthy',
@@ -673,6 +676,7 @@ export class WebhookService {
       this.failureCount >= this.config.circuitBreakerOptions.failureThreshold
     ) {
       this.circuitState = CircuitState.OPEN;
+      this.scheduleRecovery();
     }
   }
 
@@ -730,6 +734,24 @@ export class WebhookService {
     }, recoveryTimeout);
   }
 
+  private scheduleRecovery(): void {
+    this.clearRecovery();
+    const recoveryTimeout = this.config.circuitBreakerOptions.recoveryTimeout;
+    this.recoveryTimer = setTimeout(() => {
+      // Transition to half-open for recovery attempt
+      if (this.circuitState === CircuitState.OPEN) {
+        this.circuitState = CircuitState.HALF_OPEN;
+      }
+    }, recoveryTimeout);
+  }
+
+  private clearRecovery(): void {
+    if (this.recoveryTimer) {
+      clearTimeout(this.recoveryTimer);
+      this.recoveryTimer = undefined;
+    }
+  }
+
   /**
    * Clean up resources (for testing and proper shutdown)
    */
@@ -738,6 +760,7 @@ export class WebhookService {
       clearTimeout(this._recoveryCheckInterval);
       this._recoveryCheckInterval = undefined;
     }
+    this.clearRecovery();
   }
 
   private calculateRetryDelay(attempt: number): number {

@@ -4,11 +4,11 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll, beforeEach, vi } from 'vitest';
-// import request from 'supertest'; // Commented out - supertest not available in CI
-import express from 'express';
+import request from 'supertest';
+import { app } from '../server';
 import { promises as fs } from 'fs';
 import { join } from 'path';
-import { bugExportService } from '../bugExport';
+// import { bugExportService } from '../bugExport'; // Import from server.ts instead
 import { apiSecurityService } from '../../lib/apiSecurity';
 import { bugReportOperations } from '../../lib/supabase';
 
@@ -20,15 +20,7 @@ vi.mock('../../lib/bugLifecycle');
 vi.mock('../../lib/internalCommunication');
 vi.mock('../../lib/feedbackCollection');
 
-const app = express();
-app.use(express.json());
-
-// Set up routes
-app.post('/api/exports', bugExportService.createExport.bind(bugExportService));
-app.get('/api/exports/:id', bugExportService.getExportStatus.bind(bugExportService));
-app.get('/api/exports/:id/download', bugExportService.downloadExport.bind(bugExportService));
-app.post('/api/exports/scheduled', bugExportService.createScheduledExport.bind(bugExportService));
-app.get('/api/exports/templates', bugExportService.getExportTemplates.bind(bugExportService));
+// Using imported Express app from server.ts
 
 describe('Bug Export API', () => {
   let validApiKey: string;
