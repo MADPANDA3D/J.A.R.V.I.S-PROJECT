@@ -59,6 +59,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
   useEffect(() => {
     initializeDashboard();
     return () => cleanup();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Setup auto-refresh
@@ -70,7 +71,8 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     }
     
     return () => stopAutoRefresh();
-  }, [autoRefresh, refreshInterval, startAutoRefresh, stopAutoRefresh]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoRefresh, refreshInterval]);
 
   const initializeDashboard = async () => {
     try {
