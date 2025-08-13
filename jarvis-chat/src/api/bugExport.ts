@@ -14,7 +14,7 @@ import { bugLifecycleService } from '@/lib/bugLifecycle';
 import { internalCommunicationService } from '@/lib/internalCommunication';
 import { feedbackCollectionService } from '@/lib/feedbackCollection';
 import { trackBugReportEvent } from '@/lib/monitoring';
-import { validateAPIKey, checkRateLimit } from '@/lib/apiSecurity';
+import { validateAPIKey } from '@/lib/apiSecurity';
 import type { BugFilters } from './bugDashboard';
 import type { BugReport, ErrorReport, UserSessionInfo } from '@/types/bugReport';
 
@@ -195,17 +195,9 @@ class BugExportService {
     const correlationId = this.generateCorrelationId();
 
     try {
-      const apiKeyValidation = await validateAPIKey(req.headers.authorization);
-      if (!apiKeyValidation.valid || !apiKeyValidation.permissions.export) {
+      const user = (req as { user?: { id: string; permissions: { export: boolean; admin: boolean } } }).user;
+      if (!user?.permissions?.export) {
         return res.status(401).json({ error: 'Export permission required' });
-      }
-
-      const rateLimitStatus = await checkRateLimit(apiKeyValidation.apiKey!, 'createExport');
-      if (!rateLimitStatus.allowed) {
-        return res.status(429).json({ 
-          error: 'Rate limit exceeded',
-          retryAfter: rateLimitStatus.retryAfter 
-        });
       }
 
       const {
@@ -227,7 +219,7 @@ class BugExportService {
         { 
           correlationId, 
           format, 
-          userId: apiKeyValidation.userId,
+          userId: user.id,
           includeComments,
           includeAttachments
         }
@@ -369,10 +361,6 @@ class BugExportService {
     const correlationId = this.generateCorrelationId();
 
     try {
-      const apiKeyValidation = await validateAPIKey(req.headers.authorization);
-      if (!apiKeyValidation.valid) {
-        return res.status(401).json({ error: 'Invalid API key' });
-      }
 
       const exportResponse = this.exportRequests.get(exportId);
       if (!exportResponse) {
@@ -438,8 +426,8 @@ class BugExportService {
     const correlationId = this.generateCorrelationId();
 
     try {
-      const apiKeyValidation = await validateAPIKey(req.headers.authorization);
-      if (!apiKeyValidation.valid || !apiKeyValidation.permissions.admin) {
+      const user = (req as { user?: { id: string; permissions: { export: boolean; admin: boolean } } }).user;
+      if (!user?.permissions?.admin) {
         return res.status(401).json({ error: 'Admin permission required' });
       }
 
@@ -596,36 +584,57 @@ class BugExportService {
   }
 
   private async queryExportData(request: ExportRequest): Promise<Record<string, unknown>[]> {
-    // Query bugs based on filters
-    const { data: bugs } = await bugReportOperations.searchBugReports({
-      ...request.filters,
-      limit: 10000 // Large limit for exports
-    });
+    try {
+      // Query bugs based on filters
+      const result = await bugReportOperations.searchBugReports({
+        ...request.filters,
+        limit: 10000 // Large limit for exports
+      });
 
-    if (!bugs) return [];
+      if (!result.data || result.error) {
+        throw new Error(result.error || 'Failed to query bug data');
+      }
 
-    // Enrich with additional data based on request
-    const enrichedData = await Promise.all(
-      bugs.map(async (bug) => {
-        const enriched: Record<string, unknown> = { ...bug };
+      const bugs = result.data;
 
-        if (request.includeComments) {
-          enriched.comments = internalCommunicationService.getBugComments(bug.id);
-        }
+      // Enrich with additional data based on request
+      const enrichedData = await Promise.all(
+        bugs.map(async (bug) => {
+          const enriched: Record<string, unknown> = { ...bug };
 
-        if (request.includeLifecycle) {
-          enriched.lifecycle = bugLifecycleService.getStatusHistory(bug.id);
-        }
+          if (request.includeComments) {
+            try {
+              enriched.comments = internalCommunicationService.getBugComments(bug.id);
+            } catch {
+              enriched.comments = [];
+            }
+          }
 
-        if (request.includeFeedback) {
-          enriched.feedback = feedbackCollectionService.getBugFeedback(bug.id);
-        }
+          if (request.includeLifecycle) {
+            try {
+              enriched.lifecycle = bugLifecycleService.getStatusHistory(bug.id);
+            } catch {
+              enriched.lifecycle = [];
+            }
+          }
 
-        return enriched;
-      })
-    );
+          if (request.includeFeedback) {
+            try {
+              enriched.feedback = feedbackCollectionService.getBugFeedback(bug.id);
+            } catch {
+              enriched.feedback = [];
+            }
+          }
 
-    return enrichedData;
+          return enriched;
+        })
+      );
+
+      return enrichedData;
+    } catch (error) {
+      centralizedLogging.error('bug-export', 'system', 'Failed to query export data', { error });
+      throw error;
+    }
   }
 
   private async processExportData(

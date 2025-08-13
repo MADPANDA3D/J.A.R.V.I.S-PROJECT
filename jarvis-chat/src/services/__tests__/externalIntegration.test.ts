@@ -5,11 +5,10 @@
 
 import { describe, it, expect, beforeAll, afterAll, beforeEach, vi } from 'vitest';
 import request from 'supertest';
-import express from 'express';
-import { externalIntegrationService } from '../externalIntegration';
-import { webhookDeliveryService } from '../webhookService';
+import { app } from '../../api/server';
+import { webhookDeliveryService } from '../externalIntegration';
 import { apiSecurityService } from '../../lib/apiSecurity';
-import { bugReportOperations } from '../../lib/supabase';
+import { bugReportOperations, BugDetailResponse } from '../../lib/supabase';
 
 // Mock dependencies
 vi.mock('../../lib/supabase');
@@ -18,16 +17,7 @@ vi.mock('../../lib/monitoring');
 vi.mock('../../lib/bugLifecycle');
 vi.mock('axios');
 
-const app = express();
-app.use(express.json());
-
-// Set up routes
-app.post('/api/integrations/webhooks', externalIntegrationService.createWebhook.bind(externalIntegrationService));
-app.post('/api/integrations/claude-code/analyze/:bugId', externalIntegrationService.analyzeWithClaudeCode.bind(externalIntegrationService));
-app.post('/api/integrations/sentry', externalIntegrationService.integrateWithSentry.bind(externalIntegrationService));
-app.post('/api/integrations/datadog', externalIntegrationService.integrateWithDataDog.bind(externalIntegrationService));
-app.get('/api/integrations/:id/status', externalIntegrationService.getIntegrationStatus.bind(externalIntegrationService));
-app.get('/api/integrations', externalIntegrationService.listIntegrations.bind(externalIntegrationService));
+// Using imported Express app from server.ts
 
 describe('External Integration Service', () => {
   let validApiKey: string;

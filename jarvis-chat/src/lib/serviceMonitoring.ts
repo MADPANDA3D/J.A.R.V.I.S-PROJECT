@@ -415,7 +415,7 @@ class ServiceMonitoringService {
   private delay(ms: number): Promise<void> {
     // Use the same delay utility as other parts of the system for test compatibility
     return new Promise(resolve => {
-      const timeoutId = setTimeout(resolve, ms);
+      setTimeout(resolve, ms);
       // In tests, this should work with fake timers
     });
   }
