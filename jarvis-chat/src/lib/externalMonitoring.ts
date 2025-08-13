@@ -25,16 +25,16 @@ export interface ExternalMonitoringConfig {
 export interface SentryConfig extends ExternalMonitoringConfig {
   service: 'sentry';
   dsn: string;
-  beforeSend?: (event: any) => any;
-  beforeBreadcrumb?: (breadcrumb: any) => any;
+  beforeSend?: (event: unknown) => any;
+  beforeBreadcrumb?: (breadcrumb: unknown) => any;
   integrations?: unknown[];
 }
 
 export interface LogRocketConfig extends ExternalMonitoringConfig {
   service: 'logrocket';
   appId: string;
-  shouldCaptureRequest?: (request: any) => boolean;
-  shouldCaptureResponse?: (response: any) => boolean;
+  shouldCaptureRequest?: (request: unknown) => boolean;
+  shouldCaptureResponse?: (response: unknown) => boolean;
 }
 
 export interface DatadogConfig extends ExternalMonitoringConfig {
@@ -50,7 +50,7 @@ export interface CustomConfig extends ExternalMonitoringConfig {
   service: 'custom';
   customEndpoint: string;
   headers?: Record<string, string>;
-  formatPayload?: (data: any) => any;
+  formatPayload?: (data: unknown) => any;
 }
 
 // External monitoring integration class
@@ -367,7 +367,7 @@ class ExternalMonitoringService {
     Sentry.setTags(errorReport.tags);
 
     // Add fingerprint for grouping
-    Sentry.withScope((scope: any) => {
+    Sentry.withScope((scope: unknown) => {
       scope.setFingerprint(errorReport.fingerprint);
       
       // Add breadcrumbs
@@ -600,7 +600,7 @@ class ExternalMonitoringService {
   }
 
   // Data sanitization methods
-  private sanitizeSentryEvent(event: any): any {
+  private sanitizeSentryEvent(event: unknown): unknown {
     // Remove sensitive data from error events
     if (event.request?.data) {
       event.request.data = this.sanitizeObject(event.request.data);
@@ -613,7 +613,7 @@ class ExternalMonitoringService {
     return event;
   }
 
-  private sanitizeSentryBreadcrumb(breadcrumb: any): any {
+  private sanitizeSentryBreadcrumb(breadcrumb: unknown): unknown {
     // Remove sensitive data from breadcrumbs
     if (breadcrumb.data) {
       breadcrumb.data = this.sanitizeObject(breadcrumb.data);
@@ -622,7 +622,7 @@ class ExternalMonitoringService {
     return breadcrumb;
   }
 
-  private sanitizeObject(obj: any): any {
+  private sanitizeObject(obj: unknown): unknown {
     if (!obj || typeof obj !== 'object') return obj;
 
     const sensitiveKeys = ['password', 'token', 'apiKey', 'secret', 'auth', 'credit_card', 'ssn'];
