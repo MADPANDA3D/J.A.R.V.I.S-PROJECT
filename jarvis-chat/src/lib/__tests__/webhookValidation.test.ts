@@ -661,10 +661,14 @@ describe('WebhookValidation', () => {
         },
       };
 
-      // Test both basic and enhanced validation
-      const basicResult = WebhookValidator.validatePayload(realWorldPayload);
+      // Create a basic payload without metadata for basic validation
+      const { metadata, ...basicPayload } = realWorldPayload;
+      
+      // Test basic validation (without metadata)
+      const basicResult = WebhookValidator.validatePayload(basicPayload);
       expect(basicResult.success).toBe(true);
 
+      // Test enhanced validation (with metadata)
       const enhancedResult =
         WebhookValidator.validateEnhancedPayload(realWorldPayload);
       expect(enhancedResult.success).toBe(true);

@@ -407,13 +407,37 @@ export class WebhookValidator {
 
         error.issues.forEach(err => {
           if (err.code === 'invalid_type' && err.received === 'undefined') {
-            missingRequired.push(err.path.join('.'));
+            missingRequired.push(err.path.join('.') || 'root');
           } else if (err.code === 'unrecognized_keys') {
             extraFields.push(...(err.keys || []));
+          } else if (err.code === 'invalid_literal') {
+            invalidFields.push(err.path.join('.') || 'root');
           } else {
-            invalidFields.push(err.path.join('.'));
+            invalidFields.push(err.path.join('.') || 'root');
           }
         });
+
+        // Also check for missing required fields by checking the input data
+        if (data && typeof data === 'object' && data !== null) {
+          const requiredFields = ['type', 'message', 'sessionId', 'source', 'chatId', 'timestamp'];
+          const inputData = data as Record<string, unknown>;
+          
+          requiredFields.forEach(field => {
+            if (!(field in inputData) || inputData[field] === undefined || inputData[field] === null) {
+              if (!missingRequired.includes(field)) {
+                missingRequired.push(field);
+              }
+            }
+          });
+
+          // Check for extra fields
+          const allowedFields = ['type', 'message', 'sessionId', 'source', 'chatId', 'timestamp', 'requestId', 'UUID', 'selected_tools'];
+          Object.keys(inputData).forEach(key => {
+            if (!allowedFields.includes(key) && !extraFields.includes(key)) {
+              extraFields.push(key);
+            }
+          });
+        }
 
         return {
           isValid: false,
