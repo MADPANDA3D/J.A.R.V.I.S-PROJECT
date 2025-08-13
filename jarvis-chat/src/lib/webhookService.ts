@@ -319,7 +319,7 @@ export class WebhookService {
       let data;
       try {
         data = JSON.parse(responseText);
-      } catch () {
+      } catch {
         throw new WebhookError(
           `Webhook returned invalid JSON: ${responseText.substring(0, 100)}${responseText.length > 100 ? '...' : ''}`,
           WebhookErrorType.VALIDATION_ERROR,

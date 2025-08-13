@@ -432,7 +432,7 @@ class PerformanceMetricsService {
         averageSessionDuration: stats.averageSessionDuration,
         bounceRate: this.calculateBounceRate(activeSessions as unknown[])
       };
-    } catch () {
+    } catch {
       // Fallback if activity tracking not available
       return {
         activeUsers: 0,

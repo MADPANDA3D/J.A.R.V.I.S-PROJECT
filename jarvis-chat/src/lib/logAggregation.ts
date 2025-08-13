@@ -475,7 +475,7 @@ class LogAggregationService {
           (a, b) => a.timestamp - b.timestamp
         );
       }
-    } catch () {
+    } catch (error) {
       captureWarning('Failed to enforce log retention policies', { error });
     }
   }

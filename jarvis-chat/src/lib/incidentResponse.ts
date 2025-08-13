@@ -983,7 +983,7 @@ class IncidentResponseService {
     return 'Database connectivity verified';
   }
 
-  private async restartDatabasePool(): Promise<string>  {
+  private async restartDatabasePool(): Promise<string> {
     // Simulate database pool restart
     await new Promise(resolve => setTimeout(resolve, 3000));
     return 'Database connection pool restarted successfully';

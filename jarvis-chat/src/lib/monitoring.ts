@@ -323,7 +323,7 @@ class MonitoringService implements APMService {
       };
 
       // Track uncaught promise rejections
-      window.addEventListener(\'unhandledrejection\', event => {
+      window.addEventListener('unhandledrejection', event => {
         this.captureException(
           new Error(`Unhandled Promise Rejection: ${event.reason}`),
           {
@@ -333,7 +333,7 @@ class MonitoringService implements APMService {
           }
         );
       });
-    } catch () {
+    } catch (error) {
       captureWarning('Failed to initialize error tracking enhancements', {
         error,
       });
@@ -356,7 +356,7 @@ class MonitoringService implements APMService {
 
         resourceObserver.observe({ entryTypes: ['resource'] });
       }
-    } catch () {
+    } catch (error) {
       captureWarning('Failed to initialize resource monitoring', { error });
     }
   }
