@@ -25,8 +25,8 @@ export interface ExternalMonitoringConfig {
 export interface SentryConfig extends ExternalMonitoringConfig {
   service: 'sentry';
   dsn: string;
-  beforeSend?: (event: unknown) => any;
-  beforeBreadcrumb?: (breadcrumb: unknown) => any;
+  beforeSend?: (event: unknown) => unknown;
+  beforeBreadcrumb?: (breadcrumb: unknown) => unknown;
   integrations?: unknown[];
 }
 
@@ -50,7 +50,7 @@ export interface CustomConfig extends ExternalMonitoringConfig {
   service: 'custom';
   customEndpoint: string;
   headers?: Record<string, string>;
-  formatPayload?: (data: unknown) => any;
+  formatPayload?: (data: unknown) => unknown;
 }
 
 // External monitoring integration class
@@ -192,7 +192,7 @@ class ExternalMonitoringService {
       });
 
       // Store Sentry reference for later use
-      (window as any).__SENTRY__ = Sentry;
+      (window as unknown).__SENTRY__ = Sentry;
     } catch (error) {
       console.warn('Sentry initialization failed:', error);
       throw error;
@@ -215,7 +215,7 @@ class ExternalMonitoringService {
       });
 
       // Store LogRocket reference
-      (window as any).__LOGROCKET__ = LogRocket;
+      (window as unknown).__LOGROCKET__ = LogRocket;
     } catch (error) {
       console.warn('LogRocket initialization failed:', error);
       throw error;
@@ -229,10 +229,10 @@ class ExternalMonitoringService {
       datadogRum.init({
         applicationId: config.projectId!,
         clientToken: config.apiKey!,
-        site: (config as any).site || 'datadoghq.com',
+        site: (config as unknown).site || 'datadoghq.com',
         service: 'jarvis-chat',
         env: config.environment,
-        version: (config as any).version || config.release,
+        version: (config as unknown).version || config.release,
         sessionSampleRate: 100,
         sessionReplaySampleRate: 20,
         trackUserInteractions: true,
@@ -242,7 +242,7 @@ class ExternalMonitoringService {
       });
 
       // Store DataDog reference
-      (window as any).__DATADOG_RUM__ = datadogRum;
+      (window as unknown).__DATADOG_RUM__ = datadogRum;
     } catch (error) {
       console.warn('DataDog RUM initialization failed:', error);
       throw error;
@@ -351,7 +351,7 @@ class ExternalMonitoringService {
   }
 
   private async sendErrorToSentry(errorReport: EnhancedErrorReport): Promise<void>  {
-    const Sentry = (window as any).__SENTRY__;
+    const Sentry = (window as unknown).__SENTRY__;
     if (!Sentry) return;
 
     // Set user context
@@ -402,7 +402,7 @@ class ExternalMonitoringService {
   }
 
   private async sendErrorToLogRocket(errorReport: EnhancedErrorReport): Promise<void>  {
-    const LogRocket = (window as any).__LOGROCKET__;
+    const LogRocket = (window as unknown).__LOGROCKET__;
     if (!LogRocket) return;
 
     // Identify user
@@ -426,7 +426,7 @@ class ExternalMonitoringService {
   }
 
   private async sendErrorToDatadog(errorReport: EnhancedErrorReport): Promise<void>  {
-    const datadogRum = (window as any).__DATADOG_RUM__;
+    const datadogRum = (window as unknown).__DATADOG_RUM__;
     if (!datadogRum) return;
 
     // Set user
@@ -523,7 +523,7 @@ class ExternalMonitoringService {
   }
 
   private async sendBreadcrumbToSentry(breadcrumb: ErrorBreadcrumb): Promise<void>  {
-    const Sentry = (window as any).__SENTRY__;
+    const Sentry = (window as unknown).__SENTRY__;
     if (!Sentry) return;
 
     Sentry.addBreadcrumb({
