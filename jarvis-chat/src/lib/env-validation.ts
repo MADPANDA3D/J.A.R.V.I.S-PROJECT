@@ -675,7 +675,7 @@ function isValidUrl(string: string): boolean {
   try {
     new URL(string);
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 }
@@ -707,7 +707,7 @@ function isValidDomain(domain: string): boolean {
 /**
  * Logs environment validation results with enhanced formatting
  */
-export function logEnvironmentStatus(result: ValidationResult): void  => {
+export function logEnvironmentStatus(result: ValidationResult): void {
   console.log('🔧 Environment Configuration Status:');
   console.log('=====================================');
   console.log(`Environment: ${result.environment}`);
@@ -893,7 +893,7 @@ export function getEnvironmentInfo() {
 /**
  * Checks if environment is ready for production deployment
  */
-export function isProductionReady(): boolean  => {
+export function isProductionReady(): boolean {
   const result = validateEnvironment();
 
   // Must have no critical errors
