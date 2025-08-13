@@ -97,10 +97,10 @@ export function validateEnvironment(): ValidationResult {
   validateDatabaseConfig(config, errors, warnings);
 
   // Validate external integrations
-  validateIntegrationsConfig(config, errors, warnings);
+  validateIntegrationsConfig(config, errors, warnings, environment);
 
   // Validate monitoring configuration
-  validateMonitoringConfig(config, errors, warnings);
+  validateMonitoringConfig(config, errors, warnings, environment);
 
   // Validate performance configuration
   validatePerformanceConfig(config, errors, warnings);
@@ -311,9 +311,11 @@ function validateDatabaseConfig(
 function validateIntegrationsConfig(
   config: Partial<EnvConfig>,
   errors: ValidationError[],
-  warnings: ValidationWarning[]
+  warnings: ValidationWarning[],
+  environment: string
 ): void {
   const n8nWebhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL;
+  const n8nBackupWebhookUrl = import.meta.env.VITE_N8N_BACKUP_WEBHOOK_URL;
   const n8nWebhookSecret = import.meta.env.N8N_WEBHOOK_SECRET;
   const n8nApiKey = import.meta.env.N8N_API_KEY;
 
@@ -336,27 +338,59 @@ function validateIntegrationsConfig(
   } else {
     config.VITE_N8N_WEBHOOK_URL = n8nWebhookUrl;
 
-    // Check for secure webhook URL in production
-    const appEnv = import.meta.env.VITE_APP_ENV;
-    if (appEnv === 'production' && !n8nWebhookUrl.startsWith('https://')) {
+    // Check for secure webhook URL in production and staging
+    if ((environment === 'production' || environment === 'staging') && !n8nWebhookUrl.startsWith('https://')) {
       errors.push({
         variable: 'VITE_N8N_WEBHOOK_URL',
-        message: 'Webhook URL must use HTTPS in production',
+        message: 'Webhook URL must use HTTPS in production and staging',
         severity: 'error',
         category: 'security',
       });
     }
   }
 
+  // Validate backup webhook URL
+  if (n8nBackupWebhookUrl) {
+    if (!isValidUrl(n8nBackupWebhookUrl)) {
+      errors.push({
+        variable: 'VITE_N8N_BACKUP_WEBHOOK_URL',
+        message: 'Backup webhook URL format is invalid',
+        severity: 'error',
+        category: 'format',
+      });
+    } else {
+      config.VITE_N8N_BACKUP_WEBHOOK_URL = n8nBackupWebhookUrl;
+
+      // Check for secure backup webhook URL in production and staging
+      if ((environment === 'production' || environment === 'staging') && !n8nBackupWebhookUrl.startsWith('https://')) {
+        errors.push({
+          variable: 'VITE_N8N_BACKUP_WEBHOOK_URL',
+          message: 'Backup webhook URL must use HTTPS in production and staging',
+          severity: 'error',
+          category: 'security',
+        });
+      }
+    }
+  }
+
   // Validate webhook secret
-  if (n8nWebhookUrl && !n8nWebhookSecret) {
+  if (environment === 'production' && !n8nWebhookSecret) {
+    errors.push({
+      variable: 'N8N_WEBHOOK_SECRET',
+      message: 'Webhook secret is required in production',
+      severity: 'error',
+      category: 'required',
+    });
+  } else if (n8nWebhookUrl && !n8nWebhookSecret && environment !== 'production') {
     warnings.push({
       variable: 'N8N_WEBHOOK_SECRET',
       message: 'Webhook secret not configured',
       recommendation: 'Set webhook secret for secure communication',
       category: 'security',
     });
-  } else if (n8nWebhookSecret) {
+  }
+  
+  if (n8nWebhookSecret) {
     if (n8nWebhookSecret.length < 16) {
       warnings.push({
         variable: 'N8N_WEBHOOK_SECRET',
@@ -380,7 +414,8 @@ function validateIntegrationsConfig(
 function validateMonitoringConfig(
   config: Partial<EnvConfig>,
   errors: ValidationError[],
-  warnings: ValidationWarning[]
+  warnings: ValidationWarning[],
+  environment: string
 ): void {
   const sentryDsn = import.meta.env.VITE_SENTRY_DSN;
   const datadogApiKey = import.meta.env.DATADOG_API_KEY;
@@ -427,7 +462,24 @@ function validateMonitoringConfig(
       });
     } else {
       config.LOG_LEVEL = logLevel as EnvConfig['LOG_LEVEL'];
+      
+      // Production requires LOG_LEVEL='info'
+      if (environment === 'production' && logLevel !== 'info') {
+        errors.push({
+          variable: 'LOG_LEVEL',
+          message: 'LOG_LEVEL must be "info" in production',
+          severity: 'error',
+          category: 'format',
+        });
+      }
     }
+  } else if (environment === 'production') {
+    errors.push({
+      variable: 'LOG_LEVEL',
+      message: 'LOG_LEVEL is required in production and must be "info"',
+      severity: 'error',
+      category: 'required',
+    });
   }
 
   // Validate analytics setting

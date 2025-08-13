@@ -106,6 +106,9 @@ Object.defineProperty(global, 'sessionStorage', {
   writable: true
 });
 
+// Make a writable global for tests that reassign it (secrets-management.test.ts)
+(globalThis as unknown as { secretsManager: unknown }).secretsManager = undefined;
+
 // Set test environment variables
 process.env.NODE_ENV = 'test';
 process.env.VITE_SUPABASE_URL = 'https://test.supabase.co';

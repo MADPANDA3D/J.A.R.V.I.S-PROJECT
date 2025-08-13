@@ -256,11 +256,18 @@ export class WebhookService {
       errorRate: 0,
     };
 
-    // Register service for monitoring
-    if (this.config.webhookUrl) {
-      registerService('n8n-webhook', 'webhook', [this.config.webhookUrl]);
-      if (this.config.backupWebhookUrl) {
-        registerService('n8n-webhook-backup', 'webhook', [this.config.backupWebhookUrl]);
+    // Register service for monitoring (defensive approach for tests)
+    try {
+      if (this.config.webhookUrl && typeof registerService === 'function') {
+        registerService('n8n-webhook', 'webhook', [this.config.webhookUrl]);
+        if (this.config.backupWebhookUrl) {
+          registerService('n8n-webhook-backup', 'webhook', [this.config.backupWebhookUrl]);
+        }
+      }
+    } catch (error) {
+      // Gracefully handle registration errors in test environments
+      if (!isTestEnvironment()) {
+        console.warn('Service registration failed:', error);
       }
     }
 

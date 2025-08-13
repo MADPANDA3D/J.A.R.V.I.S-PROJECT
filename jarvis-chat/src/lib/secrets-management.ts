@@ -776,9 +776,22 @@ export function logSecretsStatus(result: SecretValidationResult): void {
 export function getSecretsHealthStatus() {
   const result = validateSecrets();
   const rotationStatus = secretsManager.getRotationStatus();
+  
+  // Determine status: error for validation failures, warning for missing non-critical items
+  const hasCriticalErrors = result.errors.some(e => e.severity === 'critical');
+  const hasErrors = result.errors.length > 0;
+  
+  let status: 'healthy' | 'warning' | 'error';
+  if (result.isValid) {
+    status = 'healthy';
+  } else if (hasCriticalErrors || hasErrors) {
+    status = 'error';
+  } else {
+    status = 'warning';
+  }
 
   return {
-    status: result.isValid ? 'healthy' : 'warning',
+    status,
     timestamp: result.timestamp,
     checks: {
       secrets_validation: result.isValid,
