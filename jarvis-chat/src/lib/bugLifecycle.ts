@@ -380,7 +380,7 @@ class BugLifecycleService {
   validateStatusTransition(
     currentStatus: BugStatus, 
     newStatus: BugStatus, 
-    bugReport?: any
+    bugReport?: Record<string, unknown>
   ): LifecycleValidation {
     const validation: LifecycleValidation = {
       isValid: true,
@@ -442,7 +442,7 @@ class BugLifecycleService {
       limit?: number;
       offset?: number;
     } = {}
-  ): Promise<{ data: unknown[]; count: number; error?: any }> {
+  ): Promise<{ data: unknown[]; count: number; error?: unknown }> {
     try {
       const statusArray = Array.isArray(status) ? status : [status];
       
@@ -606,10 +606,10 @@ class BugLifecycleService {
   }
 
   private async applyStatusSideEffects(
-    bugReport: any, 
+    bugReport: Record<string, unknown>, 
     newStatus: BugStatus, 
     statusChange: StatusChange
-  ): Promise<void>  => {
+  ): Promise<void> {
     // statusChange parameter available for future side effect logic
     void statusChange;
     try {
@@ -690,7 +690,7 @@ export const changeBugStatus = (
 
 export const getBugStatusHistory = (bugId: string) => bugLifecycleService.getStatusHistory(bugId);
 
-export const validateStatusTransition = (currentStatus: BugStatus, newStatus: BugStatus, bugReport?: any) =>
+export const validateStatusTransition = (currentStatus: BugStatus, newStatus: BugStatus, bugReport?: Record<string, unknown>) =>
   bugLifecycleService.validateStatusTransition(currentStatus, newStatus, bugReport);
 
 export const getAvailableTransitions = (currentStatus: BugStatus) =>
