@@ -177,7 +177,7 @@ class ErrorTracker {
         
         const { captureExternalError } = await import('./externalMonitoring');
         captureExternalError(errorReport);
-      } catch (error) {
+      } catch {
         // External services not available
       }
     }, 0);
@@ -270,7 +270,7 @@ class ErrorTracker {
       try {
         const { captureExternalBreadcrumb } = await import('./externalMonitoring');
         captureExternalBreadcrumb(breadcrumb);
-      } catch (error) {
+      } catch {
         // External monitoring not available
       }
     }, 0);
@@ -402,7 +402,7 @@ class ErrorTracker {
     if (error) {
       if (!error.context) error.context = {};
       if (!error.context.correlations) error.context.correlations = [];
-      (error.context.correlations as any[]).push(correlation);
+      (error.context.correlations as unknown[]).push(correlation);
     }
   }
 
@@ -533,7 +533,7 @@ class ErrorTracker {
   // User action tracking
   trackUserAction(
     context: UserActionContext
-  ): void  => {
+  ): void {
     this.addBreadcrumb('info', 'user_action', `User Action: ${context.actionType}`, {
       elementId: context.elementId,
       elementText: context.elementText,
