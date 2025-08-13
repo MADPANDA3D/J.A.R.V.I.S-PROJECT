@@ -50,13 +50,13 @@ app.post('/api/exports', bugExportService.createExport.bind(bugExportService));
 app.get('/api/exports/:id', bugExportService.getExportStatus.bind(bugExportService));
 app.get('/api/exports/:id/download', bugExportService.downloadExport.bind(bugExportService));
 
-// Bug dashboard routes
+// Bug dashboard routes - order matters: specific routes before parametric ones
 app.get('/api/bugs', bugDashboardAPI.getBugs.bind(bugDashboardAPI));
+app.get('/api/bugs/analytics', bugDashboardAPI.getBugAnalytics.bind(bugDashboardAPI));
+app.post('/api/bugs/search', bugDashboardAPI.searchBugs.bind(bugDashboardAPI));
 app.get('/api/bugs/:id', bugDashboardAPI.getBugById.bind(bugDashboardAPI));
 app.put('/api/bugs/:id/status', bugDashboardAPI.updateBugStatus.bind(bugDashboardAPI));
 app.post('/api/bugs/:id/assign', bugDashboardAPI.assignBug.bind(bugDashboardAPI));
-app.post('/api/bugs/search', bugDashboardAPI.searchBugs.bind(bugDashboardAPI));
-app.get('/api/bugs/analytics', bugDashboardAPI.getBugAnalytics.bind(bugDashboardAPI));
 
 // External integration routes (authentication middleware already applied above)
 app.post('/api/integrations/webhooks', externalIntegrationService.createWebhook.bind(externalIntegrationService));
