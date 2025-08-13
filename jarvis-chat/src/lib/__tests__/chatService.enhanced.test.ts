@@ -131,6 +131,7 @@ describe('ChatService - Enhanced Integration', () => {
         source: 'webapp',
         chatId: 1,
         timestamp: expect.any(String),
+        selected_tools: [],
       });
     });
 

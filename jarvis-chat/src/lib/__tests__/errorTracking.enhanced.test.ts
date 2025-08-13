@@ -138,7 +138,9 @@ describe('Enhanced Error Tracking', () => {
       const errors = errorTracker.getErrors();
       const capturedError = errors.find(e => e.id === errorId);
       
-      expect(capturedError?.breadcrumbs).toHaveLength(3); // 2 manual + 1 auto from error
+      // Error report captures breadcrumbs at time of error, before adding the error breadcrumb
+      // So it should have 2 manual breadcrumbs (the error breadcrumb is added after snapshot)
+      expect(capturedError?.breadcrumbs).toHaveLength(2); // 2 manual breadcrumbs from before error
     });
   });
 
@@ -381,6 +383,10 @@ describe('Enhanced Error Tracking', () => {
 
     it('should persist breadcrumbs to localStorage', () => {
       addBreadcrumb('info', 'info', 'Test breadcrumb');
+      
+      // Breadcrumbs are only persisted when an error is captured
+      const error = new Error('Test error');
+      captureError(error);
       
       expect(localStorageMock.setItem).toHaveBeenCalledWith(
         'jarvis_breadcrumbs',

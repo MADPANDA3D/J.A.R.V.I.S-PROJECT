@@ -786,7 +786,7 @@ class BugDashboardAPI {
       }
 
       return enriched;
-    } catch (error) {
+    } catch {
       // If all else fails, return minimal bug data
       return {
         ...bug,
@@ -897,6 +897,7 @@ class BugDashboardAPI {
     return facets;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private async generateBugAnalytics(timeRange: TimeRange, grouping: AnalyticsGrouping): Promise<BugAnalyticsResponse>  {
     try {
       // Get lifecycle statistics with error handling
@@ -927,7 +928,7 @@ class BugDashboardAPI {
           bugsByStatus: lifecycleStats.statusDistribution
         },
         trends: await this.generateTrends(timeRange),
-        groupedData: await this.generateGroupedData(grouping),
+        groupedData: await this.generateGroupedData(),
         patterns: {
           commonErrorTypes: await this.analyzeErrorTypes(),
           peakHours: await this.analyzePeakHours(),
@@ -938,7 +939,7 @@ class BugDashboardAPI {
           }
         }
       };
-    } catch (error) {
+    } catch {
       // Return minimal analytics data if all else fails
       return {
         summary: {
@@ -981,7 +982,7 @@ class BugDashboardAPI {
     }
   }
 
-  private async generateGroupedData(grouping: AnalyticsGrouping) {
+  private async generateGroupedData() {
     try {
       return {
         'open': {

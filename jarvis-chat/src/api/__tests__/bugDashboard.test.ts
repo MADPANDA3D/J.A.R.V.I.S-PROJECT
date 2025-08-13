@@ -23,7 +23,6 @@ vi.mock('../../lib/monitoring');
 
 describe('Bug Dashboard API', () => {
   let validApiKey: string;
-  let adminApiKey: string;
   let invalidApiKey: string;
 
   beforeAll(async () => {
@@ -41,21 +40,7 @@ describe('Bug Dashboard API', () => {
       }
     });
 
-    const adminKey = await apiSecurityService.createAPIKey('test-admin', 'Test Admin Key', {
-      read: true,
-      write: true,
-      export: true,
-      admin: true,
-      endpoints: ['*'],
-      rateLimits: {
-        requestsPerMinute: 1000,
-        requestsPerHour: 10000,
-        requestsPerDay: 100000
-      }
-    });
-
     validApiKey = userKey.apiKey!.key;
-    adminApiKey = adminKey.apiKey!.key;
     invalidApiKey = 'invalid_key_123';
   });
 
