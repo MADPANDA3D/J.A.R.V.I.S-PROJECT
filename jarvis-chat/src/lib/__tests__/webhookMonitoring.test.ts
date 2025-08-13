@@ -117,15 +117,18 @@ describe('WebhookMonitoringService', () => {
     });
 
     it('should maintain performance history size limit', () => {
-      // Record more than the max history size (1000)
-      for (let i = 0; i < 1200; i++) {
+      // Record more than the max history size (100 in test mode, 1000 in production)
+      const maxHistorySize = process.env.NODE_ENV === 'test' ? 100 : 1000;
+      const recordCount = maxHistorySize + 200; // Exceed the limit
+      
+      for (let i = 0; i < recordCount; i++) {
         monitoringService.recordRequest(100 + i, true);
       }
 
       const metrics = monitoringService.getCurrentMetrics();
 
-      // Should only track the last 1000 requests
-      expect(metrics.totalRequests).toBe(1000);
+      // Should only track the last maxHistorySize requests
+      expect(metrics.totalRequests).toBe(maxHistorySize);
     });
   });
 
