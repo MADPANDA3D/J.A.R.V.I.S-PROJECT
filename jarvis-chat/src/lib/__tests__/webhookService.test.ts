@@ -23,7 +23,7 @@ describe('WebhookService', () => {
     // @ts-expect-error test guard
     globalThis.fetch = (() => {
       throw new Error('TEST used global fetch; inject via WebhookService deps');
-    }) as any;
+    }) as typeof fetch;
   });
 
   beforeEach(() => {
@@ -178,7 +178,7 @@ describe('WebhookService', () => {
         status: 400,
         statusText: 'Bad Request',
         json: vi.fn().mockResolvedValue({})
-      } as any);
+      } as Partial<Response>);
 
       await expect(service.sendMessage({ message: 'hi', timestamp: new Date().toISOString(), userId: 'user_123' }))
         .rejects.toMatchObject({ type: WebhookErrorType.HTTP_ERROR });
@@ -203,7 +203,7 @@ describe('WebhookService', () => {
     it('should handle timeout errors', async () => {
       const { service, mockFetch } = makeWebhook({ timeout: 200 }); // alias handled by factory
       // fetch never resolves → request-level AbortController should fire
-      mockFetch.mockResolvedValueOnce(new Promise(() => {}) as any);
+      mockFetch.mockResolvedValueOnce(new Promise(() => {}) as Promise<Response>);
 
       const p = service.sendMessage({ message: 'hi', timestamp: new Date().toISOString(), userId: 'user_123' });
       await vi.advanceTimersByTimeAsync(200);
@@ -218,7 +218,7 @@ describe('WebhookService', () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: vi.fn().mockResolvedValue({ not: 'the expected shape' })
-      } as any);
+      } as Partial<Response>);
 
       await expect(service.sendMessage({ message: 'hi', timestamp: new Date().toISOString(), userId: 'user_123' }))
         .rejects.toMatchObject({ type: WebhookErrorType.VALIDATION_ERROR });
@@ -233,7 +233,7 @@ describe('WebhookService', () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: vi.fn().mockResolvedValue({ success: false, error: 'nope' })
-      } as any);
+      } as Partial<Response>);
 
       await expect(service.sendMessage({ message: 'hi', timestamp: new Date().toISOString(), userId: 'user_123' }))
         .rejects.toMatchObject({ type: WebhookErrorType.HTTP_ERROR });
@@ -335,7 +335,7 @@ describe('WebhookService', () => {
         status: 400,
         statusText: 'Bad Request',
         json: vi.fn().mockResolvedValue({})
-      } as any);
+      } as Partial<Response>);
 
       await expect(service.sendMessage({ message: 'hi', timestamp: new Date().toISOString(), userId: 'user_123' }))
         .rejects.toMatchObject({ type: WebhookErrorType.HTTP_ERROR });

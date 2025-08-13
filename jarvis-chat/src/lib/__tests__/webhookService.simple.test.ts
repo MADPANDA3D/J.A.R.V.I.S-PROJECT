@@ -11,7 +11,7 @@ describe('WebhookService Simple', () => {
     // @ts-expect-error test guard
     globalThis.fetch = (() => {
       throw new Error('TEST used global fetch; inject via WebhookService deps');
-    }) as any;
+    }) as typeof fetch;
   });
 
   beforeEach(() => {
@@ -46,7 +46,7 @@ describe('WebhookService Simple', () => {
       status: 400,
       statusText: 'Bad Request',
       json: vi.fn().mockResolvedValue({})
-    } as any);
+    } as Partial<Response>);
 
     const service = new WebhookService(
       { webhookUrl: 'https://example.test/webhook', timeout: 200, retryConfig: { maxAttempts: 1, baseDelay: 50, maxDelay: 200, backoffFactor: 2.0, jitter: false }, circuitBreakerOptions: { failureThreshold: 3, recoveryTimeout: 1000, monitoringWindow: 5000 }, enableMetrics: true },

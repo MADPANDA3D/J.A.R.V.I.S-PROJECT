@@ -29,7 +29,7 @@ const authenticateAPI = async (req: express.Request, res: express.Response, next
     }
 
     // Add user info to request
-    (req as { user?: { id: string; permissions: any } }).user = {
+    (req as { user?: { id: string; permissions: { read: boolean; write: boolean; export: boolean; admin: boolean } } }).user = {
       id: validation.userId,
       permissions: validation.permissions
     };
