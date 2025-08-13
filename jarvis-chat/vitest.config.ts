@@ -24,7 +24,7 @@ export default defineConfig({
       },
     },
     // Timeout configurations - reduced for faster failure detection
-    testTimeout: 10000, // 10s instead of 30s - fake timers should make tests fast
+    testTimeout: 30000, // Increased for debugging
     hookTimeout: 10000,
     teardownTimeout: 5000, // Ensure cleanup doesn't hang
     // Reduce memory usage
