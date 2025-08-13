@@ -422,7 +422,7 @@ class CentralizedLoggingService {
       const maxStoredLogs = 500;
       const recentLogs = storedLogs.slice(-maxStoredLogs);
       
-      localStorage.setItem('jarvis_centralized_logs', JSON.stringify(recentLogs));
+      localStorage.setItem('jarvis_centralized_logs', this.safeStringify(recentLogs, 50000));
     } catch (error) {
       console.warn('Failed to store logs in localStorage:', error);
     }
@@ -456,7 +456,7 @@ class CentralizedLoggingService {
     const response = await fetch(destination.config.endpoint, {
       method: 'POST',
       headers,
-      body: JSON.stringify(payload)
+      body: this.safeStringify(payload, 100000)
     });
 
     if (!response.ok) {
@@ -488,7 +488,7 @@ class CentralizedLoggingService {
       log
     ]);
 
-    const ndjson = bulkBody.map(item => JSON.stringify(item)).join('\n') + '\n';
+    const ndjson = bulkBody.map(item => this.safeStringify(item, 10000)).join('\n') + '\n';
 
     const response = await fetch(`${destination.config.endpoint}/_bulk`, {
       method: 'POST',
@@ -624,7 +624,7 @@ class CentralizedLoggingService {
       return csvContent;
     }
     
-    return JSON.stringify(logs, null, 2);
+    return this.safeStringify(logs, 100000);
   }
 }
 

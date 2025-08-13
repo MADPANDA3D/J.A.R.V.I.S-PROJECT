@@ -1,6 +1,8 @@
 // Simple error tracking and logging system
 // Can be extended with external services like Sentry
 
+import { safeStringify } from './logger';
+
 export interface ErrorReport {
   id: string;
   errorId: string; // Added for bug report compatibility
@@ -324,10 +326,10 @@ class ErrorTracker {
       // Keep only last 50 errors in localStorage
       const recentErrors = errors.slice(-50);
 
-      localStorage.setItem('jarvis_errors', JSON.stringify(recentErrors));
+      localStorage.setItem('jarvis_errors', safeStringify(recentErrors, 20000));
       
       // Also persist breadcrumbs
-      localStorage.setItem('jarvis_breadcrumbs', JSON.stringify(this.breadcrumbs));
+      localStorage.setItem('jarvis_breadcrumbs', safeStringify(this.breadcrumbs, 10000));
     } catch (e) {
       // Ignore localStorage errors
       console.warn('Failed to persist error to localStorage:', e);
@@ -364,7 +366,7 @@ class ErrorTracker {
 
   // Method to export errors for external monitoring services
   exportErrors(): string {
-    return JSON.stringify(this.errors, null, 2);
+    return safeStringify(this.errors, 100000);
   }
 
   // Bug report integration methods

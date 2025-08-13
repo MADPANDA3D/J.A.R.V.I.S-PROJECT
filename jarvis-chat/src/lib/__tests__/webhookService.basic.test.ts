@@ -195,9 +195,9 @@ describe('WebhookService - Basic Tests', () => {
 
       await expect(webhookService.sendMessage(payload)).rejects.toThrow(
         expect.objectContaining({
-          type: WebhookErrorType.VALIDATION_ERROR,
-          message: 'Invalid response format from webhook',
-          isRetryable: false,
+          type: WebhookErrorType.MALFORMED_RESPONSE,
+          message: 'Malformed response from fetch',
+          isRetryable: true,
         })
       );
     });

@@ -5,6 +5,7 @@
 
 import { monitoringService } from './monitoring';
 import { captureError, captureWarning } from './errorTracking';
+import { safeStringify } from './logger';
 
 // Log interfaces
 export interface LogEntry {
@@ -416,7 +417,7 @@ class LogAggregationService {
         await fetch(alertWebhook, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+          body: safeStringify({
             type: 'log_alert',
             alert,
             timestamp: Date.now(),
@@ -615,11 +616,11 @@ class LogAggregationService {
         await fetch(logEndpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+          body: safeStringify({
             source: 'jarvis_frontend',
             logs: logs.map(log => ({
               ...log,
-              metadata: JSON.stringify(log.metadata),
+              metadata: safeStringify(log.metadata, 1000),
             })),
           }),
         });

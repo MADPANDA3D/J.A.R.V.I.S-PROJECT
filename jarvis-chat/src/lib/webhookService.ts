@@ -18,7 +18,7 @@ import {
   registerService
 } from './serviceMonitoring';
 import { sleep, safeSetTimeout, clampDelay } from './time';
-import { safeStringify, minimalError, isTestEnvironment } from './logger';
+import { minimalError, isTestEnvironment } from './logger';
 
 // Response-like interface for broader compatibility
 interface ResponseLike {

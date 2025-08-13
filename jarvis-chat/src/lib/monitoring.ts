@@ -4,6 +4,7 @@
  */
 
 import { captureError, captureWarning, captureInfo, addBreadcrumb } from './errorTracking';
+import { safeStringify } from './logger';
 
 // APM Service Interface
 export interface APMService {
@@ -316,7 +317,7 @@ class MonitoringService implements APMService {
         this.captureMessage(`Console Error: ${args.join(' ')}`, 'error', {
           source: 'console',
           args: args.map(arg =>
-            typeof arg === 'string' ? arg : JSON.stringify(arg)
+            typeof arg === 'string' ? arg : safeStringify(arg, 1000)
           ),
         });
         originalConsoleError.apply(console, args);
@@ -513,7 +514,7 @@ class MonitoringService implements APMService {
     // Check context indicators
     if (context) {
       if (context.critical === true) return true;
-      if (criticalContexts.some(ctx => JSON.stringify(context).includes(ctx))) {
+      if (criticalContexts.some(ctx => safeStringify(context, 2000).includes(ctx))) {
         return true;
       }
     }
@@ -848,7 +849,7 @@ class MonitoringService implements APMService {
           'Authorization': import.meta.env.VITE_MONITORING_WEBHOOK_KEY ? 
             `Bearer ${import.meta.env.VITE_MONITORING_WEBHOOK_KEY}` : '',
         },
-        body: JSON.stringify(payload),
+        body: safeStringify(payload, 50000),
       });
       
       if (!response.ok) {
