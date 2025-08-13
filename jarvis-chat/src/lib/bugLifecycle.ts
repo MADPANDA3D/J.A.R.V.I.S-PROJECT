@@ -14,6 +14,7 @@ export enum BugStatus {
   IN_PROGRESS = 'in_progress',
   PENDING_VERIFICATION = 'pending_verification',
   RESOLVED = 'resolved',
+  VERIFICATION_REQUESTED = 'verification_requested',
   CLOSED = 'closed',
   REOPENED = 'reopened'
 }
@@ -117,11 +118,20 @@ const BUG_LIFECYCLE_RULES: Record<BugStatus, BugLifecycleState> = {
   },
   [BugStatus.RESOLVED]: {
     current: BugStatus.RESOLVED,
-    allowedTransitions: [BugStatus.CLOSED, BugStatus.REOPENED],
+    allowedTransitions: [BugStatus.VERIFICATION_REQUESTED, BugStatus.CLOSED, BugStatus.REOPENED],
     automaticTransitions: [{
       condition: 'no_activity_30_days',
       targetStatus: BugStatus.CLOSED,
       delay: 30 * 24 * 60 * 60 * 1000 // 30 days
+    }]
+  },
+  [BugStatus.VERIFICATION_REQUESTED]: {
+    current: BugStatus.VERIFICATION_REQUESTED,
+    allowedTransitions: [BugStatus.CLOSED, BugStatus.REOPENED],
+    automaticTransitions: [{
+      condition: 'no_feedback_7_days',
+      targetStatus: BugStatus.CLOSED,
+      delay: 7 * 24 * 60 * 60 * 1000 // 7 days
     }]
   },
   [BugStatus.CLOSED]: {
@@ -281,6 +291,96 @@ class BugLifecycleService {
           newStatus, 
           error: errorMessage 
         }
+      );
+
+      return {
+        success: false,
+        error: errorMessage
+      };
+    }
+  }
+
+  /**
+   * Process verification feedback and transition accordingly
+   */
+  async processVerificationFeedback(
+    bugId: string,
+    feedbackData: { isResolved: boolean; verificationNotes?: string },
+    userId: string
+  ): Promise<{ success: boolean; feedbackId?: string; error?: string }> {
+    const correlationId = this.generateCorrelationId();
+
+    try {
+      centralizedLogging.info(
+        'bug-lifecycle',
+        'system',
+        'Processing verification feedback',
+        { correlationId, bugId, userId, isResolved: feedbackData.isResolved }
+      );
+
+      // Get current bug report
+      const { data: bugReport, error: fetchError } = await bugReportOperations.getBugReportById(bugId);
+      if (fetchError || !bugReport) {
+        throw new Error(`Failed to fetch bug report: ${fetchError?.message || 'Bug not found'}`);
+      }
+
+      const currentStatus = bugReport.status as BugStatus;
+      
+      // Only allow verification from VERIFICATION_REQUESTED status
+      if (currentStatus !== BugStatus.VERIFICATION_REQUESTED) {
+        throw new Error(`Cannot process verification feedback from status: ${currentStatus}`);
+      }
+
+      // Determine next status based on feedback
+      const nextStatus = feedbackData.isResolved ? BugStatus.CLOSED : BugStatus.REOPENED;
+      const reason = feedbackData.isResolved 
+        ? 'User verified resolution - closing bug'
+        : 'User reported issue not resolved - reopening';
+
+      // Change status
+      const statusResult = await this.changeStatus(
+        bugId,
+        nextStatus,
+        userId,
+        reason,
+        feedbackData.verificationNotes
+      );
+
+      if (!statusResult.success) {
+        throw new Error(statusResult.error || 'Failed to update status');
+      }
+
+      const feedbackId = `feedback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+      // Track verification feedback event
+      trackBugReportEvent('verification_feedback_processed', {
+        bugId,
+        feedbackId,
+        userId,
+        isResolved: feedbackData.isResolved,
+        resultingStatus: nextStatus
+      });
+
+      centralizedLogging.info(
+        'bug-lifecycle',
+        'system',
+        'Verification feedback processed successfully',
+        { correlationId, bugId, feedbackId, resultingStatus: nextStatus }
+      );
+
+      return {
+        success: true,
+        feedbackId
+      };
+
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      
+      centralizedLogging.error(
+        'bug-lifecycle',
+        'system',
+        'Failed to process verification feedback',
+        { correlationId, bugId, userId, error: errorMessage }
       );
 
       return {

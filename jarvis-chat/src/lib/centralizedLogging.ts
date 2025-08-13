@@ -275,9 +275,46 @@ class CentralizedLoggingService {
   }
 
   private limitInMemoryLogs(): void {
-    const maxLogs = 1000;
+    // Cap in-memory arrays for test environment to prevent OOM
+    const maxLogs = process.env.NODE_ENV === 'test' ? 100 : 1000;
     if (this.logs.length > maxLogs) {
       this.logs = this.logs.slice(-maxLogs);
+    }
+    
+    // Also cap the logQueue to prevent memory buildup
+    const maxQueueSize = process.env.NODE_ENV === 'test' ? 50 : 500;
+    if (this.logQueue.length > maxQueueSize) {
+      this.logQueue = this.logQueue.slice(-maxQueueSize);
+    }
+  }
+
+  /**
+   * Safe JSON stringify with circular reference handling and size limits
+   */
+  private safeStringify(obj: unknown, maxLength: number = 10000): string {
+    const seen = new Set();
+    
+    const replacer = (_key: string, value: unknown) => {
+      if (typeof value === 'object' && value !== null) {
+        if (seen.has(value)) {
+          return '[Circular]';
+        }
+        seen.add(value);
+      }
+      
+      // Truncate large strings in test environment
+      if (typeof value === 'string' && process.env.NODE_ENV === 'test' && value.length > 1000) {
+        return value.substring(0, 1000) + '...[truncated]';
+      }
+      
+      return value;
+    };
+
+    try {
+      const result = JSON.stringify(obj, replacer);
+      return result.length > maxLength ? result.substring(0, maxLength) + '...[truncated]' : result;
+    } catch (error) {
+      return `[Stringify Error: ${error instanceof Error ? error.message : 'Unknown'}]`;
     }
   }
 

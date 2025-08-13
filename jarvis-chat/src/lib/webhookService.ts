@@ -95,6 +95,7 @@ export enum WebhookErrorType {
   HTTP_ERROR = 'http_error',
   VALIDATION_ERROR = 'validation_error',
   CIRCUIT_BREAKER_OPEN = 'circuit_breaker_open',
+  MALFORMED_RESPONSE = 'malformed_response',
   UNKNOWN_ERROR = 'unknown_error',
 }
 
@@ -274,11 +275,22 @@ export class WebhookService {
         body: JSON.stringify({
           ...payload,
           requestId: this.generateRequestId(),
+          clientVersion: '1.0.0',
         }),
         signal: controller.signal,
       });
 
       clearTimeout(timeoutId);
+
+      // Guard against malformed response from fetch
+      if (!response || typeof (response as unknown).ok !== 'boolean') {
+        throw new WebhookError(
+          'Malformed response from fetch',
+          WebhookErrorType.MALFORMED_RESPONSE,
+          undefined,
+          true
+        );
+      }
 
       if (!response.ok) {
         // Check for n8n-specific error messages
@@ -348,10 +360,14 @@ export class WebhookService {
       }
 
       return data;
-    } catch (error) {
+    } catch (err) {
       clearTimeout(timeoutId);
 
-      if (error.name === 'AbortError') {
+      if (err instanceof WebhookError) {
+        throw err;
+      }
+
+      if ((err as Error).name === 'AbortError') {
         throw new WebhookError(
           `Request timeout after ${this.config.timeout}ms`,
           WebhookErrorType.TIMEOUT_ERROR,
@@ -360,16 +376,13 @@ export class WebhookService {
         );
       }
 
-      if (error instanceof WebhookError) {
-        throw error;
-      }
-
+      // Network error handling
       throw new WebhookError(
-        `Network error: ${error.message}`,
+        `Network error: ${(err as Error).message}`,
         WebhookErrorType.NETWORK_ERROR,
         undefined,
         true,
-        error
+        { originalError: err }
       );
     }
   }

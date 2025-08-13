@@ -119,6 +119,17 @@ export interface NotificationDeliveryResult {
   metadata?: Record<string, unknown>;
 }
 
+// Notification record (for API responses)
+export interface NotificationRecord {
+  id: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  deliveredAt: string;
+  channel: NotificationChannel;
+  userId: string;
+}
+
 // Webhook notification payload
 export interface WebhookNotificationPayload {
   event: NotificationType;
@@ -209,7 +220,7 @@ class NotificationService {
       };
 
       // Deliver notification through all enabled channels
-      const deliveryResults = await this.deliverNotification(notification, preferences);
+      const deliveryResults = await this.deliverNotification(notification);
 
       // Track notification event
       trackBugReportEvent('notification_sent', {
@@ -241,7 +252,7 @@ class NotificationService {
     assignedTo: string,
     assignedBy: string,
     notes?: string
-  ): Promise<NotificationDeliveryResult[]> {
+  ): Promise<NotificationRecord[]> {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -285,7 +296,7 @@ class NotificationService {
         createdAt: new Date().toISOString()
       };
 
-      const deliveryResults = await this.deliverNotification(notification, preferences);
+      const deliveryResults = await this.deliverNotification(notification);
 
       trackBugReportEvent('notification_sent', {
         type: 'bug_assignment',
@@ -295,7 +306,20 @@ class NotificationService {
         deliveryCount: deliveryResults.filter(r => r.success).length
       });
 
-      return deliveryResults;
+      // Convert delivery results to notification records
+      const notificationRecords: NotificationRecord[] = deliveryResults
+        .filter(result => result.success)
+        .map(result => ({
+          id: result.notificationId,
+          type: notification.type,
+          title: notification.title,
+          message: notification.message,
+          deliveredAt: result.deliveredAt || new Date().toISOString(),
+          channel: result.channel,
+          userId: assignedTo
+        }));
+
+      return notificationRecords;
 
     } catch (error) {
       centralizedLogging.error(
@@ -381,7 +405,7 @@ class NotificationService {
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days
       };
 
-      const deliveryResults = await this.deliverNotification(notification, preferences);
+      const deliveryResults = await this.deliverNotification(notification);
 
       trackBugReportEvent('notification_sent', {
         type: 'feedback_request',

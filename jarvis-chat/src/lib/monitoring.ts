@@ -584,9 +584,10 @@ class MonitoringService implements APMService {
 
     this.metrics.push(metric);
 
-    // Keep only last 1000 metrics in memory
-    if (this.metrics.length > 1000) {
-      this.metrics = this.metrics.slice(-1000);
+    // Cap in-memory arrays for test environment to prevent OOM
+    const maxMetrics = process.env.NODE_ENV === 'test' ? 100 : 1000;
+    if (this.metrics.length > maxMetrics) {
+      this.metrics = this.metrics.slice(-maxMetrics);
     }
 
     // Send to external APM service if configured
@@ -606,9 +607,10 @@ class MonitoringService implements APMService {
 
     this.events.push(eventData);
 
-    // Keep only last 500 events in memory
-    if (this.events.length > 500) {
-      this.events = this.events.slice(-500);
+    // Cap in-memory arrays for test environment to prevent OOM
+    const maxEvents = process.env.NODE_ENV === 'test' ? 50 : 500;
+    if (this.events.length > maxEvents) {
+      this.events = this.events.slice(-maxEvents);
     }
 
     // Send to external APM service if configured
@@ -1043,9 +1045,10 @@ class MonitoringService implements APMService {
 
     this.notifications.push(notification);
 
-    // Keep only last 100 notifications
-    if (this.notifications.length > 100) {
-      this.notifications = this.notifications.slice(-100);
+    // Cap in-memory arrays for test environment to prevent OOM
+    const maxNotifications = process.env.NODE_ENV === 'test' ? 10 : 100;
+    if (this.notifications.length > maxNotifications) {
+      this.notifications = this.notifications.slice(-maxNotifications);
     }
 
     // Send to external monitoring

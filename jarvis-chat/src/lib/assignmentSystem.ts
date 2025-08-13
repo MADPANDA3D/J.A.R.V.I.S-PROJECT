@@ -245,6 +245,15 @@ class BugAssignmentSystem {
       if (notify) {
         try {
           await sendAssignmentNotification(bugId, assigneeId, assignerId, reason);
+          // Track assignment event after notification
+          trackBugReportEvent('bug_assigned', {
+            bugId,
+            assigneeId,
+            assignerId,
+            method,
+            previousAssignee: assignment.fromUserId,
+            workloadAfter: assignee.currentWorkload
+          });
         } catch (notifyError) {
           centralizedLogging.warn(
             'assignment-system',
@@ -258,17 +267,17 @@ class BugAssignmentSystem {
             }
           );
         }
+      } else {
+        // Track assignment event even if notification is disabled
+        trackBugReportEvent('bug_assigned', {
+          bugId,
+          assigneeId,
+          assignerId,
+          method,
+          previousAssignee: assignment.fromUserId,
+          workloadAfter: assignee.currentWorkload
+        });
       }
-
-      // Track assignment event
-      trackBugReportEvent('bug_assigned', {
-        bugId,
-        assigneeId,
-        assignerId,
-        method,
-        previousAssignee: assignment.fromUserId,
-        workloadAfter: assignee.currentWorkload
-      });
 
       centralizedLogging.info(
         'assignment-system',
@@ -382,56 +391,53 @@ class BugAssignmentSystem {
 
     for (const member of availableMembers) {
       const skillMatch = this.calculateSkillMatch(member, bugReport);
-      const workloadImpact = this.calculateWorkloadImpact(member);
+      const normalizedWorkload = member.currentWorkload / member.workloadCapacity;
+      const recentAssignments = this.getRecentAssignments(member.id, 7);
+      const recentAssignmentsRatio = recentAssignments.length / 10; // Normalize to 0-1 range
       const reasons: string[] = [];
-      let confidence = 0.5; // Base confidence
+      
+      // Calculate composite score: 60% skill match + 30% inverse workload + 10% inverse recent assignments
+      const score = 
+        0.6 * skillMatch +
+        0.3 * (1 - normalizedWorkload) +
+        0.1 * (1 - recentAssignmentsRatio);
 
-      // Skill matching
+      // Add reasoning
       if (skillMatch > 0.7) {
-        confidence += 0.3;
         reasons.push(`High skill match (${(skillMatch * 100).toFixed(0)}%)`);
       } else if (skillMatch > 0.4) {
-        confidence += 0.1;
         reasons.push(`Moderate skill match (${(skillMatch * 100).toFixed(0)}%)`);
       }
 
-      // Workload consideration
-      if (workloadImpact < 0.5) {
-        confidence += 0.2;
+      if (normalizedWorkload < 0.5) {
         reasons.push('Low current workload');
-      } else if (workloadImpact < 0.8) {
-        confidence += 0.1;
+      } else if (normalizedWorkload < 0.8) {
         reasons.push('Moderate workload');
       } else {
-        confidence -= 0.1;
         reasons.push('High workload');
       }
 
-      // Performance rating
       if (member.performanceRating >= 4) {
-        confidence += 0.1;
         reasons.push('High performer');
       }
 
-      // Recent activity
       const hoursSinceActivity = (Date.now() - new Date(member.lastActivity).getTime()) / (1000 * 60 * 60);
       if (hoursSinceActivity < 4) {
-        confidence += 0.1;
         reasons.push('Recently active');
       }
 
       recommendations.push({
         userId: member.id,
         userName: member.name,
-        confidence: Math.min(confidence, 1),
+        confidence: Math.min(score, 1),
         reasons,
-        workloadImpact,
+        workloadImpact: normalizedWorkload,
         estimatedResolutionTime: member.averageResolutionTime,
         skillMatch
       });
     }
 
-    // Sort by confidence score
+    // Sort by score (higher is better)
     return recommendations.sort((a, b) => b.confidence - a.confidence);
   }
 
@@ -460,6 +466,18 @@ class BugAssignmentSystem {
       }
 
       const currentPriority = bugReport.priority as BugPriority;
+      
+      // Check if escalation is allowed from current status
+      const currentStatus = bugReport.status as BugStatus;
+      const allowedStatuses = [BugStatus.OPEN, BugStatus.IN_PROGRESS, BugStatus.REOPENED];
+      
+      if (!allowedStatuses.includes(currentStatus)) {
+        return {
+          success: false,
+          error: `Cannot escalate bug from status: ${currentStatus}. Allowed statuses: ${allowedStatuses.join(', ')}`
+        };
+      }
+
       const newPriority = this.getNextPriorityLevel(currentPriority);
 
       if (!newPriority) {
@@ -480,6 +498,17 @@ class BugAssignmentSystem {
         throw new Error(`Failed to update bug priority: ${updateError.message}`);
       }
 
+      // Create audit trail entry for escalation
+      const auditEntry = {
+        bugId,
+        action: 'priority_escalated',
+        performedBy: escalatedBy,
+        fromPriority: currentPriority,
+        toPriority: newPriority,
+        reason,
+        timestamp: new Date().toISOString()
+      };
+
       // Send escalation alerts
       const managerIds = this.getManagerIds();
       if (managerIds.length > 0) {
@@ -492,7 +521,8 @@ class BugAssignmentSystem {
         fromPriority: currentPriority,
         toPriority: newPriority,
         reason,
-        escalatedBy
+        escalatedBy,
+        auditEntry
       });
 
       centralizedLogging.info(

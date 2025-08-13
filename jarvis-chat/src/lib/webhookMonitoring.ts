@@ -79,7 +79,7 @@ class WebhookMonitoringService {
   private activeAlerts: Map<string, AlertEvent> = new Map();
   private alertSubscribers: Array<(alert: AlertEvent) => void> = [];
 
-  private readonly MAX_HISTORY_SIZE = 1000;
+  private readonly MAX_HISTORY_SIZE = process.env.NODE_ENV === 'test' ? 100 : 1000;
   private readonly TREND_WINDOW_MINUTES = 60;
 
   constructor() {

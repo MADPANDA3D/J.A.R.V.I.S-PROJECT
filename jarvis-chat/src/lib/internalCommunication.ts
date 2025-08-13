@@ -588,6 +588,7 @@ class InternalCommunicationService {
     bugId: string,
     options: {
       includeDeleted?: boolean;
+      includeSystem?: boolean;
       visibility?: CommentVisibility;
       sortBy?: 'date_asc' | 'date_desc' | 'type';
       limit?: number;
@@ -602,6 +603,11 @@ class InternalCommunicationService {
     // Apply filters
     if (!options.includeDeleted) {
       comments = comments.filter(c => !c.isDeleted);
+    }
+
+    // Exclude system comments by default
+    if (!options.includeSystem) {
+      comments = comments.filter(c => c.commentType !== 'system');
     }
 
     if (options.visibility) {
