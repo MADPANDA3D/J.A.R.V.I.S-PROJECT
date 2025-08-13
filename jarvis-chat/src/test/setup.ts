@@ -110,3 +110,17 @@ Object.defineProperty(global, 'sessionStorage', {
 process.env.NODE_ENV = 'test';
 process.env.VITE_SUPABASE_URL = 'https://test.supabase.co';
 process.env.VITE_SUPABASE_ANON_KEY = 'test-key';
+process.env.VITE_N8N_WEBHOOK_URL = 'https://n8n.madpanda3d.com/webhook/4bed7e4e-041a-4f19-b736-d320250a50ca';
+
+// Mock import.meta.env for Vite environment variables
+vi.stubGlobal('import', {
+  meta: {
+    env: {
+      VITE_SUPABASE_URL: 'https://test.supabase.co',
+      VITE_SUPABASE_ANON_KEY: 'test-key',
+      VITE_N8N_WEBHOOK_URL: 'https://n8n.madpanda3d.com/webhook/4bed7e4e-041a-4f19-b736-d320250a50ca',
+      NODE_ENV: 'test',
+      MODE: 'test'
+    }
+  }
+});
