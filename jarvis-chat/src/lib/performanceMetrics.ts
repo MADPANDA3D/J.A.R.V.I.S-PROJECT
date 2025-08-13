@@ -369,12 +369,12 @@ class PerformanceMetricsService {
       // Rough estimation (localStorage is typically limited to ~5-10MB)
       const maxStorage = 10 * 1024 * 1024; // 10MB
       return Math.round((totalSize / maxStorage) * 100);
-    } catch () {
+    } catch {
       return 0;
     }
   }
 
-  private async getNetworkTraffic(): Promise<number>  {
+  private async getNetworkTraffic(): Promise<number> {
     // Use Navigation Timing API for network metrics
     if ('connection' in navigator) {
       const connection = (navigator as unknown as { connection?: { downlink?: number } }).connection;

@@ -292,7 +292,7 @@ export class WebhookService {
               errorMessage = `n8n Webhook Error: ${errorData.message}. ${errorData.hint || ''}`;
             }
           }
-        } catch () {
+        } catch {
           // If we can't parse the error response, use the original message
         }
 

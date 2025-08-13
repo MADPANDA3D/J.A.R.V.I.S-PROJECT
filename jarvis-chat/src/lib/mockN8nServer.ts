@@ -150,7 +150,7 @@ export class MockN8nServer {
         try {
           await this.processWebhook(payload);
           return { success: true, responseTime: Date.now() - startTime };
-        } catch (error) {
+        } catch {
           return { success: false, responseTime: Date.now() - startTime };
         }
       });

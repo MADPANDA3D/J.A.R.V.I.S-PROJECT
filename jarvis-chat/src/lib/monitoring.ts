@@ -303,7 +303,7 @@ class MonitoringService implements APMService {
 
         paintObserver.observe({ entryTypes: ['paint'] });
       }
-    } catch () {
+    } catch (error) {
       captureWarning('Failed to initialize performance monitoring', { error });
     }
   }
@@ -312,7 +312,7 @@ class MonitoringService implements APMService {
     try {
       // Enhanced global error handling
       const originalConsoleError = console.error;
-      console.error = (...args) {
+      console.error = (...args) => {
         this.captureMessage(`Console Error: ${args.join(' ')}`, 'error', {
           source: 'console',
           args: args.map(arg =>

@@ -434,7 +434,7 @@ class LogAggregationService {
           metadata: alert.metadata,
         });
       }
-    } catch () {
+    } catch (error) {
       captureWarning('Failed to send log alert', {
         alert_id: alert.id,
         error: error instanceof Error ? error.message : 'Unknown error',

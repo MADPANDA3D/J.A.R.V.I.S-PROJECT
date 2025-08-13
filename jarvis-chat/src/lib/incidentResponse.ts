@@ -977,7 +977,7 @@ class IncidentResponseService {
     }
   }
 
-  private async checkDatabaseConnectivity(): Promise<string>  {
+  private async checkDatabaseConnectivity(): Promise<string> {
     // Simulate database connectivity check
     await new Promise(resolve => setTimeout(resolve, 1000));
     return 'Database connectivity verified';
