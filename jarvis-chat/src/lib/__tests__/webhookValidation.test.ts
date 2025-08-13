@@ -663,6 +663,8 @@ describe('WebhookValidation', () => {
 
       // Create a basic payload without metadata for basic validation
       const { metadata, ...basicPayload } = realWorldPayload;
+      // metadata is intentionally unused - we just extract it to create basicPayload
+      void metadata;
       
       // Test basic validation (without metadata)
       const basicResult = WebhookValidator.validatePayload(basicPayload);

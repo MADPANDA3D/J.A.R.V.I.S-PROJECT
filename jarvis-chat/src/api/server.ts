@@ -43,12 +43,12 @@ const authenticateAPI = async (req: express.Request, res: express.Response, next
 // Apply authentication middleware to API routes
 app.use('/api', authenticateAPI);
 
-// Bug export routes
+// Bug export routes - order matters: specific routes before parametric ones
+app.get('/api/exports/templates', bugExportService.getExportTemplates.bind(bugExportService));
+app.post('/api/exports/scheduled', bugExportService.createScheduledExport.bind(bugExportService));
 app.post('/api/exports', bugExportService.createExport.bind(bugExportService));
 app.get('/api/exports/:id', bugExportService.getExportStatus.bind(bugExportService));
 app.get('/api/exports/:id/download', bugExportService.downloadExport.bind(bugExportService));
-app.post('/api/exports/scheduled', bugExportService.createScheduledExport.bind(bugExportService));
-app.get('/api/exports/templates', bugExportService.getExportTemplates.bind(bugExportService));
 
 // Bug dashboard routes
 app.get('/api/bugs', bugDashboardAPI.getBugs.bind(bugDashboardAPI));

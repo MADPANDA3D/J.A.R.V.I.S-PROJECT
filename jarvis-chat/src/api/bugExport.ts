@@ -4,7 +4,7 @@
  */
 
 import { Request, Response, NextFunction } from 'express';
-import { createWriteStream, promises as fs } from 'fs';
+import { promises as fs } from 'fs';
 import { join } from 'path';
 import { Parser as CSVParser } from 'json2csv';
 import { Builder as XMLBuilder } from 'xml2js';
@@ -14,7 +14,6 @@ import { bugLifecycleService } from '@/lib/bugLifecycle';
 import { internalCommunicationService } from '@/lib/internalCommunication';
 import { feedbackCollectionService } from '@/lib/feedbackCollection';
 import { trackBugReportEvent } from '@/lib/monitoring';
-import { validateAPIKey } from '@/lib/apiSecurity';
 import type { BugFilters } from './bugDashboard';
 import type { BugReport, ErrorReport, UserSessionInfo } from '@/types/bugReport';
 
@@ -242,6 +241,7 @@ class BugExportService {
       let effectiveFields = fields;
       let effectiveFilters = filters;
       let effectiveOptions = customOptions;
+      let effectiveFormat = format;
 
       if (template) {
         const templateConfig = this.exportTemplates.get(template);
@@ -249,14 +249,15 @@ class BugExportService {
           effectiveFields = templateConfig.fields;
           effectiveFilters = { ...templateConfig.filters, ...filters };
           effectiveOptions = { ...templateConfig.customOptions, ...customOptions };
+          effectiveFormat = templateConfig.format; // Use template format
         }
       }
 
       // Create export request  
       const exportRequest: ExportRequest = {
         id: this.generateExportId(),
-        userId: apiKeyValidation.userId,
-        format: format as ExportFormat,
+        userId: user.id,
+        format: effectiveFormat as ExportFormat,
         filters: effectiveFilters,
         fields: effectiveFields,
         includeComments,
@@ -275,7 +276,7 @@ class BugExportService {
       const exportResponse: ExportResponse = {
         exportId: exportRequest.id,
         status: 'pending',
-        format: exportRequest.format,
+        format: effectiveFormat,
         estimatedSize: estimation.size,
         estimatedTime: estimation.time,
         expiresAt: new Date(Date.now() + this.EXPORT_RETENTION_HOURS * 60 * 60 * 1000).toISOString(),
@@ -293,8 +294,8 @@ class BugExportService {
       // Track export request
       trackBugReportEvent('export_requested', {
         exportId: exportRequest.id,
-        format,
-        userId: apiKeyValidation.userId,
+        format: effectiveFormat,
+        userId: user.id,
         estimatedSize: estimation.size,
         filters: Object.keys(effectiveFilters)
       });
@@ -321,9 +322,9 @@ class BugExportService {
     const correlationId = this.generateCorrelationId();
 
     try {
-      const apiKeyValidation = await validateAPIKey(req.headers.authorization);
-      if (!apiKeyValidation.valid) {
-        return res.status(401).json({ error: 'Invalid API key' });
+      const user = (req as { user?: { id: string; permissions: { export: boolean; admin: boolean } } }).user;
+      if (!user) {
+        return res.status(401).json({ error: 'Authentication required' });
       }
 
       const exportResponse = this.exportRequests.get(exportId);
@@ -361,6 +362,10 @@ class BugExportService {
     const correlationId = this.generateCorrelationId();
 
     try {
+      const user = (req as { user?: { id: string; permissions: { export: boolean; admin: boolean } } }).user;
+      if (!user) {
+        return res.status(401).json({ error: 'Authentication required' });
+      }
 
       const exportResponse = this.exportRequests.get(exportId);
       if (!exportResponse) {
@@ -388,15 +393,25 @@ class BugExportService {
       res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
       res.setHeader('Content-Type', this.getContentType(exportResponse.format));
 
-      // Stream file to response
-      const fileStream = createWriteStream(filePath);
-      fileStream.pipe(res);
+      // Read and send file content
+      try {
+        const fileContent = await fs.readFile(filePath);
+        res.send(fileContent);
+      } catch (fileError) {
+        centralizedLogging.error(
+          'bug-export',
+          'system',
+          'Error reading export file',
+          { correlationId, exportId, error: fileError instanceof Error ? fileError.message : 'Unknown error' }
+        );
+        return res.status(500).json({ error: 'File read error' });
+      }
 
       // Track download
       trackBugReportEvent('export_downloaded', {
         exportId,
         format: exportResponse.format,
-        userId: apiKeyValidation.userId,
+        userId: user.id,
         fileSize: exportResponse.metadata.fileSize
       });
 
@@ -404,7 +419,7 @@ class BugExportService {
         'bug-export',
         'system',
         'Export downloaded',
-        { correlationId, exportId, userId: apiKeyValidation.userId }
+        { correlationId, exportId, userId: user.id }
       );
 
     } catch (error) {
@@ -449,7 +464,7 @@ class BugExportService {
         'bug-export',
         'system',
         'Scheduled export created',
-        { correlationId, scheduleId, userId: apiKeyValidation.userId }
+        { correlationId, scheduleId, userId: user.id }
       );
 
       res.status(201).json({
@@ -475,13 +490,14 @@ class BugExportService {
    */
   async getExportTemplates(req: Request, res: Response, next: NextFunction) {
     try {
-      const apiKeyValidation = await validateAPIKey(req.headers.authorization);
-      if (!apiKeyValidation.valid) {
-        return res.status(401).json({ error: 'Invalid API key' });
+
+      const user = (req as { user?: { id: string; permissions: { export: boolean; admin: boolean } } }).user;
+      if (!user) {
+        return res.status(401).json({ error: 'Authentication required' });
       }
 
       const templates = Array.from(this.exportTemplates.values())
-        .filter(template => template.isPublic || template.createdBy === apiKeyValidation.userId);
+        .filter(template => template.isPublic || template.createdBy === user.id);
 
       res.json({ templates });
 
@@ -806,11 +822,25 @@ class BugExportService {
   }
 
   private async estimateExport(request: ExportRequest): Promise< { size: number; time: number }> {
-    // Get approximate record count
-    const { count } = await bugReportOperations.searchBugReports({
-      ...request.filters,
-      limit: 1
-    });
+    let count = 0;
+    
+    try {
+      // Get approximate record count
+      const result = await bugReportOperations.searchBugReports({
+        ...request.filters,
+        limit: 1
+      });
+      count = result.count || 0;
+    } catch (error) {
+      // If estimation fails, use default estimate
+      centralizedLogging.warn(
+        'bug-export',
+        'system', 
+        'Export estimation failed, using defaults',
+        { error: error instanceof Error ? error.message : 'Unknown error' }
+      );
+      count = 100; // Default estimate
+    }
 
     // Estimate size based on format and includes
     let estimatedSizePerRecord = 1024; // Base 1KB per record
