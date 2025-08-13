@@ -70,7 +70,7 @@ export const RealTimeActivityDashboard: React.FC<RealTimeActivityDashboardProps>
     }
     
     return () => stopAutoRefresh();
-  }, [autoRefresh, refreshInterval]);
+  }, [autoRefresh, refreshInterval, startAutoRefresh, stopAutoRefresh]);
 
   const initializeDashboard = async () => {
     try {

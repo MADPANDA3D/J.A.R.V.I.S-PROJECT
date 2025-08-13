@@ -624,7 +624,7 @@ class LogAggregationService {
           }),
         });
       }
-    } catch () {
+    } catch {
       // Silently fail external log shipping
     }
   }

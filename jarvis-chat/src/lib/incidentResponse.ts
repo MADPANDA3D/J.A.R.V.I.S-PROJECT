@@ -495,7 +495,7 @@ class IncidentResponseService {
     }
   }
 
-  private async detectIncidents(): Promise<void>  {
+  private async detectIncidents(): Promise<void> {
     try {
       // Check health monitoring for incidents
       await this.checkHealthMonitoringIncidents();
@@ -518,7 +518,7 @@ class IncidentResponseService {
     }
   }
 
-  private async checkHealthMonitoringIncidents(): Promise<void>  {
+  private async checkHealthMonitoringIncidents(): Promise<void> {
     const healthAlerts = healthMonitoringService.getAlerts({
       type: 'error',
       acknowledged: false,
@@ -539,7 +539,7 @@ class IncidentResponseService {
     });
   }
 
-  private async checkErrorTrackingIncidents(): Promise<void>  {
+  private async checkErrorTrackingIncidents(): Promise<void> {
     const errorAlerts = advancedErrorTracker.getAlerts({
       severity: 'critical',
       acknowledged: false,
@@ -580,7 +580,7 @@ class IncidentResponseService {
     });
   }
 
-  private async checkLogAnalysisIncidents(): Promise<void>  {
+  private async checkLogAnalysisIncidents(): Promise<void> {
     const logAlerts = logAggregationService.getAlerts({
       level: 'critical',
       acknowledged: false,
@@ -602,7 +602,7 @@ class IncidentResponseService {
     });
   }
 
-  private async checkPerformanceIncidents(): Promise<void>  {
+  private async checkPerformanceIncidents(): Promise<void> {
     const monitoringHealth = monitoringService.getMonitoringHealth();
 
     if (
@@ -808,7 +808,7 @@ class IncidentResponseService {
     incident.timeline.push(timelineEntry);
   }
 
-  private async triggerAutomatedResponse(incident: Incident): Promise<void>  {
+  private async triggerAutomatedResponse(incident: Incident): Promise<void> {
     try {
       // Find matching playbooks
       const matchingPlaybooks = this.findMatchingPlaybooks(incident);
@@ -957,7 +957,7 @@ class IncidentResponseService {
   private async executeAction(
     action: string,
     parameters?: Record<string, unknown>
-  ): Promise<string> { {
+  ): Promise<string> {
     // Simulate action execution - in real implementation, these would call actual services
     switch (action) {
       case 'check_database_connectivity':
@@ -991,7 +991,7 @@ class IncidentResponseService {
 
   private async sendNotification(
     parameters?: Record<string, unknown>
-  ): Promise<string> { {
+  ): Promise<string> {
     // Simulate notification sending
     const team = parameters?.team || 'default';
     const severity = parameters?.severity || 'medium';
@@ -1000,19 +1000,19 @@ class IncidentResponseService {
     return `Notification sent to ${team} team with ${severity} severity`;
   }
 
-  private async collectPerformanceData(): Promise<string>  {
+  private async collectPerformanceData(): Promise<string> {
     // Simulate performance data collection
     await new Promise(resolve => setTimeout(resolve, 2000));
     return 'Performance metrics collected and analyzed';
   }
 
-  private async autoScaleResources(): Promise<string>  {
+  private async autoScaleResources(): Promise<string> {
     // Simulate auto-scaling
     await new Promise(resolve => setTimeout(resolve, 5000));
     return 'Resources scaled up automatically';
   }
 
-  private async isolateSecurityThreat(): Promise<string>  {
+  private async isolateSecurityThreat(): Promise<string> {
     // Simulate threat isolation
     await new Promise(resolve => setTimeout(resolve, 1500));
     return 'Potential security threat isolated';
@@ -1133,7 +1133,7 @@ class IncidentResponseService {
     });
 
     // Execute escalation actions
-    rule.actions.forEach(async action {
+    rule.actions.forEach(async action => {
       if (action.delay) {
         setTimeout(
           () => this.executeEscalationAction(incident, action),
@@ -1154,7 +1154,7 @@ class IncidentResponseService {
   private async executeEscalationAction(
     incident: Incident,
     action: EscalationAction
-  ): Promise<void> { {
+  ): Promise<void> {
     try {
       switch (action.type) {
         case 'notify':
@@ -1186,7 +1186,7 @@ class IncidentResponseService {
   private async sendEscalationNotification(
     incident: Incident,
     target: string
-  ): Promise<void> { {
+  ): Promise<void> {
     const communication: IncidentCommunication = {
       id: `comm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       type: 'slack', // or email, sms based on target
@@ -1221,7 +1221,7 @@ class IncidentResponseService {
   private async createWarRoom(
     incident: Incident,
     roomName: string
-  ): Promise<void> { {
+  ): Promise<void> {
     // Simulate war room creation
     this.addTimelineEntry(incident, {
       type: 'action',
@@ -1234,7 +1234,7 @@ class IncidentResponseService {
   private async updateStatusPage(
     incident: Incident,
     status: string
-  ): Promise<void> { {
+  ): Promise<void> {
     // Simulate status page update
     this.addTimelineEntry(incident, {
       type: 'communication',
@@ -1247,7 +1247,7 @@ class IncidentResponseService {
   private async executeRunbook(
     incident: Incident,
     runbookId: string
-  ): Promise<void> { {
+  ): Promise<void> {
     // Simulate runbook execution
     this.addTimelineEntry(incident, {
       type: 'action',
@@ -1265,7 +1265,7 @@ class IncidentResponseService {
       // Execute pending automated actions
       incident.automatedActions
         .filter(action => action.status === 'pending')
-        .forEach(async action {
+        .forEach(async action => {
           action.status = 'running';
           try {
             const result = await this.executeAction(action.name);

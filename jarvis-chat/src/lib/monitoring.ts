@@ -553,7 +553,7 @@ class MonitoringService implements APMService {
     message: string,
     level: 'info' | 'warning' | 'error',
     context?: Record<string, unknown>
-  ): void  => {
+  ): void {
     switch (level) {
       case 'error':
         captureError(message, context);
@@ -573,7 +573,7 @@ class MonitoringService implements APMService {
     name: string,
     value: number,
     tags?: Record<string, unknown>
-  ): void  => {
+  ): void {
     const metric = {
       timestamp: Date.now(),
       type: 'metric',
@@ -596,7 +596,7 @@ class MonitoringService implements APMService {
   trackBusinessEvent(
     event: string,
     properties?: Record<string, unknown>
-  ): void  => {
+  ): void {
     const eventData = {
       timestamp: Date.now(),
       type: 'event',
@@ -670,7 +670,7 @@ class MonitoringService implements APMService {
   }
 
   // Core Web Vitals getter
-  getCoreWebVitals(): Promise<CoreWebVitals>  => {
+  getCoreWebVitals(): Promise<CoreWebVitals> {
     return new Promise(resolve => {
       const vitals: Partial<CoreWebVitals> = {};
 
@@ -685,7 +685,7 @@ class MonitoringService implements APMService {
             checkComplete();
           });
           lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
-        } catch () {
+        } catch {
           vitals.lcp = 0;
         }
       }
@@ -754,7 +754,7 @@ class MonitoringService implements APMService {
       // Send to all services concurrently
       await Promise.allSettled(promises);
       
-    } catch () {
+    } catch (error) {
       // Log but don't throw - monitoring failures shouldn't break the app
       console.warn('External APM integration failed:', error);
     }
@@ -769,7 +769,7 @@ class MonitoringService implements APMService {
           window.DD_RUM.addAction(type, data);
         }
       }
-    } catch () {
+    } catch (error) {
       console.warn('DataDog integration failed:', error);
     }
   }
@@ -792,17 +792,17 @@ class MonitoringService implements APMService {
           });
         }
       }
-    } catch () {
+    } catch (error) {
       console.warn('Sentry integration failed:', error);
     }
   }
   
   private async sendToLogRocket(type: string, data: unknown): Promise<void>  {
     try {
-      const LogRocket = (window as any).__LOGROCKET__;
+      const LogRocket = (window as unknown as { __LOGROCKET__?: { captureException: (error: Error, options?: unknown) => void; track: (type: string, data: unknown) => void } }).__LOGROCKET__;
       if (LogRocket) {
         if (type === 'error' || type === 'critical_error') {
-          LogRocket.captureException(new Error((data as any).message || 'Unknown error'), {
+          LogRocket.captureException(new Error((data as { message?: string }).message || 'Unknown error'), {
             extra: data,
             tags: { source: 'apm_monitoring' }
           });
@@ -810,7 +810,7 @@ class MonitoringService implements APMService {
           LogRocket.track(type, data);
         }
       }
-    } catch () {
+    } catch (error) {
       console.warn('LogRocket integration failed:', error);
     }
   }
@@ -852,7 +852,7 @@ class MonitoringService implements APMService {
       if (!response.ok) {
         console.warn(`Webhook failed with status: ${response.status}`);
       }
-    } catch () {
+    } catch (error) {
       console.warn('Custom webhook integration failed:', error);
     }
   }
@@ -1070,7 +1070,7 @@ class MonitoringService implements APMService {
 
   private trackMemoryUsage(): void {
     if ('memory' in performance) {
-      const memory = (performance as any).memory;
+      const memory = (performance as unknown as { memory: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
       const memoryUsage = (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100;
       
       this.trackCustomMetric('performance.memory_usage', memoryUsage, {
@@ -1217,7 +1217,7 @@ export const withMonitoring = <T extends (...args: unknown[]) => unknown>(
         transaction.finish();
         return result;
       }
-    } catch () {
+    } catch (error) {
       transaction.setStatus('error');
       transaction.setMetadata({
         error: error instanceof Error ? error.message : String(error),
