@@ -771,9 +771,9 @@ export const accessibilityTester = new AccessibilityTester();
 /**
  * Initialize accessibility features
  */
-export function initializeAccessibility(): void  => {
+export function initializeAccessibility(): void {
   // Setup global keyboard navigation
-  document.addEventListener(\'keydown\', event => {
+  document.addEventListener('keydown', event => {
     keyboardNav.handleKeyDown(event);
   });
 
