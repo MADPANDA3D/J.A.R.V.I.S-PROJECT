@@ -513,7 +513,7 @@ export class WebhookService {
           data.error || 'Webhook returned success: false',
           WebhookErrorType.HTTP_ERROR,
           200,
-          true
+          false  // Don't retry on explicit failure
         );
       }
 
