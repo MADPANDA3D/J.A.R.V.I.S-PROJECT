@@ -252,7 +252,7 @@ class MonitoringService implements APMService {
 
         clsObserver.observe({ entryTypes: ['layout-shift'] });
       }
-    } catch () {
+    } catch (error) {
       captureWarning('Failed to initialize Core Web Vitals monitoring', {
         error,
       });

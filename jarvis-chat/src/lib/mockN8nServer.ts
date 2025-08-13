@@ -134,7 +134,7 @@ export class MockN8nServer {
   async simulateLoad(
     payloads: WebhookPayload[],
     concurrency: number = 10
-  ): Promise< => {
+  ): Promise<{
     successes: number;
     failures: number;
     averageResponseTime: number;
@@ -145,12 +145,12 @@ export class MockN8nServer {
     for (let i = 0; i < payloads.length; i += concurrency) {
       const chunk = payloads.slice(i, i + concurrency);
 
-      const promises = chunk.map(async payload {
+      const promises = chunk.map(async payload => {
         const startTime = Date.now();
         try {
           await this.processWebhook(payload);
           return { success: true, responseTime: Date.now() - startTime };
-        } catch () {
+        } catch (error) {
           return { success: false, responseTime: Date.now() - startTime };
         }
       });
@@ -174,7 +174,7 @@ export class MockN8nServer {
     this.scenarios.push({
       name: 'error-simulation',
       condition: payload => payload.message.includes('__simulate_error__'),
-      response: async () {
+      response: async () => {
         throw new Error('Simulated server error');
       },
     });
@@ -183,7 +183,7 @@ export class MockN8nServer {
     this.scenarios.push({
       name: 'timeout-simulation',
       condition: payload => payload.message.includes('__simulate_timeout__'),
-      response: async () {
+      response: async () => {
         await this.sleep(10000); // 10 seconds - should trigger timeout
         return {
           response: 'This should not be reached',
@@ -196,7 +196,7 @@ export class MockN8nServer {
     this.scenarios.push({
       name: 'slow-response',
       condition: payload => payload.message.includes('__simulate_slow__'),
-      response: async () {
+      response: async () => {
         await this.sleep(2000); // 2 seconds
         return {
           response: `Slow response to: ${payload.message}`,
@@ -210,7 +210,7 @@ export class MockN8nServer {
     this.scenarios.push({
       name: 'large-response',
       condition: payload => payload.message.includes('__simulate_large__'),
-      response: async () {
+      response: async () => {
         const largeResponse = 'A'.repeat(10000); // 10KB response
         return {
           response: `Large response: ${largeResponse}`,
@@ -224,7 +224,7 @@ export class MockN8nServer {
       name: 'invalid-format',
       condition: payload =>
         payload.message.includes('__simulate_invalid_format__'),
-      response: async () {
+      response: async () => {
         // Return invalid format (missing required fields)
         return { invalid: true } as unknown as WebhookResponse;
       },
@@ -234,7 +234,7 @@ export class MockN8nServer {
   private async executeScenario(
     scenario: MockScenario,
     payload: WebhookPayload
-  ): Promise<WebhookResponse>  => {
+  ): Promise<WebhookResponse> {
     // Apply scenario-specific or default latency
     const latency = scenario.latency ?? this.calculateLatency();
     await this.sleep(latency);
@@ -250,7 +250,7 @@ export class MockN8nServer {
 
   private async processDefaultRequest(
     payload: WebhookPayload
-  ): Promise<WebhookResponse>  => {
+  ): Promise<WebhookResponse> {
     // Simulate processing latency
     const latency = this.calculateLatency();
     await this.sleep(latency);
@@ -365,7 +365,7 @@ export class MockN8nServer {
     return `mock_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private sleep(ms: number): Promise<void>  => {
+  private sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 }

@@ -296,7 +296,7 @@ class LogAggregationService {
 
       // Send logs to external systems if configured
       this.sendToExternalSystems(recentLogs);
-    } catch () {
+    } catch (error) {
       captureError(
         error instanceof Error ? error : new Error('Log processing failed'),
         {

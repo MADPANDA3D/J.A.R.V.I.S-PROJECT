@@ -229,7 +229,7 @@ class InternalCommunicationService {
       attachments?: File[];
       isPinned?: boolean;
     } = {}
-  ): Promise< => { success: boolean; commentId?: string; error?: string }> {
+  ): Promise<{ success: boolean; commentId?: string; error?: string }> {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -376,7 +376,7 @@ class InternalCommunicationService {
     editorId: string,
     newContent: string,
     reason?: string
-  ): Promise< => { success: boolean; error?: string }> {
+  ): Promise<{ success: boolean; error?: string }> {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -462,7 +462,7 @@ class InternalCommunicationService {
     commentId: string,
     deleterId: string,
     reason?: string
-  ): Promise< => { success: boolean; error?: string }> {
+  ): Promise<{ success: boolean; error?: string }> {
     const correlationId = this.generateCorrelationId();
 
     try {
@@ -542,7 +542,7 @@ class InternalCommunicationService {
     commentId: string,
     userId: string,
     emoji: string
-  ): Promise< => { success: boolean; error?: string }> {
+  ): Promise<{ success: boolean; error?: string }> {
     try {
       const comment = this.commentsStorage.get(commentId);
       if (!comment || comment.isDeleted) {
@@ -593,7 +593,7 @@ class InternalCommunicationService {
       limit?: number;
       offset?: number;
     } = {}
-  ): InternalComment[]  => {
+  ): InternalComment[] {
     const commentIds = this.commentsIndex.get(bugId) || [];
     let comments = commentIds
       .map(id => this.commentsStorage.get(id))
@@ -728,7 +728,7 @@ class InternalCommunicationService {
     hostId: string,
     sessionType: CollaborationSession['sessionType'],
     participantIds: string[] = []
-  ): Promise< => { success: boolean; sessionId?: string; error?: string }> {
+  ): Promise<{ success: boolean; sessionId?: string; error?: string }> {
     try {
       const sessionId = this.generateSessionId();
       
@@ -807,7 +807,7 @@ class InternalCommunicationService {
       dateRange?: { start: string; end: string };
       limit?: number;
     } = {}
-  ): AuditTrailEntry[]  => {
+  ): AuditTrailEntry[] {
     let entries = this.auditTrail.get(bugId) || [];
 
     // Apply filters
@@ -843,7 +843,7 @@ class InternalCommunicationService {
   private async processMentions(
     content: string,
     explicitMentions: Omit<CommentMention, 'id' | 'resolved' | 'notifiedAt'>[]
-  ): Promise<CommentMention[]>  => {
+  ): Promise<CommentMention[]> {
     const mentions: CommentMention[] = [];
     
     // Process explicit mentions
@@ -880,7 +880,7 @@ class InternalCommunicationService {
   private async processAttachments(
     files: File[],
     uploaderId: string
-  ): Promise<CommentAttachment[]>  => {
+  ): Promise<CommentAttachment[]> {
     const attachments: CommentAttachment[] = [];
 
     for (const file of files) {
