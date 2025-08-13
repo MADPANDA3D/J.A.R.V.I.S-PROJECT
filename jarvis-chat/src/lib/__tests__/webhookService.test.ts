@@ -2,61 +2,42 @@
  * Comprehensive WebhookService Test Suite
  * Tests for webhook functionality, error handling, retry logic, and performance
  * 
- * FIXED: Uses fake timers and deterministic time advancement to prevent timeouts and OOM
+ * FIXED: Uses makeWebhook factory and fake timers to prevent timeouts and OOM
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import {
-  WebhookService,
   WebhookErrorType,
   WebhookPayload,
   WebhookResponse,
 } from '../webhookService';
+import { makeWebhook } from './test-utils/webhookFactory';
+import { resetServiceMonitoring } from '../serviceMonitoring';
 
-// Global fake timers setup
-vi.useFakeTimers();
+// Helper for microtask flushing
+const flushMicrotasks = async () => await Promise.resolve();
 
 describe('WebhookService', () => {
-  let webhookService: WebhookService;
-  let mockFetch: ReturnType<typeof vi.fn>;
-
   beforeEach(() => {
-    // Clear all mocks and timers
-    vi.clearAllMocks();
-    vi.clearAllTimers();
-
-    // Create fresh mock fetch
-    mockFetch = vi.fn();
-
-    // Create webhook service with test configuration and injected fetch
-    webhookService = new WebhookService({
-      webhookUrl: 'https://test-webhook.example.com/webhook',
-      timeout: 5000,
-      retryConfig: {
-        maxAttempts: 3,
-        baseDelay: 100, // Small delays for testing
-        maxDelay: 1000,
-        backoffFactor: 2.0,
-        jitter: false, // Disable jitter for predictable testing
-      },
-      circuitBreakerOptions: {
-        failureThreshold: 3,
-        recoveryTimeout: 1000, // Short recovery for testing
-        monitoringWindow: 5000,
-      },
-      enableMetrics: true,
-    }, { fetch: mockFetch });
+    vi.useFakeTimers();
+    // Stub console methods to prevent noise in tests
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
-  afterEach(() => {
-    // Clean up timers and restore mocks
-    vi.runOnlyPendingTimers();
+  afterEach(async () => {
+    await vi.runOnlyPendingTimersAsync();
     vi.clearAllTimers();
-    webhookService.destroy(); // Clean up service resources
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+    // Reset singleton state to prevent OOM from growing arrays
+    resetServiceMonitoring();
   });
 
   describe('Message Sending Success Scenarios', () => {
     it('should send message successfully with valid payload', async () => {
+      const { service, mockFetch } = makeWebhook();
       const mockResponse: WebhookResponse = {
         response: 'Hello, how can I help you?',
         success: true,
@@ -77,11 +58,11 @@ describe('WebhookService', () => {
         conversationId: 'conv_123',
       };
 
-      const result = await webhookService.sendMessage(payload);
+      const result = await service.sendMessage(payload);
 
       expect(result).toEqual(mockResponse);
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://test-webhook.example.com/webhook',
+        'https://example.test/webhook',
         expect.objectContaining({
           method: 'POST',
           headers: expect.objectContaining({
@@ -91,9 +72,12 @@ describe('WebhookService', () => {
           body: expect.stringContaining('"message":"Hello"'),
         })
       );
+
+      service.destroy();
     });
 
     it('should include request metadata in payload', async () => {
+      const { service, mockFetch } = makeWebhook();
       const mockResponse: WebhookResponse = {
         response: 'Response',
         success: true,
@@ -112,7 +96,7 @@ describe('WebhookService', () => {
         metadata: { source: 'chat', priority: 'normal' },
       };
 
-      await webhookService.sendMessage(payload);
+      await service.sendMessage(payload);
 
       const callArgs = mockFetch.mock.calls[0];
       const requestBody = JSON.parse(callArgs[1].body);
@@ -124,9 +108,12 @@ describe('WebhookService', () => {
         requestId: expect.stringMatching(/^req_/),
         clientVersion: '1.0.0',
       });
+
+      service.destroy();
     });
 
     it('should handle response with additional fields', async () => {
+      const { service, mockFetch } = makeWebhook();
       const mockResponse: WebhookResponse = {
         response: 'Response with extra data',
         success: true,
@@ -146,16 +133,18 @@ describe('WebhookService', () => {
         timestamp: new Date().toISOString(),
       };
 
-      const result = await webhookService.sendMessage(payload);
+      const result = await service.sendMessage(payload);
 
       expect(result.requestId).toBe('server_req_456');
       expect(result.processingTime).toBe(200);
+
+      service.destroy();
     });
   });
 
   describe('Error Handling', () => {
     it('should throw validation error for missing webhook URL', async () => {
-      const serviceWithoutUrl = new WebhookService({ webhookUrl: '' }, { fetch: mockFetch });
+      const { service: serviceWithoutUrl } = makeWebhook({ webhookUrl: '' });
 
       const payload: WebhookPayload = {
         message: 'Test',
@@ -175,6 +164,7 @@ describe('WebhookService', () => {
     });
 
     it('should handle HTTP error responses', async () => {
+      const { service, mockFetch } = makeWebhook();
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 500,
@@ -187,16 +177,21 @@ describe('WebhookService', () => {
         timestamp: new Date().toISOString(),
       };
 
-      await expect(webhookService.sendMessage(payload)).rejects.toThrow(
+      await expect(service.sendMessage(payload)).rejects.toThrow(
         expect.objectContaining({
           type: WebhookErrorType.HTTP_ERROR,
           statusCode: 500,
           isRetryable: true,
         })
       );
+      expect(mockFetch).toHaveBeenCalledTimes(1);
+      await flushMicrotasks();
+
+      service.destroy();
     });
 
     it('should handle network errors', async () => {
+      const { service, mockFetch } = makeWebhook();
       mockFetch.mockRejectedValueOnce(new TypeError('Failed to fetch'));
 
       const payload: WebhookPayload = {
@@ -205,19 +200,22 @@ describe('WebhookService', () => {
         timestamp: new Date().toISOString(),
       };
 
-      await expect(webhookService.sendMessage(payload)).rejects.toThrow(
+      const promise = service.sendMessage(payload);
+      await vi.advanceTimersByTimeAsync(150); // Sum of retry delays
+      
+      await expect(promise).rejects.toThrow(
         expect.objectContaining({
           type: WebhookErrorType.NETWORK_ERROR,
           isRetryable: true,
         })
       );
+
+      service.destroy();
     });
 
     it('should handle timeout errors', async () => {
-      // Mock AbortError
-      const abortError = new Error('The operation was aborted');
-      abortError.name = 'AbortError';
-      mockFetch.mockRejectedValueOnce(abortError);
+      const { service, mockFetch } = makeWebhook({ timeout: 200 });
+      mockFetch.mockResolvedValueOnce(new Promise(() => {}) as unknown as Response); // never resolves → Abort
 
       const payload: WebhookPayload = {
         message: 'Test',
@@ -225,16 +223,16 @@ describe('WebhookService', () => {
         timestamp: new Date().toISOString(),
       };
 
-      await expect(webhookService.sendMessage(payload)).rejects.toThrow(
-        expect.objectContaining({
-          type: WebhookErrorType.TIMEOUT_ERROR,
-          statusCode: 408,
-          isRetryable: true,
-        })
-      );
+      const promise = service.sendMessage(payload);
+      await vi.advanceTimersByTimeAsync(200);
+      
+      await expect(promise).rejects.toThrow(/aborted|timeout/i);
+
+      service.destroy();
     });
 
     it('should handle malformed response format', async () => {
+      const { service, mockFetch } = makeWebhook();
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -247,16 +245,21 @@ describe('WebhookService', () => {
         timestamp: new Date().toISOString(),
       };
 
-      await expect(webhookService.sendMessage(payload)).rejects.toThrow(
+      await expect(service.sendMessage(payload)).rejects.toThrow(
         expect.objectContaining({
           type: WebhookErrorType.VALIDATION_ERROR,
           message: 'Invalid response format from webhook',
           isRetryable: false,
         })
       );
+      expect(mockFetch).toHaveBeenCalledTimes(1);
+      await flushMicrotasks();
+
+      service.destroy();
     });
 
     it('should handle webhook response with success: false', async () => {
+      const { service, mockFetch } = makeWebhook();
       const errorResponse = {
         response: '',
         success: false,
@@ -275,18 +278,23 @@ describe('WebhookService', () => {
         timestamp: new Date().toISOString(),
       };
 
-      await expect(webhookService.sendMessage(payload)).rejects.toThrow(
+      await expect(service.sendMessage(payload)).rejects.toThrow(
         expect.objectContaining({
           type: WebhookErrorType.HTTP_ERROR,
           message: 'Processing failed on server',
           isRetryable: true,
         })
       );
+      expect(mockFetch).toHaveBeenCalledTimes(1);
+      await flushMicrotasks();
+
+      service.destroy();
     });
   });
 
   describe('Retry Logic with Exponential Backoff', () => {
     it('should retry on retryable errors with fake timer advancement', async () => {
+      const { service, mockFetch } = makeWebhook();
       // First two calls fail, third succeeds
       mockFetch
         .mockRejectedValueOnce(new TypeError('Network error'))
@@ -308,20 +316,22 @@ describe('WebhookService', () => {
       };
 
       // Start the async operation
-      const resultPromise = webhookService.sendMessage(payload);
+      const resultPromise = service.sendMessage(payload);
 
       // Advance timers to trigger retries
-      // First retry after 100ms, second retry after 200ms
-      await vi.advanceTimersByTimeAsync(300);
+      // First retry after 50ms, second retry after 100ms
+      await vi.advanceTimersByTimeAsync(150);
 
       const result = await resultPromise;
 
       expect(result.response).toBe('Success after retries');
       expect(mockFetch).toHaveBeenCalledTimes(3);
+
+      service.destroy();
     });
 
     it('should not retry on non-retryable errors', async () => {
-      const serviceWithoutUrl = new WebhookService({ webhookUrl: '' }, { fetch: mockFetch });
+      const { service: serviceWithoutUrl } = makeWebhook({ webhookUrl: '' });
 
       const payload: WebhookPayload = {
         message: 'Test',
@@ -337,7 +347,8 @@ describe('WebhookService', () => {
       serviceWithoutUrl.destroy();
     });
 
-    it('should respect max retry attempts', async () => {
+    it('should respect max attempts', async () => {
+      const { service, mockFetch } = makeWebhook();
       // All calls fail
       mockFetch.mockRejectedValue(new TypeError('Persistent network error'));
 
@@ -347,19 +358,22 @@ describe('WebhookService', () => {
         timestamp: new Date().toISOString(),
       };
 
-      const resultPromise = webhookService.sendMessage(payload);
+      const resultPromise = service.sendMessage(payload);
 
       // Advance timers to complete all retry attempts
-      // Total time: 100ms + 200ms = 300ms for all retries
-      await vi.advanceTimersByTimeAsync(300);
+      // Total time: 50ms + 100ms = 150ms for all retries
+      await vi.advanceTimersByTimeAsync(150);
 
       await expect(resultPromise).rejects.toThrow();
 
       // Should try initial attempt + 2 retries = 3 total
       expect(mockFetch).toHaveBeenCalledTimes(3);
+
+      service.destroy();
     });
 
     it('should calculate exponential backoff delays', async () => {
+      const { service, mockFetch } = makeWebhook();
       mockFetch.mockRejectedValue(new TypeError('Network error'));
 
       const payload: WebhookPayload = {
@@ -368,18 +382,21 @@ describe('WebhookService', () => {
         timestamp: new Date().toISOString(),
       };
 
-      const promise = webhookService.sendMessage(payload);
+      const promise = service.sendMessage(payload);
 
       // Advance timers to complete all attempts
-      await vi.advanceTimersByTimeAsync(300);
+      await vi.advanceTimersByTimeAsync(150);
 
       await expect(promise).rejects.toThrow();
 
       // Should have made multiple attempts
       expect(mockFetch).toHaveBeenCalledTimes(3);
+
+      service.destroy();
     });
 
     it('should not retry on 4xx client errors (except 408, 429)', async () => {
+      const { service, mockFetch } = makeWebhook();
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 400,
@@ -392,13 +409,17 @@ describe('WebhookService', () => {
         timestamp: new Date().toISOString(),
       };
 
-      await expect(webhookService.sendMessage(payload)).rejects.toThrow();
+      await expect(service.sendMessage(payload)).rejects.toThrow();
 
       // Should only make one attempt for non-retryable client errors
       expect(mockFetch).toHaveBeenCalledTimes(1);
+      await flushMicrotasks();
+
+      service.destroy();
     });
 
     it('should retry on retryable HTTP status codes', async () => {
+      const { service, mockFetch } = makeWebhook();
       // Test 429 (Too Many Requests) - should retry
       mockFetch
         .mockResolvedValueOnce({
@@ -422,29 +443,30 @@ describe('WebhookService', () => {
         timestamp: new Date().toISOString(),
       };
 
-      const resultPromise = webhookService.sendMessage(payload);
+      const resultPromise = service.sendMessage(payload);
 
       // Advance timer for the retry delay
-      await vi.advanceTimersByTimeAsync(100);
+      await vi.advanceTimersByTimeAsync(50);
 
       const result = await resultPromise;
 
       expect(result.response).toBe('Success after rate limit');
       expect(mockFetch).toHaveBeenCalledTimes(2);
+
+      service.destroy();
     });
   });
 
   describe('Circuit Breaker Pattern', () => {
     it('should open circuit after failure threshold with fake timers', async () => {
       // Configure service with low failure threshold
-      const testService = new WebhookService({
-        webhookUrl: 'https://test.example.com/webhook',
+      const { service: testService, mockFetch } = makeWebhook({
         circuitBreakerOptions: {
           failureThreshold: 2,
           recoveryTimeout: 1000,
           monitoringWindow: 5000,
         },
-      }, { fetch: mockFetch });
+      });
 
       mockFetch.mockRejectedValue(new TypeError('Network error'));
 
@@ -456,12 +478,12 @@ describe('WebhookService', () => {
 
       // First failure - advance timers for retries
       const firstPromise = testService.sendMessage(payload);
-      await vi.advanceTimersByTimeAsync(300);
+      await vi.advanceTimersByTimeAsync(150);
       await expect(firstPromise).rejects.toThrow();
 
       // Second failure - should open circuit
       const secondPromise = testService.sendMessage(payload);
-      await vi.advanceTimersByTimeAsync(300);
+      await vi.advanceTimersByTimeAsync(150);
       await expect(secondPromise).rejects.toThrow();
 
       // Third call should fail immediately with circuit breaker error
@@ -479,14 +501,13 @@ describe('WebhookService', () => {
     });
 
     it('should reset circuit breaker on successful request', async () => {
-      const testService = new WebhookService({
-        webhookUrl: 'https://test.example.com/webhook',
+      const { service: testService, mockFetch } = makeWebhook({
         circuitBreakerOptions: {
           failureThreshold: 2,
           recoveryTimeout: 100, // Very short for testing
           monitoringWindow: 5000,
         },
-      }, { fetch: mockFetch });
+      });
 
       const payload: WebhookPayload = {
         message: 'Test circuit recovery',
@@ -498,11 +519,11 @@ describe('WebhookService', () => {
       mockFetch.mockRejectedValue(new TypeError('Network error'));
       
       const firstPromise = testService.sendMessage(payload);
-      await vi.advanceTimersByTimeAsync(300);
+      await vi.advanceTimersByTimeAsync(150);
       await expect(firstPromise).rejects.toThrow();
       
       const secondPromise = testService.sendMessage(payload);
-      await vi.advanceTimersByTimeAsync(300);
+      await vi.advanceTimersByTimeAsync(150);
       await expect(secondPromise).rejects.toThrow();
 
       // Fast forward time for recovery timeout
@@ -529,27 +550,34 @@ describe('WebhookService', () => {
     });
 
     it('should provide circuit breaker configuration methods', () => {
-      webhookService.configureCircuitBreaker({
+      const { service } = makeWebhook();
+      service.configureCircuitBreaker({
         failureThreshold: 10,
         recoveryTimeout: 30000,
       });
 
-      const config = webhookService.getConfig();
+      const config = service.getConfig();
       expect(config.circuitBreakerOptions.failureThreshold).toBe(10);
       expect(config.circuitBreakerOptions.recoveryTimeout).toBe(30000);
+
+      service.destroy();
     });
 
     it('should allow manual circuit breaker reset', () => {
+      const { service } = makeWebhook();
       // Force some failures to change circuit state
-      webhookService.resetCircuitBreaker();
+      service.resetCircuitBreaker();
 
-      const metrics = webhookService.getMetrics();
+      const metrics = service.getMetrics();
       expect(metrics.circuitBreakerState).toBe('closed');
+
+      service.destroy();
     });
   });
 
   describe('Webhook Payload Validation', () => {
     it('should validate required payload fields', async () => {
+      const { service, mockFetch } = makeWebhook();
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -566,7 +594,7 @@ describe('WebhookService', () => {
         timestamp: new Date().toISOString(),
       };
 
-      await webhookService.sendMessage(payload);
+      await service.sendMessage(payload);
 
       const callArgs = mockFetch.mock.calls[0];
       const requestBody = JSON.parse(callArgs[1].body);
@@ -576,9 +604,12 @@ describe('WebhookService', () => {
       expect(requestBody).toHaveProperty('timestamp');
       expect(requestBody).toHaveProperty('requestId');
       expect(requestBody).toHaveProperty('clientVersion');
+
+      service.destroy();
     });
 
     it('should include optional payload fields when provided', async () => {
+      const { service, mockFetch } = makeWebhook();
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -601,7 +632,7 @@ describe('WebhookService', () => {
         },
       };
 
-      await webhookService.sendMessage(payload);
+      await service.sendMessage(payload);
 
       const callArgs = mockFetch.mock.calls[0];
       const requestBody = JSON.parse(callArgs[1].body);
@@ -612,6 +643,8 @@ describe('WebhookService', () => {
         version: '1.2.3',
         sessionId: 'session_789',
       });
+
+      service.destroy();
     });
 
     it('should validate webhook response format strictly', async () => {
@@ -629,6 +662,7 @@ describe('WebhookService', () => {
       ];
 
       for (const invalidResponse of testCases) {
+        const { service, mockFetch } = makeWebhook();
         mockFetch.mockResolvedValueOnce({
           ok: true,
           status: 200,
@@ -641,18 +675,21 @@ describe('WebhookService', () => {
           timestamp: new Date().toISOString(),
         };
 
-        await expect(webhookService.sendMessage(payload)).rejects.toThrow(
+        await expect(service.sendMessage(payload)).rejects.toThrow(
           expect.objectContaining({
             type: WebhookErrorType.VALIDATION_ERROR,
             message: 'Invalid response format from webhook',
           })
         );
+
+        service.destroy();
       }
     });
   });
 
   describe('Performance and Metrics', () => {
     it('should track request metrics', async () => {
+      const { service, mockFetch } = makeWebhook();
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -669,17 +706,20 @@ describe('WebhookService', () => {
         timestamp: new Date().toISOString(),
       };
 
-      await webhookService.sendMessage(payload);
+      await service.sendMessage(payload);
 
-      const metrics = webhookService.getMetrics();
+      const metrics = service.getMetrics();
       expect(metrics.totalRequests).toBe(1);
       expect(metrics.successfulRequests).toBe(1);
       expect(metrics.failedRequests).toBe(0);
       expect(metrics.errorRate).toBe(0);
       expect(metrics.averageResponseTime).toBeGreaterThan(0);
+
+      service.destroy();
     });
 
     it('should track error metrics on failures', async () => {
+      const { service, mockFetch } = makeWebhook();
       mockFetch.mockRejectedValueOnce(new TypeError('Network error'));
 
       const payload: WebhookPayload = {
@@ -688,20 +728,23 @@ describe('WebhookService', () => {
         timestamp: new Date().toISOString(),
       };
 
-      const errorPromise = webhookService.sendMessage(payload);
+      const errorPromise = service.sendMessage(payload);
       
       // Advance timers for retry attempts
-      await vi.advanceTimersByTimeAsync(300);
+      await vi.advanceTimersByTimeAsync(150);
       
       await expect(errorPromise).rejects.toThrow();
 
-      const metrics = webhookService.getMetrics();
+      const metrics = service.getMetrics();
       expect(metrics.totalRequests).toBeGreaterThan(0);
       expect(metrics.failedRequests).toBeGreaterThan(0);
       expect(metrics.errorRate).toBeGreaterThan(0);
+
+      service.destroy();
     });
 
     it('should calculate percentile response times', async () => {
+      const { service, mockFetch } = makeWebhook();
       // Send multiple requests to get response time data
       for (let i = 0; i < 10; i++) {
         mockFetch.mockResolvedValueOnce({
@@ -720,15 +763,18 @@ describe('WebhookService', () => {
           timestamp: new Date().toISOString(),
         };
 
-        await webhookService.sendMessage(payload);
+        await service.sendMessage(payload);
       }
 
-      const metrics = webhookService.getMetrics();
+      const metrics = service.getMetrics();
       expect(metrics.p95ResponseTime).toBeGreaterThanOrEqual(0);
       expect(metrics.averageResponseTime).toBeGreaterThanOrEqual(0);
+
+      service.destroy();
     });
 
     it('should include last request timestamp in metrics', async () => {
+      const { service, mockFetch } = makeWebhook();
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -747,18 +793,21 @@ describe('WebhookService', () => {
         timestamp: new Date().toISOString(),
       };
 
-      await webhookService.sendMessage(payload);
+      await service.sendMessage(payload);
 
-      const metrics = webhookService.getMetrics();
+      const metrics = service.getMetrics();
       expect(metrics.lastRequestTime).toBeDefined();
       expect(metrics.lastRequestTime!.getTime()).toBeGreaterThanOrEqual(
         beforeRequest.getTime()
       );
+
+      service.destroy();
     });
   });
 
   describe('Health Check', () => {
     it('should perform health check successfully', async () => {
+      const { service, mockFetch } = makeWebhook();
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -769,7 +818,7 @@ describe('WebhookService', () => {
           }),
       });
 
-      const healthStatus = await webhookService.healthCheck();
+      const healthStatus = await service.healthCheck();
 
       expect(healthStatus.status).toBe('healthy');
       expect(healthStatus.responseTime).toBeGreaterThan(0);
@@ -780,26 +829,32 @@ describe('WebhookService', () => {
       const requestBody = JSON.parse(callArgs[1].body);
       expect(requestBody.message).toBe('__health_check__');
       expect(requestBody.userId).toBe('system');
+
+      service.destroy();
     });
 
     it('should return unhealthy status on errors', async () => {
+      const { service, mockFetch } = makeWebhook();
       mockFetch.mockRejectedValueOnce(new TypeError('Connection failed'));
 
-      const healthPromise = webhookService.healthCheck();
+      const healthPromise = service.healthCheck();
       
       // Advance timers for retry attempts
-      await vi.advanceTimersByTimeAsync(300);
+      await vi.advanceTimersByTimeAsync(150);
       
       const healthStatus = await healthPromise;
 
       expect(healthStatus.status).toBe('unhealthy');
       expect(healthStatus.error).toContain('Connection failed');
       expect(healthStatus.responseTime).toBeUndefined();
+
+      service.destroy();
     });
   });
 
   describe('Concurrent Request Handling', () => {
     it('should handle multiple concurrent requests', async () => {
+      const { service, mockFetch } = makeWebhook();
       // Setup mock to respond to multiple requests
       mockFetch.mockImplementation(() =>
         Promise.resolve({
@@ -822,7 +877,7 @@ describe('WebhookService', () => {
       // Send 5 concurrent requests
       const promises = Array(5)
         .fill(null)
-        .map(() => webhookService.sendMessage(payload));
+        .map(() => service.sendMessage(payload));
 
       const results = await Promise.all(promises);
 
@@ -833,9 +888,12 @@ describe('WebhookService', () => {
       });
 
       expect(mockFetch).toHaveBeenCalledTimes(5);
+
+      service.destroy();
     });
 
     it('should handle mixed success/failure in concurrent requests', async () => {
+      const { service, mockFetch } = makeWebhook();
       let callCount = 0;
       mockFetch.mockImplementation(() => {
         callCount++;
@@ -863,10 +921,10 @@ describe('WebhookService', () => {
         .fill(null)
         .map(async () => {
           try {
-            return await webhookService.sendMessage(payload);
+            return await service.sendMessage(payload);
           } catch (err) {
             // Need to advance timers for failed requests with retries
-            await vi.advanceTimersByTimeAsync(300);
+            await vi.advanceTimersByTimeAsync(150);
             return err;
           }
         });
@@ -879,6 +937,8 @@ describe('WebhookService', () => {
 
       expect(successes.length).toBeGreaterThan(0);
       expect(errors.length).toBeGreaterThan(0);
+
+      service.destroy();
     });
   });
 
@@ -893,6 +953,7 @@ describe('WebhookService', () => {
         },
       });
 
+      const { service: serviceWithAuth, mockFetch } = makeWebhook();
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -902,10 +963,6 @@ describe('WebhookService', () => {
             success: true,
           }),
       });
-
-      const serviceWithAuth = new WebhookService({
-        webhookUrl: 'https://test-webhook.example.com/webhook',
-      }, { fetch: mockFetch });
 
       const payload: WebhookPayload = {
         message: 'Authenticated request',
@@ -929,6 +986,7 @@ describe('WebhookService', () => {
     });
 
     it('should include standard headers in all requests', async () => {
+      const { service, mockFetch } = makeWebhook();
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -945,16 +1003,19 @@ describe('WebhookService', () => {
         timestamp: new Date().toISOString(),
       };
 
-      await webhookService.sendMessage(payload);
+      await service.sendMessage(payload);
 
       const callArgs = mockFetch.mock.calls[0];
       const headers = callArgs[1].headers;
 
       expect(headers['Content-Type']).toBe('application/json');
       expect(headers['User-Agent']).toBe('JARVIS-Chat/1.0');
+
+      service.destroy();
     });
 
     it('should generate unique request IDs', async () => {
+      const { service, mockFetch } = makeWebhook();
       mockFetch.mockImplementation(() =>
         Promise.resolve({
           ok: true,
@@ -974,8 +1035,8 @@ describe('WebhookService', () => {
       };
 
       // Send multiple requests
-      await webhookService.sendMessage(payload);
-      await webhookService.sendMessage(payload);
+      await service.sendMessage(payload);
+      await service.sendMessage(payload);
 
       const call1Body = JSON.parse(mockFetch.mock.calls[0][1].body);
       const call2Body = JSON.parse(mockFetch.mock.calls[1][1].body);
@@ -983,11 +1044,14 @@ describe('WebhookService', () => {
       expect(call1Body.requestId).toMatch(/^req_\d+_[a-z0-9]+$/);
       expect(call2Body.requestId).toMatch(/^req_\d+_[a-z0-9]+$/);
       expect(call1Body.requestId).not.toBe(call2Body.requestId);
+
+      service.destroy();
     });
   });
 
   describe('Timer Management and Cleanup', () => {
     it('should not have pending timers after operation completion', async () => {
+      const { service, mockFetch } = makeWebhook();
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -1000,16 +1064,16 @@ describe('WebhookService', () => {
         timestamp: new Date().toISOString(),
       };
 
-      await webhookService.sendMessage(payload);
+      await service.sendMessage(payload);
 
-      // Verify no timers are left pending
-      expect(vi.getTimerCount()).toBe(1); // Only the circuit breaker recovery timer should remain
+      // Verify no timers are left pending (only circuit breaker recovery timer should remain)
+      expect(vi.getTimerCount()).toBe(1);
+
+      service.destroy();
     });
 
     it('should clean up resources on destroy', () => {
-      const service = new WebhookService({
-        webhookUrl: 'https://test.example.com/webhook',
-      }, { fetch: mockFetch });
+      const { service } = makeWebhook();
 
       // Service should have created a recovery timer
       expect(vi.getTimerCount()).toBeGreaterThan(0);

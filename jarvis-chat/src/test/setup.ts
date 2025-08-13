@@ -66,8 +66,20 @@ global.IntersectionObserver = vi.fn().mockImplementation(() => ({
   disconnect: vi.fn(),
 }));
 
-// Mock fetch
-global.fetch = vi.fn();
+// Safety net: Make accidental global fetch usage blow up loudly in tests
+globalThis.fetch = (() => {
+  throw new Error('TEST used global fetch; inject a mock via WebhookService deps');
+}) as typeof fetch;
+
+// Timeout overflow protection sentinel
+import { MAX_TIMEOUT_MS } from '../lib/time';
+const realSetTimeout = global.setTimeout;
+vi.spyOn(global, 'setTimeout').mockImplementation(((fn: () => void, ms?: number, ...args: unknown[]) => {
+  if (typeof ms === 'number' && ms > MAX_TIMEOUT_MS) {
+    throw new Error(`Timeout overflow scheduled: ${ms}`);
+  }
+  return realSetTimeout(fn, ms as number, ...args);
+}) as typeof setTimeout);
 
 // Mock localStorage
 const localStorageMock = {

@@ -213,7 +213,16 @@ export class WebhookService {
   private _recoveryCheckInterval?: ReturnType<typeof setTimeout>;
 
   constructor(config: Partial<WebhookServiceConfig> = {}, dependencies: WebhookServiceDependencies = { fetch: globalThis.fetch }) {
-    this.fetch = dependencies.fetch;
+    // Constructor guard (dev/test only): warn if globalThis.fetch would be used by accident
+    if (isTestEnvironment() && !dependencies?.fetch) {
+      console.warn('TEST: WebhookService created without fetch injection - this may cause test timeouts');
+      // In tests, use a mock fetch that always fails to prevent hanging
+      this.fetch = (async () => {
+        throw new Error('WebhookService: Mock fetch - real requests not allowed in tests');
+      }) as typeof fetch;
+    } else {
+      this.fetch = dependencies.fetch;
+    }
     this.config = {
       webhookUrl: import.meta.env.VITE_N8N_WEBHOOK_URL || '',
       timeout: parseInt(import.meta.env.WEBHOOK_TIMEOUT || '15000'),
