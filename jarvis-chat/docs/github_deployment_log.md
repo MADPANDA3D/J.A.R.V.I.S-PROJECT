@@ -1,8 +1,12 @@
 Run echo "🧪 Running test suite..."
 🧪 Running test suite...
+
 > jarvis-chat@0.0.0 test:ci
 > NODE_OPTIONS='--max-old-space-size=4096' vitest run --pool=forks --poolOptions.forks.singleFork=true --reporter=verbose --bail=10
+
+
  RUN  v3.2.4 /home/runner/work/J.A.R.V.I.S-PROJECT/J.A.R.V.I.S-PROJECT/jarvis-chat
+
  ✓ src/lib/__tests__/bugLifecycleIntegration.test.ts > Bug Lifecycle Integration Tests > Complete Bug Lifecycle Workflow > processes complete bug lifecycle from open to closed 9ms
  ✓ src/lib/__tests__/bugLifecycleIntegration.test.ts > Bug Lifecycle Integration Tests > Complete Bug Lifecycle Workflow > handles escalation workflow correctly 1ms
  ✓ src/lib/__tests__/bugLifecycleIntegration.test.ts > Bug Lifecycle Integration Tests > Notification Integration > sends notifications throughout bug lifecycle 1ms
@@ -13,25 +17,26 @@ Run echo "🧪 Running test suite..."
  ✓ src/lib/__tests__/bugLifecycleIntegration.test.ts > Bug Lifecycle Integration Tests > Performance and Scalability > handles concurrent operations efficiently 1ms
  ✓ src/lib/__tests__/bugLifecycleIntegration.test.ts > Bug Lifecycle Integration Tests > Performance and Scalability > maintains data consistency under load 1ms
  ✓ src/lib/__tests__/bugLifecycleIntegration.test.ts > Bug Lifecycle Integration Tests > Error Handling and Recovery > handles service failures gracefully 1ms
- ✓ src/lib/__tests__/bugLifecycleIntegration.test.ts > Bug Lifecycle Integration Tests > Error Handling and Recovery > validates state transitions correctly 0ms
+ ✓ src/lib/__tests__/bugLifecycleIntegration.test.ts > Bug Lifecycle Integration Tests > Error Handling and Recovery > validates state transitions correctly 1ms
  ✓ src/lib/__tests__/bugLifecycleIntegration.test.ts > Bug Lifecycle Integration Tests > Integration with Monitoring > tracks all lifecycle events for monitoring 3ms
  ✓ src/lib/__tests__/bugLifecycleIntegration.test.ts > Bug Lifecycle Integration Tests > Workflow Optimization > optimizes assignment recommendations based on workload 1ms
  ✓ src/lib/__tests__/bugLifecycleIntegration.test.ts > Bug Lifecycle Integration Tests > Workflow Optimization > provides workload balancing recommendations 1ms
-(node:2249) PromiseRejectionHandledWarning: Promise rejection was handled asynchronously (rejection id: 4)
-(Use `node --trace-warnings ...` to show where the warning was created)
-(node:2249) PromiseRejectionHandledWarning: Promise rejection was handled asynchronously (rejection id: 11)
-(node:2249) PromiseRejectionHandledWarning: Promise rejection was handled asynchronously (rejection id: 15)
-(node:2249) PromiseRejectionHandledWarning: Promise rejection was handled asynchronously (rejection id: 19)
-(node:2249) PromiseRejectionHandledWarning: Promise rejection was handled asynchronously (rejection id: 23)
-(node:2249) PromiseRejectionHandledWarning: Promise rejection was handled asynchronously (rejection id: 28)
-(node:2249) PromiseRejectionHandledWarning: Promise rejection was handled asynchronously (rejection id: 32)
- ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Message Sending Success Scenarios > should send message successfully with valid payload 6ms
- ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Message Sending Success Scenarios > should include request metadata in payload 2ms
+ ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Message Sending Success Scenarios > should send message successfully with valid payload 7ms
+ ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Message Sending Success Scenarios > should include request metadata in payload 3ms
  ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Message Sending Success Scenarios > should handle response with additional fields 1ms
- ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Error Handling > should throw validation error for missing webhook URL 1ms
- ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Error Handling > should handle HTTP error responses 2ms
- ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Error Handling > should handle network errors 2ms
- ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Error Handling > should handle timeout errors 4ms
+ ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Error Handling > should throw validation error for missing webhook URL 2ms
+ ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Error Handling > should handle HTTP error responses 3ms
+ ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Error Handling > should handle network errors 1ms
+(node:2277) PromiseRejectionHandledWarning: Promise rejection was handled asynchronously (rejection id: 4)
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:2277) PromiseRejectionHandledWarning: Promise rejection was handled asynchronously (rejection id: 11)
+(node:2277) PromiseRejectionHandledWarning: Promise rejection was handled asynchronously (rejection id: 15)
+(node:2277) PromiseRejectionHandledWarning: Promise rejection was handled asynchronously (rejection id: 19)
+(node:2277) PromiseRejectionHandledWarning: Promise rejection was handled asynchronously (rejection id: 23)
+(node:2277) PromiseRejectionHandledWarning: Promise rejection was handled asynchronously (rejection id: 28)
+(node:2277) PromiseRejectionHandledWarning: Promise rejection was handled asynchronously (rejection id: 32)
+(node:2277) PromiseRejectionHandledWarning: Promise rejection was handled asynchronously (rejection id: 34)
+ ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Error Handling > should handle timeout errors 5ms
  ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Error Handling > should handle malformed response format 2ms
  ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Error Handling > should handle webhook response with success: false 2ms
  ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Retry Logic with Exponential Backoff > should retry on retryable errors with fake timer advancement 2ms
@@ -40,16 +45,15 @@ Run echo "🧪 Running test suite..."
  ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Retry Logic with Exponential Backoff > should calculate exponential backoff delays 2ms
  ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Retry Logic with Exponential Backoff > should not retry on 4xx client errors (except 408, 429) 1ms
  ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Retry Logic with Exponential Backoff > should retry on retryable HTTP status codes 1ms
- ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Circuit Breaker Pattern > should open circuit after failure threshold with fake timers 3ms
+ ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Circuit Breaker Pattern > should open circuit after failure threshold with fake timers 4ms
  ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Circuit Breaker Pattern > should reset circuit breaker on successful request 3ms
  ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Circuit Breaker Pattern > should provide circuit breaker configuration methods 1ms
  ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Circuit Breaker Pattern > should allow manual circuit breaker reset 1ms
  ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Webhook Payload Validation > should validate required payload fields 1ms
  ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Webhook Payload Validation > should include optional payload fields when provided 1ms
-(node:2249) PromiseRejectionHandledWarning: Promise rejection was handled asynchronously (rejection id: 34)
- ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Webhook Payload Validation > should validate webhook response format strictly 4ms
- ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Performance and Metrics > should track request metrics 5ms
- ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Performance and Metrics > should track error metrics on failures 3ms
+ ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Webhook Payload Validation > should validate webhook response format strictly 3ms
+ ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Performance and Metrics > should track request metrics 3ms
+ ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Performance and Metrics > should track error metrics on failures 2ms
  ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Performance and Metrics > should calculate percentile response times 3ms
  ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Performance and Metrics > should include last request timestamp in metrics 1ms
  ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Health Check > should perform health check successfully 1ms
@@ -61,19 +65,19 @@ Run echo "🧪 Running test suite..."
  ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Authentication and Security > should generate unique request IDs 1ms
  ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Timer Management and Cleanup > should not have pending timers after operation completion 1ms
  ✓ src/lib/__tests__/webhookService.test.ts > WebhookService > Timer Management and Cleanup > should clean up resources on destroy 1ms
- ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/webhooks > should create webhook configuration with admin permissions 22ms
+ ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/webhooks > should create webhook configuration with admin permissions 23ms
  ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/webhooks > should return 401 for missing admin permissions 4ms
  ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/webhooks > should validate webhook configuration 10ms
- ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/webhooks > should support different authentication types 14ms
+ ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/webhooks > should support different authentication types 11ms
  ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/webhooks > should support event filtering 3ms
  ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/claude-code/analyze/:bugId > should perform pattern analysis 3ms
  ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/claude-code/analyze/:bugId > should perform resolution analysis 3ms
  ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/claude-code/analyze/:bugId > should perform severity classification 3ms
- ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/claude-code/analyze/:bugId > should perform duplicate detection 2ms
+ ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/claude-code/analyze/:bugId > should perform duplicate detection 6ms
  ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/claude-code/analyze/:bugId > should perform user impact analysis 3ms
  ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/claude-code/analyze/:bugId > should return 400 for invalid analysis type 3ms
  ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/claude-code/analyze/:bugId > should return 404 for non-existent bug 3ms
- ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/claude-code/analyze/:bugId > should support analysis context options 2ms
+ ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/claude-code/analyze/:bugId > should support analysis context options 3ms
  ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/sentry > should setup Sentry integration with admin permissions 2ms
  ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/sentry > should return 401 for missing admin permissions 2ms
  ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/sentry > should validate Sentry configuration 4ms
@@ -84,35 +88,35 @@ Run echo "🧪 Running test suite..."
  ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > POST /api/integrations/datadog > should support different DataDog sites 5ms
  ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > GET /api/integrations/:id/status > should return integration status 4ms
  ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > GET /api/integrations/:id/status > should return 404 for non-existent integration 2ms
- ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > GET /api/integrations > should list all integrations with summary 6ms
+ ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > GET /api/integrations > should list all integrations with summary 5ms
  ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > Webhook Delivery Service > should format bug data for Sentry correctly 1ms
  ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > Webhook Delivery Service > should format bug data for DataDog correctly 1ms
  ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > Webhook Delivery Service > should format bug data for Slack correctly 15ms
  ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > Webhook Delivery Service > should get delivery statistics 1ms
- ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > Error Handling > should handle malformed webhook configurations 4ms
+ ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > Error Handling > should handle malformed webhook configurations 3ms
  ✓ src/services/__tests__/externalIntegration.test.ts > External Integration Service > Error Handling > should handle service unavailability gracefully 2ms
- ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > POST /api/exports > should create export request with export permissions 5ms
+ ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > POST /api/exports > should create export request with export permissions 6ms
  ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > POST /api/exports > should return 401 for missing export permissions 3ms
- ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > POST /api/exports > should validate export format 2ms
- ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > POST /api/exports > should support all valid export formats 12ms
+ ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > POST /api/exports > should validate export format 3ms
+ ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > POST /api/exports > should support all valid export formats 10ms
  ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > POST /api/exports > should apply export templates 3ms
- ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > POST /api/exports > should return 503 when export queue is full 10ms
- ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > GET /api/exports/:id > should return export status for valid export ID 5ms
- ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > GET /api/exports/:id > should return 404 for non-existent export ID 2ms
+ ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > POST /api/exports > should return 503 when export queue is full 12ms
+ ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > GET /api/exports/:id > should return export status for valid export ID 6ms
+ ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > GET /api/exports/:id > should return 404 for non-existent export ID 3ms
  ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > GET /api/exports/:id > should include progress for processing exports 105ms
- ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > GET /api/exports/:id/download > should download completed export file 508ms
+ ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > GET /api/exports/:id/download > should download completed export file 507ms
  ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > GET /api/exports/:id/download > should return 400 for incomplete export 5ms
  ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > POST /api/exports/scheduled > should create scheduled export with admin permissions 3ms
  ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > POST /api/exports/scheduled > should return 401 for missing admin permissions 2ms
  ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > POST /api/exports/scheduled > should validate schedule configuration 2ms
- ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > POST /api/exports/scheduled > should support different schedule frequencies 7ms
+ ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > POST /api/exports/scheduled > should support different schedule frequencies 5ms
  ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > GET /api/exports/templates > should return available export templates 2ms
  ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > GET /api/exports/templates > should filter templates by user access 2ms
  ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > Export Processing > should handle large dataset exports 21ms
  ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > Export Processing > should apply field selection correctly 206ms
  ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > Export Processing > should handle export failures gracefully 207ms
  ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > Custom Processing Options > should apply data anonymization when requested 3ms
- ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > Custom Processing Options > should flatten nested objects when requested 4ms
+ ✓ src/api/__tests__/bugExport.test.ts > Bug Export API > Custom Processing Options > should flatten nested objects when requested 3ms
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Webhook Payload Schema Validation > should validate a basic valid payload 3ms
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Webhook Payload Schema Validation > should validate payload with all optional fields 1ms
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Webhook Payload Schema Validation > should reject payload with missing required fields 1ms
@@ -121,105 +125,105 @@ Run echo "🧪 Running test suite..."
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Webhook Payload Schema Validation > should validate message length constraints 1ms
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Webhook Payload Schema Validation > should validate all supported message types 1ms
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Webhook Payload Schema Validation > should validate all supported tool IDs 1ms
- ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Webhook Payload Schema Validation > should validate UUID format strictly 3ms
+ ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Webhook Payload Schema Validation > should validate UUID format strictly 2ms
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Enhanced Webhook Payload Schema Validation > should validate enhanced payload with metadata 2ms
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Enhanced Webhook Payload Schema Validation > should apply default values for optional metadata fields 1ms
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Enhanced Webhook Payload Schema Validation > should validate tool selection metadata structure 1ms
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Webhook Response Schema Validation > should validate successful webhook response 1ms
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Webhook Response Schema Validation > should validate error webhook response 1ms
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Webhook Response Schema Validation > should reject response with invalid structure 1ms
- ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Webhook Response Schema Validation > should validate optional response fields 0ms
+ ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Webhook Response Schema Validation > should validate optional response fields 1ms
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Health Check Response Schema Validation > should validate healthy status response 1ms
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Health Check Response Schema Validation > should validate degraded status response 1ms
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Health Check Response Schema Validation > should reject invalid health status values 1ms
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Health Check Response Schema Validation > should validate minimal health check response 1ms
- ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Validation Error Schema > should create properly structured validation errors 1ms
- ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > WebhookValidator Utility Methods > should create validated payload with createValidatedPayload 2ms
+ ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Validation Error Schema > should create properly structured validation errors 2ms
+ ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > WebhookValidator Utility Methods > should create validated payload with createValidatedPayload 1ms
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > WebhookValidator Utility Methods > should throw error for invalid payload construction 1ms
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > WebhookValidator Utility Methods > should provide validation summary 1ms
- ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > WebhookValidator Utility Methods > should provide detailed validation summary for invalid payload 3ms
+ ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > WebhookValidator Utility Methods > should provide detailed validation summary for invalid payload 1ms
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > WebhookValidator Utility Methods > should handle edge cases in validation summary 1ms
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Schema Integration Tests > should work with real-world payload example 1ms
  ✓ src/lib/__tests__/webhookValidation.test.ts > WebhookValidation > Schema Integration Tests > should handle complex validation error scenarios 1ms
  ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > GET /api/bugs > should return paginated bugs with valid API key 6ms
- ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > GET /api/bugs > should return 401 for invalid API key 2ms
- ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > GET /api/bugs > should return 401 for missing API key 2ms
+ ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > GET /api/bugs > should return 401 for invalid API key 3ms
+ ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > GET /api/bugs > should return 401 for missing API key 5ms
  ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > GET /api/bugs > should apply status filters correctly 3ms
- ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > GET /api/bugs > should apply date range filters correctly 2ms
+ ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > GET /api/bugs > should apply date range filters correctly 3ms
  ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > GET /api/bugs > should enforce pagination limits 2ms
  ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > GET /api/bugs/:id > should return bug details with valid ID 3ms
  ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > GET /api/bugs/:id > should return 404 for non-existent bug 2ms
- ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > PUT /api/bugs/:id/status > should update bug status with write permissions 3ms
- ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > PUT /api/bugs/:id/status > should return 400 for invalid status 2ms
+ ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > PUT /api/bugs/:id/status > should update bug status with write permissions 4ms
+ ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > PUT /api/bugs/:id/status > should return 400 for invalid status 3ms
  ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > PUT /api/bugs/:id/status > should return 401 for insufficient permissions 3ms
- ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > POST /api/bugs/:id/assign > should assign bug with write permissions 5ms
- ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > POST /api/bugs/:id/assign > should return 400 for failed assignment 3ms
- ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > POST /api/bugs/search > should perform text search with results 4ms
+ ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > POST /api/bugs/:id/assign > should assign bug with write permissions 3ms
+ ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > POST /api/bugs/:id/assign > should return 400 for failed assignment 2ms
+ ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > POST /api/bugs/search > should perform text search with results 5ms
  ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > POST /api/bugs/search > should return empty results for no matches 3ms
- ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > GET /api/bugs/analytics > should return analytics data 4ms
+ ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > GET /api/bugs/analytics > should return analytics data 3ms
  ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > GET /api/bugs/analytics > should use default time range when not specified 2ms
  ↓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > Rate Limiting > should enforce rate limits
  ↓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > Error Handling > should handle database errors gracefully
- ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > Error Handling > should handle service errors gracefully 9ms
+ ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > Error Handling > should handle service errors gracefully 7ms
  ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > Input Validation > should validate required fields for status updates 3ms
  ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > Input Validation > should validate required fields for assignments 2ms
  ✓ src/api/__tests__/bugDashboard.test.ts > Bug Dashboard API > Input Validation > should validate pagination parameters 3ms
- ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Performance Metrics Collection > should record successful requests correctly 4ms
+ ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Performance Metrics Collection > should record successful requests correctly 3ms
  ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Performance Metrics Collection > should record failed requests correctly 2ms
- ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Performance Metrics Collection > should calculate percentiles correctly 2ms
- ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Performance Metrics Collection > should track requests per minute and hour 2ms
- ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Performance Metrics Collection > should determine health status based on metrics 2ms
- ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Performance Metrics Collection > should handle empty metrics gracefully 2ms
- ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Performance Metrics Collection > should maintain performance history size limit 16ms
+ ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Performance Metrics Collection > should calculate percentiles correctly 1ms
+ ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Performance Metrics Collection > should track requests per minute and hour 1ms
+ ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Performance Metrics Collection > should determine health status based on metrics 1ms
+ ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Performance Metrics Collection > should handle empty metrics gracefully 1ms
+ ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Performance Metrics Collection > should maintain performance history size limit 12ms
  ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Alert System > should initialize with default alert rules 2ms
- ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Alert System > should trigger high error rate alert 1ms
+ ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Alert System > should trigger high error rate alert 2ms
  ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Alert System > should trigger slow response time alert 1ms
  ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Alert System > should respect alert cooldown periods 1ms
  ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Alert System > should allow custom alert rules 1ms
- ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Alert System > should allow alert resolution 2ms
+ ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Alert System > should allow alert resolution 1ms
  ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Alert System > should generate descriptive alert messages 1ms
  ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Dashboard Data > should generate comprehensive dashboard data 2ms
  ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Dashboard Data > should include performance trends in dashboard data 2ms
- ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Dashboard Data > should limit recent alerts in dashboard data 2ms
- ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Alert Subscription Management > should allow multiple subscribers 1ms
- ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Alert Subscription Management > should handle subscriber errors gracefully 2ms
- ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Alert Subscription Management > should properly unsubscribe callbacks 3ms
- ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Circuit Breaker Integration > should infer circuit breaker state from error patterns 1ms
- ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Circuit Breaker Integration > should detect half-open circuit breaker state 1ms
- ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Circuit Breaker Integration > should show closed circuit breaker for healthy patterns 1ms
+ ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Dashboard Data > should limit recent alerts in dashboard data 3ms
+ ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Alert Subscription Management > should allow multiple subscribers 2ms
+ ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Alert Subscription Management > should handle subscriber errors gracefully 3ms
+ ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Alert Subscription Management > should properly unsubscribe callbacks 2ms
+ ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Circuit Breaker Integration > should infer circuit breaker state from error patterns 2ms
+ ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Circuit Breaker Integration > should detect half-open circuit breaker state 3ms
+ ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Circuit Breaker Integration > should show closed circuit breaker for healthy patterns 2ms
  ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Data Cleanup and Management > should clear history and alerts properly 1ms
  ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Data Cleanup and Management > should handle concurrent request recording safely 3ms
  ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Singleton Instance > should provide working singleton instance 1ms
  ✓ src/lib/__tests__/webhookMonitoring.test.ts > WebhookMonitoringService > Singleton Instance > should maintain state across singleton access 1ms
  ✓ src/__tests__/bugReportIntegration.test.ts > Bug Report System Integration > completes full bug report submission workflow 4ms
  ✓ src/__tests__/bugReportIntegration.test.ts > Bug Report System Integration > integrates error tracking with bug reports 2ms
- ✓ src/__tests__/bugReportIntegration.test.ts > Bug Report System Integration > integrates performance monitoring 1ms
+ ✓ src/__tests__/bugReportIntegration.test.ts > Bug Report System Integration > integrates performance monitoring 2ms
  ✓ src/__tests__/bugReportIntegration.test.ts > Bug Report System Integration > handles validation errors properly 2ms
- ✓ src/__tests__/bugReportIntegration.test.ts > Bug Report System Integration > handles file upload failures gracefully 1ms
- ✓ src/__tests__/bugReportIntegration.test.ts > Bug Report System Integration > detects and prevents duplicate submissions 1ms
- ✓ src/__tests__/bugReportIntegration.test.ts > Bug Report System Integration > processes submission queue correctly 18ms
- ✓ src/__tests__/bugReportIntegration.test.ts > Bug Report System Integration > maintains data integrity throughout the process 3ms
+ ✓ src/__tests__/bugReportIntegration.test.ts > Bug Report System Integration > handles file upload failures gracefully 2ms
+ ✓ src/__tests__/bugReportIntegration.test.ts > Bug Report System Integration > detects and prevents duplicate submissions 2ms
+ ✓ src/__tests__/bugReportIntegration.test.ts > Bug Report System Integration > processes submission queue correctly 20ms
+ ✓ src/__tests__/bugReportIntegration.test.ts > Bug Report System Integration > maintains data integrity throughout the process 4ms
  ✓ src/__tests__/bugReportIntegration.test.ts > Bug Report System Integration > handles system errors and recovers gracefully 2ms
  ✓ src/__tests__/bugReportIntegration.test.ts > Bug Report System Integration > generates proper tracking numbers 2ms
- ✓ src/__tests__/bugReportIntegration.test.ts > Bug Report System Integration > maintains performance under load 21ms
- ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Manual Assignment > assigns bug to team member successfully 5ms
- ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Manual Assignment > handles assignment to non-existent user 5ms
- ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Manual Assignment > handles database update failures 2ms
- ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Manual Assignment > tracks assignment history 3ms
+ ✓ src/__tests__/bugReportIntegration.test.ts > Bug Report System Integration > maintains performance under load 16ms
+ ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Manual Assignment > assigns bug to team member successfully 3ms
+ ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Manual Assignment > handles assignment to non-existent user 2ms
+ ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Manual Assignment > handles database update failures 4ms
+ ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Manual Assignment > tracks assignment history 2ms
  ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Manual Assignment > handles reassignment correctly 2ms
  ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Auto Assignment > auto-assigns bug successfully 2ms
- ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Auto Assignment > returns null when no suitable assignee found 2ms
+ ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Auto Assignment > returns null when no suitable assignee found 1ms
  ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Auto Assignment > considers workload when auto-assigning 1ms
  ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Assignment Recommendations > generates assignment recommendations 1ms
  ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Assignment Recommendations > sorts recommendations by confidence 1ms
  ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Assignment Recommendations > considers skill matching in recommendations 1ms
  ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Priority Escalation > escalates bug priority successfully 2ms
- ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Priority Escalation > prevents escalation beyond maximum priority 3ms
- ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Priority Escalation > sends escalation alerts to managers 1ms
- ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Workload Management > calculates workload metrics correctly 1ms
- ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Workload Management > identifies workload imbalances 1ms
+ ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Priority Escalation > prevents escalation beyond maximum priority 1ms
+ ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Priority Escalation > sends escalation alerts to managers 3ms
+ ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Workload Management > calculates workload metrics correctly 2ms
+ ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Workload Management > identifies workload imbalances 2ms
  ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Workload Management > updates team member information 1ms
- ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Workload Management > handles update of non-existent team member 2ms
+ ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Workload Management > handles update of non-existent team member 1ms
  ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Assignment Rules > applies assignment rules correctly 2ms
  ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Assignment Rules > falls back to recommendations when no rules match 2ms
  ✓ src/lib/__tests__/assignmentSystem.test.ts > BugAssignmentSystem > Error Handling > handles bug fetch errors gracefully 2ms
@@ -255,18 +259,18 @@ Run echo "🧪 Running test suite..."
  ↓ src/lib/__tests__/env-validation.enhanced.test.ts > Enhanced Environment Validation > Cross-Environment Validation > should handle development environment specifics
  ↓ src/lib/__tests__/env-validation.enhanced.test.ts > Enhanced Environment Validation > Cross-Environment Validation > should handle staging environment specifics
  ↓ src/lib/__tests__/env-validation.enhanced.test.ts > Enhanced Environment Validation > Cross-Environment Validation > should handle production environment specifics
- ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Complete Development Environment > should validate complete development setup 6ms
+ ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Complete Development Environment > should validate complete development setup 4ms
  ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Complete Development Environment > should allow insecure configurations in development 2ms
- ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Complete Staging Environment > should validate complete staging setup 2ms
- ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Complete Staging Environment > should enforce HTTPS in staging 2ms
- ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Complete Production Environment > should validate complete production setup 3ms
- ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Complete Production Environment > should reject insecure production configurations 2ms
- ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Complete Production Environment > should require HTTPS for all external services in production 2ms
- ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Health Check Integration > should provide comprehensive health status 3ms
- ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Health Check Integration > should detect configuration problems in health checks 3ms
- ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Production Readiness Assessment > should correctly assess production readiness 2ms
- ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Production Readiness Assessment > should reject non-production-ready configuration 2ms
- ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Cross-System Dependencies > should validate database and webhook integration 2ms
+ ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Complete Staging Environment > should validate complete staging setup 1ms
+ ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Complete Staging Environment > should enforce HTTPS in staging 1ms
+ ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Complete Production Environment > should validate complete production setup 2ms
+ ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Complete Production Environment > should reject insecure production configurations 1ms
+ ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Complete Production Environment > should require HTTPS for all external services in production 1ms
+ ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Health Check Integration > should provide comprehensive health status 2ms
+ ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Health Check Integration > should detect configuration problems in health checks 2ms
+ ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Production Readiness Assessment > should correctly assess production readiness 1ms
+ ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Production Readiness Assessment > should reject non-production-ready configuration 1ms
+ ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Cross-System Dependencies > should validate database and webhook integration 1ms
  ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Cross-System Dependencies > should validate monitoring integration 2ms
  ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Error Correlation > should correlate related errors across systems 2ms
  ✓ src/lib/__tests__/environment-integration.test.ts > Environment & Secrets Integration > Complete System Validation > should validate entire system health 3ms
@@ -285,7 +289,7 @@ Run echo "🧪 Running test suite..."
  ✓ src/lib/__tests__/secrets-management.test.ts > Secrets Management System > Security Validation > should detect development URLs in production 1ms
  ✓ src/lib/__tests__/secrets-management.test.ts > Secrets Management System > Secret Categorization > should categorize secrets correctly 1ms
  ✓ src/lib/__tests__/secrets-management.test.ts > Secrets Management System > Secret Access Logging > should log secret access 1ms
- ✓ src/lib/__tests__/secrets-management.test.ts > Secrets Management System > Secret Access Logging > should limit audit log size 4ms
+ ✓ src/lib/__tests__/secrets-management.test.ts > Secrets Management System > Secret Access Logging > should limit audit log size 3ms
  ✓ src/lib/__tests__/secrets-management.test.ts > Secrets Management System > Rotation Status > should track rotation status 1ms
  ✓ src/lib/__tests__/secrets-management.test.ts > Secrets Management System > Rotation Status > should identify overdue rotations 1ms
  ✓ src/lib/__tests__/secrets-management.test.ts > Secrets Management System > Rotation Status > should identify upcoming rotation needs 1ms
@@ -297,72 +301,72 @@ Run echo "🧪 Running test suite..."
  ✓ src/lib/__tests__/secrets-management.test.ts > Secrets Management System > Environment-Specific Validation > should be strict in production 1ms
  ✓ src/lib/__tests__/secrets-management.test.ts > Secrets Management System > Logging > should log secrets status without revealing values 2ms
  ✓ src/lib/__tests__/secrets-management.test.ts > Secrets Management System > Integration with Environment Validation > should complement environment validation 1ms
- ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Performance Tracking > should track page load time 6ms
+ ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Performance Tracking > should track page load time 4ms
  ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Performance Tracking > should track API response times 2ms
  ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Performance Tracking > should track API errors for 4xx/5xx status codes 2ms
- ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Performance Tracking > should track user interactions 5ms
+ ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Performance Tracking > should track user interactions 3ms
  ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Custom Metrics > should track custom metrics with tags 2ms
  ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Custom Metrics > should track business events 2ms
- ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > User Tracking > should set user information 3ms
- ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Transactions > should create and finish transactions 3ms
+ ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > User Tracking > should set user information 2ms
+ ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Transactions > should create and finish transactions 2ms
  ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Transactions > should track transaction duration as metric 2ms
  ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Error Tracking > should capture exceptions 3ms
  ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Error Tracking > should capture messages with different levels 2ms
  ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Core Web Vitals > should collect Core Web Vitals 2ms
  ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Metrics Filtering > should filter metrics by name 2ms
- ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Metrics Filtering > should filter metrics by time range 4ms
+ ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Metrics Filtering > should filter metrics by time range 3ms
  ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Health Monitoring > should report monitoring health status 2ms
  ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Health Monitoring > should report degraded status with many errors 2ms
  ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > External Integration > should handle missing external APM services gracefully 2ms
  ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > External Integration > should send to external services when available 2ms
- ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Memory Management > should limit metrics storage to prevent memory leaks 11ms
+ ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Memory Management > should limit metrics storage to prevent memory leaks 9ms
  ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Memory Management > should limit events storage to prevent memory leaks 6ms
  ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Performance Wrapper > should wrap functions with monitoring 2ms
- ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Performance Wrapper > should handle function errors and track them 3ms
- ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Message Sending Success Scenarios > should send message successfully with valid payload 3ms
+ ✓ src/lib/__tests__/monitoring.test.ts > MonitoringService > Performance Wrapper > should handle function errors and track them 2ms
+ ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Message Sending Success Scenarios > should send message successfully with valid payload 4ms
  ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Message Sending Success Scenarios > should include request metadata in payload 2ms
- ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Error Handling > should throw validation error for missing webhook URL 1ms
- ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Error Handling > should handle HTTP error responses 302ms
+ ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Error Handling > should throw validation error for missing webhook URL 2ms
+ ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Error Handling > should handle HTTP error responses 303ms
  ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Error Handling > should handle network errors 304ms
  ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Error Handling > should handle malformed response format 3ms
  ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Basic Retry Logic > should retry on retryable errors and eventually succeed 303ms
  ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Basic Retry Logic > should not retry on non-retryable errors 3ms
- ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Webhook Payload Validation > should validate required payload fields 1ms
- ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Webhook Payload Validation > should include optional payload fields when provided 1ms
+ ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Webhook Payload Validation > should validate required payload fields 2ms
+ ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Webhook Payload Validation > should include optional payload fields when provided 2ms
  ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Performance and Metrics > should track request metrics on success 1ms
- ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Performance and Metrics > should track error metrics on failures 303ms
- ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Health Check > should perform health check successfully 2ms
- ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Health Check > should return unhealthy status on errors 303ms
- ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Configuration and Security > should include standard headers in all requests 4ms
+ ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Performance and Metrics > should track error metrics on failures 302ms
+ ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Health Check > should perform health check successfully 4ms
+ ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Health Check > should return unhealthy status on errors 302ms
+ ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Configuration and Security > should include standard headers in all requests 3ms
  ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Configuration and Security > should generate unique request IDs 2ms
  ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Configuration and Security > should provide circuit breaker configuration methods 1ms
  ✓ src/lib/__tests__/webhookService.basic.test.ts > WebhookService - Basic Tests > Configuration and Security > should allow manual circuit breaker reset 1ms
  ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Enhanced Error Reports > should create enhanced error reports with session info 4ms
  ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Enhanced Error Reports > should generate fingerprints for error grouping 2ms
- ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Enhanced Error Reports > should include release and environment information 2ms
+ ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Enhanced Error Reports > should include release and environment information 1ms
  ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Breadcrumb System > should add breadcrumbs with proper categorization 1ms
- ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Breadcrumb System > should limit breadcrumb storage 1ms
- ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Breadcrumb System > should include breadcrumbs in error reports 1ms
+ ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Breadcrumb System > should limit breadcrumb storage 2ms
+ ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Breadcrumb System > should include breadcrumbs in error reports 2ms
  ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > API Failure Tracking > should track API failures with detailed context 2ms
  ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > API Failure Tracking > should add breadcrumbs for API failures 2ms
  ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Authentication Error Tracking > should track auth errors with context 2ms
- ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Authentication Error Tracking > should add breadcrumbs for auth events 1ms
+ ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Authentication Error Tracking > should add breadcrumbs for auth events 2ms
  ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > User Action Tracking > should track user actions as breadcrumbs 1ms
  ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > User Action Tracking > should handle different action types 1ms
- ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Tags Management > should set and retrieve tags 3ms
+ ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Tags Management > should set and retrieve tags 1ms
  ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Tags Management > should merge tags when setting multiple times 1ms
- ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Tags Management > should include tags in error reports 1ms
+ ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Tags Management > should include tags in error reports 2ms
  ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Session Integration > should include session ID in error reports 2ms
- ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Session Integration > should set user context 1ms
- ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Performance > should handle high volume of errors efficiently 57ms
+ ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Session Integration > should set user context 2ms
+ ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Performance > should handle high volume of errors efficiently 58ms
  ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Performance > should limit stored errors to prevent memory leaks 122ms
- ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Data Persistence > should persist errors to localStorage 4ms
- ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Data Persistence > should persist breadcrumbs to localStorage 3ms
- ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Data Persistence > should handle localStorage errors gracefully 4ms
- ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > External Monitoring Integration > should send errors to external monitoring asynchronously 29ms
- ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > External Monitoring Integration > should send breadcrumbs to external monitoring 13ms
- ✓ src/lib/__tests__/config-templates.test.ts > Configuration Templates Validation > Environment Template Files > should have .env.template for development 2ms
- ✓ src/lib/__tests__/config-templates.test.ts > Configuration Templates Validation > Environment Template Files > should have .env.staging.template for staging 1ms
+ ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Data Persistence > should persist errors to localStorage 3ms
+ ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Data Persistence > should persist breadcrumbs to localStorage 2ms
+ ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > Data Persistence > should handle localStorage errors gracefully 3ms
+ ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > External Monitoring Integration > should send errors to external monitoring asynchronously 27ms
+ ✓ src/lib/__tests__/errorTracking.enhanced.test.ts > Enhanced Error Tracking > External Monitoring Integration > should send breadcrumbs to external monitoring 14ms
+ ✓ src/lib/__tests__/config-templates.test.ts > Configuration Templates Validation > Environment Template Files > should have .env.template for development 3ms
+ ✓ src/lib/__tests__/config-templates.test.ts > Configuration Templates Validation > Environment Template Files > should have .env.staging.template for staging 2ms
  ✓ src/lib/__tests__/config-templates.test.ts > Configuration Templates Validation > Environment Template Files > should have .env.production.template for production 1ms
  ✓ src/lib/__tests__/config-templates.test.ts > Configuration Templates Validation > Template Content Validation > should include all required variables in development template 1ms
  ✓ src/lib/__tests__/config-templates.test.ts > Configuration Templates Validation > Template Content Validation > should include production-specific variables in production template 1ms
@@ -375,63 +379,33 @@ Run echo "🧪 Running test suite..."
  ✓ src/lib/__tests__/config-templates.test.ts > Configuration Templates Validation > Template Completeness > should provide example values where appropriate 1ms
  ✓ src/lib/__tests__/config-templates.test.ts > Configuration Templates Validation > Environment-Specific Differences > should have appropriate differences between environments 3ms
  ✓ src/lib/__tests__/config-templates.test.ts > Configuration Templates Validation > Documentation Quality > should have comprehensive comments 2ms
- ✓ src/lib/__tests__/chatService.enhanced.test.ts > ChatService - Enhanced Integration > Enhanced sendMessageToAI > should use webhook service with proper payload structure 3ms
+ ✓ src/lib/__tests__/chatService.enhanced.test.ts > ChatService - Enhanced Integration > Enhanced sendMessageToAI > should use webhook service with proper payload structure 4ms
  ✓ src/lib/__tests__/chatService.enhanced.test.ts > ChatService - Enhanced Integration > Enhanced sendMessageToAI > should handle webhook service errors gracefully 2ms
- ✓ src/lib/__tests__/chatService.enhanced.test.ts > ChatService - Enhanced Integration > Enhanced sendMessageToAI > should use fallback response when circuit breaker is open 2207ms
- ✓ src/lib/__tests__/chatService.enhanced.test.ts > ChatService - Enhanced Integration > Enhanced sendMessageToAI > should use fallback response when webhook URL not configured 2400ms
+ ✓ src/lib/__tests__/chatService.enhanced.test.ts > ChatService - Enhanced Integration > Enhanced sendMessageToAI > should use fallback response when circuit breaker is open 2834ms
+ ✓ src/lib/__tests__/chatService.enhanced.test.ts > ChatService - Enhanced Integration > Enhanced sendMessageToAI > should use fallback response when webhook URL not configured 2863ms
  ✓ src/lib/__tests__/chatService.enhanced.test.ts > ChatService - Enhanced Integration > Enhanced sendMessageToAI > should include conversation ID in webhook payload when provided 4ms
  ✓ src/lib/__tests__/chatService.enhanced.test.ts > ChatService - Enhanced Integration > Enhanced sendMessageToAI > should handle missing conversation ID gracefully 2ms
  ✓ src/lib/__tests__/chatService.enhanced.test.ts > ChatService - Enhanced Integration > Webhook Status Monitoring > should return webhook health status and metrics 3ms
  ✓ src/lib/__tests__/chatService.enhanced.test.ts > ChatService - Enhanced Integration > Webhook Status Monitoring > should handle health check errors gracefully 1ms
  ✓ src/lib/__tests__/chatService.enhanced.test.ts > ChatService - Enhanced Integration > Webhook Status Monitoring > should detect when webhook is not configured 1ms
  ✓ src/lib/__tests__/chatService.enhanced.test.ts > ChatService - Enhanced Integration > Integration with Existing Features > should maintain backward compatibility with existing methods 1ms
- ✓ src/lib/__tests__/chatService.enhanced.test.ts > ChatService - Enhanced Integration > Integration with Existing Features > should pass conversation ID to enhanced webhook service 3ms
- ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > rendering > should render the tools button with correct selected count 45ms
+ ✓ src/lib/__tests__/chatService.enhanced.test.ts > ChatService - Enhanced Integration > Integration with Existing Features > should pass conversation ID to enhanced webhook service 1ms
+ ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > rendering > should render the tools button with correct selected count 43ms
  ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > rendering > should render compact version correctly 14ms
  ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > rendering > should show loading state 7ms
- ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > tool selection > should toggle tool selection when checkbox is clicked 35ms
- ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > tool selection > should display tools grouped by category 30ms
+ ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > tool selection > should toggle tool selection when checkbox is clicked 34ms
+ ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > tool selection > should display tools grouped by category 29ms
  ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > selected tools display > should show correct selected count in main label 16ms
  ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > selected tools display > should show "No tools selected" message when none are selected 22ms
- ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > tool information display > should display tool names and descriptions 33ms
- ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > tool information display > should show helpful message about tool usage 21ms
- ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > accessibility > should have proper aria-label for the main button 13ms
- ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > accessibility > should update aria-label when selection changes 12ms
- ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > error handling > should handle tools loading error gracefully 10ms
- ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > dropdown behavior > should open and close dropdown correctly 17ms
- × src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Session Creation > should create a new session on initialization 4ms
-   → .toMatch() expects to receive a string, but got undefined
- × src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Session Creation > should generate unique session IDs 2ms
-   → expected undefined not to be undefined // Object.is equality
- × src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Session Creation > should collect device information 2ms
-   → expected undefined to be defined
- × src/lib/__tests__/sessionTracking.test.ts > Session Tracking > User Management > should set user ID and metadata 2ms
-   → expected undefined to be 'test-user-123' // Object.is equality
- × src/lib/__tests__/sessionTracking.test.ts > Session Tracking > User Management > should track auth events 2ms
-   → Target cannot be null or undefined.
- × src/lib/__tests__/sessionTracking.test.ts > Session Tracking > User Management > should track failed auth events 2ms
-   → expected undefined to be false // Object.is equality
- × src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Session Analytics > should calculate session analytics 2ms
-   → expected 0 to be greater than 0
- ✓ src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Session Analytics > should track most visited pages 1ms
- × src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Session History > should maintain session history 2ms
-   → expected 0 to be greater than 0
- × src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Session History > should include current session in history 2ms
-   → expected undefined to be defined
- × src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Error Integration > should increment error count 2ms
-   → expected undefined to be 1 // Object.is equality
- × src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Data Persistence > should attempt to persist session data 2ms
-   → expected "spy" to be called with arguments: [ 'jarvis_sessions', Any<String> ]
-Number of calls: 0
-
- ✓ src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Data Persistence > should handle localStorage errors gracefully 1ms
- ✓ src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Performance > should limit session storage size 1ms
- ✓ src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Performance > should handle rapid user actions without performance issues 1ms
- × src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Memory Management > should not leak memory with continuous usage 2ms
-   → actual value must be number or bigint, received "undefined"
- ✓ src/hooks/__tests__/useTools.test.ts > useTools > initialization > should initialize with default tools when user is not logged in 5ms
+ ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > tool information display > should display tool names and descriptions 32ms
+ ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > tool information display > should show helpful message about tool usage 22ms
+ ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > accessibility > should have proper aria-label for the main button 15ms
+ ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > accessibility > should update aria-label when selection changes 13ms
+ ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > error handling > should handle tools loading error gracefully 12ms
+ ✓ src/components/chat/__tests__/ToolsSelector.test.tsx > ToolsSelector > dropdown behavior > should open and close dropdown correctly 19ms
+ ✓ src/hooks/__tests__/useTools.test.ts > useTools > initialization > should initialize with default tools when user is not logged in 6ms
  ✓ src/hooks/__tests__/useTools.test.ts > useTools > initialization > should load saved preferences from localStorage when user is logged in 4ms
- ✓ src/hooks/__tests__/useTools.test.ts > useTools > tool selection > should toggle tool selection correctly 5ms
+ ✓ src/hooks/__tests__/useTools.test.ts > useTools > tool selection > should toggle tool selection correctly 7ms
  ✓ src/hooks/__tests__/useTools.test.ts > useTools > tool selection > should save selections to localStorage when changed 4ms
  ✓ src/hooks/__tests__/useTools.test.ts > useTools > getSelectedToolIds > should return only enabled tool IDs 4ms
  ✓ src/hooks/__tests__/useTools.test.ts > useTools > preferences management > should update preferences correctly 4ms
@@ -440,22 +414,27 @@ Number of calls: 0
  ✓ src/hooks/__tests__/useTools.test.ts > useTools > analytics > should generate session ID when recording usage 4ms
  ✓ src/hooks/__tests__/useTools.test.ts > useTools > analytics > should not record usage when analytics is disabled 4ms
  ✓ src/components/bug-report/__tests__/BugReportForm.test.tsx > BugReportForm > renders initial bug type selection step 14ms
- × src/components/bug-report/__tests__/BugReportForm.test.tsx > BugReportForm > progresses through form steps correctly 15ms
+ × src/components/bug-report/__tests__/BugReportForm.test.tsx > BugReportForm > progresses through form steps correctly 11ms
    → Found multiple elements with the text: Report a Bug
+
 Here are the matching elements:
+
 Ignored nodes: comments, script, style
 <h2
   class="text-xl font-semibold text-gray-900 mb-2"
 >
   Report a Bug
 </h2>
+
 Ignored nodes: comments, script, style
 <h2
   class="text-xl font-semibold text-gray-900 mb-2"
 >
   Report a Bug
 </h2>
+
 (If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
 Ignored nodes: comments, script, style
 <body>
   <div />
@@ -685,43 +664,1398 @@ Ignored nodes: comments, script, style
     </div>
   </div>
 </body>
- · src/components/bug-report/__tests__/BugReportForm.test.tsx > BugReportForm > validates required fields
- · src/components/bug-report/__tests__/BugReportForm.test.tsx > BugReportForm > handles form submission successfully
- · src/components/bug-report/__tests__/BugReportForm.test.tsx > BugReportForm > displays success message after submission
- · src/components/bug-report/__tests__/BugReportForm.test.tsx > BugReportForm > handles form cancellation
- · src/components/bug-report/__tests__/BugReportForm.test.tsx > BugReportForm > supports auto-save functionality
- · src/components/bug-report/__tests__/BugReportForm.test.tsx > BugReportForm > handles file attachment uploads
- · src/lib/__tests__/webhook.diagnostic.test.ts > Webhook Diagnostics > should diagnose webhook connectivity and provide setup guidance
- · src/lib/__tests__/webhook.diagnostic.test.ts > Webhook Diagnostics > should test webhook response format expectations
- · src/lib/__tests__/webhook.diagnostic.test.ts > Webhook Diagnostics > should provide n8n workflow setup guidance
- · src/lib/__tests__/env-validation.test.ts > Environment Validation > validateEnvironment > should return valid when all required variables are set
- · src/lib/__tests__/env-validation.test.ts > Environment Validation > validateEnvironment > should return errors when required variables are missing
- · src/lib/__tests__/env-validation.test.ts > Environment Validation > validateEnvironment > should validate URL format for Supabase URL
- · src/lib/__tests__/env-validation.test.ts > Environment Validation > validateEnvironment > should validate JWT format for Supabase anon key
- · src/lib/__tests__/env-validation.test.ts > Environment Validation > validateEnvironment > should add warnings for optional missing variables
- · src/lib/__tests__/env-validation.test.ts > Environment Validation > getEnvironmentInfo > should return correct environment info structure
- · src/lib/__tests__/env-validation.test.ts > Environment Validation > getEnvironmentInfo > should detect development environment
- · src/lib/__tests__/bugReporting.test.ts > BugReportingService > creates bug report successfully
- · src/lib/__tests__/bugReporting.test.ts > BugReportingService > collects enhanced error context
- · src/lib/__tests__/bugReporting.test.ts > BugReportingService > integrates with performance metrics
- · src/lib/__tests__/bugReporting.test.ts > BugReportingService > handles database submission errors
- · src/lib/__tests__/bugReporting.test.ts > BugReportingService > logs submission activity
- · src/lib/__tests__/bugReporting.test.ts > BugReportingService > handles missing browser info gracefully
- · src/lib/__tests__/bugReporting.test.ts > BugReportingService > correlates bug reports with errors
- · src/lib/__tests__/bugReporting.test.ts > BugReportingService > generates correlation IDs for tracking
- · src/lib/__tests__/bugReporting.test.ts > BugReportingService > handles network errors gracefully
- · src/lib/__tests__/bugReporting.test.ts > BugReportingService > collects comprehensive monitoring data
- · src/hooks/__tests__/usePWAInstall.test.ts > usePWAInstall > should initialize with correct default state
- · src/hooks/__tests__/usePWAInstall.test.ts > usePWAInstall > should detect when app is installed in standalone mode
- · src/hooks/__tests__/usePWAInstall.test.ts > usePWAInstall > should handle beforeinstallprompt event
- · src/hooks/__tests__/usePWAInstall.test.ts > usePWAInstall > should handle successful installation
- · src/hooks/__tests__/usePWAInstall.test.ts > usePWAInstall > should handle installation rejection
- · src/hooks/__tests__/usePWAInstall.test.ts > usePWAInstall > should handle installation error
- · src/hooks/__tests__/usePWAInstall.test.ts > usePWAInstall > should handle appinstalled event
- · src/hooks/__tests__/usePWAInstall.test.ts > usePWAInstall > should clear error when clearError is called
- · src/hooks/__tests__/usePWAInstall.test.ts > usePWAInstall > should return false for install when no prompt is available
- · src/lib/__tests__/webhook.integration.test.ts > Real n8n Webhook Integration > should successfully send message to real n8n webhook
- · src/lib/__tests__/webhook.integration.test.ts > Real n8n Webhook Integration > should perform health check successfully
+ × src/components/bug-report/__tests__/BugReportForm.test.tsx > BugReportForm > validates required fields 9ms
+   → Found multiple elements by: [data-testid="select-functionality-button"]
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<button
+  data-testid="select-functionality-button"
+>
+  Select Functionality
+</button>
+
+Ignored nodes: comments, script, style
+<button
+  data-testid="select-functionality-button"
+>
+  Select Functionality
+</button>
+
+Ignored nodes: comments, script, style
+<button
+  data-testid="select-functionality-button"
+>
+  Select Functionality
+</button>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                3
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Attachments
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center "
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                4
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Review
+              </span>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div
+            data-testid="bug-type-selector"
+          >
+            <button
+              data-testid="select-functionality-button"
+            >
+              Select Functionality
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                3
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Attachments
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center "
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                4
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Review
+              </span>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div
+            data-testid="bug-type-selector"
+          >
+            <button
+              data-testid="select-functionality-button"
+            >
+              Select Functionality
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                3
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Attachments
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center "
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                4
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Review
+              </span>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div
+            data-testid="bug-type-selector"
+          >
+            <button
+              data-testid="select-functionality-button"
+            >
+              Select Functionality
+            </button>
+          </div>
+        </form>
+        <div
+          class="mt-4 text-center"
+        >
+          <p
+            class="text-xs text-gray-500"
+          >
+            Changes are being auto-saved...
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+ × src/components/bug-report/__tests__/BugReportForm.test.tsx > BugReportForm > handles form submission successfully 10ms
+   → Found multiple elements with the text: Report a Bug
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                3
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Attachments
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center "
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                4
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Review
+              </span>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div
+            data-testid="bug-type-selector"
+          >
+            <button
+              data-testid="select-functionality-button"
+            >
+              Select Functionality
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                3
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Attachments
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center "
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                4
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Review
+              </span>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div
+            data-testid="bug-type-selector"
+          >
+            <button
+              data-testid="select-functionality-button"
+            >
+              Select Functionality
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                3
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Attachments
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center "
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                4
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Review
+              </span>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div
+            data-testid="bug-type-selector"
+          >
+            <button
+              data-testid="select-functionality-button"
+            >
+              Select Functionality
+            </button>
+          </div>
+        </form>
+        <div
+          class="mt-4 text-center"
+        >
+          <p
+            class="text-xs text-gray-500"
+          >
+            Changes are being auto-saved...
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                3
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Attachments
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center "
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                4
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Review
+              </span>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div
+            data-testid="bug-type-selector"
+          >
+            <button
+              data-testid="select-functionality-button"
+            >
+              Select Functionality
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+ ✓ src/components/bug-report/__tests__/BugReportForm.test.tsx > BugReportForm > displays success message after submission 4ms
+ × src/components/bug-report/__tests__/BugReportForm.test.tsx > BugReportForm > handles form cancellation 10ms
+   → Found multiple elements by: [data-testid="select-functionality-button"]
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<button
+  data-testid="select-functionality-button"
+>
+  Select Functionality
+</button>
+
+Ignored nodes: comments, script, style
+<button
+  data-testid="select-functionality-button"
+>
+  Select Functionality
+</button>
+
+Ignored nodes: comments, script, style
+<button
+  data-testid="select-functionality-button"
+>
+  Select Functionality
+</button>
+
+Ignored nodes: comments, script, style
+<button
+  data-testid="select-functionality-button"
+>
+  Select Functionality
+</button>
+
+Ignored nodes: comments, script, style
+<button
+  data-testid="select-functionality-button"
+>
+  Select Functionality
+</button>
+
+Ignored nodes: comments, script, style
+<button
+  data-testid="select-functionality-button"
+>
+  Select Functionality
+</button>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                3
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Attachments
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center "
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                4
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Review
+              </span>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div
+            data-testid="bug-type-selector"
+          >
+            <button
+              data-testid="select-functionality-button"
+            >
+              Select Functionality
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1...
+ ✓ src/components/bug-report/__tests__/BugReportForm.test.tsx > BugReportForm > supports auto-save functionality 9ms
+ × src/components/bug-report/__tests__/BugReportForm.test.tsx > BugReportForm > handles file attachment uploads 12ms
+   → Found multiple elements with the text: Report a Bug
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                3
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Attachments
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center "
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                4
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Review
+              </span>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div
+            data-testid="bug-type-selector"
+          >
+            <button
+              data-testid="select-functionality-button"
+            >
+              Select Functionality
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1...
+ ✓ src/lib/__tests__/webhook.diagnostic.test.ts > Webhook Diagnostics > should diagnose webhook connectivity and provide setup guidance 4ms
+ ✓ src/lib/__tests__/webhook.diagnostic.test.ts > Webhook Diagnostics > should test webhook response format expectations 2ms
+ ✓ src/lib/__tests__/webhook.diagnostic.test.ts > Webhook Diagnostics > should provide n8n workflow setup guidance 1ms
+ ✓ src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Session Creation > should create a new session on initialization 6ms
+ ✓ src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Session Creation > should generate unique session IDs 2ms
+ ✓ src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Session Creation > should collect device information 2ms
+ ✓ src/lib/__tests__/sessionTracking.test.ts > Session Tracking > User Management > should set user ID and metadata 2ms
+ ✓ src/lib/__tests__/sessionTracking.test.ts > Session Tracking > User Management > should track auth events 2ms
+ ✓ src/lib/__tests__/sessionTracking.test.ts > Session Tracking > User Management > should track failed auth events 2ms
+ ✓ src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Session Analytics > should calculate session analytics 2ms
+ ✓ src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Session Analytics > should track most visited pages 3ms
+ ✓ src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Session History > should maintain session history 2ms
+ ✓ src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Session History > should include current session in history 2ms
+ ✓ src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Error Integration > should increment error count 2ms
+ ✓ src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Data Persistence > should attempt to persist session data 2ms
+ ✓ src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Data Persistence > should handle localStorage errors gracefully 2ms
+ ✓ src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Performance > should limit session storage size 2ms
+ ✓ src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Performance > should handle rapid user actions without performance issues 2ms
+ ✓ src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Memory Management > should not leak memory with continuous usage 2ms
+ ✓ src/lib/__tests__/env-validation.test.ts > Environment Validation > validateEnvironment > should return valid when all required variables are set 4ms
+ ✓ src/lib/__tests__/env-validation.test.ts > Environment Validation > validateEnvironment > should return errors when required variables are missing 2ms
+ ✓ src/lib/__tests__/env-validation.test.ts > Environment Validation > validateEnvironment > should validate URL format for Supabase URL 1ms
+ ✓ src/lib/__tests__/env-validation.test.ts > Environment Validation > validateEnvironment > should validate JWT format for Supabase anon key 1ms
+ ✓ src/lib/__tests__/env-validation.test.ts > Environment Validation > validateEnvironment > should add warnings for optional missing variables 1ms
+ ✓ src/lib/__tests__/env-validation.test.ts > Environment Validation > getEnvironmentInfo > should return correct environment info structure 2ms
+ ✓ src/lib/__tests__/env-validation.test.ts > Environment Validation > getEnvironmentInfo > should detect development environment 1ms
+ ✓ src/lib/__tests__/bugReporting.test.ts > BugReportingService > creates bug report successfully 7ms
+ ✓ src/lib/__tests__/bugReporting.test.ts > BugReportingService > collects enhanced error context 3ms
+ ✓ src/lib/__tests__/bugReporting.test.ts > BugReportingService > integrates with performance metrics 2ms
+ ✓ src/lib/__tests__/bugReporting.test.ts > BugReportingService > handles database submission errors 2ms
+ ✓ src/lib/__tests__/bugReporting.test.ts > BugReportingService > logs submission activity 2ms
+ ✓ src/lib/__tests__/bugReporting.test.ts > BugReportingService > handles missing browser info gracefully 2ms
+ ✓ src/lib/__tests__/bugReporting.test.ts > BugReportingService > correlates bug reports with errors 4ms
+ ✓ src/lib/__tests__/bugReporting.test.ts > BugReportingService > generates correlation IDs for tracking 2ms
+ ✓ src/lib/__tests__/bugReporting.test.ts > BugReportingService > handles network errors gracefully 2ms
+ ✓ src/lib/__tests__/bugReporting.test.ts > BugReportingService > collects comprehensive monitoring data 2ms
+ ✓ src/hooks/__tests__/usePWAInstall.test.ts > usePWAInstall > should initialize with correct default state 6ms
+ ✓ src/hooks/__tests__/usePWAInstall.test.ts > usePWAInstall > should detect when app is installed in standalone mode 3ms
+ ✓ src/hooks/__tests__/usePWAInstall.test.ts > usePWAInstall > should handle beforeinstallprompt event 3ms
+ ✓ src/hooks/__tests__/usePWAInstall.test.ts > usePWAInstall > should handle successful installation 3ms
+ ✓ src/hooks/__tests__/usePWAInstall.test.ts > usePWAInstall > should handle installation rejection 5ms
+ ✓ src/hooks/__tests__/usePWAInstall.test.ts > usePWAInstall > should handle installation error 3ms
+ ✓ src/hooks/__tests__/usePWAInstall.test.ts > usePWAInstall > should handle appinstalled event 3ms
+ ✓ src/hooks/__tests__/usePWAInstall.test.ts > usePWAInstall > should clear error when clearError is called 3ms
+ ✓ src/hooks/__tests__/usePWAInstall.test.ts > usePWAInstall > should return false for install when no prompt is available 3ms
+ × src/lib/__tests__/webhook.integration.test.ts > Real n8n Webhook Integration > should successfully send message to real n8n webhook 507ms
+   → Unknown error during webhook call
+ × src/lib/__tests__/webhook.integration.test.ts > Real n8n Webhook Integration > should perform health check successfully 507ms
+   → actual value must be number or bigint, received "undefined"
  · src/lib/__tests__/webhook.integration.test.ts > Real n8n Webhook Integration > should handle conversation context properly
  · src/lib/__tests__/webhook.integration.test.ts > Real n8n Webhook Integration > should demonstrate error recovery and circuit breaker
  · src/lib/__tests__/webhook.integration.test.ts > Real n8n Webhook Integration > should test different message types and formats
@@ -795,157 +2129,59 @@ Ignored nodes: comments, script, style
  · src/lib/__tests__/minimal.test.ts > Minimal Test > should pass basic test
  · src/lib/__tests__/minimal.test.ts > Minimal Test > should work with fake timers
  · src/lib/__tests__/minimal.test.ts > Minimal Test > should import WebhookService
-⎯⎯⎯⎯⎯⎯ Failed Tests 13 ⎯⎯⎯⎯⎯⎯⎯
- FAIL  src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Session Creation > should create a new session on initialization
-TypeError: .toMatch() expects to receive a string, but got undefined
- ❯ src/lib/__tests__/sessionTracking.test.ts:150:41
-    148|       
-    149|       expect(currentSession).toBeDefined();
-    150|       expect(currentSession?.sessionId).toMatch(/^session_\d+_[a-z0-9]…
-       |                                         ^
-    151|       expect(currentSession?.startTime).toBeDefined();
-    152|       expect(currentSession?.deviceInfo).toBeDefined();
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/13]⎯
- FAIL  src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Session Creation > should generate unique session IDs
-AssertionError: expected undefined not to be undefined // Object.is equality
- ❯ src/lib/__tests__/sessionTracking.test.ts:161:39
-    159|       const session2 = getCurrentSession();
-    160|       
-    161|       expect(session1?.sessionId).not.toBe(session2?.sessionId);
-       |                                       ^
-    162|     });
-    163| 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/13]⎯
- FAIL  src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Session Creation > should collect device information
-AssertionError: expected undefined to be defined
- ❯ src/lib/__tests__/sessionTracking.test.ts:168:26
-    166|       const deviceInfo = currentSession?.deviceInfo;
-    167|       
-    168|       expect(deviceInfo).toBeDefined();
-       |                          ^
-    169|       expect(deviceInfo?.userAgent).toBe('Mozilla/5.0 (Test Browser)');
-    170|       expect(deviceInfo?.platform).toBe('Test Platform');
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/13]⎯
- FAIL  src/lib/__tests__/sessionTracking.test.ts > Session Tracking > User Management > should set user ID and metadata
-AssertionError: expected undefined to be 'test-user-123' // Object.is equality
-- Expected: 
-"test-user-123"
-+ Received: 
-undefined
- ❯ src/lib/__tests__/sessionTracking.test.ts:185:38
-    183|       
-    184|       const currentSession = getCurrentSession();
-    185|       expect(currentSession?.userId).toBe(userId);
-       |                                      ^
-    186|       expect(currentSession?.metadata).toEqual(expect.objectContaining…
-    187|     });
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/13]⎯
- FAIL  src/lib/__tests__/sessionTracking.test.ts > Session Tracking > User Management > should track auth events
-AssertionError: Target cannot be null or undefined.
- ❯ src/lib/__tests__/sessionTracking.test.ts:193:42
-    191|       
-    192|       const currentSession = getCurrentSession();
-    193|       expect(currentSession?.authEvents).toHaveLength(2); // session_s…
-       |                                          ^
-    194|       
-    195|       const signInEvent = currentSession?.authEvents.find((e) => e.typ…
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/13]⎯
- FAIL  src/lib/__tests__/sessionTracking.test.ts > Session Tracking > User Management > should track failed auth events
-AssertionError: expected undefined to be false // Object.is equality
-- Expected: 
-false
-+ Received: 
-undefined
- ❯ src/lib/__tests__/sessionTracking.test.ts:207:36
-    205|       const signInEvent = currentSession?.authEvents.find((e) => e.typ…
-    206|       
-    207|       expect(signInEvent?.success).toBe(false);
-       |                                    ^
-    208|       expect(signInEvent?.errorMessage).toBe('Invalid credentials');
-    209|     });
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/13]⎯
- FAIL  src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Session Analytics > should calculate session analytics
-AssertionError: expected 0 to be greater than 0
- ❯ src/lib/__tests__/sessionTracking.test.ts:220:39
-    218|       const analytics = getSessionAnalytics();
-    219|       
-    220|       expect(analytics.totalSessions).toBeGreaterThan(0);
-       |                                       ^
-    221|       expect(analytics.totalPageViews).toBeGreaterThan(0);
-    222|       expect(analytics.averageSessionDuration).toBeGreaterThanOrEqual(…
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/13]⎯
- FAIL  src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Session History > should maintain session history
-AssertionError: expected 0 to be greater than 0
- ❯ src/lib/__tests__/sessionTracking.test.ts:238:30
-    236|       
-    237|       expect(Array.isArray(history)).toBe(true);
-    238|       expect(history.length).toBeGreaterThan(0);
-       |                              ^
-    239|     });
-    240| 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/13]⎯
- FAIL  src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Session History > should include current session in history
-AssertionError: expected undefined to be defined
- ❯ src/lib/__tests__/sessionTracking.test.ts:246:32
-    244|       
-    245|       const currentInHistory = history.find(s => s.sessionId === curre…
-    246|       expect(currentInHistory).toBeDefined();
-       |                                ^
-    247|     });
-    248|   });
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/13]⎯
- FAIL  src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Error Integration > should increment error count
-AssertionError: expected undefined to be 1 // Object.is equality
-- Expected: 
-1
-+ Received: 
-undefined
- ❯ src/lib/__tests__/sessionTracking.test.ts:258:42
-    256|       
-    257|       const updatedSession = getCurrentSession();
-    258|       expect(updatedSession?.errorCount).toBe(initialErrorCount + 1);
-       |                                          ^
-    259|     });
-    260|   });
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/13]⎯
- FAIL  src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Data Persistence > should attempt to persist session data
-AssertionError: expected "spy" to be called with arguments: [ 'jarvis_sessions', Any<String> ]
-Number of calls: 0
 
- ❯ src/lib/__tests__/sessionTracking.test.ts:265:40
-    263|     it('should attempt to persist session data', () => {
-    264|       // Session tracking automatically persists data
-    265|       expect(localStorageMock.setItem).toHaveBeenCalledWith(
-       |                                        ^
-    266|         'jarvis_sessions',
-    267|         expect.any(String)
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/13]⎯
- FAIL  src/lib/__tests__/sessionTracking.test.ts > Session Tracking > Memory Management > should not leak memory with continuous usage
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/__tests__/webhook.integration.test.ts > Real n8n Webhook Integration > should successfully send message to real n8n webhook
+WebhookError: Unknown error during webhook call
+ ❯ WebhookService.makeWebhookRequest src/lib/webhookService.ts:563:13
+    561| 
+    562|       // Unknown errors
+    563|       throw new WebhookError(
+       |             ^
+    564|         'Unknown error during webhook call',
+    565|         WebhookErrorType.UNKNOWN_ERROR,
+ ❯ timeout src/lib/webhookService.ts:330:30
+ ❯ ServiceMonitoringService.makeMonitoredCall src/lib/serviceMonitoring.ts:315:20
+ ❯ src/lib/__tests__/webhook.integration.test.ts:47:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { statusCode: undefined, isRetryable: true, originalError: { name: 'Error', message: 'TEST used global fetch; inject a mock via WebhookService deps', code: undefined } }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  src/lib/__tests__/webhook.integration.test.ts > Real n8n Webhook Integration > should perform health check successfully
 TypeError: actual value must be number or bigint, received "undefined"
- ❯ src/lib/__tests__/sessionTracking.test.ts:321:46
-    319|       
-    320|       // Should manage memory appropriately
-    321|       expect(finalSession?.pageViews.length).toBeLessThan(initialPageV…
-       |                                              ^
-    322|     });
-    323|   });
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/13]⎯
+ ❯ src/lib/__tests__/webhook.integration.test.ts:70:39
+     68| 
+     69|     expect(healthStatus.status).toMatch(/healthy|degraded/);
+     70|     expect(healthStatus.responseTime).toBeGreaterThan(0);
+       |                                       ^
+     71| 
+     72|     if (healthStatus.status === 'healthy') {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
  FAIL  src/components/bug-report/__tests__/BugReportForm.test.tsx > BugReportForm > progresses through form steps correctly
 TestingLibraryElementError: Found multiple elements with the text: Report a Bug
+
 Here are the matching elements:
+
 Ignored nodes: comments, script, style
 <h2
   class="text-xl font-semibold text-gray-900 mb-2"
 >
   Report a Bug
 </h2>
+
 Ignored nodes: comments, script, style
 <h2
   class="text-xl font-semibold text-gray-900 mb-2"
 >
   Report a Bug
 </h2>
+
 (If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
 Ignored nodes: comments, script, style
 <body>
   <div />
@@ -1187,11 +2423,1416 @@ Ignored nodes: comments, script, style
        |                   ^
     102|     expect(screen.getByTestId('bug-type-selector')).toBeInTheDocument(…
     103|     expect(screen.getByTestId('select-functionality-button')).toBeInTh…
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/13]⎯
- Test Files  2 failed | 18 passed | 20 skipped (40)
-      Tests  13 failed | 371 passed | 31 skipped (525)
-   Start at  06:00:54
-   Duration  11.66s (transform 1.11s, setup 196ms, collect 1.88s, tests 8.60s, environment 417ms, prepare 149ms)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  src/components/bug-report/__tests__/BugReportForm.test.tsx > BugReportForm > validates required fields
+TestingLibraryElementError: Found multiple elements by: [data-testid="select-functionality-button"]
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<button
+  data-testid="select-functionality-button"
+>
+  Select Functionality
+</button>
+
+Ignored nodes: comments, script, style
+<button
+  data-testid="select-functionality-button"
+>
+  Select Functionality
+</button>
+
+Ignored nodes: comments, script, style
+<button
+  data-testid="select-functionality-button"
+>
+  Select Functionality
+</button>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                3
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Attachments
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center "
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                4
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Review
+              </span>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div
+            data-testid="bug-type-selector"
+          >
+            <button
+              data-testid="select-functionality-button"
+            >
+              Select Functionality
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                3
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Attachments
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center "
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                4
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Review
+              </span>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div
+            data-testid="bug-type-selector"
+          >
+            <button
+              data-testid="select-functionality-button"
+            >
+              Select Functionality
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                3
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Attachments
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center "
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                4
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Review
+              </span>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div
+            data-testid="bug-type-selector"
+          >
+            <button
+              data-testid="select-functionality-button"
+            >
+              Select Functionality
+            </button>
+          </div>
+        </form>
+        <div
+          class="mt-4 text-center"
+        >
+          <p
+            class="text-xs text-gray-500"
+          >
+            Changes are being auto-saved...
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ getElementError node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ ❯ getMultipleElementsFoundError node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ src/components/bug-report/__tests__/BugReportForm.test.tsx:141:28
+    139|     
+    140|     // Select bug type first
+    141|     fireEvent.click(screen.getByTestId('select-functionality-button'));
+       |                            ^
+    142|     
+    143|     await waitFor(() => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  src/components/bug-report/__tests__/BugReportForm.test.tsx > BugReportForm > handles form submission successfully
+TestingLibraryElementError: Found multiple elements with the text: Report a Bug
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                3
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Attachments
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center "
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                4
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Review
+              </span>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div
+            data-testid="bug-type-selector"
+          >
+            <button
+              data-testid="select-functionality-button"
+            >
+              Select Functionality
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                3
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Attachments
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center "
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                4
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Review
+              </span>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div
+            data-testid="bug-type-selector"
+          >
+            <button
+              data-testid="select-functionality-button"
+            >
+              Select Functionality
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                3
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Attachments
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center "
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                4
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Review
+              </span>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div
+            data-testid="bug-type-selector"
+          >
+            <button
+              data-testid="select-functionality-button"
+            >
+              Select Functionality
+            </button>
+          </div>
+        </form>
+        <div
+          class="mt-4 text-center"
+        >
+          <p
+            class="text-xs text-gray-500"
+          >
+            Changes are being auto-saved...
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                3
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Attachments
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center "
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                4
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Review
+              </span>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div
+            data-testid="bug-type-selector"
+          >
+            <button
+              data-testid="select-functionality-button"
+            >
+              Select Functionality
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ getElementError node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ ❯ getMultipleElementsFoundError node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ src/components/bug-report/__tests__/BugReportForm.test.tsx:153:19
+    151|     
+    152|     // Verify the component renders with form elements
+    153|     expect(screen.getByText('Report a Bug')).toBeInTheDocument();
+       |                   ^
+    154|     expect(screen.getByTestId('select-functionality-button')).toBeInTh…
+    155|     
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+ FAIL  src/components/bug-report/__tests__/BugReportForm.test.tsx > BugReportForm > handles form cancellation
+TestingLibraryElementError: Found multiple elements by: [data-testid="select-functionality-button"]
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<button
+  data-testid="select-functionality-button"
+>
+  Select Functionality
+</button>
+
+Ignored nodes: comments, script, style
+<button
+  data-testid="select-functionality-button"
+>
+  Select Functionality
+</button>
+
+Ignored nodes: comments, script, style
+<button
+  data-testid="select-functionality-button"
+>
+  Select Functionality
+</button>
+
+Ignored nodes: comments, script, style
+<button
+  data-testid="select-functionality-button"
+>
+  Select Functionality
+</button>
+
+Ignored nodes: comments, script, style
+<button
+  data-testid="select-functionality-button"
+>
+  Select Functionality
+</button>
+
+Ignored nodes: comments, script, style
+<button
+  data-testid="select-functionality-button"
+>
+  Select Functionality
+</button>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                3
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Attachments
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center "
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                4
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Review
+              </span>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div
+            data-testid="bug-type-selector"
+          >
+            <button
+              data-testid="select-functionality-button"
+            >
+              Select Functionality
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1...
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ getElementError node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ ❯ getMultipleElementsFoundError node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ src/components/bug-report/__tests__/BugReportForm.test.tsx:178:28
+    176|     
+    177|     // Go to a step where cancel button exists
+    178|     fireEvent.click(screen.getByTestId('select-functionality-button'));
+       |                            ^
+    179|     
+    180|     // This would test actual cancel button interaction
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/7]⎯
+
+ FAIL  src/components/bug-report/__tests__/BugReportForm.test.tsx > BugReportForm > handles file attachment uploads
+TestingLibraryElementError: Found multiple elements with the text: Report a Bug
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xl font-semibold text-gray-900 mb-2"
+>
+  Report a Bug
+</h2>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div />
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                3
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Attachments
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center "
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                4
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Review
+              </span>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div
+            data-testid="bug-type-selector"
+          >
+            <button
+              data-testid="select-functionality-button"
+            >
+              Select Functionality
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div
+      class="rounded-lg border bg-card text-card-foreground shadow-sm bug-report-form"
+    >
+      <div
+        class="p-6"
+      >
+        <div
+          class="mb-6"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-900 mb-2"
+          >
+            Report a Bug
+          </h2>
+          <p
+            class="text-gray-600 text-sm"
+          >
+            Help us improve JARVIS Chat by reporting bugs and issues you encounter.
+          </p>
+        </div>
+        <div
+          class="mb-6"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-blue-600 border-blue-600 text-white"
+              >
+                1
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Bug Type
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1"
+            >
+              <div
+                class="flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-100 border-gray-300 text-gray-500"
+              >
+                2
+              </div>
+              <span
+                class="ml-2 text-xs text-gray-600"
+              >
+                Details
+              </span>
+              <div
+                class="flex-1 h-0.5 bg-gray-200 mx-4"
+              />
+            </div>
+            <div
+              class="flex items-center flex-1...
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ getElementError node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ ❯ getMultipleElementsFoundError node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ src/components/bug-report/__tests__/BugReportForm.test.tsx:224:19
+    222|     // Verify the initial state includes the file attachment mock comp…
+    223|     // This tests that the component structure is properly set up
+    224|     expect(screen.getByText('Report a Bug')).toBeInTheDocument();
+       |                   ^
+    225|     expect(screen.getByTestId('select-functionality-button')).toBeInTh…
+    226|     
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/7]⎯
+
+
+ Test Files  2 failed | 23 passed | 15 skipped (40)
+      Tests  7 failed | 414 passed | 31 skipped (525)
+   Start at  06:38:23
+   Duration  13.90s (transform 1.12s, setup 207ms, collect 1.86s, tests 10.81s, environment 436ms, prepare 173ms)
+
 ❌ Tests failed
 🛑 Deployment cancelled due to test failures
 Error: Process completed with exit code 1.
