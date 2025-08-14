@@ -103,7 +103,8 @@
       "Bash(NODE_ENV=test npx vitest src/lib/__tests__/bugLifecycleIntegration.test.ts --run --no-coverage -t \"sends notifications throughout bug lifecycle\")",
       "Bash(./scripts/ci-test-runner.sh:*)",
       "Bash(dos2unix:*)",
-      "Bash(gh run list:*)"
+      "Bash(gh run list:*)",
+      "WebFetch(domain:69.62.71.229)"
     ],
     "deny": []
   }
