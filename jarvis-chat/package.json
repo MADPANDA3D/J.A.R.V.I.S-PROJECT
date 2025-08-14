@@ -15,8 +15,8 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:run": "NODE_OPTIONS='--max-old-space-size=51200' vitest run --pool=threads --poolOptions.threads.maxThreads=1 --no-coverage",
-    "test:ci": "NODE_OPTIONS='--max-old-space-size=51200' vitest run --pool=threads --poolOptions.threads.maxThreads=1 --no-coverage --reporter=verbose --bail=10",
+    "test:run": "NODE_OPTIONS='--max-old-space-size=51200' vitest run --pool=threads --poolOptions.threads.maxThreads=4 --no-coverage",
+    "test:ci": "NODE_OPTIONS='--max-old-space-size=51200' vitest run --pool=threads --poolOptions.threads.maxThreads=4 --no-coverage --reporter=verbose --bail=10",
     "prepare": "is-ci || husky"
   },
   "dependencies": {
