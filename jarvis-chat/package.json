@@ -15,8 +15,8 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:run": "NODE_OPTIONS='--max-old-space-size=12288' vitest run --pool=forks --poolOptions.forks.singleFork=true",
-    "test:ci": "NODE_OPTIONS='--max-old-space-size=12288' vitest run --pool=forks --poolOptions.forks.singleFork=true --reporter=verbose --bail=10",
+    "test:run": "NODE_OPTIONS='--max-old-space-size=16384 --gc-interval=100 --max-semi-space-size=512' vitest run --pool=threads --poolOptions.threads.maxThreads=1 --no-coverage",
+    "test:ci": "NODE_OPTIONS='--max-old-space-size=16384 --gc-interval=100 --max-semi-space-size=512' vitest run --pool=threads --poolOptions.threads.maxThreads=1 --no-coverage --reporter=verbose --bail=10",
     "prepare": "is-ci || husky"
   },
   "dependencies": {
