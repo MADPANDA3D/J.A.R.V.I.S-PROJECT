@@ -3,13 +3,14 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { monitoringService } from '../monitoring';
+import { monitoringService, withMonitoring } from '../monitoring';
 
 // Mock dependencies
 vi.mock('../errorTracking', () => ({
   captureError: vi.fn(),
   captureWarning: vi.fn(),
   captureInfo: vi.fn(),
+  addBreadcrumb: vi.fn(),
 }));
 
 // Mock performance API
@@ -26,6 +27,8 @@ Object.defineProperty(window, 'performance', {
       { name: 'first-contentful-paint', startTime: 150 },
     ]),
   },
+  configurable: true,
+  writable: true,
 });
 
 // Mock PerformanceObserver
@@ -45,10 +48,21 @@ Object.defineProperty(navigator, 'connection', {
 
 describe('MonitoringService', () => {
   beforeEach(() => {
+    try {
+      vi.useFakeTimers();
+    } catch {
+      // Timers may already be fake from a previous test
+      // This can happen in pool environments
+    }
     vi.clearAllMocks();
   });
 
   afterEach(() => {
+    try {
+      vi.useRealTimers();
+    } catch {
+      // Safe to ignore - timers may not be fake
+    }
     vi.restoreAllMocks();
   });
 
@@ -351,7 +365,7 @@ describe('MonitoringService', () => {
   describe('Performance Wrapper', () => {
     it('should wrap functions with monitoring', async () => {
       const testFunction = vi.fn().mockResolvedValue('success');
-      const wrappedFunction = monitoringService.withMonitoring(
+      const wrappedFunction = withMonitoring(
         testFunction,
         'test_function',
         'async_operation'
@@ -372,7 +386,7 @@ describe('MonitoringService', () => {
     it('should handle function errors and track them', async () => {
       const error = new Error('Test error');
       const testFunction = vi.fn().mockRejectedValue(error);
-      const wrappedFunction = monitoringService.withMonitoring(
+      const wrappedFunction = withMonitoring(
         testFunction,
         'failing_function'
       );
