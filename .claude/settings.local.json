@@ -102,7 +102,8 @@
       "Bash(NODE_ENV=test npm run test:run src/lib/__tests__/bugLifecycleIntegration.test.ts)",
       "Bash(NODE_ENV=test npx vitest src/lib/__tests__/bugLifecycleIntegration.test.ts --run --no-coverage -t \"sends notifications throughout bug lifecycle\")",
       "Bash(./scripts/ci-test-runner.sh:*)",
-      "Bash(dos2unix:*)"
+      "Bash(dos2unix:*)",
+      "Bash(gh run list:*)"
     ],
     "deny": []
   }
