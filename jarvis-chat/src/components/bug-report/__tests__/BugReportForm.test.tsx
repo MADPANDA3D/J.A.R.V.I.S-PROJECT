@@ -4,8 +4,8 @@
  */
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { BugReportForm } from '../BugReportForm';
 
 // Mock dependencies
@@ -87,18 +87,22 @@ describe('BugReportForm', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    cleanup(); // Ensure DOM is cleaned up between tests
+  });
+
   it('renders initial bug type selection step', () => {
-    render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
+    const { container } = render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
     
-    expect(screen.getByText('Report a Bug')).toBeInTheDocument();
+    expect(container.querySelector('h2')).toHaveTextContent('Report a Bug');
     expect(screen.getByTestId('bug-type-selector')).toBeInTheDocument();
   });
 
   it('progresses through form steps correctly', () => {
-    render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
+    const { container } = render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
     
     // Should start with bug type selection and show the form header
-    expect(screen.getByText('Report a Bug')).toBeInTheDocument();
+    expect(container.querySelector('h2')).toHaveTextContent('Report a Bug');
     expect(screen.getByTestId('bug-type-selector')).toBeInTheDocument();
     expect(screen.getByTestId('select-functionality-button')).toBeInTheDocument();
     
@@ -147,10 +151,10 @@ describe('BugReportForm', () => {
   });
 
   it('handles form submission successfully', () => {
-    render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
+    const { container } = render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
     
     // Verify the component renders with form elements
-    expect(screen.getByText('Report a Bug')).toBeInTheDocument();
+    expect(container.querySelector('h2')).toHaveTextContent('Report a Bug');
     expect(screen.getByTestId('select-functionality-button')).toBeInTheDocument();
     
     // Click on bug type selection - this is the main interaction we're testing
@@ -217,11 +221,11 @@ describe('BugReportForm', () => {
   });
 
   it('handles file attachment uploads', () => {
-    render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
+    const { container } = render(<BugReportForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
     
     // Verify the initial state includes the file attachment mock component
     // This tests that the component structure is properly set up
-    expect(screen.getByText('Report a Bug')).toBeInTheDocument();
+    expect(container.querySelector('h2')).toHaveTextContent('Report a Bug');
     expect(screen.getByTestId('select-functionality-button')).toBeInTheDocument();
     
     // Click to start form progression
