@@ -24,7 +24,7 @@ export default defineConfig({
       },
     },
     // Timeout configurations - reduced for faster failure detection
-    testTimeout: 30000, // Increased for debugging
+    testTimeout: 30000, // 30s to account for JSDOM environment setup time in WSL
     hookTimeout: 10000,
     teardownTimeout: 5000, // Ensure cleanup doesn't hang
     // Reduce memory usage
