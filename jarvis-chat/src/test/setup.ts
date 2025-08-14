@@ -1,4 +1,4 @@
-import { vi, afterEach, afterAll, beforeAll } from 'vitest';
+import { vi, afterEach, afterAll } from 'vitest';
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 import { createTestError } from './testUtils';
