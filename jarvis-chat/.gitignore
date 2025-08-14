@@ -25,6 +25,7 @@ dist-ssr
 
 # Environment variables (but allow .env.template and .env.example)
 .env
+.env.production
 !.env.template
 !.env.*.example
 .env.local
