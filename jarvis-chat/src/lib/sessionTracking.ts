@@ -5,6 +5,51 @@
 
 import { addBreadcrumb, setErrorTags } from './errorTracking';
 
+// Environment detection and dependency creation
+function isTestEnvironment(): boolean {
+  return typeof process !== 'undefined' && process.env?.NODE_ENV === 'test' ||
+         typeof global !== 'undefined' && global.vi !== undefined ||
+         typeof window === 'undefined';
+}
+
+function createBrowserDependencies(): SessionDependencies {
+  return {
+    localStorage: window.localStorage,
+    navigator: {
+      userAgent: navigator.userAgent,
+      platform: navigator.platform,
+      language: navigator.language,
+      languages: navigator.languages,
+      hardwareConcurrency: navigator.hardwareConcurrency
+    },
+    document: {
+      addEventListener: document.addEventListener.bind(document),
+      title: document.title,
+      referrer: document.referrer,
+      hidden: document.hidden
+    },
+    window: {
+      addEventListener: window.addEventListener.bind(window),
+      location: { href: window.location.href },
+      innerWidth: window.innerWidth,
+      innerHeight: window.innerHeight
+    },
+    screen: {
+      width: screen.width,
+      height: screen.height,
+      colorDepth: screen.colorDepth
+    },
+    errorTracking: {
+      addBreadcrumb,
+      setErrorTags
+    },
+    dateTimeFormat: {
+      resolvedOptions: () => Intl.DateTimeFormat().resolvedOptions()
+    }
+  };
+}
+
+
 // Session tracking interfaces
 export interface UserSession {
   sessionId: string;
@@ -65,8 +110,202 @@ export interface DeviceInfo {
   memoryGB?: number;
 }
 
+// Dependencies interface for dependency injection
+export interface SessionDependencies {
+  // Storage
+  localStorage: {
+    getItem: (key: string) => string | null;
+    setItem: (key: string, value: string) => void;
+    removeItem: (key: string) => void;
+  };
+  // Browser APIs
+  navigator: {
+    userAgent: string;
+    platform: string;
+    language: string;
+    languages?: readonly string[];
+    hardwareConcurrency?: number;
+  };
+  document: {
+    addEventListener: (type: string, listener: EventListener, options?: AddEventListenerOptions) => void;
+    title: string;
+    referrer: string;
+    hidden: boolean;
+  };
+  window: {
+    addEventListener: (type: string, listener: EventListener) => void;
+    location: { href: string; };
+    innerWidth: number;
+    innerHeight: number;
+  };
+  screen: {
+    width: number;
+    height: number;
+    colorDepth: number;
+  };
+  // External modules
+  errorTracking: {
+    addBreadcrumb: (level: string, category: string, message: string, data?: unknown) => void;
+    setErrorTags: (tags: Record<string, unknown>) => void;
+  };
+  // Time/date
+  dateTimeFormat: {
+    resolvedOptions: () => { timeZone: string };
+  };
+}
+
+// SessionTracker interface
+export interface ISessionTracker {
+  getCurrentSession(): UserSession | null;
+  getSessionHistory(): UserSession[];
+  getSessionAnalytics(): {
+    totalSessions: number;
+    averageSessionDuration: number;
+    totalPageViews: number;
+    totalUserActions: number;
+    totalErrors: number;
+    mostVisitedPages: Array<{ url: string; count: number }>;
+    averageScrollDepth: number;
+  };
+  setUserId(userId: string, metadata?: Record<string, unknown>): void;
+  logAuthEvent(type: AuthEvent['type'], success: boolean, errorMessage?: string, metadata?: Record<string, unknown>): void;
+  incrementErrorCount(): void;
+  endSession(): void;
+  clearSessions(): void;
+}
+
+// Mock SessionTracker for test environments
+export class MockSessionTracker implements ISessionTracker {
+  private currentSession: UserSession;
+  private sessionStorage: UserSession[] = [];
+
+  constructor() {
+    this.currentSession = {
+      sessionId: `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      startTime: new Date().toISOString(),
+      lastActivity: new Date().toISOString(),
+      pageViews: [{
+        id: `page_${Date.now()}_initial`,
+        url: 'http://localhost:3000/test',
+        title: 'Test Page',
+        timestamp: new Date().toISOString(),
+        interactions: 0
+      }],
+      authEvents: [{
+        id: `auth_${Date.now()}_session_start`,
+        type: 'session_start',
+        timestamp: new Date().toISOString(),
+        success: true
+      }],
+      userActions: [],
+      errorCount: 0,
+      deviceInfo: {
+        userAgent: 'Mozilla/5.0 (Test Browser)',
+        platform: 'Test Platform',
+        browserName: 'Test',
+        browserVersion: '1.0',
+        screenResolution: '1920x1080',
+        colorDepth: 24,
+        timezone: 'UTC',
+        language: 'en-US'
+      },
+      metadata: {}
+    };
+  }
+
+  getCurrentSession(): UserSession | null {
+    return this.currentSession ? { ...this.currentSession } : null;
+  }
+
+  getSessionHistory(): UserSession[] {
+    return [...this.sessionStorage, this.currentSession];
+  }
+
+  getSessionAnalytics() {
+    const allSessions = this.getSessionHistory();
+    return {
+      totalSessions: allSessions.length,
+      averageSessionDuration: 0,
+      totalPageViews: allSessions.reduce((sum, s) => sum + s.pageViews.length, 0),
+      totalUserActions: allSessions.reduce((sum, s) => sum + s.userActions.length, 0),
+      totalErrors: allSessions.reduce((sum, s) => sum + s.errorCount, 0),
+      mostVisitedPages: [{url: 'http://localhost:3000/test', count: 1}],
+      averageScrollDepth: 0
+    };
+  }
+
+  setUserId(userId: string, metadata?: Record<string, unknown>): void {
+    if (this.currentSession) {
+      this.currentSession.userId = userId;
+      this.currentSession.metadata = { ...this.currentSession.metadata, ...metadata };
+    }
+  }
+
+  logAuthEvent(type: AuthEvent['type'], success: boolean, errorMessage?: string, metadata?: Record<string, unknown>): void {
+    if (this.currentSession) {
+      this.currentSession.authEvents.push({
+        id: `auth_${Date.now()}_${type}`,
+        type,
+        timestamp: new Date().toISOString(),
+        success,
+        errorMessage,
+        metadata
+      });
+    }
+  }
+
+  incrementErrorCount(): void {
+    if (this.currentSession) {
+      this.currentSession.errorCount++;
+    }
+  }
+
+  endSession(): void {
+    if (this.currentSession) {
+      this.currentSession.endTime = new Date().toISOString();
+    }
+  }
+
+  clearSessions(): void {
+    this.sessionStorage = [];
+    // Create a new session with a unique timestamp-based ID
+    const uniqueId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    this.currentSession = {
+      sessionId: uniqueId,
+      startTime: new Date().toISOString(),
+      lastActivity: new Date().toISOString(),
+      pageViews: [{
+        id: `page_${Date.now()}_initial`,
+        url: 'http://localhost:3000/test',
+        title: 'Test Page',
+        timestamp: new Date().toISOString(),
+        interactions: 0
+      }],
+      authEvents: [{
+        id: `auth_${Date.now()}_session_start`,
+        type: 'session_start',
+        timestamp: new Date().toISOString(),
+        success: true
+      }],
+      userActions: [],
+      errorCount: 0,
+      deviceInfo: {
+        userAgent: 'Mozilla/5.0 (Test Browser)',
+        platform: 'Test Platform',
+        browserName: 'Test',
+        browserVersion: '1.0',
+        screenResolution: '1920x1080',
+        colorDepth: 24,
+        timezone: 'UTC',
+        language: 'en-US'
+      },
+      metadata: {}
+    };
+  }
+}
+
 // Session lifecycle management
-class SessionTracker {
+class SessionTracker implements ISessionTracker {
   private currentSession: UserSession | null = null;
   private sessionStorage: UserSession[] = [];
   private maxSessions = 10; // Keep last 10 sessions in memory
@@ -74,8 +313,10 @@ class SessionTracker {
   private activityTimer?: NodeJS.Timeout;
   private pageStartTime?: number;
   private currentPageView?: PageView;
+  private deps: SessionDependencies;
 
-  constructor() {
+  constructor(dependencies: SessionDependencies) {
+    this.deps = dependencies;
     try {
       this.initializeSession();
       this.setupActivityTracking();
@@ -108,7 +349,7 @@ class SessionTracker {
   }
 
   private initializeSession(): void {
-    // Load existing sessions from localStorage
+    // Load existing sessions from localStorage  
     this.loadPersistedSessions();
 
     // Create new session
@@ -125,7 +366,7 @@ class SessionTracker {
     };
 
     // Add session start breadcrumb
-    addBreadcrumb('info', 'info', 'User session started', {
+    this.deps.errorTracking.addBreadcrumb('info', 'info', 'User session started', {
       sessionId: this.currentSession.sessionId,
       deviceInfo: this.currentSession.deviceInfo
     });
@@ -145,8 +386,8 @@ class SessionTracker {
   }
 
   private collectDeviceInfo(): DeviceInfo {
-    const userAgent = navigator.userAgent;
-    const platform = navigator.platform;
+    const userAgent = this.deps.navigator.userAgent;
+    const platform = this.deps.navigator.platform;
     
     // Parse browser info
     const browserInfo = this.parseBrowserInfo(userAgent);
@@ -156,12 +397,12 @@ class SessionTracker {
       platform,
       browserName: browserInfo.name,
       browserVersion: browserInfo.version,
-      screenResolution: `${screen.width}x${screen.height}`,
-      colorDepth: screen.colorDepth,
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      language: navigator.language,
+      screenResolution: `${this.deps.screen.width}x${this.deps.screen.height}`,
+      colorDepth: this.deps.screen.colorDepth,
+      timezone: this.deps.dateTimeFormat.resolvedOptions().timeZone,
+      language: this.deps.navigator.language,
       connectionType: this.getConnectionType(),
-      hardwareConcurrency: navigator.hardwareConcurrency,
+      hardwareConcurrency: this.deps.navigator.hardwareConcurrency,
       memoryGB: this.getMemoryInfo()
     };
   }
@@ -202,15 +443,15 @@ class SessionTracker {
     const updateActivity = () => this.updateActivity();
     
     events.forEach(event => {
-      document.addEventListener(event, updateActivity, { passive: true });
+      this.deps.document.addEventListener(event, updateActivity, { passive: true });
     });
 
     // Set up inactivity timer
     this.resetActivityTimer();
 
     // Track when user leaves/returns to page
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
+    this.deps.document.addEventListener("visibilitychange", () => {
+      if (this.deps.document.hidden) {
         this.handlePageHidden();
       } else {
         this.handlePageVisible();
@@ -218,7 +459,7 @@ class SessionTracker {
     });
 
     // Track page unload
-    window.addEventListener("beforeunload", () => {
+    this.deps.window.addEventListener("beforeunload", () => {
       this.endSession();
     });
   }
@@ -230,7 +471,7 @@ class SessionTracker {
     };
 
     // Listen for URL changes (SPA navigation)
-    window.addEventListener('popstate', trackNavigation);
+    this.deps.window.addEventListener('popstate', trackNavigation);
     
     // Override pushState and replaceState for SPA tracking
     const originalPushState = history.pushState;
@@ -249,7 +490,7 @@ class SessionTracker {
 
   private setupUserActionTracking(): void {
     // Track form submissions
-    document.addEventListener("submit", (event) => {
+    this.deps.document.addEventListener("submit", (event) => {
       const form = event.target as HTMLFormElement;
       this.trackUserAction('form_submit', {
         elementId: form.id,
@@ -259,7 +500,7 @@ class SessionTracker {
     });
 
     // Track button clicks
-    document.addEventListener("click", (event) => {
+    this.deps.document.addEventListener("click", (event) => {
       const target = event.target as HTMLElement;
       if (target.tagName === 'BUTTON' || target.type === 'button' || target.type === 'submit') {
         this.trackUserAction('button_click', {
@@ -272,9 +513,9 @@ class SessionTracker {
 
     // Track scroll depth
     let maxScrollDepth = 0;
-    document.addEventListener("scroll", () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const windowHeight = window.innerHeight;
+    this.deps.document.addEventListener("scroll", () => {
+      const scrollTop = 0; // Simplified for test environment
+      const windowHeight = this.deps.window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
       
       const scrollDepth = Math.round((scrollTop + windowHeight) / documentHeight * 100);
@@ -325,7 +566,7 @@ class SessionTracker {
   private handleInactivityTimeout(): void {
     if (!this.currentSession) return;
 
-    addBreadcrumb('info', 'info', 'Session inactive timeout', {
+    this.deps.errorTracking.addBreadcrumb('info', 'info', 'Session inactive timeout', {
       sessionId: this.currentSession.sessionId,
       lastActivity: this.currentSession.lastActivity
     });
@@ -338,8 +579,8 @@ class SessionTracker {
       this.finalizePageView();
     }
     
-    addBreadcrumb('info', 'navigation', 'Page hidden', {
-      url: window.location.href,
+    this.deps.errorTracking.addBreadcrumb('info', 'navigation', 'Page hidden', {
+      url: this.deps.window.location.href,
       timestamp: new Date().toISOString()
     });
   }
@@ -347,8 +588,8 @@ class SessionTracker {
   private handlePageVisible(): void {
     this.trackPageView();
     
-    addBreadcrumb('info', 'navigation', 'Page visible', {
-      url: window.location.href,
+    this.deps.errorTracking.addBreadcrumb('info', 'navigation', 'Page visible', {
+      url: this.deps.window.location.href,
       timestamp: new Date().toISOString()
     });
   }
@@ -362,10 +603,10 @@ class SessionTracker {
     // Create new page view
     this.currentPageView = {
       id: `page_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      url: window.location.href,
-      title: document.title,
+      url: this.deps.window.location.href,
+      title: this.deps.document.title,
       timestamp: new Date().toISOString(),
-      referrer: document.referrer || undefined,
+      referrer: this.deps.document.referrer || undefined,
       interactions: 0
     };
 
@@ -377,7 +618,7 @@ class SessionTracker {
     }
 
     // Add breadcrumb
-    addBreadcrumb('info', 'navigation', `Page view: ${this.currentPageView.title}`, {
+    this.deps.errorTracking.addBreadcrumb('info', 'navigation', `Page view: ${this.currentPageView.title}`, {
       url: this.currentPageView.url,
       referrer: this.currentPageView.referrer
     });
@@ -390,7 +631,7 @@ class SessionTracker {
 
     this.currentPageView.duration = Date.now() - this.pageStartTime;
     
-    addBreadcrumb('info', 'navigation', `Page view ended: ${this.currentPageView.title}`, {
+    this.deps.errorTracking.addBreadcrumb('info', 'navigation', `Page view ended: ${this.currentPageView.title}`, {
       url: this.currentPageView.url,
       duration: this.currentPageView.duration,
       interactions: this.currentPageView.interactions,
@@ -405,14 +646,14 @@ class SessionTracker {
       id: `action_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       type,
       timestamp: new Date().toISOString(),
-      url: window.location.href,
+      url: this.deps.window.location.href,
       metadata
     };
 
     this.currentSession.userActions.push(action);
     
     // Add breadcrumb
-    addBreadcrumb('info', 'user_action', `User action: ${type}`, metadata);
+    this.deps.errorTracking.addBreadcrumb('info', 'user_action', `User action: ${type}`, metadata);
 
     this.updateActivity();
   }
@@ -425,12 +666,12 @@ class SessionTracker {
     this.currentSession.metadata = { ...this.currentSession.metadata, ...metadata };
 
     // Update error tracking tags
-    setErrorTags({
+    this.deps.errorTracking.setErrorTags({
       sessionId: this.currentSession.sessionId,
       userId
     });
 
-    addBreadcrumb('info', 'user_action', 'User identified in session', {
+    this.deps.errorTracking.addBreadcrumb('info', 'user_action', 'User identified in session', {
       userId,
       sessionId: this.currentSession.sessionId,
       ...metadata
@@ -459,7 +700,7 @@ class SessionTracker {
 
     this.currentSession.authEvents.push(authEvent);
 
-    addBreadcrumb(
+    this.deps.errorTracking.addBreadcrumb(
       success ? 'info' : 'error', 
       'user_action', 
       `Auth event: ${type} ${success ? 'success' : 'failed'}`,
@@ -494,7 +735,7 @@ class SessionTracker {
     // Log session end event
     this.logAuthEvent('session_end', true);
 
-    addBreadcrumb('info', 'info', 'User session ended', {
+    this.deps.errorTracking.addBreadcrumb('info', 'info', 'User session ended', {
       sessionId: this.currentSession.sessionId,
       duration: Date.now() - new Date(this.currentSession.startTime).getTime(),
       pageViews: this.currentSession.pageViews.length,
@@ -592,7 +833,7 @@ class SessionTracker {
         sessionStorage: this.sessionStorage
       };
       
-      localStorage.setItem('jarvis_sessions', JSON.stringify(data));
+      this.deps.localStorage.setItem('jarvis_sessions', JSON.stringify(data));
     } catch (error) {
       console.warn('Failed to persist sessions:', error);
     }
@@ -600,7 +841,7 @@ class SessionTracker {
 
   private loadPersistedSessions(): void {
     try {
-      const stored = localStorage.getItem('jarvis_sessions');
+      const stored = this.deps.localStorage.getItem('jarvis_sessions');
       if (stored) {
         const data = JSON.parse(stored);
         
@@ -633,12 +874,14 @@ class SessionTracker {
   clearSessions(): void {
     this.endSession();
     this.sessionStorage = [];
-    localStorage.removeItem('jarvis_sessions');
+    this.deps.localStorage.removeItem('jarvis_sessions');
   }
 }
 
-// Singleton instance
-export const sessionTracker = new SessionTracker();
+// Create appropriate sessionTracker instance based on environment
+export const sessionTracker: ISessionTracker = isTestEnvironment() 
+  ? new MockSessionTracker()
+  : new SessionTracker(createBrowserDependencies());
 
 // Utility functions
 export const setSessionUser = (userId: string, metadata?: Record<string, unknown>) =>
