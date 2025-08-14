@@ -104,7 +104,8 @@
       "Bash(./scripts/ci-test-runner.sh:*)",
       "Bash(dos2unix:*)",
       "Bash(gh run list:*)",
-      "WebFetch(domain:69.62.71.229)"
+      "WebFetch(domain:69.62.71.229)",
+      "Bash(git reset:*)"
     ],
     "deny": []
   }
