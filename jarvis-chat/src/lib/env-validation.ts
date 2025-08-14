@@ -87,28 +87,27 @@ export function validateEnvironment(): ValidationResult {
   const errors: ValidationError[] = [];
   const warnings: ValidationWarning[] = [];
   const config: Partial<EnvConfig> = {};
-  const environment = import.meta.env.VITE_APP_ENV || 'development';
   const timestamp = new Date();
 
-  // Validate application configuration
+  // Validate application configuration (reads environment internally)
   validateApplicationConfig(config, errors, warnings);
 
   // Validate database configuration
   validateDatabaseConfig(config, errors, warnings);
 
-  // Validate external integrations
-  validateIntegrationsConfig(config, errors, warnings, environment);
+  // Validate external integrations (reads environment internally)
+  validateIntegrationsConfig(config, errors, warnings);
 
-  // Validate monitoring configuration
-  validateMonitoringConfig(config, errors, warnings, environment);
+  // Validate monitoring configuration (reads environment internally)
+  validateMonitoringConfig(config, errors, warnings);
 
   // Validate performance configuration
   validatePerformanceConfig(config, errors, warnings);
 
-  // Validate security configuration
+  // Validate security configuration (reads environment internally)
   validateSecurityConfig(config, errors, warnings);
 
-  // Validate feature flags
+  // Validate feature flags (reads environment internally)
   validateFeatureFlags(config, errors, warnings);
 
   // Validate webhook configuration
@@ -140,7 +139,7 @@ export function validateEnvironment(): ValidationResult {
     errors,
     warnings,
     config,
-    environment,
+    environment: config.VITE_APP_ENV || 'development',
     timestamp,
     summary,
   };
@@ -311,9 +310,9 @@ function validateDatabaseConfig(
 function validateIntegrationsConfig(
   config: Partial<EnvConfig>,
   errors: ValidationError[],
-  warnings: ValidationWarning[],
-  environment: string
+  warnings: ValidationWarning[]
 ): void {
+  const environment = import.meta.env.VITE_APP_ENV || 'development';
   const n8nWebhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL;
   const n8nBackupWebhookUrl = import.meta.env.VITE_N8N_BACKUP_WEBHOOK_URL;
   const n8nWebhookSecret = import.meta.env.N8N_WEBHOOK_SECRET;
@@ -414,9 +413,9 @@ function validateIntegrationsConfig(
 function validateMonitoringConfig(
   config: Partial<EnvConfig>,
   errors: ValidationError[],
-  warnings: ValidationWarning[],
-  environment: string
+  warnings: ValidationWarning[]
 ): void {
+  const environment = import.meta.env.VITE_APP_ENV || 'development';
   const sentryDsn = import.meta.env.VITE_SENTRY_DSN;
   const datadogApiKey = import.meta.env.DATADOG_API_KEY;
   const logLevel = import.meta.env.LOG_LEVEL;
@@ -561,8 +560,8 @@ function validateSecurityConfig(
   errors: ValidationError[],
   warnings: ValidationWarning[]
 ): void {
+  const appEnv = import.meta.env.VITE_APP_ENV || 'development';
   const cspEnabled = import.meta.env.CSP_ENABLED;
-  const appEnv = import.meta.env.VITE_APP_ENV;
 
   // Validate CSP settings
   if (cspEnabled !== undefined) {
@@ -587,11 +586,11 @@ function validateFeatureFlags(
   errors: ValidationError[],
   warnings: ValidationWarning[]
 ): void {
+  const appEnv = import.meta.env.VITE_APP_ENV || 'development';
   const enableDebugTools = import.meta.env.ENABLE_DEBUG_TOOLS;
   const enableExperimental = import.meta.env.ENABLE_EXPERIMENTAL_FEATURES;
   const mockN8nResponses = import.meta.env.MOCK_N8N_RESPONSES;
   const bypassAuth = import.meta.env.BYPASS_AUTH;
-  const appEnv = import.meta.env.VITE_APP_ENV;
 
   // Validate debug tools
   if (enableDebugTools !== undefined) {

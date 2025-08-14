@@ -1,18 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-// Mock import.meta.env
-const mockEnv: Record<string, string | undefined> = {};
-
-vi.stubGlobal('import', {
-  meta: {
-    env: new Proxy(mockEnv, {
-      get(target, prop) {
-        return target[prop as string];
-      },
-    }),
-  },
-});
-
 // Import after mocking
 import {
   validateEnvironment,
@@ -23,28 +10,26 @@ import { validateSecrets, getSecretsHealthStatus } from '../secrets-management';
 
 describe('Environment & Secrets Integration', () => {
   beforeEach(() => {
-    // Clear all environment variables
-    Object.keys(mockEnv).forEach(key => {
-      delete mockEnv[key];
-    });
-
-    // Set default environment
-    mockEnv.VITE_APP_ENV = 'development';
+    // Clear all environment variables using vi.unstubAllEnvs
+    vi.unstubAllEnvs();
+    
+    // Set default environment using vi.stubEnv
+    vi.stubEnv('VITE_APP_ENV', 'development');
   });
 
   describe('Complete Development Environment', () => {
     it('should validate complete development setup', () => {
-      // Set up complete development environment
-      mockEnv.VITE_APP_ENV = 'development';
-      mockEnv.VITE_APP_VERSION = '1.0.0-dev';
-      mockEnv.VITE_APP_DOMAIN = 'localhost:5173';
-      mockEnv.VITE_SUPABASE_URL = 'https://dev.supabase.co';
-      mockEnv.VITE_SUPABASE_ANON_KEY =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRldiIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNjQwMDAwMDAwLCJleHAiOjE2NDAwMDAwMDB9.dev-signature-that-is-long-enough-for-validation';
-      mockEnv.VITE_N8N_WEBHOOK_URL = 'http://localhost:5678/webhook/test';
-      mockEnv.LOG_LEVEL = 'debug';
-      mockEnv.ENABLE_DEBUG_TOOLS = 'true';
-      mockEnv.MOCK_N8N_RESPONSES = 'true';
+      // Set up complete development environment using vi.stubEnv
+      vi.stubEnv('VITE_APP_ENV', 'development');
+      vi.stubEnv('VITE_APP_VERSION', '1.0.0-dev');
+      vi.stubEnv('VITE_APP_DOMAIN', 'localhost:5173');
+      vi.stubEnv('VITE_SUPABASE_URL', 'https://dev.supabase.co');
+      vi.stubEnv('VITE_SUPABASE_ANON_KEY', 
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRldiIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNjQwMDAwMDAwLCJleHAiOjE2NDAwMDAwMDB9.dev-signature-that-is-long-enough-for-validation');
+      vi.stubEnv('VITE_N8N_WEBHOOK_URL', 'http://localhost:5678/webhook/test');
+      vi.stubEnv('LOG_LEVEL', 'debug');
+      vi.stubEnv('ENABLE_DEBUG_TOOLS', 'true');
+      vi.stubEnv('MOCK_N8N_RESPONSES', 'true');
 
       const envResult = validateEnvironment();
       const secretsResult = validateSecrets();
@@ -66,12 +51,12 @@ describe('Environment & Secrets Integration', () => {
     });
 
     it('should allow insecure configurations in development', () => {
-      mockEnv.VITE_APP_ENV = 'development';
-      mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
-      mockEnv.VITE_SUPABASE_ANON_KEY = 'short-dev-key';
-      mockEnv.VITE_N8N_WEBHOOK_URL = 'http://localhost:5678/webhook';
-      mockEnv.N8N_WEBHOOK_SECRET = 'dev-secret';
-      mockEnv.BYPASS_AUTH = 'true';
+      vi.stubEnv('VITE_APP_ENV', 'development');
+      vi.stubEnv('VITE_SUPABASE_URL', 'https://test.supabase.co');
+      vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'short-dev-key');
+      vi.stubEnv('VITE_N8N_WEBHOOK_URL', 'http://localhost:5678/webhook');
+      vi.stubEnv('N8N_WEBHOOK_SECRET', 'dev-secret');
+      vi.stubEnv('BYPASS_AUTH', 'true');
 
       const envResult = validateEnvironment();
       const secretsResult = validateSecrets();
@@ -88,19 +73,19 @@ describe('Environment & Secrets Integration', () => {
   describe('Complete Staging Environment', () => {
     it('should validate complete staging setup', () => {
       // Set up complete staging environment
-      mockEnv.VITE_APP_ENV = 'staging';
-      mockEnv.VITE_APP_VERSION = '1.0.0-staging';
-      mockEnv.VITE_APP_DOMAIN = 'staging.example.com';
-      mockEnv.VITE_SUPABASE_URL = 'https://staging.supabase.co';
-      mockEnv.VITE_SUPABASE_ANON_KEY =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0YWdpbmciLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MDAwMDAwMCwiZXhwIjoxNjQwMDAwMDAwfQ.staging-signature-that-is-long-enough-for-validation';
-      mockEnv.VITE_N8N_WEBHOOK_URL = 'https://staging-n8n.example.com/webhook';
-      mockEnv.N8N_WEBHOOK_SECRET = 'staging-webhook-secret-with-good-length';
-      mockEnv.VITE_SENTRY_DSN = 'https://staging-sentry.io/project';
-      mockEnv.LOG_LEVEL = 'info';
-      mockEnv.ENABLE_CACHING = 'true';
-      mockEnv.CACHE_TTL = '300';
-      mockEnv.CSP_ENABLED = 'true';
+      vi.stubEnv('VITE_APP_ENV', 'staging');
+      vi.stubEnv('VITE_APP_VERSION', '1.0.0-staging');
+      vi.stubEnv('VITE_APP_DOMAIN', 'staging.example.com');
+      vi.stubEnv('VITE_SUPABASE_URL', 'https://staging.supabase.co');
+      vi.stubEnv('VITE_SUPABASE_ANON_KEY',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0YWdpbmciLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MDAwMDAwMCwiZXhwIjoxNjQwMDAwMDAwfQ.staging-signature-that-is-long-enough-for-validation');
+      vi.stubEnv('VITE_N8N_WEBHOOK_URL', 'https://staging-n8n.example.com/webhook');
+      vi.stubEnv('N8N_WEBHOOK_SECRET', 'staging-webhook-secret-with-good-length');
+      vi.stubEnv('VITE_SENTRY_DSN', 'https://staging-sentry.io/project');
+      vi.stubEnv('LOG_LEVEL', 'info');
+      vi.stubEnv('ENABLE_CACHING', 'true');
+      vi.stubEnv('CACHE_TTL', '300');
+      vi.stubEnv('CSP_ENABLED', 'true');
 
       const envResult = validateEnvironment();
       const secretsResult = validateSecrets();
