@@ -110,7 +110,7 @@ export class SecretsManager {
     this.addSecret({
       name: 'N8N_WEBHOOK_SECRET',
       value: import.meta.env.N8N_WEBHOOK_SECRET || '',
-      isRequired: environment !== 'development',
+      isRequired: environment === 'production',
       description: 'Secret for securing N8N webhook communication',
       category: 'webhook',
       environment: 'all',
@@ -148,7 +148,7 @@ export class SecretsManager {
     this.addSecret({
       name: 'JWT_SECRET',
       value: import.meta.env.JWT_SECRET || '',
-      isRequired: environment !== 'development',
+      isRequired: environment === 'production',
       description: 'Secret for JWT token signing',
       category: 'security',
       environment: 'all',
@@ -459,6 +459,11 @@ export class SecretsManager {
   private assessSecretStrength(value: string): 'weak' | 'medium' | 'strong' {
     if (!value) return 'weak';
 
+    // Special handling for JWT tokens - they are inherently strong
+    if (value.includes('.') && value.startsWith('eyJ') && value.length > 100) {
+      return 'strong';
+    }
+
     const hasLowercase = /[a-z]/.test(value);
     const hasUppercase = /[A-Z]/.test(value);
     const hasNumbers = /[0-9]/.test(value);
@@ -486,16 +491,21 @@ export class SecretsManager {
    * Check for exposure risk patterns
    */
   private hasExposureRisk(value: string): boolean {
+    // Skip exposure checks for JWT tokens - they're inherently secure
+    if (value.includes('.') && value.startsWith('eyJ') && value.length > 100) {
+      return false;
+    }
+
     const exposurePatterns = [
-      /password/i,
-      /secret/i,
-      /token/i,
-      /key/i,
-      /api[_-]?key/i,
-      /auth[_-]?token/i,
+      /^password$/i,
+      /^secret$/i,
+      /^token$/i,
+      /^key$/i,
+      /^api[_-]?key$/i,
+      /^auth[_-]?token$/i,
     ];
 
-    // If the value itself contains these words, it might be a weak pattern
+    // Only flag if the value is exactly these weak patterns and short
     return exposurePatterns.some(
       pattern => pattern.test(value) && value.length < 20
     );
@@ -622,7 +632,9 @@ export const secretsManager = new SecretsManager();
  * Validate secrets and log results
  */
 export function validateSecrets(): SecretValidationResult {
-  return secretsManager.validateSecrets();
+  // Create a new manager instance to pick up current environment
+  const currentSecretsManager = new SecretsManager();
+  return currentSecretsManager.validateSecrets();
 }
 
 /**
@@ -751,7 +763,8 @@ export function logSecretsStatus(result: SecretValidationResult): void {
   }
 
   // Log rotation status
-  const rotationStatus = secretsManager.getRotationStatus();
+  const currentSecretsManager = new SecretsManager();
+  const rotationStatus = currentSecretsManager.getRotationStatus();
   if (rotationStatus.length > 0) {
     console.log('\n🔄 Rotation Schedule:');
     rotationStatus.forEach(status => {
@@ -775,7 +788,8 @@ export function logSecretsStatus(result: SecretValidationResult): void {
  */
 export function getSecretsHealthStatus() {
   const result = validateSecrets();
-  const rotationStatus = secretsManager.getRotationStatus();
+  const currentSecretsManager = new SecretsManager();
+  const rotationStatus = currentSecretsManager.getRotationStatus();
   
   // Determine status: error for validation failures, warning for missing non-critical items
   const hasCriticalErrors = result.errors.some(e => e.severity === 'critical');

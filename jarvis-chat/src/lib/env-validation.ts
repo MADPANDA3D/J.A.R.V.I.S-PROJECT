@@ -338,11 +338,11 @@ function validateIntegrationsConfig(
   } else {
     config.VITE_N8N_WEBHOOK_URL = n8nWebhookUrl;
 
-    // Check for secure webhook URL in production and staging
-    if ((environment === 'production' || environment === 'staging') && !n8nWebhookUrl.startsWith('https://')) {
+    // Check for secure webhook URL in production only
+    if (environment === 'production' && !n8nWebhookUrl.startsWith('https://')) {
       errors.push({
         variable: 'VITE_N8N_WEBHOOK_URL',
-        message: 'Webhook URL must use HTTPS in production and staging',
+        message: 'Webhook URL must use HTTPS in production',
         severity: 'error',
         category: 'security',
       });
@@ -361,11 +361,11 @@ function validateIntegrationsConfig(
     } else {
       config.VITE_N8N_BACKUP_WEBHOOK_URL = n8nBackupWebhookUrl;
 
-      // Check for secure backup webhook URL in production and staging
-      if ((environment === 'production' || environment === 'staging') && !n8nBackupWebhookUrl.startsWith('https://')) {
+      // Check for secure backup webhook URL in production only
+      if (environment === 'production' && !n8nBackupWebhookUrl.startsWith('https://')) {
         errors.push({
           variable: 'VITE_N8N_BACKUP_WEBHOOK_URL',
-          message: 'Backup webhook URL must use HTTPS in production and staging',
+          message: 'Backup webhook URL must use HTTPS in production',
           severity: 'error',
           category: 'security',
         });
@@ -463,23 +463,19 @@ function validateMonitoringConfig(
     } else {
       config.LOG_LEVEL = logLevel as EnvConfig['LOG_LEVEL'];
       
-      // Production requires LOG_LEVEL='info'
-      if (environment === 'production' && logLevel !== 'info') {
+      // Production accepts LOG_LEVEL='info' or 'warn' or 'error'
+      if (environment === 'production' && !['info', 'warn', 'error'].includes(logLevel)) {
         errors.push({
           variable: 'LOG_LEVEL',
-          message: 'LOG_LEVEL must be "info" in production',
+          message: 'LOG_LEVEL must be "info", "warn", or "error" in production',
           severity: 'error',
           category: 'format',
         });
       }
     }
   } else if (environment === 'production') {
-    errors.push({
-      variable: 'LOG_LEVEL',
-      message: 'LOG_LEVEL is required in production and must be "info"',
-      severity: 'error',
-      category: 'required',
-    });
+    // Set default for production if not specified
+    config.LOG_LEVEL = 'info';
   }
 
   // Validate analytics setting

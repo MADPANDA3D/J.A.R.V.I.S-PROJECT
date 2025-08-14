@@ -852,6 +852,9 @@ POST {"action": "delete_credential", "data": {"credentialId": "cred-id-here"}}
 **Returns:** Deletion confirmation
 **Use Case:** Security cleanup, revoke access, credential rotation
 
+### `*debug`
+**See debug-command.md for complete debugging protocol**
+
 ---
 
 ## 🧠 **INTELLIGENT WORKFLOWS**

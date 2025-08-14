@@ -49,6 +49,7 @@ describe('Environment & Secrets Integration', () => {
       const envResult = validateEnvironment();
       const secretsResult = validateSecrets();
 
+
       expect(envResult.isValid).toBe(true);
       expect(secretsResult.isValid).toBe(true);
 
