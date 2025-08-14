@@ -239,13 +239,14 @@ describe('Environment & Secrets Integration', () => {
     });
 
     it('should detect configuration problems in health checks', () => {
-      // Set up problematic configuration - missing required database config
+      // Set up problematic configuration - missing database causes env error, weak JWT causes secrets warning
       vi.stubEnv('VITE_APP_ENV', 'production');
-      // Missing VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY will cause critical env validation errors
-      vi.stubEnv('N8N_WEBHOOK_SECRET', 'production-webhook-secret');
-      vi.stubEnv('VITE_SENTRY_DSN', 'https://sentry.io/project');
-      vi.stubEnv('ENCRYPTION_KEY', 'production-encryption-key-sufficiently-long');
-      vi.stubEnv('JWT_SECRET', 'weak');
+      // Missing VITE_SUPABASE_URL/VITE_SUPABASE_ANON_KEY causes env validation to fail
+      // But provide required secrets to avoid critical secret errors
+      vi.stubEnv('N8N_WEBHOOK_SECRET', 'VerySecureProductionWebhookSecret123!WithSymbols');
+      vi.stubEnv('VITE_SENTRY_DSN', 'https://sentry.io/production-project');
+      vi.stubEnv('ENCRYPTION_KEY', 'ProductionEncryptionKey456!WithExcellentSecurity');
+      vi.stubEnv('JWT_SECRET', 'weak'); // This causes quality issue, not missing critical
 
       const envHealth = getHealthCheckStatus();
       const secretsHealth = getSecretsHealthStatus();

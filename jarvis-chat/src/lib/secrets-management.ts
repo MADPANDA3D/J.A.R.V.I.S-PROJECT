@@ -248,6 +248,9 @@ export class SecretsManager {
     // Check for exposure risks
     this.checkExposureRisks(errors, warnings);
 
+    // Check for missing correlations (e.g., webhook URL without secret)
+    this.checkMissingCorrelations(warnings, environment);
+
     // Generate summary
     const summary: SecretSummary = {
       totalSecrets: secrets.length,
@@ -369,6 +372,27 @@ export class SecretsManager {
           category: 'rotation',
         });
       }
+    }
+  }
+
+  /**
+   * Check for missing correlations (e.g., webhook URL configured but secret missing)
+   */
+  private checkMissingCorrelations(
+    warnings: SecretWarning[],
+    environment: string
+  ): void {
+    // Check for webhook URL without secret
+    const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL;
+    const webhookSecret = this.secrets.get('N8N_WEBHOOK_SECRET');
+    
+    if (webhookUrl && (!webhookSecret || !webhookSecret.value)) {
+      warnings.push({
+        secret: 'N8N_WEBHOOK_SECRET',
+        message: 'Webhook secret not configured but webhook URL is set',
+        recommendation: 'Configure webhook secret for secure communication',
+        category: 'security',
+      });
     }
   }
 

@@ -968,8 +968,23 @@ export function getHealthCheckStatus() {
   const result = validateEnvironment();
   const isReady = isProductionReady();
 
+  // Check for critical configuration issues in production
+  const databaseConfigured = !!(
+    result.config.VITE_SUPABASE_URL && result.config.VITE_SUPABASE_ANON_KEY
+  );
+  const hasCriticalMissingConfig = result.environment === 'production' && !databaseConfigured;
+
+  let status: 'healthy' | 'warning' | 'error';
+  if (!result.isValid || hasCriticalMissingConfig) {
+    status = 'error';
+  } else if (isReady) {
+    status = 'healthy';
+  } else {
+    status = 'warning';
+  }
+
   return {
-    status: result.isValid ? (isReady ? 'healthy' : 'warning') : 'error',
+    status,
     timestamp: result.timestamp,
     environment: result.environment,
     checks: {
