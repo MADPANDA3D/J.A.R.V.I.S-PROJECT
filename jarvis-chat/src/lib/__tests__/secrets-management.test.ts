@@ -6,21 +6,10 @@ import {
   getSecretsHealthStatus,
 } from '../secrets-management';
 
-// Mock import.meta.env
+// Mock environment for testing
 const mockEnv: Record<string, string | undefined> = {};
 
-vi.stubGlobal('import', {
-  meta: {
-    env: new Proxy(mockEnv, {
-      get(target, prop) {
-        return target[prop as string];
-      },
-    }),
-  },
-});
-
 describe('Secrets Management System', () => {
-  // let secretsManager: SecretsManager;
 
   beforeEach(() => {
     // Clear all environment variables
@@ -31,8 +20,7 @@ describe('Secrets Management System', () => {
     // Set default environment
     mockEnv.VITE_APP_ENV = 'development';
 
-    // Create new instance for each test
-    secretsManager = new SecretsManager();
+    // Test environment is set up for each test
   });
 
   describe('Secret Strength Assessment', () => {
@@ -40,7 +28,7 @@ describe('Secrets Management System', () => {
       // Strong secret: long, mixed case, numbers, symbols
       mockEnv.JWT_SECRET = 'MyVerySecureJWT$ecret123WithSymbols!AndNumbers456';
 
-      const manager = new SecretsManager();
+      const manager = new SecretsManager(mockEnv);
       const result = manager.validateSecrets();
 
       const jwtSecret = result.secrets.find(s => s.name === 'JWT_SECRET');
@@ -51,7 +39,7 @@ describe('Secrets Management System', () => {
       // Medium secret: decent length, some complexity
       mockEnv.JWT_SECRET = 'MediumSecret123';
 
-      const manager = new SecretsManager();
+      const manager = new SecretsManager(mockEnv);
       const result = manager.validateSecrets();
 
       const jwtSecret = result.secrets.find(s => s.name === 'JWT_SECRET');
@@ -62,7 +50,7 @@ describe('Secrets Management System', () => {
       // Weak secret: short or simple
       mockEnv.JWT_SECRET = 'weak123';
 
-      const manager = new SecretsManager();
+      const manager = new SecretsManager(mockEnv);
       const result = manager.validateSecrets();
 
       const jwtSecret = result.secrets.find(s => s.name === 'JWT_SECRET');
@@ -72,7 +60,7 @@ describe('Secrets Management System', () => {
     it('should identify empty secrets as weak', () => {
       mockEnv.JWT_SECRET = '';
 
-      const manager = new SecretsManager();
+      const manager = new SecretsManager(mockEnv);
       const result = manager.validateSecrets();
 
       const jwtSecret = result.secrets.find(s => s.name === 'JWT_SECRET');
@@ -84,7 +72,7 @@ describe('Secrets Management System', () => {
     it('should require Supabase URL and key', () => {
       // Don't set required variables
 
-      const result = validateSecrets();
+      const result = validateSecrets(mockEnv);
 
       expect(result.isValid).toBe(false);
       expect(
@@ -105,7 +93,7 @@ describe('Secrets Management System', () => {
       mockEnv.VITE_SUPABASE_ANON_KEY =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test';
 
-      const result = validateSecrets();
+      const result = validateSecrets(mockEnv);
 
       expect(
         result.errors.some(
@@ -120,7 +108,7 @@ describe('Secrets Management System', () => {
       mockEnv.VITE_SUPABASE_ANON_KEY =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test';
 
-      const result = validateSecrets();
+      const result = validateSecrets(mockEnv);
 
       expect(
         result.errors.some(
@@ -132,7 +120,7 @@ describe('Secrets Management System', () => {
     it('should not require monitoring secrets in development', () => {
       mockEnv.VITE_APP_ENV = 'development';
 
-      const result = validateSecrets();
+      const result = validateSecrets(mockEnv);
 
       expect(
         result.errors.some(
@@ -147,7 +135,7 @@ describe('Secrets Management System', () => {
       mockEnv.JWT_SECRET = 'weak';
       mockEnv.N8N_WEBHOOK_SECRET = '123';
 
-      const result = validateSecrets();
+      const result = validateSecrets(mockEnv);
 
       expect(
         result.errors.some(
@@ -164,7 +152,7 @@ describe('Secrets Management System', () => {
     it('should warn about client-exposed security secrets', () => {
       mockEnv.VITE_SECURITY_SECRET = 'test-secret';
 
-      const manager = new SecretsManager();
+      const manager = new SecretsManager(mockEnv);
       // Manually add a VITE_ prefixed security secret to test this
       manager['secrets'].set('VITE_SECURITY_SECRET', {
         name: 'VITE_SECURITY_SECRET',
@@ -189,7 +177,7 @@ describe('Secrets Management System', () => {
       mockEnv.SUPABASE_SERVICE_ROLE_KEY =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlc3QiLCJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjQwMDAwMDAwLCJleHAiOjE2NDAwMDAwMDB9.service-role-signature';
 
-      const result = validateSecrets();
+      const result = validateSecrets(mockEnv);
 
       expect(
         result.warnings.some(
@@ -207,7 +195,7 @@ describe('Secrets Management System', () => {
       mockEnv.VITE_SUPABASE_ANON_KEY =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test';
 
-      const result = validateSecrets();
+      const result = validateSecrets(mockEnv);
 
       expect(
         result.errors.some(
@@ -222,7 +210,7 @@ describe('Secrets Management System', () => {
       mockEnv.VITE_SUPABASE_ANON_KEY =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test';
 
-      const result = validateSecrets();
+      const result = validateSecrets(mockEnv);
 
       expect(
         result.errors.some(
@@ -240,7 +228,7 @@ describe('Secrets Management System', () => {
       mockEnv.VITE_SENTRY_DSN = 'https://sentry.io/test';
       mockEnv.JWT_SECRET = 'jwt-secret';
 
-      const manager = new SecretsManager();
+      const manager = new SecretsManager(mockEnv);
       const databaseSecrets = manager.getSecretsByCategory('database');
       const webhookSecrets = manager.getSecretsByCategory('webhook');
       const monitoringSecrets = manager.getSecretsByCategory('monitoring');
@@ -261,7 +249,7 @@ describe('Secrets Management System', () => {
 
   describe('Secret Access Logging', () => {
     it('should log secret access', () => {
-      const manager = new SecretsManager();
+      const manager = new SecretsManager(mockEnv);
 
       manager.getSecret('VITE_SUPABASE_URL');
       manager.getSecret('JWT_SECRET');
@@ -282,7 +270,7 @@ describe('Secrets Management System', () => {
     });
 
     it('should limit audit log size', () => {
-      const manager = new SecretsManager();
+      const manager = new SecretsManager(mockEnv);
 
       // Simulate many accesses
       for (let i = 0; i < 1200; i++) {
@@ -299,7 +287,7 @@ describe('Secrets Management System', () => {
       mockEnv.N8N_WEBHOOK_SECRET = 'test-webhook-secret';
       mockEnv.JWT_SECRET = 'test-jwt-secret';
 
-      const manager = new SecretsManager();
+      const manager = new SecretsManager(mockEnv);
       const rotationStatus = manager.getRotationStatus();
 
       expect(
@@ -313,7 +301,7 @@ describe('Secrets Management System', () => {
     it('should identify overdue rotations', () => {
       mockEnv.JWT_SECRET = 'test-jwt-secret';
 
-      const manager = new SecretsManager();
+      const manager = new SecretsManager(mockEnv);
 
       // Simulate old rotation date
       const jwtSecret = manager['secrets'].get('JWT_SECRET');
@@ -331,7 +319,7 @@ describe('Secrets Management System', () => {
     it('should identify upcoming rotation needs', () => {
       mockEnv.JWT_SECRET = 'test-jwt-secret';
 
-      const manager = new SecretsManager();
+      const manager = new SecretsManager(mockEnv);
 
       // Simulate recent but due-soon rotation date
       const jwtSecret = manager['secrets'].get('JWT_SECRET');
@@ -354,7 +342,7 @@ describe('Secrets Management System', () => {
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlc3QiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MDAwMDAwMCwiZXhwIjoxNjQwMDAwMDAwfQ.test-signature-that-is-long-enough-for-validation';
       mockEnv.JWT_SECRET = 'weak'; // This will generate strength issue
 
-      const result = validateSecrets();
+      const result = validateSecrets(mockEnv);
 
       expect(result.summary.totalSecrets).toBeGreaterThan(0);
       expect(result.summary.validSecrets).toBeGreaterThan(0);
@@ -373,7 +361,7 @@ describe('Secrets Management System', () => {
       mockEnv.N8N_WEBHOOK_SECRET =
         'very-secure-webhook-secret-with-good-length';
 
-      const health = getSecretsHealthStatus();
+      const health = getSecretsHealthStatus(mockEnv);
 
       expect(health.status).toBe('healthy');
       expect(health.checks.secrets_validation).toBe(true);
@@ -384,14 +372,14 @@ describe('Secrets Management System', () => {
     it('should return warning status for issues', () => {
       mockEnv.JWT_SECRET = 'weak';
 
-      const health = getSecretsHealthStatus();
+      const health = getSecretsHealthStatus(mockEnv);
 
       expect(health.status).toBe('warning');
       expect(health.checks.secrets_validation).toBe(false);
     });
 
     it('should include rotation status in health check', () => {
-      const health = getSecretsHealthStatus();
+      const health = getSecretsHealthStatus(mockEnv);
 
       expect(health).toHaveProperty('rotation_status');
       expect(Array.isArray(health.rotation_status)).toBe(true);
@@ -404,7 +392,7 @@ describe('Secrets Management System', () => {
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY = 'short-key';
 
-      const result = validateSecrets();
+      const result = validateSecrets(mockEnv);
 
       // Should not require webhook secret in development
       expect(
@@ -421,7 +409,7 @@ describe('Secrets Management System', () => {
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test';
       mockEnv.JWT_SECRET = 'weak-production-secret';
 
-      const result = validateSecrets();
+      const result = validateSecrets(mockEnv);
 
       expect(
         result.errors.some(
@@ -438,7 +426,7 @@ describe('Secrets Management System', () => {
       mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
       mockEnv.VITE_SUPABASE_ANON_KEY = 'test-key';
 
-      const result = validateSecrets();
+      const result = validateSecrets(mockEnv);
       logSecretsStatus(result);
 
       expect(consoleSpy).toHaveBeenCalled();

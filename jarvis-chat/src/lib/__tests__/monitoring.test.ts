@@ -55,6 +55,8 @@ describe('MonitoringService', () => {
       // This can happen in pool environments
     }
     vi.clearAllMocks();
+    // Clear metrics to ensure test isolation
+    monitoringService.clearMetrics();
   });
 
   afterEach(() => {

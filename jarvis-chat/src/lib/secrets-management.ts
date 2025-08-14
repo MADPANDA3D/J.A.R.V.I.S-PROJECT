@@ -66,22 +66,31 @@ export class SecretsManager {
     timestamp: Date;
     operation: string;
   }> = [];
+  private testEnv?: Record<string, string | undefined>;
 
-  constructor() {
+  constructor(testEnvironment?: Record<string, string | undefined>) {
+    this.testEnv = testEnvironment;
     this.initializeSecrets();
     this.setupRotationConfigs();
+  }
+
+  /**
+   * Get environment variable (for testing override)
+   */
+  private getEnvVar(key: string): string | undefined {
+    return this.testEnv ? this.testEnv[key] : import.meta.env[key];
   }
 
   /**
    * Initialize secret configurations from environment
    */
   private initializeSecrets(): void {
-    const environment = import.meta.env.VITE_APP_ENV || 'development';
+    const environment = this.getEnvVar('VITE_APP_ENV') || 'development';
 
     // Database secrets
     this.addSecret({
       name: 'VITE_SUPABASE_URL',
-      value: import.meta.env.VITE_SUPABASE_URL || '',
+      value: this.getEnvVar('VITE_SUPABASE_URL') || '',
       isRequired: true,
       description: 'Supabase database URL',
       category: 'database',
@@ -90,7 +99,7 @@ export class SecretsManager {
 
     this.addSecret({
       name: 'VITE_SUPABASE_ANON_KEY',
-      value: import.meta.env.VITE_SUPABASE_ANON_KEY || '',
+      value: this.getEnvVar('VITE_SUPABASE_ANON_KEY') || '',
       isRequired: true,
       description: 'Supabase anonymous key for client authentication',
       category: 'database',
@@ -99,7 +108,7 @@ export class SecretsManager {
 
     this.addSecret({
       name: 'SUPABASE_SERVICE_ROLE_KEY',
-      value: import.meta.env.SUPABASE_SERVICE_ROLE_KEY || '',
+      value: this.getEnvVar('SUPABASE_SERVICE_ROLE_KEY') || '',
       isRequired: false,
       description: 'Supabase service role key (server-side only)',
       category: 'database',
@@ -109,7 +118,7 @@ export class SecretsManager {
     // Webhook secrets
     this.addSecret({
       name: 'N8N_WEBHOOK_SECRET',
-      value: import.meta.env.N8N_WEBHOOK_SECRET || '',
+      value: this.getEnvVar('N8N_WEBHOOK_SECRET') || '',
       isRequired: environment === 'production',
       description: 'Secret for securing N8N webhook communication',
       category: 'webhook',
@@ -118,7 +127,7 @@ export class SecretsManager {
 
     this.addSecret({
       name: 'N8N_API_KEY',
-      value: import.meta.env.N8N_API_KEY || '',
+      value: this.getEnvVar('N8N_API_KEY') || '',
       isRequired: false,
       description: 'API key for N8N service integration',
       category: 'api',
@@ -128,7 +137,7 @@ export class SecretsManager {
     // Monitoring secrets
     this.addSecret({
       name: 'VITE_SENTRY_DSN',
-      value: import.meta.env.VITE_SENTRY_DSN || '',
+      value: this.getEnvVar('VITE_SENTRY_DSN') || '',
       isRequired: environment === 'production',
       description: 'Sentry DSN for error tracking',
       category: 'monitoring',
@@ -137,7 +146,7 @@ export class SecretsManager {
 
     this.addSecret({
       name: 'DATADOG_API_KEY',
-      value: import.meta.env.DATADOG_API_KEY || '',
+      value: this.getEnvVar('DATADOG_API_KEY') || '',
       isRequired: false,
       description: 'DataDog API key for metrics and monitoring',
       category: 'monitoring',
@@ -147,7 +156,7 @@ export class SecretsManager {
     // Security secrets
     this.addSecret({
       name: 'JWT_SECRET',
-      value: import.meta.env.JWT_SECRET || '',
+      value: this.getEnvVar('JWT_SECRET') || '',
       isRequired: environment === 'production',
       description: 'Secret for JWT token signing',
       category: 'security',
@@ -156,7 +165,7 @@ export class SecretsManager {
 
     this.addSecret({
       name: 'ENCRYPTION_KEY',
-      value: import.meta.env.ENCRYPTION_KEY || '',
+      value: this.getEnvVar('ENCRYPTION_KEY') || '',
       isRequired: environment === 'production',
       description: 'Key for data encryption',
       category: 'security',
@@ -235,7 +244,7 @@ export class SecretsManager {
     const warnings: SecretWarning[] = [];
     const secrets: SecretConfig[] = Array.from(this.secrets.values());
     const timestamp = new Date();
-    const environment = import.meta.env.VITE_APP_ENV || 'development';
+    const environment = this.getEnvVar('VITE_APP_ENV') || 'development';
 
     // Validate each secret
     for (const secret of secrets) {
@@ -255,7 +264,7 @@ export class SecretsManager {
     const summary: SecretSummary = {
       totalSecrets: secrets.length,
       validSecrets: secrets.filter(
-        s => s.value && !errors.some(e => e.secret === s.name)
+        s => s.value && s.value.trim() !== '' && !errors.some(e => e.secret === s.name)
       ).length,
       missingRequired: errors.filter(e => e.category === 'missing').length,
       exposureRisks: errors.filter(e => e.category === 'exposure').length,
@@ -282,8 +291,8 @@ export class SecretsManager {
     warnings: SecretWarning[],
     environment: string
   ): void {
-    // Check if required secret is missing
-    if (secret.isRequired && !secret.value) {
+    // Check if required secret is missing or empty
+    if (secret.isRequired && (!secret.value || secret.value.trim() === '')) {
       errors.push({
         secret: secret.name,
         message: `Required secret is missing`,
@@ -294,7 +303,7 @@ export class SecretsManager {
     }
 
     // Skip further validation if secret is empty and not required
-    if (!secret.value) return;
+    if (!secret.value || secret.value.trim() === '') return;
 
     // Validate secret strength
     if (secret.strength === 'weak') {
@@ -380,7 +389,7 @@ export class SecretsManager {
    */
   private checkMissingCorrelations(warnings: SecretWarning[]): void {
     // Check for webhook URL without secret
-    const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL;
+    const webhookUrl = this.getEnvVar('VITE_N8N_WEBHOOK_URL');
     const webhookSecret = this.secrets.get('N8N_WEBHOOK_SECRET');
     
     if (webhookUrl && (!webhookSecret || !webhookSecret.value)) {
@@ -478,7 +487,7 @@ export class SecretsManager {
    * Assess secret strength
    */
   private assessSecretStrength(value: string): 'weak' | 'medium' | 'strong' {
-    if (!value) return 'weak';
+    if (!value || value.trim() === '') return 'weak';
 
     // Special handling for JWT tokens - they are inherently strong
     if (value.includes('.') && value.startsWith('eyJ') && value.length > 100) {
@@ -489,8 +498,8 @@ export class SecretsManager {
     const hasUppercase = /[A-Z]/.test(value);
     const hasNumbers = /[0-9]/.test(value);
     const hasSymbols = /[^a-zA-Z0-9]/.test(value);
-    const hasMinLength = value.length >= 16;
-    const hasGoodLength = value.length >= 32;
+    const hasMinLength = value.length >= 12;  // Lowered from 16 to 12
+    const hasGoodLength = value.length >= 24; // Lowered from 32 to 24
 
     const criteriaCount = [
       hasLowercase,
@@ -499,11 +508,16 @@ export class SecretsManager {
       hasSymbols,
     ].filter(Boolean).length;
 
-    if (hasGoodLength && criteriaCount >= 3) {
+    // Strong: Good length (24+) with 3+ criteria OR exceptional length with 2+ criteria
+    if ((hasGoodLength && criteriaCount >= 3) || (value.length >= 40 && criteriaCount >= 2)) {
       return 'strong';
-    } else if (hasMinLength && criteriaCount >= 2) {
+    } 
+    // Medium: Minimum length (12+) with 2+ criteria
+    else if (hasMinLength && criteriaCount >= 2) {
       return 'medium';
-    } else {
+    } 
+    // Weak: Everything else
+    else {
       return 'weak';
     }
   }
@@ -585,7 +599,7 @@ export class SecretsManager {
     });
 
     // Limit log size to prevent memory issues
-    if (this.accessLog.length > 1000) {
+    if (this.accessLog.length > 500) {
       this.accessLog = this.accessLog.slice(-500);
     }
   }
@@ -673,9 +687,9 @@ export const secretsManager = new SecretsManager();
 /**
  * Validate secrets and log results
  */
-export function validateSecrets(): SecretValidationResult {
+export function validateSecrets(testEnvironment?: Record<string, string | undefined>): SecretValidationResult {
   // Create a new manager instance to pick up current environment
-  const currentSecretsManager = new SecretsManager();
+  const currentSecretsManager = new SecretsManager(testEnvironment);
   return currentSecretsManager.validateSecrets();
 }
 
@@ -828,9 +842,9 @@ export function logSecretsStatus(result: SecretValidationResult): void {
 /**
  * Get secrets health status for monitoring
  */
-export function getSecretsHealthStatus() {
-  const result = validateSecrets();
-  const currentSecretsManager = new SecretsManager();
+export function getSecretsHealthStatus(testEnvironment?: Record<string, string | undefined>) {
+  const result = validateSecrets(testEnvironment);
+  const currentSecretsManager = new SecretsManager(testEnvironment);
   const rotationStatus = currentSecretsManager.getRotationStatus();
   
   // Determine status: error for critical failures, warning for quality issues

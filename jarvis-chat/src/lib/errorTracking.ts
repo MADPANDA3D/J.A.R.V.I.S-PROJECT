@@ -79,6 +79,9 @@ class ErrorTracker {
   private sessionId: string;
   private userId?: string;
   private currentTags: Record<string, string> = {};
+  private consoleLogCount = 0; // Track console logs for rate limiting
+  private maxConsoleLogsPerSecond = 10; // Limit console spam
+  private lastConsoleLogReset = Date.now();
 
   constructor() {
     this.sessionId = this.generateSessionId();
@@ -184,8 +187,8 @@ class ErrorTracker {
       }
     }, 0);
 
-    // Log to console in development
-    if (import.meta.env.DEV) {
+    // Log to console in development (with rate limiting to prevent spam)
+    if (import.meta.env.DEV && !this.isTestEnvironment() && this.shouldLogToConsole()) {
       console.group(`🔴 Error Tracked [${level.toUpperCase()}]`);
       console.error('Message:', errorReport.message);
       console.error('Context:', errorReport.context);
@@ -221,6 +224,39 @@ class ErrorTracker {
     }
     
     return fingerprint;
+  }
+
+  private isTestEnvironment(): boolean {
+    return (
+      typeof global !== 'undefined' &&
+      global.process &&
+      global.process.env &&
+      global.process.env.NODE_ENV === 'test'
+    ) || 
+    // Check for Vitest environment
+    typeof window !== 'undefined' &&
+    (window as { __vitest_runner__?: unknown }).__vitest_runner__ !== undefined ||
+    // Check for Jest environment
+    typeof window !== 'undefined' &&
+    (window as { jest?: unknown }).jest !== undefined;
+  }
+
+  private shouldLogToConsole(): boolean {
+    const now = Date.now();
+    
+    // Reset counter every second
+    if (now - this.lastConsoleLogReset > 1000) {
+      this.consoleLogCount = 0;
+      this.lastConsoleLogReset = now;
+    }
+    
+    // Check if under rate limit
+    if (this.consoleLogCount >= this.maxConsoleLogsPerSecond) {
+      return false;
+    }
+    
+    this.consoleLogCount++;
+    return true;
   }
 
   captureMessage(

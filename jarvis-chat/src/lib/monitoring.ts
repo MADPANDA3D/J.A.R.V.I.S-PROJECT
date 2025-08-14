@@ -1138,6 +1138,13 @@ class MonitoringService implements APMService {
     this.alertRules = this.alertRules.filter(r => r.id !== ruleId);
     return this.alertRules.length < initialLength;
   }
+
+  // Testing utility methods
+  clearMetrics(): void {
+    this.metrics = [];
+    this.events = [];
+    this.notifications = [];
+  }
 }
 
 // Singleton instance
