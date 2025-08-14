@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen, cleanup } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { ProtectedRoute } from '../ProtectedRoute';
 import { useAuth } from '@/contexts/AuthContext';
@@ -24,6 +24,10 @@ const TestComponent = () => (
 describe('ProtectedRoute', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    cleanup(); // Ensure DOM is cleaned up between tests
   });
 
   it('should show loading spinner when auth is not initialized', () => {
@@ -62,7 +66,7 @@ describe('ProtectedRoute', () => {
       resetPassword: vi.fn(),
     });
 
-    render(
+    const { container } = render(
       <TestWrapper>
         <ProtectedRoute>
           <TestComponent />
@@ -70,7 +74,7 @@ describe('ProtectedRoute', () => {
       </TestWrapper>
     );
 
-    expect(screen.getByText('Checking authentication...')).toBeInTheDocument();
+    expect(container.querySelector('p')).toHaveTextContent('Checking authentication...');
     expect(screen.queryByTestId('protected-content')).not.toBeInTheDocument();
   });
 
