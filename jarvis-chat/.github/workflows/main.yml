@@ -24,20 +24,25 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
+          cache-dependency-path: './jarvis-chat/package-lock.json'
 
       - name: Install dependencies with timing
+        working-directory: ./jarvis-chat
         run: |
           echo "Starting dependency installation at $(date)"
           time npm ci
           echo "Dependency installation completed at $(date)"
 
       - name: TypeScript type checking
+        working-directory: ./jarvis-chat
         run: npm run type-check
 
       - name: ESLint linting
+        working-directory: ./jarvis-chat
         run: npm run lint
 
       - name: Run tests with coverage
+        working-directory: ./jarvis-chat
         run: |
           echo "Starting tests at $(date)"
           npm run test:run:ci -- --coverage
@@ -65,14 +70,17 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
+          cache-dependency-path: './jarvis-chat/package-lock.json'
 
       - name: Install dependencies with timing
+        working-directory: ./jarvis-chat
         run: |
           echo "Starting dependency installation at $(date)"
           time npm ci
           echo "Dependency installation completed at $(date)"
 
       - name: Run npm audit
+        working-directory: ./jarvis-chat
         run: npm audit --audit-level=high
 
       - name: GitHub Security Advisories
@@ -104,17 +112,21 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
+          cache-dependency-path: './jarvis-chat/package-lock.json'
 
       - name: Install dependencies with timing
+        working-directory: ./jarvis-chat
         run: |
           echo "Starting dependency installation at $(date)"
           time npm ci
           echo "Dependency installation completed at $(date)"
 
       - name: Build application
+        working-directory: ./jarvis-chat
         run: npm run build
 
       - name: Analyze bundle size
+        working-directory: ./jarvis-chat
         run: |
           du -sh dist/
           ls -la dist/
@@ -123,7 +135,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
-          path: dist/
+          path: ./jarvis-chat/dist/
           retention-days: 30
 
       - name: Set up Docker Buildx
@@ -151,7 +163,7 @@ jobs:
         id: build
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./jarvis-chat
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
