@@ -15,7 +15,8 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:run": "NODE_OPTIONS='--max-old-space-size=51200' vitest run --pool=threads --poolOptions.threads.maxThreads=1 --no-coverage --testTimeout=15000",
+    "test:run": "NODE_OPTIONS='--max-old-space-size=51200' vitest run --pool=threads --poolOptions.threads.maxThreads=1 --no-coverage --testTimeout=15000 --teardownTimeout=10000",
+    "test:run:ci": "node scripts/force-exit.cjs",
     "test:ci": "NODE_OPTIONS='--max-old-space-size=51200' vitest run --pool=threads --poolOptions.threads.maxThreads=1 --no-coverage --reporter=verbose --bail=10 --testTimeout=15000 --teardownTimeout=30000",
     "prepare": "is-ci || husky"
   },

@@ -38,7 +38,10 @@ jobs:
         run: npm run lint
 
       - name: Run tests with coverage
-        run: npm run test:run -- --coverage
+        run: |
+          echo "Starting tests at $(date)"
+          npm run test:run:ci -- --coverage
+          echo "Tests completed successfully at $(date)"
 
       - name: Upload test results
         uses: actions/upload-artifact@v4

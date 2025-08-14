@@ -1,5 +1,6 @@
-import { vi } from 'vitest';
+import { vi, afterEach, afterAll, beforeAll } from 'vitest';
 import '@testing-library/jest-dom';
+import { cleanup } from '@testing-library/react';
 import { createTestError } from './testUtils';
 
 // Global error function for tests
@@ -126,4 +127,33 @@ vi.stubGlobal('import', {
       MODE: 'test'
     }
   }
+});
+
+// Global test cleanup hooks for proper resource management
+afterEach(() => {
+  // Clean up React DOM
+  cleanup();
+  
+  // Clear all mocks and timers
+  vi.clearAllMocks();
+  vi.clearAllTimers();
+  
+  // Clear any remaining local/session storage
+  localStorageMock.clear();
+  sessionStorageMock.clear();
+});
+
+// Force cleanup and exit after all tests
+afterAll(async () => {
+  // Clear all global mocks
+  vi.clearAllMocks();
+  vi.resetAllMocks();
+  vi.restoreAllMocks();
+  
+  // Clear timers
+  vi.clearAllTimers();
+  vi.runOnlyPendingTimers();
+  
+  // Allow brief moment for cleanup
+  await new Promise(resolve => setTimeout(resolve, 100));
 });

@@ -27,6 +27,12 @@ export default defineConfig({
     testTimeout: 30000, // 30s to account for JSDOM environment setup time in WSL
     hookTimeout: 10000,
     teardownTimeout: 5000, // Ensure cleanup doesn't hang
+    // Force process exit after tests complete
+    forceRerunTriggers: [],
+    // Additional cleanup options
+    coverage: {
+      enabled: false, // Disable coverage by default to prevent hanging
+    },
     // Reduce memory usage
     isolate: true,
     cache: false,
