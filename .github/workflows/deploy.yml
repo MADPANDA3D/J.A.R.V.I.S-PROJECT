@@ -223,32 +223,8 @@ jobs:
         run: |
           echo "🚀 Triggering VPS deployment..."
           
-          # Create deployment payload
-          DEPLOYMENT_PAYLOAD=$(cat <<EOF
-          {
-            "action": "completed",
-            "workflow_run": {
-              "conclusion": "success",
-              "head_sha": "${{ github.sha }}",
-              "name": "Deploy to VPS"
-            },
-            "repository": {
-              "name": "${{ github.repository }}"
-            },
-            "pusher": {
-              "name": "${{ github.actor }}"
-            },
-            "ref": "${{ github.ref }}",
-            "metadata": {
-              "version": "${{ github.sha }}",
-              "branch": "${{ github.ref_name }}",
-              "build_id": "${{ github.run_id }}",
-              "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-              "workflow_url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            }
-          }
-          EOF
-          )
+          # Create deployment payload (compact JSON for proper signature calculation)
+          DEPLOYMENT_PAYLOAD='{"action":"completed","workflow_run":{"conclusion":"success","head_sha":"${{ github.sha }}","name":"Deploy to VPS"},"repository":{"name":"${{ github.repository }}"},"pusher":{"name":"${{ github.actor }}"},"ref":"${{ github.ref }}","metadata":{"version":"${{ github.sha }}","branch":"${{ github.ref_name }}","build_id":"${{ github.run_id }}","timestamp":"'$(date -u +%Y-%m-%dT%H:%M:%SZ)'","workflow_url":"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}}'
 
           # Calculate webhook signature
           WEBHOOK_SECRET="${{ secrets.VPS_WEBHOOK_SECRET }}"
