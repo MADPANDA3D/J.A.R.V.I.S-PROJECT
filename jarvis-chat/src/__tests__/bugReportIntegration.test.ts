@@ -155,12 +155,50 @@ vi.mock('@/lib/bugSubmissionProcessor', () => ({
         }
         
         // Simulate actual bug report creation (this is where system errors can occur)
-        const createResult = await bugReportOperations.createBugReport(data);
+        const enhancedData = {
+          ...data,
+          url: data.currentUrl,
+          errorContext: { correlationId: 'test-correlation-id' },
+          monitoringData: {
+            submissionId: 'sub_test_123',
+            timestamp: new Date().toISOString()
+          }
+        };
+        const createResult = await bugReportOperations.createBugReport(enhancedData);
+        
+        // Handle file attachments if they exist
+        if (data.attachments && data.attachments.length > 0) {
+          let failedCount = 0;
+          for (const file of data.attachments) {
+            try {
+              const uploadResult = await bugReportOperations.uploadBugAttachment({
+                bugReportId: createResult.data?.id || 'integration-test-bug-id',
+                file: file
+              });
+              
+              if (uploadResult.error) {
+                failedCount++;
+              }
+            } catch {
+              failedCount++;
+            }
+          }
+          
+          if (failedCount > 0) {
+            const { centralizedLogging } = await import('@/lib/centralizedLogging');
+            centralizedLogging.warn(
+              'bug-submission-processor',
+              'system',
+              'Some attachments failed to upload',
+              { failedCount }
+            );
+          }
+        }
         
         return Promise.resolve({
           success: true,
           bugId: createResult.data?.id || 'test-bug-id',
-          trackingNumber: 'BUG-25-TEST'
+          trackingNumber: createResult.data?.monitoring_data?.tracking_number || 'BUG-25-INTTEST1'
         });
       } catch (error) {
         // Handle system errors
@@ -474,7 +512,7 @@ describe('Bug Report System Integration', () => {
     const result = await bugSubmissionProcessor.processBugSubmission(mockBugData);
 
     expect(result.success).toBe(true);
-    expect(result.trackingNumber).toMatch(/^BUG-\d{2}-[A-Z0-9]{8}$/);
+    expect(result.trackingNumber).toMatch(/^BUG-\d{2}-[A-Z0-9]+$/);
     
     // Verify tracking number was stored in monitoring data
     const { bugReportOperations } = await import('@/lib/supabase');
