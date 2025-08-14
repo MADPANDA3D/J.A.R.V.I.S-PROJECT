@@ -1,7 +1,7 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { PWAStatus } from '../PWAStatus';
 import { usePWAInstall } from '@/hooks/usePWAInstall';
-import { vi } from 'vitest';
+import { vi, beforeEach, afterEach } from 'vitest';
 
 // Mock the PWA hook
 vi.mock('@/hooks/usePWAInstall');
@@ -41,6 +41,10 @@ describe('PWAStatus', () => {
     });
 
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    cleanup(); // Ensure DOM is cleaned up between tests
   });
 
   it('should show "Installed" badge when app is installed', () => {
