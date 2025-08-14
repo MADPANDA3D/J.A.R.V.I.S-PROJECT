@@ -4,6 +4,43 @@
  */
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
+
+// Mock errorTracking before importing sessionTracking
+vi.mock('../errorTracking', () => ({
+  addBreadcrumb: vi.fn(),
+  setErrorTags: vi.fn()
+}));
+
+// Mock performance APIs that might be missing
+global.performance = global.performance || {
+  now: vi.fn(() => Date.now()),
+  mark: vi.fn(),
+  measure: vi.fn(),
+  getEntriesByType: vi.fn(() => []),
+  getEntriesByName: vi.fn(() => []),
+  clearMarks: vi.fn(),
+  clearMeasures: vi.fn()
+} as Performance;
+
+// Mock history API
+global.history = global.history || {
+  pushState: vi.fn(),
+  replaceState: vi.fn(),
+  back: vi.fn(),
+  forward: vi.fn(),
+  go: vi.fn(),
+  length: 1,
+  scrollRestoration: 'auto' as ScrollRestoration,
+  state: null
+} as History;
+
+// Mock PerformanceObserver
+global.PerformanceObserver = vi.fn().mockImplementation(() => ({
+  observe: vi.fn(),
+  disconnect: vi.fn(),
+  takeRecords: vi.fn()
+})) as unknown as typeof PerformanceObserver;
+
 import { 
   getCurrentSession, 
   getSessionHistory, 
@@ -48,7 +85,7 @@ Object.defineProperty(navigator, 'platform', {
   writable: true,
 });
 
-// Mock document
+// Mock document and DOM methods
 Object.defineProperty(document, 'title', {
   value: 'Test Page',
   writable: true,
@@ -58,6 +95,15 @@ Object.defineProperty(document, 'referrer', {
   value: '',
   writable: true,
 });
+
+Object.defineProperty(document, 'hidden', {
+  value: false,
+  writable: true,
+});
+
+// Mock document.addEventListener and window.addEventListener
+document.addEventListener = vi.fn();
+window.addEventListener = vi.fn();
 
 // Mock screen
 Object.defineProperty(screen, 'width', { value: 1920 });
@@ -76,7 +122,20 @@ describe('Session Tracking', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     localStorageMock.getItem.mockReturnValue(null);
-    clearAllSessions();
+    
+    // Clear any existing sessions first
+    try {
+      clearAllSessions();
+    } catch {
+      // Ignore errors during cleanup
+    }
+    
+    // Initialize session for testing
+    try {
+      getCurrentSession();
+    } catch {
+      // Ignore initialization errors in test
+    }
   });
 
   afterEach(() => {

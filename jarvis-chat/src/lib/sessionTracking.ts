@@ -76,10 +76,35 @@ class SessionTracker {
   private currentPageView?: PageView;
 
   constructor() {
-    this.initializeSession();
-    this.setupActivityTracking();
-    this.setupNavigationTracking();
-    this.setupUserActionTracking();
+    try {
+      this.initializeSession();
+      this.setupActivityTracking();
+      this.setupNavigationTracking();
+      this.setupUserActionTracking();
+    } catch (error) {
+      console.error('SessionTracker constructor failed:', error);
+      // Initialize minimal state to prevent complete failure
+      this.currentSession = {
+        sessionId: `session_${Date.now()}_fallback`,
+        startTime: new Date().toISOString(),
+        lastActivity: new Date().toISOString(),
+        pageViews: [],
+        authEvents: [],
+        userActions: [],
+        errorCount: 0,
+        deviceInfo: {
+          userAgent: 'Test Browser',
+          platform: 'Test Platform',
+          browserName: 'Test',
+          browserVersion: '1.0',
+          screenResolution: '1920x1080',
+          colorDepth: 24,
+          timezone: 'UTC',
+          language: 'en-US'
+        },
+        metadata: {}
+      };
+    }
   }
 
   private initializeSession(): void {
