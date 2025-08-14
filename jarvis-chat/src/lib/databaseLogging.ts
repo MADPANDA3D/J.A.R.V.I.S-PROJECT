@@ -4,6 +4,7 @@
  */
 
 import { addBreadcrumb } from './errorTracking';
+import { sendToCentralizedLogging } from './centralizedLogging';
 
 // Database logging interfaces
 export interface DatabaseQueryLog {
@@ -376,7 +377,6 @@ class DatabaseLoggingService {
   private async sendToExternalLogging(type: string, data: unknown): Promise<void>  {
     try {
       // Send to centralized logging service
-      const { sendToCentralizedLogging } = await import('./centralizedLogging');
       await sendToCentralizedLogging(type, data);
     } catch (error) {
       // Fail silently to not break database operations
