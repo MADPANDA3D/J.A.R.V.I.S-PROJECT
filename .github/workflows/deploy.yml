@@ -218,7 +218,65 @@ jobs:
           echo "✅ Deployment metadata prepared:"
           cat deployment-metadata.json
 
-      - name: 🚀 Deployment successful
+      - name: 🚀 Notify VPS for deployment
+        if: success()
+        run: |
+          echo "🚀 Triggering VPS deployment..."
+          
+          # Create deployment payload
+          DEPLOYMENT_PAYLOAD=$(cat <<EOF
+          {
+            "action": "completed",
+            "workflow_run": {
+              "conclusion": "success",
+              "head_sha": "${{ github.sha }}",
+              "name": "Deploy to VPS"
+            },
+            "repository": {
+              "name": "${{ github.repository }}"
+            },
+            "pusher": {
+              "name": "${{ github.actor }}"
+            },
+            "ref": "${{ github.ref }}",
+            "metadata": {
+              "version": "${{ github.sha }}",
+              "branch": "${{ github.ref_name }}",
+              "build_id": "${{ github.run_id }}",
+              "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+              "workflow_url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }
+          }
+          EOF
+          )
+
+          # Calculate webhook signature
+          WEBHOOK_SECRET="${{ secrets.VPS_WEBHOOK_SECRET }}"
+          SIGNATURE=$(echo -n "$DEPLOYMENT_PAYLOAD" | openssl dgst -sha256 -hmac "$WEBHOOK_SECRET" -binary | xxd -p -c 256)
+
+          # Send webhook to VPS
+          HTTP_STATUS=$(curl -w "%{http_code}" -o /tmp/webhook_response.txt \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -H "X-GitHub-Event: workflow_run" \
+            -H "X-Hub-Signature-256: sha256=$SIGNATURE" \
+            -H "User-Agent: GitHub-Hookshot/deploy-workflow" \
+            -d "$DEPLOYMENT_PAYLOAD" \
+            "${{ secrets.VPS_WEBHOOK_URL }}/webhook/deploy" \
+            --connect-timeout 10 \
+            --max-time 30)
+
+          # Check response
+          if [ "$HTTP_STATUS" -eq 200 ]; then
+            echo "✅ VPS deployment webhook sent successfully"
+            echo "Response:" $(cat /tmp/webhook_response.txt)
+          else
+            echo "❌ VPS deployment webhook failed with status: $HTTP_STATUS"
+            echo "Response:" $(cat /tmp/webhook_response.txt)
+            exit 1
+          fi
+
+      - name: 🎉 Deployment successful
         run: |
           echo "🎉 Build completed successfully!"
           echo ""
@@ -228,10 +286,8 @@ jobs:
           echo "  • Commit: ${{ github.sha }}"
           echo "  • Build ID: ${{ github.run_id }}"
           echo "  • Node.js: ${{ env.NODE_VERSION }}"
-          echo "  • Status: ✅ READY FOR DEPLOYMENT"
+          echo "  • Status: ✅ DEPLOYMENT TRIGGERED"
           echo ""
-          echo "🔗 Webhook will trigger VPS deployment automatically"
-          echo "🎯 VPS webhook server will process this workflow_run event"
           echo "📡 Check VPS logs at: http://69.62.71.229:9000/dashboard"
 
       - name: 📊 Workflow completion notification
