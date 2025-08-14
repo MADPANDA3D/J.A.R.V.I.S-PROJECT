@@ -50,22 +50,13 @@ describe('WebhookService', () => {
   });
 
   afterEach(async () => {
-    // Run all pending timers to completion to prevent unhandled promises
-    await vi.runAllTimersAsync();
-    
-    // Give a brief moment for any remaining promises to settle
-    await new Promise(resolve => setTimeout(resolve, 10));
-    
+    // Run only pending timers to avoid infinite loops
+    await vi.runOnlyPendingTimersAsync();
     vi.clearAllTimers();
     vi.useRealTimers();
     vi.restoreAllMocks();
     // Reset singleton state to prevent OOM from growing arrays
     resetServiceMonitoring();
-    
-    // Force garbage collection to clean up any lingering promises
-    if (global.gc) {
-      global.gc();
-    }
   });
 
   describe('Message Sending Success Scenarios', () => {
