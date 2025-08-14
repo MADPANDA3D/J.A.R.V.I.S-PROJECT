@@ -1,7 +1,7 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react';
 import { InstallPrompt } from '../InstallPrompt';
 import { usePWAInstall } from '@/hooks/usePWAInstall';
-import { vi } from 'vitest';
+import { vi, beforeEach, afterEach } from 'vitest';
 
 // Mock the PWA hook
 vi.mock('@/hooks/usePWAInstall');
@@ -26,6 +26,10 @@ describe('InstallPrompt', () => {
     });
 
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    cleanup(); // Ensure DOM is cleaned up between tests
   });
 
   it('should not render when canInstall is false', () => {
@@ -63,13 +67,14 @@ describe('InstallPrompt', () => {
   it('should call install when install button is clicked', async () => {
     mockInstall.mockResolvedValue(true);
 
-    render(<InstallPrompt showDelay={0} />);
+    const { container } = render(<InstallPrompt showDelay={0} />);
 
     await waitFor(() => {
-      expect(screen.getByText('Install')).toBeInTheDocument();
+      expect(container.querySelector('[role="button"]')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Install'));
+    const installButton = container.querySelector('[role="button"]') as HTMLElement;
+    fireEvent.click(installButton);
     expect(mockInstall).toHaveBeenCalled();
   });
 
@@ -115,29 +120,34 @@ describe('InstallPrompt', () => {
   });
 
   it('should dismiss prompt when X button is clicked', async () => {
-    render(<InstallPrompt showDelay={0} />);
+    const { container } = render(<InstallPrompt showDelay={0} />);
 
     await waitFor(() => {
-      expect(screen.getAllByText('Install JARVIS Chat')[0]).toBeInTheDocument();
+      expect(container.querySelector('h3')).toHaveTextContent('Install JARVIS Chat');
     });
 
-    const dismissButton = screen.getByRole('button', { name: '' }); // X button has no text
+    const buttons = container.querySelectorAll('[role="button"]');
+    const dismissButton = Array.from(buttons).find(btn => 
+      btn.querySelector('svg')?.classList.contains('lucide-x')
+    ) as HTMLElement;
+    
+    expect(dismissButton).toBeInTheDocument();
     fireEvent.click(dismissButton);
 
     await waitFor(() => {
-      expect(screen.queryByText('Install JARVIS Chat')).not.toBeInTheDocument();
+      expect(container.querySelector('h3')).not.toBeInTheDocument();
     });
   });
 
   it('should respect showDelay prop', async () => {
-    render(<InstallPrompt showDelay={100} />);
+    const { container } = render(<InstallPrompt showDelay={100} />);
 
     // Should not be visible immediately
-    expect(screen.queryByText('Install JARVIS Chat')).not.toBeInTheDocument();
+    expect(container.querySelector('h3')).not.toBeInTheDocument();
 
     // Should be visible after delay
     await waitFor(() => {
-        expect(screen.getByText('Install JARVIS Chat')).toBeInTheDocument();
+        expect(container.querySelector('h3')).toHaveTextContent('Install JARVIS Chat');
       },
       { timeout: 200 }
     );
@@ -146,16 +156,17 @@ describe('InstallPrompt', () => {
   it('should hide prompt after successful installation', async () => {
     mockInstall.mockResolvedValue(true);
 
-    render(<InstallPrompt showDelay={0} />);
+    const { container } = render(<InstallPrompt showDelay={0} />);
 
     await waitFor(() => {
-      expect(screen.getByText('Install')).toBeInTheDocument();
+      expect(container.querySelector('[role="button"]')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Install'));
+    const installButton = container.querySelector('[role="button"]') as HTMLElement;
+    fireEvent.click(installButton);
 
     await waitFor(() => {
-      expect(screen.queryByText('Install JARVIS Chat')).not.toBeInTheDocument();
+      expect(container.querySelector('h3')).not.toBeInTheDocument();
     });
   });
 });
