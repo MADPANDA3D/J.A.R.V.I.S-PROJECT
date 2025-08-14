@@ -1762,7 +1762,7 @@ app.use((error, req, res, next) => {
 });
 
 // Start server
-app.listen(PORT, async () => {
+app.listen(PORT, '0.0.0.0', async () => {
     console.log(`🚀 JARVIS Webhook Server running on port ${PORT}`);
     console.log(`📡 WebSocket notifications on port 9001`);
     console.log(`📝 Logs directory: ${LOGS_DIR}`);
