@@ -370,6 +370,10 @@ describe('Secrets Management System', () => {
     });
 
     it('should return warning status for issues', () => {
+      // Set required secrets so they don't cause missing required errors
+      mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
+      mockEnv.VITE_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlc3QiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MDAwMDAwMCwiZXhwIjoxNjQwMDAwMDAwfQ.test-signature-that-is-long-enough-for-validation';
+      // Set JWT_SECRET to weak value - this should cause only a quality issue
       mockEnv.JWT_SECRET = 'weak';
 
       const health = getSecretsHealthStatus(mockEnv);
