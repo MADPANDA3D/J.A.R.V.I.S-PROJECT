@@ -249,7 +249,7 @@ export class SecretsManager {
     this.checkExposureRisks(errors, warnings);
 
     // Check for missing correlations (e.g., webhook URL without secret)
-    this.checkMissingCorrelations(warnings, environment);
+    this.checkMissingCorrelations(warnings);
 
     // Generate summary
     const summary: SecretSummary = {
@@ -378,10 +378,7 @@ export class SecretsManager {
   /**
    * Check for missing correlations (e.g., webhook URL configured but secret missing)
    */
-  private checkMissingCorrelations(
-    warnings: SecretWarning[],
-    environment: string
-  ): void {
+  private checkMissingCorrelations(warnings: SecretWarning[]): void {
     // Check for webhook URL without secret
     const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL;
     const webhookSecret = this.secrets.get('N8N_WEBHOOK_SECRET');
