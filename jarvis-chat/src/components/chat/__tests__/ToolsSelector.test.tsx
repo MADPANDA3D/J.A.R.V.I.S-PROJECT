@@ -29,7 +29,7 @@ interface MockChildrenProps {
 vi.mock('../../ui/dropdown-menu', () => ({
   DropdownMenu: ({ children, open, onOpenChange }: MockDropdownProps) => (
     <div
-      data-testid="dropdown-menu"
+      data-testid="dropdown-root"
       data-open={open}
       onClick={() => onOpenChange?.(!open)}
     >
@@ -37,7 +37,13 @@ vi.mock('../../ui/dropdown-menu', () => ({
     </div>
   ),
   DropdownMenuTrigger: ({ children }: MockChildrenProps) => (
-    <div data-testid="dropdown-trigger">{children}</div>
+    <div data-testid="dropdown-trigger" onClick={(e) => {
+      // Find parent dropdown and click it to toggle
+      const parent = (e.target as HTMLElement).closest('[data-testid="dropdown-root"]');
+      if (parent) {
+        parent.click();
+      }
+    }}>{children}</div>
   ),
   DropdownMenuContent: ({ children }: MockChildrenProps) => (
     <div data-testid="dropdown-content">{children}</div>
@@ -65,16 +71,21 @@ interface MockButtonProps {
 }
 
 vi.mock('../../ui/button', () => ({
-  Button: ({ children, onClick, disabled, 'aria-label': ariaLabel }: MockButtonProps) => (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      aria-label={ariaLabel}
-      data-testid="tools-button"
-    >
-      {children}
-    </button>
-  ),
+  Button: ({ children, onClick, disabled, 'aria-label': ariaLabel }: MockButtonProps) => {
+    // Create unique test IDs for loading vs normal state
+    const testId = disabled && !ariaLabel ? "tools-button-loading" : "tools-button";
+    
+    return (
+      <button
+        onClick={onClick}
+        disabled={disabled}
+        aria-label={ariaLabel}
+        data-testid={testId}
+      >
+        {children}
+      </button>
+    );
+  },
 }));
 
 interface MockBadgeProps {
@@ -83,11 +94,23 @@ interface MockBadgeProps {
 }
 
 vi.mock('../../ui/badge', () => ({
-  Badge: ({ children, variant }: MockBadgeProps) => (
-    <span data-testid="badge" data-variant={variant}>
-      {children}
-    </span>
-  ),
+  Badge: ({ children, variant, className }: MockBadgeProps & { className?: string }) => {
+    // Create unique test IDs based on className to distinguish badges
+    let testId = "badge";
+    if (className?.includes("absolute")) {
+      testId = "badge-compact";
+    } else if (className?.includes("text-xs") && !className?.includes("ml-2")) {
+      testId = "badge-dropdown";
+    } else if (className?.includes("ml-2")) {
+      testId = "badge-main";
+    }
+    
+    return (
+      <span data-testid={testId} data-variant={variant}>
+        {children}
+      </span>
+    );
+  },
 }));
 
 describe('ToolsSelector', () => {
@@ -136,7 +159,7 @@ describe('ToolsSelector', () => {
       expect(button).toBeInTheDocument();
       expect(button).toHaveAttribute('aria-label', 'Select tools (1 selected)');
 
-      const badge = screen.getByTestId('badge');
+      const badge = screen.getByTestId('badge-main');
       expect(badge).toHaveTextContent('1');
     });
 
@@ -145,8 +168,8 @@ describe('ToolsSelector', () => {
 
       render(<ToolsSelector compact={true} />);
 
-      const badges = screen.getAllByTestId('badge');
-      expect(badges[0]).toHaveTextContent('2');
+      const badge = screen.getByTestId('badge-compact');
+      expect(badge).toHaveTextContent('2');
     });
 
     it('should show loading state', () => {
@@ -157,7 +180,7 @@ describe('ToolsSelector', () => {
 
       render(<ToolsSelector />);
 
-      const button = screen.getByTestId('tools-button');
+      const button = screen.getByTestId('tools-button-loading');
       expect(button).toBeDisabled();
       expect(screen.getByText('Loading...')).toBeInTheDocument();
     });
@@ -167,8 +190,8 @@ describe('ToolsSelector', () => {
     it('should toggle tool selection when checkbox is clicked', async () => {
       render(<ToolsSelector />);
 
-      // Open dropdown
-      fireEvent.click(screen.getByTestId('dropdown-menu'));
+      // Open dropdown by clicking the trigger
+      fireEvent.click(screen.getByTestId('dropdown-trigger'));
 
       await waitFor(() => {
         expect(screen.getByTestId('dropdown-content')).toBeInTheDocument();
@@ -189,8 +212,8 @@ describe('ToolsSelector', () => {
     it('should display tools grouped by category', () => {
       render(<ToolsSelector />);
 
-      // Open dropdown
-      fireEvent.click(screen.getByTestId('dropdown-menu'));
+      // Open dropdown by clicking the trigger
+      fireEvent.click(screen.getByTestId('dropdown-trigger'));
 
       // Check that category labels are present
       const labels = screen.getAllByTestId('dropdown-label');
@@ -223,8 +246,8 @@ describe('ToolsSelector', () => {
 
       render(<ToolsSelector />);
 
-      // Open dropdown
-      fireEvent.click(screen.getByTestId('dropdown-menu'));
+      // Open dropdown by clicking the trigger
+      fireEvent.click(screen.getByTestId('dropdown-trigger'));
 
       expect(screen.getByText(/No tools selected/)).toBeInTheDocument();
     });
@@ -234,8 +257,8 @@ describe('ToolsSelector', () => {
     it('should display tool names and descriptions', () => {
       render(<ToolsSelector />);
 
-      // Open dropdown
-      fireEvent.click(screen.getByTestId('dropdown-menu'));
+      // Open dropdown by clicking the trigger
+      fireEvent.click(screen.getByTestId('dropdown-trigger'));
 
       // Check that tool information is displayed
       expect(screen.getByText('File Analysis')).toBeInTheDocument();
@@ -247,8 +270,8 @@ describe('ToolsSelector', () => {
     it('should show helpful message about tool usage', () => {
       render(<ToolsSelector />);
 
-      // Open dropdown
-      fireEvent.click(screen.getByTestId('dropdown-menu'));
+      // Open dropdown by clicking the trigger
+      fireEvent.click(screen.getByTestId('dropdown-trigger'));
 
       expect(
         screen.getByText(/Selected tools will be available to the AI assistant/)
@@ -295,7 +318,7 @@ describe('ToolsSelector', () => {
     it('should open and close dropdown correctly', () => {
       render(<ToolsSelector />);
 
-      const dropdown = screen.getByTestId('dropdown-menu');
+      const dropdown = screen.getByTestId('dropdown-root');
 
       // Initially closed
       expect(dropdown).toHaveAttribute('data-open', 'false');
