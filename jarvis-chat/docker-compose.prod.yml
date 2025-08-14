@@ -10,8 +10,7 @@ services:
     container_name: jarvis-chat-prod
     restart: unless-stopped
     ports:
-      - '80:80'
-      - '443:443'
+      - '3001:80'
     environment:
       # Application Configuration
       - NODE_ENV=production
