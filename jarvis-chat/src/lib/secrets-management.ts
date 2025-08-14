@@ -515,20 +515,41 @@ export class SecretsManager {
    * Check for default/example values
    */
   private isDefaultValue(value: string): boolean {
-    const defaultPatterns = [
+    const lowercaseValue = value.toLowerCase();
+    
+    // Exact matches for simple defaults
+    const exactDefaults = [
+      'password',
+      'secret', 
+      'key',
+      'token',
+      'test',
+      'example',
+      '12345',
+      'changeme',
+      'change-me',
+    ];
+    
+    // Pattern-based defaults (substring matches)
+    const patternDefaults = [
       'your-secret-here',
       'replace-me',
-      'example',
       'test-secret',
       'development-only',
       'change-me',
-      '12345',
-      'password',
-      'secret',
+      'example-',
+      'sample-',
+      'demo-',
     ];
 
-    return defaultPatterns.some(pattern =>
-      value.toLowerCase().includes(pattern.toLowerCase())
+    // Check for exact matches first (only for very short, obviously weak values)
+    if (value.length < 20 && exactDefaults.some(pattern => lowercaseValue === pattern)) {
+      return true;
+    }
+    
+    // Check for pattern matches in longer strings
+    return patternDefaults.some(pattern =>
+      lowercaseValue.includes(pattern.toLowerCase())
     );
   }
 
@@ -791,17 +812,20 @@ export function getSecretsHealthStatus() {
   const currentSecretsManager = new SecretsManager();
   const rotationStatus = currentSecretsManager.getRotationStatus();
   
-  // Determine status: error for validation failures, warning for missing non-critical items
+  // Determine status: error for critical failures, warning for quality issues
   const hasCriticalErrors = result.errors.some(e => e.severity === 'critical');
-  const hasErrors = result.errors.length > 0;
+  const hasMissingRequired = result.errors.some(e => e.category === 'missing');
+  const hasQualityIssues = result.errors.some(e => e.category === 'strength' || e.category === 'format');
   
   let status: 'healthy' | 'warning' | 'error';
   if (result.isValid) {
     status = 'healthy';
-  } else if (hasCriticalErrors || hasErrors) {
+  } else if (hasCriticalErrors || hasMissingRequired) {
     status = 'error';
-  } else {
+  } else if (hasQualityIssues) {
     status = 'warning';
+  } else {
+    status = 'error'; // fallback for other error types
   }
 
   return {

@@ -100,11 +100,11 @@ describe('Environment & Secrets Integration', () => {
     });
 
     it('should enforce HTTPS in staging', () => {
-      mockEnv.VITE_APP_ENV = 'staging';
-      mockEnv.VITE_SUPABASE_URL = 'https://staging.supabase.co';
-      mockEnv.VITE_SUPABASE_ANON_KEY =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.staging-key';
-      mockEnv.VITE_N8N_WEBHOOK_URL = 'http://insecure-staging.com/webhook';
+      vi.stubEnv('VITE_APP_ENV', 'staging');
+      vi.stubEnv('VITE_SUPABASE_URL', 'https://staging.supabase.co');
+      vi.stubEnv('VITE_SUPABASE_ANON_KEY',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.staging-key');
+      vi.stubEnv('VITE_N8N_WEBHOOK_URL', 'http://insecure-staging.com/webhook');
 
       const envResult = validateEnvironment();
 
@@ -121,31 +121,31 @@ describe('Environment & Secrets Integration', () => {
   describe('Complete Production Environment', () => {
     it('should validate complete production setup', () => {
       // Set up complete production environment
-      mockEnv.VITE_APP_ENV = 'production';
-      mockEnv.VITE_APP_VERSION = '1.0.0';
-      mockEnv.VITE_APP_DOMAIN = 'app.example.com';
-      mockEnv.VITE_CDN_URL = 'https://cdn.example.com';
-      mockEnv.VITE_SUPABASE_URL = 'https://prod.supabase.co';
-      mockEnv.VITE_SUPABASE_ANON_KEY =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByb2QiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MDAwMDAwMCwiZXhwIjoxNjQwMDAwMDAwfQ.production-signature-that-is-long-enough-for-validation';
-      mockEnv.SUPABASE_SERVICE_ROLE_KEY =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByb2QiLCJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjQwMDAwMDAwLCJleHAiOjE2NDAwMDAwMDB9.service-role-signature-that-is-long-enough-for-validation';
-      mockEnv.VITE_N8N_WEBHOOK_URL = 'https://n8n.example.com/webhook';
-      mockEnv.N8N_WEBHOOK_SECRET =
-        'VerySecureProductionWebhookSecret123!WithSymbols';
-      mockEnv.N8N_API_KEY = 'prod-api-key-with-sufficient-length';
-      mockEnv.VITE_SENTRY_DSN = 'https://sentry.io/production-project';
-      mockEnv.DATADOG_API_KEY = 'datadog-production-api-key';
-      mockEnv.JWT_SECRET = 'ProductionJWTSecret123!WithGoodComplexity&Length';
-      mockEnv.ENCRYPTION_KEY =
-        'ProductionEncryptionKey456!WithExcellentSecurity';
-      mockEnv.LOG_LEVEL = 'warn';
-      mockEnv.ENABLE_CACHING = 'true';
-      mockEnv.CACHE_TTL = '3600';
-      mockEnv.COMPRESSION_ENABLED = 'true';
-      mockEnv.CSP_ENABLED = 'true';
-      mockEnv.RATE_LIMIT_WINDOW = '900';
-      mockEnv.RATE_LIMIT_MAX_REQUESTS = '1000';
+      vi.stubEnv('VITE_APP_ENV', 'production');
+      vi.stubEnv('VITE_APP_VERSION', '1.0.0');
+      vi.stubEnv('VITE_APP_DOMAIN', 'app.example.com');
+      vi.stubEnv('VITE_CDN_URL', 'https://cdn.example.com');
+      vi.stubEnv('VITE_SUPABASE_URL', 'https://prod.supabase.co');
+      vi.stubEnv('VITE_SUPABASE_ANON_KEY',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByb2QiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MDAwMDAwMCwiZXhwIjoxNjQwMDAwMDAwfQ.production-signature-that-is-long-enough-for-validation');
+      vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByb2QiLCJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjQwMDAwMDAwLCJleHAiOjE2NDAwMDAwMDB9.service-role-signature-that-is-long-enough-for-validation');
+      vi.stubEnv('VITE_N8N_WEBHOOK_URL', 'https://n8n.example.com/webhook');
+      vi.stubEnv('N8N_WEBHOOK_SECRET',
+        'VerySecureProductionWebhookSecret123!WithSymbols');
+      vi.stubEnv('N8N_API_KEY', 'prod-api-key-with-sufficient-length');
+      vi.stubEnv('VITE_SENTRY_DSN', 'https://sentry.io/production-project');
+      vi.stubEnv('DATADOG_API_KEY', 'datadog-production-api-key');
+      vi.stubEnv('JWT_SECRET', 'ProductionJWTSecret123!WithGoodComplexity&Length');
+      vi.stubEnv('ENCRYPTION_KEY',
+        'ProductionEncryptionKey456!WithExcellentSecurity');
+      vi.stubEnv('LOG_LEVEL', 'warn');
+      vi.stubEnv('ENABLE_CACHING', 'true');
+      vi.stubEnv('CACHE_TTL', '3600');
+      vi.stubEnv('COMPRESSION_ENABLED', 'true');
+      vi.stubEnv('CSP_ENABLED', 'true');
+      vi.stubEnv('RATE_LIMIT_WINDOW', '900');
+      vi.stubEnv('RATE_LIMIT_MAX_REQUESTS', '1000');
 
       const envResult = validateEnvironment();
       const secretsResult = validateSecrets();
@@ -168,14 +168,14 @@ describe('Environment & Secrets Integration', () => {
     });
 
     it('should reject insecure production configurations', () => {
-      mockEnv.VITE_APP_ENV = 'production';
-      mockEnv.VITE_SUPABASE_URL = 'https://prod.supabase.co';
-      mockEnv.VITE_SUPABASE_ANON_KEY =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.prod-key';
-      mockEnv.ENABLE_DEBUG_TOOLS = 'true';
-      mockEnv.MOCK_N8N_RESPONSES = 'true';
-      mockEnv.BYPASS_AUTH = 'true';
-      mockEnv.JWT_SECRET = 'weak';
+      vi.stubEnv('VITE_APP_ENV', 'production');
+      vi.stubEnv('VITE_SUPABASE_URL', 'https://prod.supabase.co');
+      vi.stubEnv('VITE_SUPABASE_ANON_KEY',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.prod-key');
+      vi.stubEnv('ENABLE_DEBUG_TOOLS', 'true');
+      vi.stubEnv('MOCK_N8N_RESPONSES', 'true');
+      vi.stubEnv('BYPASS_AUTH', 'true');
+      vi.stubEnv('JWT_SECRET', 'weak');
 
       const envResult = validateEnvironment();
       const secretsResult = validateSecrets();
@@ -192,11 +192,11 @@ describe('Environment & Secrets Integration', () => {
     });
 
     it('should require HTTPS for all external services in production', () => {
-      mockEnv.VITE_APP_ENV = 'production';
-      mockEnv.VITE_SUPABASE_URL = 'https://prod.supabase.co';
-      mockEnv.VITE_SUPABASE_ANON_KEY =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.prod-key';
-      mockEnv.VITE_N8N_WEBHOOK_URL = 'http://insecure-webhook.com';
+      vi.stubEnv('VITE_APP_ENV', 'production');
+      vi.stubEnv('VITE_SUPABASE_URL', 'https://prod.supabase.co');
+      vi.stubEnv('VITE_SUPABASE_ANON_KEY',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.prod-key');
+      vi.stubEnv('VITE_N8N_WEBHOOK_URL', 'http://insecure-webhook.com');
 
       const envResult = validateEnvironment();
 
@@ -212,15 +212,16 @@ describe('Environment & Secrets Integration', () => {
   describe('Health Check Integration', () => {
     it('should provide comprehensive health status', () => {
       // Set up a good configuration
-      mockEnv.VITE_APP_ENV = 'production';
-      mockEnv.VITE_SUPABASE_URL = 'https://prod.supabase.co';
-      mockEnv.VITE_SUPABASE_ANON_KEY =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByb2QiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MDAwMDAwMCwiZXhwIjoxNjQwMDAwMDAwfQ.production-signature-that-is-long-enough-for-validation';
-      mockEnv.VITE_N8N_WEBHOOK_URL = 'https://n8n.example.com/webhook';
-      mockEnv.N8N_WEBHOOK_SECRET = 'VerySecureProductionWebhookSecret123!';
-      mockEnv.JWT_SECRET = 'ProductionJWTSecret123!WithGoodComplexity';
-      mockEnv.ENCRYPTION_KEY =
-        'ProductionEncryptionKey456!WithExcellentSecurity';
+      vi.stubEnv('VITE_APP_ENV', 'production');
+      vi.stubEnv('VITE_SUPABASE_URL', 'https://prod.supabase.co');
+      vi.stubEnv('VITE_SUPABASE_ANON_KEY',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByb2QiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MDAwMDAwMCwiZXhwIjoxNjQwMDAwMDAwfQ.production-signature-that-is-long-enough-for-validation');
+      vi.stubEnv('VITE_N8N_WEBHOOK_URL', 'https://n8n.example.com/webhook');
+      vi.stubEnv('N8N_WEBHOOK_SECRET', 'VerySecureProductionWebhookSecret123!');
+      vi.stubEnv('JWT_SECRET', 'ProductionJWTSecret123!WithGoodComplexity');
+      vi.stubEnv('ENCRYPTION_KEY',
+        'ProductionEncryptionKey456!WithExcellentSecurity');
+      vi.stubEnv('VITE_SENTRY_DSN', 'https://sentry.io/production-project');
 
       const envHealth = getHealthCheckStatus();
       const secretsHealth = getSecretsHealthStatus();
@@ -238,9 +239,13 @@ describe('Environment & Secrets Integration', () => {
     });
 
     it('should detect configuration problems in health checks', () => {
-      // Set up problematic configuration
-      mockEnv.VITE_APP_ENV = 'production';
-      mockEnv.JWT_SECRET = 'weak';
+      // Set up problematic configuration - missing required database config
+      vi.stubEnv('VITE_APP_ENV', 'production');
+      // Missing VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY will cause critical env validation errors
+      vi.stubEnv('N8N_WEBHOOK_SECRET', 'production-webhook-secret');
+      vi.stubEnv('VITE_SENTRY_DSN', 'https://sentry.io/project');
+      vi.stubEnv('ENCRYPTION_KEY', 'production-encryption-key-sufficiently-long');
+      vi.stubEnv('JWT_SECRET', 'weak');
 
       const envHealth = getHealthCheckStatus();
       const secretsHealth = getSecretsHealthStatus();
@@ -257,16 +262,16 @@ describe('Environment & Secrets Integration', () => {
   describe('Production Readiness Assessment', () => {
     it('should correctly assess production readiness', () => {
       // Set up production-ready configuration
-      mockEnv.VITE_APP_ENV = 'production';
-      mockEnv.VITE_SUPABASE_URL = 'https://prod.supabase.co';
-      mockEnv.VITE_SUPABASE_ANON_KEY =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByb2QiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MDAwMDAwMCwiZXhwIjoxNjQwMDAwMDAwfQ.production-signature-that-is-long-enough-for-validation';
-      mockEnv.VITE_N8N_WEBHOOK_URL = 'https://n8n.example.com/webhook';
-      mockEnv.N8N_WEBHOOK_SECRET = 'VerySecureProductionWebhookSecret123!';
-      mockEnv.JWT_SECRET = 'ProductionJWTSecret123!WithGoodComplexity';
-      mockEnv.ENCRYPTION_KEY =
-        'ProductionEncryptionKey456!WithExcellentSecurity';
-      mockEnv.VITE_SENTRY_DSN = 'https://sentry.io/project';
+      vi.stubEnv('VITE_APP_ENV', 'production');
+      vi.stubEnv('VITE_SUPABASE_URL', 'https://prod.supabase.co');
+      vi.stubEnv('VITE_SUPABASE_ANON_KEY',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByb2QiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MDAwMDAwMCwiZXhwIjoxNjQwMDAwMDAwfQ.production-signature-that-is-long-enough-for-validation');
+      vi.stubEnv('VITE_N8N_WEBHOOK_URL', 'https://n8n.example.com/webhook');
+      vi.stubEnv('N8N_WEBHOOK_SECRET', 'VerySecureProductionWebhookSecret123!');
+      vi.stubEnv('JWT_SECRET', 'ProductionJWTSecret123!WithGoodComplexity');
+      vi.stubEnv('ENCRYPTION_KEY',
+        'ProductionEncryptionKey456!WithExcellentSecurity');
+      vi.stubEnv('VITE_SENTRY_DSN', 'https://sentry.io/project');
 
       const isReady = isProductionReady();
       const secretsResult = validateSecrets();
@@ -277,9 +282,9 @@ describe('Environment & Secrets Integration', () => {
 
     it('should reject non-production-ready configuration', () => {
       // Set up non-production-ready configuration
-      mockEnv.VITE_APP_ENV = 'production';
-      mockEnv.ENABLE_DEBUG_TOOLS = 'true';
-      mockEnv.JWT_SECRET = 'weak';
+      vi.stubEnv('VITE_APP_ENV', 'production');
+      vi.stubEnv('ENABLE_DEBUG_TOOLS', 'true');
+      vi.stubEnv('JWT_SECRET', 'weak');
 
       const isReady = isProductionReady();
       const secretsResult = validateSecrets();
@@ -291,11 +296,11 @@ describe('Environment & Secrets Integration', () => {
 
   describe('Cross-System Dependencies', () => {
     it('should validate database and webhook integration', () => {
-      mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
-      mockEnv.VITE_SUPABASE_ANON_KEY =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test';
-      mockEnv.VITE_N8N_WEBHOOK_URL = 'https://n8n.example.com/webhook';
-      mockEnv.N8N_WEBHOOK_SECRET = 'secure-webhook-secret';
+      vi.stubEnv('VITE_SUPABASE_URL', 'https://test.supabase.co');
+      vi.stubEnv('VITE_SUPABASE_ANON_KEY',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test');
+      vi.stubEnv('VITE_N8N_WEBHOOK_URL', 'https://n8n.example.com/webhook');
+      vi.stubEnv('N8N_WEBHOOK_SECRET', 'secure-webhook-secret');
 
       const envResult = validateEnvironment();
       const secretsResult = validateSecrets();
@@ -318,9 +323,9 @@ describe('Environment & Secrets Integration', () => {
     });
 
     it('should validate monitoring integration', () => {
-      mockEnv.VITE_SENTRY_DSN = 'https://sentry.io/project';
-      mockEnv.DATADOG_API_KEY = 'datadog-api-key';
-      mockEnv.LOG_LEVEL = 'info';
+      vi.stubEnv('VITE_SENTRY_DSN', 'https://sentry.io/project');
+      vi.stubEnv('DATADOG_API_KEY', 'datadog-api-key');
+      vi.stubEnv('LOG_LEVEL', 'info');
 
       const envResult = validateEnvironment();
       const secretsResult = validateSecrets();
@@ -346,7 +351,7 @@ describe('Environment & Secrets Integration', () => {
   describe('Error Correlation', () => {
     it('should correlate related errors across systems', () => {
       // Set up configuration with related errors
-      mockEnv.VITE_N8N_WEBHOOK_URL = 'https://webhook.example.com';
+      vi.stubEnv('VITE_N8N_WEBHOOK_URL', 'https://webhook.example.com');
       // Missing webhook secret will cause issues in both systems
 
       const envResult = validateEnvironment();
@@ -367,10 +372,10 @@ describe('Environment & Secrets Integration', () => {
   describe('Complete System Validation', () => {
     it('should validate entire system health', () => {
       // Set up minimal working configuration
-      mockEnv.VITE_APP_ENV = 'development';
-      mockEnv.VITE_SUPABASE_URL = 'https://test.supabase.co';
-      mockEnv.VITE_SUPABASE_ANON_KEY =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlc3QiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MDAwMDAwMCwiZXhwIjoxNjQwMDAwMDAwfQ.test-signature-that-is-long-enough-for-validation';
+      vi.stubEnv('VITE_APP_ENV', 'development');
+      vi.stubEnv('VITE_SUPABASE_URL', 'https://test.supabase.co');
+      vi.stubEnv('VITE_SUPABASE_ANON_KEY',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlc3QiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MDAwMDAwMCwiZXhwIjoxNjQwMDAwMDAwfQ.test-signature-that-is-long-enough-for-validation');
 
       const envResult = validateEnvironment();
       const secretsResult = validateSecrets();
