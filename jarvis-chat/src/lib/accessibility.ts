@@ -322,13 +322,19 @@ export class KeyboardNavigationManager {
    * Handle keyboard events
    */
   handleKeyDown(event: KeyboardEvent): boolean {
-    const key = this.getKeyString(event);
-    const callback = this.shortcuts.get(key);
+    if (!event) return false;
+    
+    try {
+      const key = this.getKeyString(event);
+      const callback = this.shortcuts.get(key);
 
-    if (callback) {
-      event.preventDefault();
-      callback();
-      return true;
+      if (callback) {
+        event.preventDefault();
+        callback();
+        return true;
+      }
+    } catch (error) {
+      console.warn('Keyboard navigation error:', error);
     }
 
     return false;
@@ -345,7 +351,9 @@ export class KeyboardNavigationManager {
     if (event.shiftKey) parts.push('shift');
     if (event.metaKey) parts.push('meta');
 
-    parts.push(event.key.toLowerCase());
+    // Safely handle potentially undefined event.key
+    const key = event.key || event.code || 'unknown';
+    parts.push(key.toLowerCase());
 
     return parts.join('+');
   }
