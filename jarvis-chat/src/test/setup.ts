@@ -154,7 +154,7 @@ afterAll(async () => {
   try {
     vi.clearAllTimers();
     vi.runOnlyPendingTimers();
-  } catch (error) {
+  } catch {
     // Timers not mocked, skip cleanup
   }
   
