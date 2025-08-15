@@ -133,7 +133,8 @@ export class FocusManager {
     const lastElement = focusableElements[focusableElements.length - 1];
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'Tab') return;
+      const key = event.key || event.code || '';
+      if (key !== 'Tab') return;
 
       if (event.shiftKey) {
         // Shift + Tab
