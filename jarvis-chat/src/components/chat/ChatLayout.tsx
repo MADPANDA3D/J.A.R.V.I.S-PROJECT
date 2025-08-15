@@ -43,7 +43,6 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [isSending, setIsSending] = useState(false);
-  // const [showSearch, setShowSearch] = useState(false); // Unused for now
   const [currentSearchTerms, setCurrentSearchTerms] = useState<string[]>([]);
   const [highlightedMessageId, setHighlightedMessageId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -144,7 +143,6 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
   };
 
   const handleClearSearch = () => {
-    setShowSearch(false);
     setCurrentSearchTerms([]);
     setHighlightedMessageId(null);
   };
@@ -152,7 +150,6 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
   const handleSearchResultClick = (messageId: string) => {
     onMessageClick?.(messageId);
     setHighlightedMessageId(messageId);
-    setShowSearch(false);
     
     // Scroll to the message if possible
     setTimeout(() => {
