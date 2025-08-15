@@ -6,7 +6,7 @@ import path from 'path';
 export default defineConfig({
   plugins: [react()],
   test: {
-    globals: false, // Disable globals to prevent 'it' leaking into production
+    globals: true, // Re-enable for tests - production builds don't include vitest
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     include: ['**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],

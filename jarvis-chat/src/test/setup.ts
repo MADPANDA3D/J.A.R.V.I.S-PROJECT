@@ -150,9 +150,13 @@ afterAll(async () => {
   vi.resetAllMocks();
   vi.restoreAllMocks();
   
-  // Clear timers
-  vi.clearAllTimers();
-  vi.runOnlyPendingTimers();
+  // Clear timers (only if fake timers are enabled)
+  try {
+    vi.clearAllTimers();
+    vi.runOnlyPendingTimers();
+  } catch (error) {
+    // Timers not mocked, skip cleanup
+  }
   
   // Allow brief moment for cleanup
   await new Promise(resolve => setTimeout(resolve, 100));
