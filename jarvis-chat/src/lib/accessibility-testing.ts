@@ -433,8 +433,20 @@ export class AccessibilityTester {
 // Export singleton instance
 export const accessibilityTester = AccessibilityTester.getInstance();
 
-// Auto-start periodic testing in development
-if (process.env.NODE_ENV === 'development') {
+/**
+ * Initialize automated accessibility testing (dev mode only)
+ * Call this function to start periodic testing
+ */
+export function initializeAccessibilityTesting(): void {
+  if (process.env.NODE_ENV !== 'development') {
+    return;
+  }
+
+  if (typeof document === 'undefined') {
+    // SSR or Node environment
+    return;
+  }
+
   // Schedule accessibility tests every 30 minutes in development
   let cleanup: (() => void) | null = null;
 
