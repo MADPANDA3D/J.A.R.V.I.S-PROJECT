@@ -105,7 +105,8 @@
       "Bash(dos2unix:*)",
       "Bash(gh run list:*)",
       "WebFetch(domain:69.62.71.229)",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "WebFetch(domain:jarvis.madpanda3d.com)"
     ],
     "deny": []
   }
