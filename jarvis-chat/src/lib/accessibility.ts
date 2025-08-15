@@ -848,9 +848,27 @@ export function initializeAccessibility(): void {
   console.log('Accessibility features initialized');
 }
 
-// Auto-initialize when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initializeAccessibility);
-} else {
-  initializeAccessibility();
+// Lazy initialization flag
+let isInitialized = false;
+
+/**
+ * Ensure accessibility features are initialized
+ */
+export function ensureAccessibilityInitialized(): void {
+  if (isInitialized) return;
+  
+  if (typeof document === 'undefined') {
+    // SSR or Node environment - skip initialization
+    return;
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeAccessibility();
+      isInitialized = true;
+    });
+  } else {
+    initializeAccessibility();
+    isInitialized = true;
+  }
 }
